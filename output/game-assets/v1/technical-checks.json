@@ -1,0 +1,138 @@
+[
+  {
+    "id": "bg_sunlight_lite",
+    "size": [
+      512,
+      1024
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 636243
+  },
+  {
+    "id": "hero_ship",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 224378,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      8,
+      15,
+      488,
+      504
+    ],
+    "clear_margin_px": 8
+  },
+  {
+    "id": "enemy_normal_01_moon_jelly",
+    "size": [
+      192,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 20686,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      14,
+      13,
+      174,
+      184
+    ],
+    "clear_margin_px": 8
+  },
+  {
+    "id": "enemy_normal_02_lantern_angler",
+    "size": [
+      192,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 21336,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      8,
+      27,
+      176,
+      150
+    ],
+    "clear_margin_px": 8
+  },
+  {
+    "id": "enemy_normal_03_electric_eel",
+    "size": [
+      192,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 11806,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      21,
+      58,
+      167,
+      147
+    ],
+    "clear_margin_px": 21
+  },
+  {
+    "id": "icon_crystal",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 5782,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      23,
+      16,
+      75,
+      75
+    ],
+    "clear_margin_px": 16
+  },
+  {
+    "id": "icon_oxygen",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 5317,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      31,
+      12,
+      67,
+      78
+    ],
+    "clear_margin_px": 12
+  }
+]
