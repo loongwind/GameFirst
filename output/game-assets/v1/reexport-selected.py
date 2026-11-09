@@ -11,7 +11,9 @@ for r in rows:
     dest = root / r['path']
     previous = hashlib.sha256(dest.read_bytes()).hexdigest() if dest.exists() else ''
     kind = r.get('export_kind', 'standard')
-    if kind == 'ui_bar':
+    if kind in ('ui_panel_sampled', 'ui_track'):
+        args = ['swift', str(root / 'export-ui-sampled.swift'), str(root / r['source_master']), str(dest), 'panel' if kind == 'ui_panel_sampled' else 'track', *r['export_crop'].split(',')]
+    elif kind == 'ui_bar':
         args = ['swift', str(root / 'export-ui-bar.swift'), str(root / r['source_master']), str(dest), *r['export_crop'].split(',')]
     elif kind == 'swim_strip':
         args = ['swift', str(root / 'export-swim.swift'), str(root / r['source_master']), str(root / 'animation-layouts' / (r['id'] + '.json')), str(dest)]

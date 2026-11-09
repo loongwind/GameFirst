@@ -1,0 +1,50 @@
+{
+  "tool": "built-in image_gen",
+  "version": "v1-r4",
+  "records": [
+    {
+      "id": "bg_harbor",
+      "prompt": "Use case: stylized-concept. Production game background bg_harbor_far.png for Abyss Hunter, PORTRAIT 2:3 composition, target1024x1536. Reference image gives harbor architecture, turquoise color and hand-painted2D style only. Generate ONLY THE FAR BACKGROUND LAYER: a bright clean marine research harbor with cyan blue sky in upper quarter, distant small white research stations and domed science buildings along far horizon, subtle warm amber work lights far away. Main lower two thirds broad OPEN cyan turquoise sea with gently painted reflected sunlight and faint underwater blue depth. Beautiful crisp illustration, soft rounded painted volumes. Keep middle and lower central region very open and low detail for gameplay and overlaying separate character/foreground. NO foreground docks, crane, cables, hooks, hanging ropes, ship, submarine, diver, people, enemies, fish, coral, weapons, HUD, panels, buttons, text, numbers, logos, watermarks, frame or shadow mask. No fully enclosed seabed. No black foreground silhouettes. Full bleed opaque background, no transparency.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-d632dd3748df/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-13005092-715c-425b-8c32-b61139c9938f.png",
+      "references": [
+        "../../imagegen/abyss-hunter-v1/01-harbor-preparation.png"
+      ]
+    },
+    {
+      "id": "reef_harbor_left",
+      "prompt": "Use case: stylized-concept. Generate ONE clean isolated game sprite: a very tall, narrow LEFT-SIDE science harbor pier support column. Use supplied RIGHT-side column solely as material and painting style reference. Create a distinct LEFT support: shaft hugs LEFT side, a small projecting maintenance landing toward RIGHT in upper quarter, one small warm amber worklamp under it, ivory navy-gray rounded metal panels with muted orange corner guards and bolted bands. Few blue underwater rocks and tiny cyan coral around bottom foot. Visible shape tall and narrow approximately1:4. All structure fully visible, no crop. Front/three-quarter side view consistent with reference, hand-painted2D. TRUE TRANSPARENT empty pixels outside the crisp object; background alpha0. Very important: NO exterior glow, NO fog, NO haze, NO blue/gray mist, NO illumination outside the object, NO aura, NO shadow. Light affects ONLY solid surfaces. No sea, sky, room, crane, cables, boat, people, animals, UI, text, logos or watermark. Generous transparent margin.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-d632dd3748df/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-2453fa29-abde-49ef-b972-cc9c47b3b67a.png",
+      "references": [
+        "source-masters/deco_harbor_right.png"
+      ]
+    },
+    {
+      "id": "reef_harbor_right",
+      "prompt": "Use case: stylized-concept. ONE isolated production foreground RIGHT harbor edge decoration for underwater game Abyss Hunter. Reference supplies palette and hand-painted2D soft rounded mechanical architecture. Tall NARROW VERTICAL strip visible shape1:4 width:height, intended384x1536. One tall right-side ivory/blue-gray science dock support piling with muted orange small protective panels, a compact amber worklight whose warm light stays ONLY ON SOLID SURFACES. At upper RIGHT a small simple maintenance platform/ladder and at bottom blue cyan rocks with a few tiny cyan corals. Upper silhouette narrower, no crane arm. Most structure hugs RIGHT side; LEFT silhouette irregular open toward gameplay water. No horizontal floor extending left. All parts uncut and visible with ample transparent margin. TRUE TRANSPARENT background, absolutely NO outside glow, fog, halo, blue mist, ambient aura, cast shadow or colored backdrop. All pixels outside crisp structure silhouette alpha0. No sea or sky, people, submarine, fish, UI, cables, ropes, text, digits, watermark, extra loose objects.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-d632dd3748df/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-356f6c2c-e7b0-4666-b8a4-db5a900f8d7a.png",
+      "references": [
+        "../../imagegen/abyss-hunter-v1/01-harbor-preparation.png"
+      ]
+    },
+    {
+      "id": "flora_harbor",
+      "prompt": "Use case: stylized-concept. ONE isolated production harbor foreground decoration for underwater game Abyss Hunter. A compact SINGLE CLOSED ivory and navy reinforced research storage crate, muted orange top handle, one cyan glass front window revealing a few softly glowing angular cyan crystals INSIDE. 3/4 front view, matches supplied harbor concept's science crate style and soft hand-painted2D rounded volumes. Not a UI card or button. Full object centered in a square canvas occupying70%, intended512x512. No ground plane, no pedestal, no shadow. TRUE TRANSPARENT background with generous outer margin. Cyan light is confined to the glass and solid crate surfaces; NO exterior glow, fog, haze, halo or ambient aura. No text, symbols, numbers, logos, watermark, frame, fish, coral, sea or extra loose crystals.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-d632dd3748df/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-9aeb0f1e-2983-418c-9796-08627d12ff02.png",
+      "references": [
+        "../../imagegen/abyss-hunter-v1/01-harbor-preparation.png"
+      ]
+    },
+    {
+      "id": "reef_harbor_left_rejected",
+      "status": "rejected",
+      "prompt": "Use case: stylized-concept. ONE isolated production foreground LEFT harbor edge decoration for underwater game Abyss Hunter. Reference shows palette and hand-painted2D soft mechanical architecture only. Very tall NARROW VERTICAL strip, visible structure roughly1:4 width:height, intended384x1536. A SINGLE left-side science dock support column: weathered blue gray marine pier pilings, a small ivory-orange maintenance housing and warm amber work lamp at upper left, blue cyan rocks with a few subtle corals down the left edge. Most structure hugs the LEFT side of its narrow strip; RIGHT silhouette irregular and open toward gameplay water. Bottom ends naturally in a few underwater rocks, no horizontal ground extending right. No crane arm or cable. TRUE transparency around and to RIGHT of the whole tall structure. Generous transparent outer margin, all parts visible and uncut. No sea or sky background, no people, submarine, fish, UI, boxes, text, numbers, watermark, detached objects or cast ground shadow.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-d632dd3748df/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-e3a343e5-7c93-44ed-b1a9-764e85ab9b4c.png"
+    },
+    {
+      "id": "reef_harbor_left_rejected2",
+      "status": "rejected",
+      "prompt": "Use case: background-extraction. Edit target: the supplied tall LEFT science harbor support column. Preserve all existing solid parts, their hand-painted2D style, left-hugging orientation, maintenance housing, orange railing, lamp, blue gray piling and rocks/coral. REMOVE ALL the broad exterior blue mist and amber light halo around this structure. Outside the EXACT CRISP object silhouette must be genuinely TRANSPARENT alpha0, including around the lamp. Keep the lamp visibly bright and warm illumination ONLY ON SOLID SURFACES; there must be no exterior bloom or cast shadow. No replacement background, no fog or gray haze, no new objects, no new floor, no words or watermark. Retain generous transparent margin and the entire uncut column. A tall narrow isolated production sprite, not a scene.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-d632dd3748df/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-bfb1678c-8d85-47c0-bd94-8d3e5dc7d524.png"
+    }
+  ]
+}

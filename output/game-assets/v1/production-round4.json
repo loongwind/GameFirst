@@ -1,0 +1,121 @@
+{
+  "tool": "built-in image_gen",
+  "version": "v1-r4",
+  "records": [
+    {
+      "id": "icon_hp",
+      "prompt": "Use case: stylized-concept. Asset: icon_hp.png, one isolated production HUD life icon for the underwater game Abyss Hunter. A single simple chunky heart-shaped optical module, ivory white rounded rim, luminous cyan glass solid heart core, tiny navy separation, soft hand-painted 2D volume like the supplied oxygen icon. Use the oxygen tank only as material/style reference, DO NOT depict a tank. Centered front view, clearly recognizable heart silhouette at 48px. Cyan/white dominant, no red. Square canvas, object occupies central 75% leaving ample true transparent margin. Transparent background, no ground shadow, no pedestal, no outline frame, no words, no letters, no numbers, no watermark, no HUD or extra objects.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-d632dd3748df/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-4acae940-4d3c-44a8-bfff-4847911e5962.png",
+      "references": [
+        "main/icon_oxygen.png"
+      ]
+    },
+    {
+      "id": "icon_cargo",
+      "prompt": "Use case: stylized-concept. One isolated production game icon for Abyss Hunter, matching the supplied oxygen icon's ivory soft mechanical trim, navy edge separation and glossy cyan optical glass, rounded hand-painted 2D volume with only 2-3 main value levels. Square canvas, object centered at 75% size, ample TRUE transparent margin. Legible silhouette at 48px. No background, ground shadow, pedestal, outer badge/frame, words, letters, numbers, watermark or other objects. Oxygen image is a STYLE reference only. Subject: cargo capacity. One compact closed rectangular ivory cargo crate with rounded reinforced navy corners, a single broad cyan window on its front, small muted orange handle on top. 3/4 front view. Distinct box silhouette.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-d632dd3748df/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-5bf0dd11-f47a-43e4-8ee7-54c048e71230.png",
+      "references": [
+        "main/icon_oxygen.png"
+      ]
+    },
+    {
+      "id": "icon_rescue",
+      "prompt": "Use case: stylized-concept. One isolated production game icon for Abyss Hunter, matching the supplied oxygen icon's ivory soft mechanical trim, navy edge separation and glossy cyan optical glass, rounded hand-painted 2D volume with only 2-3 main value levels. Square canvas, object centered at 75% size, ample TRUE transparent margin. Legible silhouette at 48px. No background, ground shadow, pedestal, outer badge/frame, words, letters, numbers, watermark or other objects. Oxygen image is a STYLE reference only. Subject: rescue buoy. One simple ivory and muted orange segmented lifesaver ring in slightly 3/4 front view, cyan locator light on its small top fitting. The large central hole is truly transparent. Clean bold life-ring silhouette; no ropes dangling, no boat. Warm amber accents identify rescue.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-d632dd3748df/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-a62915f3-23ad-41d8-9c2e-7ddc36ef704b.png",
+      "references": [
+        "main/icon_oxygen.png"
+      ]
+    },
+    {
+      "id": "icon_warning",
+      "prompt": "Use case: stylized-concept. One isolated production HUD symbol for the underwater game Abyss Hunter. Rounded hand-painted 2D soft mechanical optical appearance. Navy edge separation, smooth simple 2-3 tonal layers, restrained bevel highlights. Front view, precisely centered, square canvas with ample true transparent outer margins, symbol occupies central 70%. Clear at 48px. No text, letters, numbers, watermark, surrounding badge, container, background, ground shadow, podium or additional objects. Supplied oxygen icon is material/style reference only; don't draw a tank. Subject: one amber/yellow rounded equilateral triangular warning symbol pointing up, with a navy exclamation-shaped inset made of one simple vertical slit and one dot. Solid amber face. This single pictogram denotes danger; the exclamation is the only permitted symbol. No outer circle.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-d632dd3748df/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-a623308e-6f21-47a6-a8fd-1cb967b88a94.png",
+      "references": [
+        "main/icon_oxygen.png"
+      ]
+    },
+    {
+      "id": "icon_video",
+      "prompt": "Use case: stylized-concept. One isolated production HUD symbol for the underwater game Abyss Hunter. Rounded hand-painted 2D soft mechanical optical appearance. Navy edge separation, smooth simple 2-3 tonal layers, restrained bevel highlights. Front view, precisely centered, square canvas with ample true transparent outer margins, symbol occupies central 70%. Clear at 48px. No text, letters, numbers, watermark, surrounding badge, container, background, ground shadow, podium or additional objects. Supplied oxygen icon is material/style reference only; don't draw a tank. Subject: one solid cyan glass triangular play symbol pointing RIGHT, with a narrow ivory beveled edge. Simple clean equilateral rounded triangle, continuous filled center, no holes and no surrounding button.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-d632dd3748df/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-9cecd685-30af-4253-9aea-e0b0b24edb2e.png",
+      "references": [
+        "main/icon_oxygen.png"
+      ]
+    },
+    {
+      "id": "icon_pause",
+      "prompt": "Use case: stylized-concept. One isolated production HUD pictogram for the underwater game Abyss Hunter. Same rounded hand-painted 2D soft mechanical optical appearance as supplied oxygen icon, narrow ivory bevel edge and navy edge separation, solid cyan glass face, only 2-3 main value levels and small highlights. Flat frontal orthographic view. Square canvas, symbol centered with ample true transparent margin occupying central 70%. Clearly readable at 48px. NO words, letters, numbers, frame, badge, button, background, pedestal, ground shadow, extra objects or watermark. Reference image is style only, don't draw an oxygen tank. Subject: PAUSE symbol consisting of exactly TWO parallel vertical rounded rectangular bars, equal size and evenly spaced with a transparent gap between them. Both filled cyan with thin ivory bevel.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-d632dd3748df/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-4c3f1c27-04a5-4c61-9bb2-c0ff1f2a7aea.png",
+      "references": [
+        "main/icon_oxygen.png"
+      ]
+    },
+    {
+      "id": "icon_ascend",
+      "prompt": "Use case: stylized-concept. One isolated production HUD pictogram for the underwater game Abyss Hunter. Same rounded hand-painted 2D soft mechanical optical appearance as supplied oxygen icon, narrow ivory bevel edge and navy edge separation, solid cyan glass face, only 2-3 main value levels and small highlights. Flat frontal orthographic view. Square canvas, symbol centered with ample true transparent margin occupying central 70%. Clearly readable at 48px. NO words, letters, numbers, frame, badge, button, background, pedestal, ground shadow, extra objects or watermark. Reference image is style only, don't draw an oxygen tank. Subject: ASCEND symbol consisting of exactly TWO thick identical upward pointing chevrons stacked vertically. Both chevron peaks point UP. Transparent gap separates the two, no down-facing shapes. Thin ivory trim, solid cyan broad strokes.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-d632dd3748df/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-9a5551f4-60f4-4a98-bdb6-7ceaa43ad391.png",
+      "references": [
+        "main/icon_oxygen.png"
+      ]
+    },
+    {
+      "id": "icon_depth_marker",
+      "prompt": "Use case: precise-object-edit. Edit target: supplied depth cursor icon. Keep the cyan right-pointing triangle and ivory left heel, their materials, shape, scale, and position unchanged. REMOVE ALL the huge gray cloudy halo, fog, shadow and glow surrounding this object. Make everything outside the crisp navy object silhouette fully transparent alpha0, including all margins. No replacement background. The final result must be ONLY the small clean cursor symbol on true transparency. No fog, no glow, no shadow, no checkerboard, no extra marks.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-d632dd3748df/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-7b624bc8-2dd6-4dea-9b7e-ca88ea54595b.png",
+      "references": [
+        "rejected/icon_depth_marker_rejected-r4.png"
+      ]
+    },
+    {
+      "id": "ui_panel",
+      "prompt": "Use case: stylized-concept. Generate ONE isolated production UI panel skin for Abyss Hunter, front orthographic view. A simple square rounded rectangular navy blue panel, exact panel silhouette 1:1, floating centered with generous true transparent outer margin. Narrow fine teal edge #246073, subtly beveled corners, tiny rim light #54EEE2 only along top outer edge. The entire large central surface MUST be one UNIFORM FLAT SOLID navy fill #082D40 with constant opacity, without gradients, texture, pattern, lighting, glow, shading, reflections or highlights anywhere in central 75% of width and height. Artwork should occupy 80% of square canvas; rounded corners within narrow outer 12% zone. This is a 128x128 source nine-slice skin with 24px insets, scalable center. NO cutout or hole in middle. Subtle hand-painted 2D edge volume to match reference UI. No text, letters, digits, icons, symbols, screws, ornaments, shadows, large glow, background, checkerboard or watermark. Reference cyan button is only for edge language; panel is NAVY not cyan.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-d632dd3748df/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-79917e06-0c53-49fb-93ea-89e3f98eeda8.png",
+      "references": [
+        "main/ui_button_primary.png"
+      ],
+      "export_note": "Use original filled candidate with deterministic nine-slice center texel sampling; other candidates have uneven alpha."
+    },
+    {
+      "id": "ui_bar_track",
+      "prompt": "Use case: stylized-concept. ONE isolated production empty HUD progress bar track skin for underwater game Abyss Hunter. Front orthographic view. Shape is a VERY THIN horizontal capsule, the visible shape is exactly 7 times as WIDE as HIGH. Centered on a wide transparent canvas, generous transparent margin all around. Navy solid continuous interior #082D40, very narrow fine muted teal #246073 beveled rim confined to OUTER edge. Middle 80% of width is completely UNIFORM flat navy, no horizontal gradient, pattern, reflection, texture or content. Rounded ends must be short and subtle, not large end caps. Intended final canvas128x32 with112x16 visible track, nine-slice L/R12 and T/B8. No filled progress, no cyan center, no bar segment, no label, no numbers, no icon, no hole, no gauge, no shadow, no extra objects, no watermark. Transparent surrounding background; entire navy interior is filled, not transparent. Reference is edge/material language only.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-d632dd3748df/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-61be1d93-8341-49f6-9e9d-40a533553fde.png",
+      "references": [
+        "main/ui_button_primary.png"
+      ]
+    },
+    {
+      "id": "ui_joystick_base",
+      "prompt": "Use case: stylized-concept. Create ONE isolated production game virtual joystick base for underwater game Abyss Hunter. EXACTLY ROUND ring in straight-on orthographic view, not elliptical, not tilted. A thin softly beveled dark navy #082D40 outer ring with a fine muted teal #246073 rim and restrained cyan edge #54EEE2. The ENTIRE large central disk/hole is genuinely TRANSPARENT alpha0, not filled, not dark, not glass. Ring band about 10% of overall diameter. Simple smooth circle with no ticks or divisions, no crosshair, arrows, ornament or symbols. Centered on square canvas with generous true transparent surrounding margin. Subtle hand-painted2D soft mechanical edge volume. No fog, diffuse glow, ground shadow, pedestal, words, numbers, watermark or background. Reference image only gives UI material language; do not draw a button.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-d632dd3748df/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-9f1616e0-4446-4bbd-9a89-3e6bef661f16.png",
+      "references": [
+        "main/ui_button_primary.png"
+      ]
+    },
+    {
+      "id": "ui_joystick_thumb",
+      "prompt": "Use case: stylized-concept. Create ONE isolated production game joystick thumb knob for underwater game Abyss Hunter. EXACTLY CIRCULAR solid low domed cyan optical knob, straight-on orthographic view, not elliptical, not tilted. Narrow navy base edge with fine teal bevel, cyan glass face #54EEE2, small soft upper-left highlight. Continuous filled center, no hole. Centered square canvas, 80% circle with generous TRUE transparent outer margin. Subtle hand-painted2D rounded volume consistent with reference UI. Clean plain surface; no arrows, rings, icons, crosshair, letters, numbers, watermark. No fog, diffuse glow, ground shadow, pedestal or background.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-d632dd3748df/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-dcc49344-ec66-499b-bd98-8fc0dcfe42fb.png",
+      "references": [
+        "main/ui_button_primary.png"
+      ]
+    },
+    {
+      "id": "ui_panel_rejected3",
+      "status": "rejected",
+      "prompt": "Create a plain UI sprite, a single flat solid navy teal rounded SQUARE tile with a thin muted turquoise border. The tile face is an OPAQUE SOLID continuous painted surface across its ENTIRE area, including the center. Fill color RGB(8,45,64), alpha255 EVERYWHERE inside the square. No gradients, no lighting, no texture, no shadows, no illustration. A simple FLAT UI nine-slice sprite. A very narrow border in RGB(36,96,115). Small rounded corners. The colored shape should take up 80% of a square canvas and be centered. ONLY THE OUTSIDE of the square is transparent. All of the interior is solid opaque navy. No hole, no transparent interior. No text or any symbol. Absolutely no decoration.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-d632dd3748df/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-0009f5d5-7ce8-4307-ab41-7e6de84fb7d0.png"
+    },
+    {
+      "id": "icon_depth_marker_rejected",
+      "status": "rejected",
+      "prompt": "Use case: stylized-concept. One isolated production HUD pictogram for the underwater game Abyss Hunter. Same rounded hand-painted 2D soft mechanical optical appearance as supplied oxygen icon, narrow ivory bevel edge and navy edge separation, solid cyan glass face, only 2-3 main value levels and small highlights. Flat frontal orthographic view. Square canvas, symbol centered with ample true transparent margin occupying central 70%. Clearly readable at 48px. NO words, letters, numbers, frame, badge, button, background, pedestal, ground shadow, extra objects or watermark. Reference image is style only, don't draw an oxygen tank. Subject: depth ruler cursor, a SINGLE small solid horizontal cyan triangular pointer pointing RIGHT, attached seamlessly to a short rounded rectangular ivory heel on its LEFT. Compact silhouette like a navigation cursor, no ruler, no tick marks, no surrounding ring.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-d632dd3748df/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-87a8661b-a859-4cf9-8b57-5311c27b472c.png"
+    },
+    {
+      "id": "ui_panel_rejected2",
+      "status": "rejected",
+      "prompt": "Use case: precise-object-edit. Edit target: supplied square navy game UI panel. Keep the square rounded silhouette, thin teal outer border and corner bevel unchanged. Change ONLY the central interior surface: replace the ENTIRE central area inside the border with a perfectly uniform flat solid #082D40 navy color, constant full opacity. This MUST be a single unvarying color with NO gradients, NO shadows, NO noise, NO brush texture, NO highlights, NO reflections. All shading must be confined to the very narrow outer bevel. The central 80 percent square should have identical color at every location. Preserve true transparency outside the rounded panel. No text, no icon, no extra objects.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-d632dd3748df/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-a36d405f-4cd8-4072-a501-27a1f87274ac.png"
+    }
+  ]
+}

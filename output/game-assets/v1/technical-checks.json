@@ -1297,5 +1297,374 @@
       0.5,
       0.0
     ]
+  },
+  {
+    "id": "icon_hp",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 12347,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      8,
+      13,
+      88,
+      83
+    ],
+    "clear_margin_px": 8
+  },
+  {
+    "id": "icon_cargo",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 12946,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      9,
+      12,
+      87,
+      84
+    ],
+    "clear_margin_px": 9
+  },
+  {
+    "id": "icon_rescue",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 10326,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      15,
+      9,
+      80,
+      87
+    ],
+    "clear_margin_px": 9
+  },
+  {
+    "id": "icon_warning",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 9249,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      9,
+      12,
+      87,
+      84
+    ],
+    "clear_margin_px": 9
+  },
+  {
+    "id": "icon_video",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 10098,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      12,
+      9,
+      84,
+      88
+    ],
+    "clear_margin_px": 8
+  },
+  {
+    "id": "icon_pause",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 11073,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      9,
+      9,
+      87,
+      87
+    ],
+    "clear_margin_px": 9
+  },
+  {
+    "id": "icon_ascend",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 11103,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      14,
+      9,
+      82,
+      87
+    ],
+    "clear_margin_px": 9
+  },
+  {
+    "id": "icon_depth_marker",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 8283,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      9,
+      14,
+      87,
+      82
+    ],
+    "clear_margin_px": 9
+  },
+  {
+    "id": "ui_panel",
+    "size": [
+      128,
+      128
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 3220,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      8,
+      8,
+      120,
+      120
+    ],
+    "clear_margin_px": 8,
+    "nine_slice_insets": [
+      24,
+      24,
+      24,
+      24
+    ],
+    "center_channel_extrema": [
+      [
+        4,
+        4
+      ],
+      [
+        32,
+        32
+      ],
+      [
+        51,
+        51
+      ],
+      [
+        253,
+        253
+      ]
+    ],
+    "center_channel_stddev": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "id": "ui_bar_track",
+    "size": [
+      128,
+      32
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 2874,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      8,
+      8,
+      120,
+      24
+    ],
+    "clear_margin_px": 8,
+    "nine_slice_insets": [
+      12,
+      8,
+      12,
+      8
+    ]
+  },
+  {
+    "id": "ui_joystick_base",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 38777,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      8,
+      8,
+      248,
+      248
+    ],
+    "clear_margin_px": 8,
+    "center_alpha_extrema": [
+      0,
+      1
+    ]
+  },
+  {
+    "id": "ui_joystick_thumb",
+    "size": [
+      128,
+      128
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 17911,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      9,
+      8,
+      119,
+      119
+    ],
+    "clear_margin_px": 8
+  },
+  {
+    "id": "bg_harbor",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 2041631,
+    "alpha_extrema": [
+      255,
+      255
+    ]
+  },
+  {
+    "id": "reef_harbor_left",
+    "size": [
+      384,
+      1536
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 414501,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      10,
+      12,
+      247,
+      1528
+    ],
+    "clear_margin_px": 8
+  },
+  {
+    "id": "reef_harbor_right",
+    "size": [
+      384,
+      1536
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 530010,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      45,
+      10,
+      376,
+      1524
+    ],
+    "clear_margin_px": 8
+  },
+  {
+    "id": "flora_harbor",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 359297,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      13,
+      8,
+      496,
+      504
+    ],
+    "clear_margin_px": 8
   }
 ]
