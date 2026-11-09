@@ -134,5 +134,449 @@
       78
     ],
     "clear_margin_px": 12
+  },
+  {
+    "id": "bg_sunlight",
+    "size": [
+      1024,
+      1536
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 1763076,
+    "alpha_extrema": [
+      255,
+      255
+    ]
+  },
+  {
+    "id": "reef_sunlight_left",
+    "size": [
+      384,
+      1536
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 325275,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      8,
+      12,
+      143,
+      1525
+    ],
+    "clear_margin_px": 8
+  },
+  {
+    "id": "reef_sunlight_right",
+    "size": [
+      384,
+      1536
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 507991,
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "alpha_bbox": [
+      122,
+      12,
+      372,
+      1528
+    ],
+    "clear_margin_px": 8
+  },
+  {
+    "id": "flora_sunlight",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 250365,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      51,
+      8,
+      461,
+      504
+    ],
+    "clear_margin_px": 8
+  },
+  {
+    "id": "mount_sonic",
+    "size": [
+      128,
+      128
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 21502,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      9,
+      18,
+      120,
+      110
+    ],
+    "clear_margin_px": 8
+  },
+  {
+    "id": "mount_torpedo",
+    "size": [
+      128,
+      128
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 17740,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      9,
+      28,
+      119,
+      100
+    ],
+    "clear_margin_px": 9
+  },
+  {
+    "id": "mount_arc",
+    "size": [
+      128,
+      128
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 16036,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      9,
+      31,
+      119,
+      97
+    ],
+    "clear_margin_px": 9
+  },
+  {
+    "id": "mount_mine",
+    "size": [
+      128,
+      128
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 19146,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      8,
+      14,
+      119,
+      114
+    ],
+    "clear_margin_px": 8
+  },
+  {
+    "id": "fx_bubble",
+    "size": [
+      64,
+      64
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 5359,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      8,
+      8,
+      56,
+      56
+    ],
+    "clear_margin_px": 8
+  },
+  {
+    "id": "fx_glow",
+    "size": [
+      128,
+      128
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 17192,
+    "alpha_extrema": [
+      0,
+      253
+    ],
+    "alpha_bbox": [
+      19,
+      8,
+      109,
+      120
+    ],
+    "clear_margin_px": 8
+  },
+  {
+    "id": "fx_crystal_drop",
+    "size": [
+      64,
+      64
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 2870,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      19,
+      9,
+      45,
+      55
+    ],
+    "clear_margin_px": 9
+  },
+  {
+    "id": "fx_sonic_ring",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 39957,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      9,
+      8,
+      247,
+      248
+    ],
+    "clear_margin_px": 8,
+    "center_alpha": 0
+  },
+  {
+    "id": "fx_torpedo",
+    "size": [
+      128,
+      64
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 10132,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      9,
+      10,
+      120,
+      54
+    ],
+    "clear_margin_px": 8
+  },
+  {
+    "id": "fx_arc",
+    "size": [
+      256,
+      64
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 7095,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      8,
+      22,
+      248,
+      42
+    ],
+    "clear_margin_px": 8
+  },
+  {
+    "id": "fx_mine",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 10821,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      9,
+      10,
+      88,
+      86
+    ],
+    "clear_margin_px": 8
+  },
+  {
+    "id": "fx_hit",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 7990,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      9,
+      8,
+      87,
+      88
+    ],
+    "clear_margin_px": 8
+  },
+  {
+    "id": "fx_death_particle",
+    "size": [
+      32,
+      32
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 727,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      9,
+      8,
+      23,
+      24
+    ],
+    "clear_margin_px": 8
+  },
+  {
+    "id": "fx_thruster",
+    "size": [
+      128,
+      64
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 6107,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      9,
+      16,
+      119,
+      49
+    ],
+    "clear_margin_px": 9
+  },
+  {
+    "id": "hero_damaged",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 215062,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      8,
+      22,
+      483,
+      466
+    ],
+    "clear_margin_px": 8
+  },
+  {
+    "id": "ui_button_primary",
+    "size": [
+      160,
+      80
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 7548,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      23,
+      15,
+      137,
+      65
+    ],
+    "clear_margin_px": 15,
+    "nine_slice_insets": [
+      32,
+      24,
+      32,
+      24
+    ],
+    "center_channel_extrema": [
+      [
+        38,
+        44
+      ],
+      [
+        114,
+        126
+      ],
+      [
+        143,
+        155
+      ],
+      [
+        253,
+        254
+      ]
+    ],
+    "center_channel_stddev": [
+      1.272965940030676,
+      2.447332650718223,
+      2.3222925234328446,
+      0.3479705037886281
+    ]
   }
 ]

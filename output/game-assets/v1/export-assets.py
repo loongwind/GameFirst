@@ -1,4 +1,9 @@
 """Export selected image_gen masters with native CoreGraphics; Pillow only inspects."""
+import runpy
+from pathlib import Path as _Path
+if (_Path(__file__).resolve().parent / 'production-round2.json').exists():
+    runpy.run_path(str(_Path(__file__).resolve().parent / 'reexport-selected.py'), run_name='__main__')
+    raise SystemExit(0)
 from pathlib import Path
 from PIL import Image
 import csv, subprocess, shutil, json

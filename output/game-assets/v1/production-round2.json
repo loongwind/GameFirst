@@ -1,0 +1,187 @@
+{
+  "tool": "built-in image_gen",
+  "production_version": "v1-r2",
+  "records": [
+    {
+      "id": "bg_sunlight",
+      "prompt": "Use case: stylized-concept. Create ONE production far background for Abyss Hunter SUNLIGHT layer, bg_sunlight_far.png, portrait 1024x1536, 2:3 aspect, opaque full bleed. Image1 is STYLE/palette reference only, image2 is the established quiet simplified far background to match closely. Bright cool cyan-blue-green clear shallow sea with soft top sunbeams and very restrained painterly water depth, gently darkens toward bottom. Faint indistinct distant cliff silhouettes only at outermost left and right, center 80% width uninterrupted open water for gameplay at every height. No seabed at bottom. This is the far layer; separately generated rocks/corals will be overlaid later. No foreground coral, no fish, no jellyfish, no submarine/diver, enemies, weapons, effects, projectiles, loot, interface, HUD, buttons, text, numbers, watermark, frames. Same rounded softly dimensional hand-painted 2D language as refs, not photography. Clear legible low-contrast open sea and no baked gameplay.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-8c36338db84f/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-2eec5e6b-498a-42c3-9dbd-926b554f62cc.png",
+      "batch": "B",
+      "reference_paths": [
+        "output/imagegen/abyss-hunter-v1/02-sunlight-combat.png",
+        "output/game-assets/v1/main/bg_sunlight_lite.png"
+      ]
+    },
+    {
+      "id": "reef_sunlight_left",
+      "prompt": "Use case: stylized-concept. ONE isolated production foreground reef border for Abyss Hunter sunlight zone. EXTREMELY TALL NARROW canvas aspect1:4, target384x1536 portrait, real transparent background. A slender vertically continuous wall of rounded faceted dark teal/blue rocks, sparse small rounded cyan and blue-purple coral sprigs. Match reference hand-painted dimensional 2D style. Light from above, large simple readable masses and restrained cyan edges, not photorealistic. The rock is a SIDE BORDER, not a pillar in the middle; top-to-bottom vertical coverage of reef, no horizontal floor along bottom. Both top and bottom ends softly taper with transparent safe margin at least8px at final. Entire object isolated with transparent safe edge; no scene water, no sky, no fish, no submarine, no jellyfish, no enemies, no bullets/effects/loot, no interface, text, numbers, logo or watermark. LEFT border version: rock's broad outer face hugs the far LEFT canvas edge (inside safe margin), jagged rounded contour faces RIGHT toward open water. Keep the rightmost third of strip transparent where possible, coral tips point RIGHT. One continuous left rock-wall strip only, distinct from the right border.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-8c36338db84f/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-fcfa9737-008a-45a4-ade1-6f40528e7dfb.png",
+      "batch": "B",
+      "reference_paths": [
+        "output/imagegen/abyss-hunter-v1/02-sunlight-combat.png"
+      ]
+    },
+    {
+      "id": "reef_sunlight_right",
+      "prompt": "Use case: stylized-concept. ONE isolated production foreground reef border for Abyss Hunter sunlight zone. EXTREMELY TALL NARROW canvas aspect1:4, target384x1536 portrait, real transparent background. A slender vertically continuous wall of rounded faceted dark teal/blue rocks, sparse small rounded cyan and blue-purple coral sprigs. Match reference hand-painted dimensional 2D style. Light from above, large simple readable masses and restrained cyan edges, not photorealistic. The rock is a SIDE BORDER, not a pillar in the middle; top-to-bottom vertical coverage of reef, no horizontal floor along bottom. Both top and bottom ends softly taper with transparent safe margin at least8px at final. Entire object isolated with transparent safe edge; no scene water, no sky, no fish, no submarine, no jellyfish, no enemies, no bullets/effects/loot, no interface, text, numbers, logo or watermark. RIGHT border version: rock's broad outer face hugs the far RIGHT canvas edge (inside safe margin), jagged rounded contour faces LEFT toward open water. Keep the leftmost third of strip transparent where possible, coral tips point LEFT. One continuous right rock-wall strip only, distinct rock ledges from left border.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-8c36338db84f/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-b27f515b-ad26-47ea-9b7f-eff001b99bd5.png",
+      "batch": "B",
+      "reference_paths": [
+        "output/imagegen/abyss-hunter-v1/02-sunlight-combat.png"
+      ]
+    },
+    {
+      "id": "flora_sunlight",
+      "prompt": "Use case: stylized-concept. One isolated production fore-layer coral decoration sprite for Abyss Hunter sunlight zone, deco_sunlight_flora.png, final512x512 square, actual transparent background. Reference1 supplies hand-painted dimensional 2D aquatic palette and rounded coral language, reference2 is background for color harmony only. A single compact group of three rounded cyan branching coral stems and one small muted blue-violet sea fan rooted together on a small dark teal reef pebble. Simple silhouettes, chunky rounded tips, restrained bright cyan lit edges, subtle painted texture, no more than tiny local rim glow. Bottom-centered but entire object within square with generous 12% transparent safe margin all sides; not an entire coastline. Friendly scientific exploration. No creatures, jellyfish, fish, submarine, shells with faces, bubbles, crystals, detached particles, floor plane, full scenery, pedestal, ground cast shadow, lettering, HUD, numbers, watermark or framing card. Output genuine alpha exterior and clear center/background around branching silhouette.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-8c36338db84f/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-18034aec-7248-459a-8793-5d003639ee67.png",
+      "batch": "B",
+      "reference_paths": [
+        "output/imagegen/abyss-hunter-v1/02-sunlight-combat.png",
+        "output/game-assets/v1/main/bg_sunlight_lite.png"
+      ]
+    },
+    {
+      "id": "mount_sonic",
+      "prompt": "Use case: stylized-concept. Create ONE isolated production BATTLE WEAPON MOUNT sprite for the H-01 submarine in Abyss Hunter, final128x128 square, genuine alpha transparent background. Image1 is ship identity/material/proportion reference; image2 supplies equipment art language. A compact detachable rounded white-ivory and muted-orange soft-mechanical weapon pod, cyan energy accents, right-facing 3/4 side view matching ship. Simple readable silhouette at48px, hand-painted dimensional 2D, restrained painted texture. Single weapon without the submarine. Keep shape centered with 12% transparent clear margin all sides. No base/pedestal/platform, no ground/shadow, no circular display ring, no frame/card, no background scene, no projectile/explosion, no text/letter/number/logo/watermark. SONIC CANNON: one short rounded cylindrical pod, one large circular cyan acoustic emitter ring facing front-RIGHT, concentric mechanical rings and central deep teal aperture, ivory shell, thin muted orange rear band. Distinct ring silhouette, not a multi-barrel gun, not a torpedo rack.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-8c36338db84f/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-8e7fbf4f-fc72-484d-ba25-da69c365c9a7.png",
+      "batch": "B",
+      "reference_paths": [
+        "output/game-assets/v1/main/hero_h01_idle.png",
+        "output/imagegen/abyss-hunter-v1/01-harbor-preparation.png"
+      ]
+    },
+    {
+      "id": "mount_torpedo",
+      "prompt": "Use case: stylized-concept. Create ONE isolated production BATTLE WEAPON MOUNT sprite for the H-01 submarine in Abyss Hunter, final128x128 square, genuine alpha transparent background. Image1 is ship identity/material/proportion reference; image2 supplies equipment art language. A compact detachable rounded white-ivory and muted-orange soft-mechanical weapon pod, cyan energy accents, right-facing 3/4 side view matching ship. Simple readable silhouette at48px, hand-painted dimensional 2D, restrained painted texture. Single weapon without the submarine. Keep shape centered with 12% transparent clear margin all sides. No base/pedestal/platform, no ground/shadow, no circular display ring, no frame/card, no background scene, no projectile/explosion, no text/letter/number/logo/watermark. TORPEDO NEST: one compact rounded rectangular ivory launcher pod with TWO short visible cylindrical launch tubes facing front-RIGHT, a pair of small muted-orange torpedo noses recessed inside the tubes, orange lower shell bands, tiny cyan status window. Distinct twin chamber silhouette, no acoustic ring, no coil or floating mines.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-8c36338db84f/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-0ca8fcca-3dc1-4a52-a70b-f912c864e67f.png",
+      "batch": "B",
+      "reference_paths": [
+        "output/game-assets/v1/main/hero_h01_idle.png",
+        "output/imagegen/abyss-hunter-v1/01-harbor-preparation.png"
+      ]
+    },
+    {
+      "id": "mount_arc",
+      "prompt": "Use case: stylized-concept. Create ONE isolated production BATTLE WEAPON MOUNT sprite for H-01 submarine in Abyss Hunter, final128x128 square, actual alpha transparent background. Image1 is ship identity/material/proportion reference; image2 supplies equipment language. Compact detachable rounded white-ivory and muted-orange soft-mechanical weapon pod with cyan energy accents, right-facing3/4 side view, same H-01 material proportions. Simple silhouette readable at48px, hand-painted dimensional2D, restrained painted texture. Single weapon only, no submarine. Centered complete shape with12% transparent clear margin. No base/pedestal/platform, ground/shadow, display ring, framing card, background scene, projectile/explosion/lightning arcs, text, letters, numbers, logo or watermark. ELECTRIC ARC CHAIN WEAPON: compact horizontal ivory cylinder fitted with three thick clearly separate cyan energy coil rings and a two-prong rounded dark-teal emitter pointing RIGHT, a muted-orange backing cuff and small orange carrying tab on top. Distinct ribbed coil silhouette, no torpedo chambers or acoustic speaker aperture.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-8c36338db84f/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-d8dc0a07-a7d5-4979-b3fa-efc8892c10de.png",
+      "batch": "B",
+      "reference_paths": [
+        "output/game-assets/v1/main/hero_h01_idle.png",
+        "output/imagegen/abyss-hunter-v1/01-harbor-preparation.png"
+      ]
+    },
+    {
+      "id": "mount_mine",
+      "prompt": "Use case: stylized-concept. Create ONE isolated production BATTLE WEAPON MOUNT sprite for H-01 submarine in Abyss Hunter, final128x128 square, actual alpha transparent background. Image1 is ship identity/material/proportion reference; image2 supplies equipment language. Compact detachable rounded white-ivory and muted-orange soft-mechanical weapon pod with cyan energy accents, right-facing3/4 side view, same H-01 material proportions. Simple silhouette readable at48px, hand-painted dimensional2D, restrained painted texture. Single weapon only, no submarine. Centered complete shape with12% transparent clear margin. No base/pedestal/platform, ground/shadow, display ring, framing card, background scene, projectile/explosion/lightning arcs, text, letters, numbers, logo or watermark. DECOY MINE LAUNCHER: compact spherical ivory/orange pod with three short rounded protective radial fins, a cyan equatorial energy band and small round cyan front sensor, a short dark-teal attachment lug tucked under its body. Distinct smooth BALL silhouette with a small launcher collar at rear-left. Friendly rounded edges, no sharp spikes. Do not add an anchor chain. Single pod only, no loose mine and no separate objects.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-8c36338db84f/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-80460e34-4919-46a5-ad1e-24d115d6c769.png",
+      "batch": "B",
+      "reference_paths": [
+        "output/game-assets/v1/main/hero_h01_idle.png",
+        "output/imagegen/abyss-hunter-v1/01-harbor-preparation.png"
+      ]
+    },
+    {
+      "id": "fx_bubble",
+      "prompt": "Use case: stylized-concept. Create ONE production isolated 2D game particle texture, final64x64 square: a single small round clear sea bubble with thin pale-cyan rim, one simple upper-left white/cyan specular crescent. Actual transparent alpha exterior and largely transparent interior with only faint cool cyan glass tint. Clean softly painted2D bubble matching reference sunlight zone; perfectly circular front view, readable at16px, no huge glow. Centered about70% canvas diameter with at least8px final clear border. Only ONE bubble, no surrounding dots or bubble trail. No ground/shadow, fish, submarine, scene water, text, numbers, logo or watermark. This is a one-particle sprite, not an underwater picture. Genuine alpha, no black/white/magenta backing or checkerboard.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-8c36338db84f/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-40af1b20-1d39-4de1-ba87-68c11f07f4f6.png",
+      "batch": "B",
+      "reference_paths": [
+        "output/imagegen/abyss-hunter-v1/02-sunlight-combat.png"
+      ]
+    },
+    {
+      "id": "fx_glow",
+      "prompt": "Use case: stylized-concept. ONE production 2D game local glow particle texture, final128x128 square, true alpha background. Single small circular CYAN SOFT GLOW with a small luminous almost-white central core smoothly feathering into pale cyan then turquoise and into fully transparent exterior. Radial symmetric, no hard disk edge, NO ring or donut: center is the brightest point and glow strength decreases continuously outward. Keep glow local within central60% of canvas and outer12% fully transparent. This will be used on one pickup or machine, not fullscreen bloom. Clean restrained mobile2D aquatic light. One glow only; no sparkles/stars/particles, no object, no water, no scene, no cloud, no text, numerals, watermark, black or white backing. Genuine transparent alpha exterior.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-8c36338db84f/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-fecaf41e-2683-40c5-bd04-3bbc3ffc70de.png",
+      "batch": "B",
+      "reference_paths": []
+    },
+    {
+      "id": "fx_crystal_drop",
+      "prompt": "Use case: stylized-concept. ONE isolated production loot particle sprite for Abyss Hunter, fx_crystal_drop.png, final64x64 square, actual transparent background. A SINGLE cyan luminous faceted crystal gemstone, vertical elongated hexagonal prism with pointed upper/lower tips, slight three-quarter facet view. Clear light-cyan front facet, dark teal side facet, very thin pale cyan rim, simple 2-3value hierarchy; readable at16px. Match reference2D hand-painted collectible cyan gems. One solid connected gemstone only, no cluster, no detached sparkles, no gold stars, no ground shadow/pedestal, no display ring or card, no scene, no submarine/creature, no words/letters/numbers/logo/watermark. Center gem with12% safe clear transparent margin. Restrained rim only, no big halo. Actual alpha, not white/black painted backing or checkerboard.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-8c36338db84f/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-15978c75-8d6e-4fd1-9386-ac9dbfc5c07a.png",
+      "batch": "B",
+      "reference_paths": [
+        "output/imagegen/abyss-hunter-v1/02-sunlight-combat.png"
+      ]
+    },
+    {
+      "id": "fx_sonic_ring",
+      "prompt": "Use case: stylized-concept. Create ONE production 2D game VFX particle texture, final256x256 square: a single perfectly circular THIN CYAN SONIC RING, front orthographic face-on view, actual transparent background and completely transparent empty center. Match reference's clean hand-painted aquatic local cyan attack light. One continuous crisp pale cyan rim of near-uniform 3px final thickness, very restrained soft cyan edge feather 4px max, outer radius about100px at final256. No multiple concentric rings, no elliptical perspective, no ripple water, no filled disk, no central spot, no arcs/bolts, no shards, no bubbles/particles, no submarine, no scenery, no HUD, text/number/logo/watermark. Keep at least20px true transparent margin. The ring is a single isolated sprite to scale/fade by code; no black background and no fullscreen bloom.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-8c36338db84f/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-bbf9a5d8-ad51-4939-9ef4-fc6a2f203f8b.png",
+      "batch": "B",
+      "reference_paths": [
+        "output/imagegen/abyss-hunter-v1/02-sunlight-combat.png"
+      ]
+    },
+    {
+      "id": "fx_torpedo",
+      "prompt": "Use case: stylized-concept. ONE isolated production projectile sprite for Abyss Hunter, fx_torpedo.png, final128x64 landscape2:1 canvas, actual transparent background. A single SHORT rounded torpedo traveling exactly RIGHT in side/very slight3/4 view: muted-orange rounded pointed nose at RIGHT, ivory-white short cylindrical metal body, one dark teal band and a small cyan energy slit, two tiny rounded tail fins at LEFT. Compact friendly rounded weapon design consistent with supplied reference hero's white-orange mechanical language. Clean simple readable2D hand-painted volume, no markings. Whole torpedo centered within canvas with at least8px final clear margin. No exhaust, no smoke, no trail, no explosion, no bubbles, no detached sparkles, no submarine, no water/background, no HUD, words, numbers, logos, watermark or groundshadow. One projectile only, not a weapon launcher or a sheet.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-8c36338db84f/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-1862c3be-367b-4235-84fe-bede50a16003.png",
+      "batch": "B",
+      "reference_paths": [
+        "output/imagegen/abyss-hunter-v1/02-sunlight-combat.png"
+      ]
+    },
+    {
+      "id": "fx_arc",
+      "prompt": "Use case: stylized-concept. ONE production 2D game electric-arc segment particle, target256x64, very wide4:1 landscape texture, genuine alpha transparent background. A single short thin cyan lightning stroke running horizontally LEFT to RIGHT, with three gentle angular zigzag bends, bright white-cyan inner core about2px at final size, narrow turquoise feather edge at most3px. One connected open stroke only, no branches, no loops/rings, no sparks, no glow cloud. Center along horizontal midline, whole line within12% safe margin horizontally and at least8px final top/bottom. Clean hand-painted stylized aquatic action game light, no photo-real lightning or dark cloud. No machines, water, enemies, background, black backing, text, numerals, logo or watermark. This is one reusable short arc segment, not a full lightning scene.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-8c36338db84f/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-56028f90-0c3b-452c-bdef-e8d16de870ef.png",
+      "batch": "B",
+      "reference_paths": []
+    },
+    {
+      "id": "fx_mine",
+      "prompt": "Use case: stylized-concept. ONE isolated production 2D game floating mine projectile sprite, final96x96 square, true transparent alpha background. A small spherical ivory-white metal buoy mine with muted-orange protective cap and three short rounded blunt nubs, thin cyan luminous equator band and one small cyan sensor eye, subtle3/4 view. Match friendly rounded H-01 white-orange-cyan submarine equipment style, minimal clean2-3value groups and simple dimensional painted shading. Distinct ball silhouette, no sharp spikes, no chain/anchor, no launcher mount, no handle, no submarine. Whole mine centered with12% clear safe margin, legible at24px. No blast/smoke/trail, no sparkles, floor/shadow/pedestal, no scenery, card/frame, letters, numbers, UI/logo/watermark. One ball only, no sheet.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-8c36338db84f/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-5dd14a44-90db-4f7e-bc42-6eb929c2d21c.png",
+      "batch": "B",
+      "reference_paths": []
+    },
+    {
+      "id": "fx_hit",
+      "prompt": "Use case: stylized-concept. ONE isolated production 2D game hit spark particle sprite, final96x96 square, genuine alpha background. One small clean cyan-white four-point impact spark, short broad tapered rays, bright small pale-cyan center, thin teal-cyan outer edges, restrained local glow no more than4px final. Simple single connected light shape, readable at16px. Hand-painted dimensional2D mobile aquatic game palette, regular attack cyan not red/purple. Centered about65% canvas width with at least8px fully clear border. No additional tiny stars or scattered particles, no blast cloud, no smoke, no fire/explosion, no background, no scene, no black fill/backing, no UI, text, letters, numbers, watermark or framing. A single local VFX element for scaling/fading by code.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-8c36338db84f/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-fc3c5ebc-c2f0-48e8-a59e-d66ce4f78899.png",
+      "batch": "B",
+      "reference_paths": []
+    },
+    {
+      "id": "fx_death_particle",
+      "prompt": "Use case: stylized-concept. ONE isolated production 2D game luminescent death mote texture, final32x32 square, actual alpha transparent background. A SINGLE tiny rounded cyan glowing teardrop/mote, pointed top and round lower end, with one pale cyan highlight, only2-3value groups and very restrained soft rim. Friendly non-gory underwater defeated-creature bioluminescent particle. Not a crystal shard or a starburst; very simple solid small droplet silhouette legible at8px. Shape centered with at least8px final clear border, actual content about12px at32px output. No other particles, no spray, no smoke, no halo disk, no black/white backing, no scenery, creatures, UI, text, numbers, letters, logo or watermark.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-8c36338db84f/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-985da658-eb54-41bf-9558-a84c93604d41.png",
+      "batch": "B",
+      "reference_paths": []
+    },
+    {
+      "id": "fx_thruster",
+      "prompt": "Use case: stylized-concept. ONE isolated production2D game thruster exhaust VFX sprite, final128x64 landscape2:1, genuine alpha background. A SHORT softly tapered CYAN energy plume pointing LEFT. Rounded compact pale white-cyan bright root at RIGHT where a submarine nozzle attaches, smoothly tapering to a small curved blue-cyan tip toward LEFT, one simple inner white-cyan core, thin turquoise outer feather. Friendly clean2D hand-painted underwater propulsion light, restrained local effect. Shape centered with at least8px final transparent border. ONLY THE LIGHT PLUME, no metal nozzle, submarine, tube, weapon, fins, bubbles/trail, smoke, fire, sparks, scene water, ground, text/number/logo/watermark. No long fog bank or large halo. Single connected plume, no sheet or variants.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-8c36338db84f/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-2f1c0261-1c51-4e0f-9e4b-bd1a1f11c065.png",
+      "batch": "B",
+      "reference_paths": []
+    },
+    {
+      "id": "hero_damaged",
+      "prompt": "Use case: precise-object-edit. EDIT TARGET is the supplied H-01 submarine production sprite. Create its lightly damaged/rescue-state counterpart hero_h01_damaged.png, final512x512 square, real transparent background. Preserve EXACT same ship identity, right-facing3/4 side view, body proportions and centered composition: single large round cyan porthole, two small side fins, exactly two front weapon pods, ivory majority armor, muted-orange accent armor, rear thruster on LEFT. Change ONLY: add three small subtle shallow grey scratches on ivory side armor and one small scuff on orange fin, TURN OFF rear thruster illumination so its nozzle becomes dark teal; preserve complete rear nozzle geometry. Keep cyan glass porthole lit enough to read. Preserve empty seat inside, no driver. Do not break, dent, remove, add or redesign any part. No fractured glass, heavy grunge, flames, smoke, bubbles, blood, characters, dangling cables, rescue ship, scene, groundshadow, UI, words, letters, numbers, watermark, cards or additional objects. Same softly dimensional hand-painted2D finish and whole silhouette. All borders at least8px actual transparent at final size.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-8c36338db84f/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-7a1f12c3-5bf3-44d1-ad0a-d93c668e8c3b.png",
+      "batch": "B",
+      "reference_paths": [
+        "output/game-assets/v1/main/hero_h01_idle.png"
+      ]
+    },
+    {
+      "id": "ui_button_primary",
+      "prompt": "One isolated FILLED CYAN GAME BUTTON, target 160x80, 2:1 aspect ratio. Continuous solid opaque blue-cyan rounded rectangle made of colored plastic. Main surface color muted BLUE-CYAN (approximately RGB 36, 128, 160), pale aquamarine rim light RGB84,238,226, navy lower bevel. The entire center is solid opaque flat BLUE-CYAN, the exact same filled material as the four corners. No hole and no glass: surface must fully cover what is behind it. Broad uninterrupted filled middle panel occupies most of button, tiny bevel at perimeter only. Flat plain face suitable for nine-slice stretching, center region at x32..128 and y24..56 is a uniform solid color. Isometric/perspective disallowed: orthographic front rectangle only. Clear actual transparent background OUTSIDE the silhouette, with safe border at least 8px at target size. Softly dimensional 2D game style. No arrows, icons, pictograms, text, glyphs, numerals, objects, logo, watermark, scene. Only this single filled blank button.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-8c36338db84f/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-8373d6cd-40c7-4d7b-87d3-e7642c226bba.png",
+      "batch": "A",
+      "status": "selected",
+      "reference_paths": []
+    },
+    {
+      "id": "ui_button_primary_attempt_4",
+      "prompt": "Use case: stylized-concept. Production game UI skin. One solid filled turquoise cyan luminous rounded rectangular button, front orthographic view, wide 2:1 canvas, final 160x80 pixels. A simple continuous solid cyan slab, single unbroken flat teal-cyan color face across the entire middle. Entire button face opaque from left to right with continuous color filling its center. Very slim pale-cyan raised bevel around rounded outer edge and darker teal lower edge, softly dimensional hand-painted 2D mobile game material. Nine-slice texture: flat uniform color in central rectangle x32..128 y24..56 at final160x80; keep all edge decoration outside that rectangle. Solid button silhouette inset at least 8px from canvas edges. Genuinely transparent exterior outside the button only. No text, numbers, symbols or illustrations. Single texture, no layout, no environment, no watermark.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-8c36338db84f/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-d943b575-6fae-48d1-89fa-cca01e555207.png",
+      "batch": "A",
+      "status": "rejected",
+      "reference_paths": []
+    }
+  ]
+}
