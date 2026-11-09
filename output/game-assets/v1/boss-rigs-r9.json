@@ -1,0 +1,130 @@
+{
+  "coordinate_note": "Pixels at full 768px body; Cocos node origin at body center, bottom-left axes. Part anchor (0.5,0.9). Angles are CCW. Values are art assembly suggestions, not engine-tested Prefabs.",
+  "rigs": [
+    {
+      "id": "enemy_boss_01_angler_king",
+      "body": "sunlight/enemy_boss_01_angler_king_idle.png",
+      "part": "sunlight/enemy_boss_01_angler_king_fin.png",
+      "body_socket_top_left_px": [
+        413.01908713692944,
+        429.55684647302905
+      ],
+      "cocos_node_position_from_body_center": [
+        29.019087136929443,
+        -45.556846473029054
+      ],
+      "part_anchor_bottom_left": [
+        0.5,
+        0.9
+      ],
+      "part_scale": 0.55,
+      "part_instances_angles_deg": [
+        0
+      ],
+      "preview_swing_degrees": [
+        -12,
+        0,
+        12,
+        0
+      ],
+      "source_socket_point_top_left_px": [
+        665,
+        680
+      ]
+    },
+    {
+      "id": "enemy_boss_02_tentacle_warden",
+      "body": "twilight/enemy_boss_02_tentacle_warden_idle.png",
+      "part": "twilight/enemy_boss_02_tentacle_warden_fin.png",
+      "body_socket_top_left_px": [
+        570.9726775956284,
+        401.12204007285976
+      ],
+      "cocos_node_position_from_body_center": [
+        186.9726775956284,
+        -17.12204007285976
+      ],
+      "part_anchor_bottom_left": [
+        0.5,
+        0.9
+      ],
+      "part_scale": 0.95,
+      "part_instances_angles_deg": [
+        0
+      ],
+      "preview_swing_degrees": [
+        -12,
+        0,
+        12,
+        0
+      ],
+      "source_socket_point_top_left_px": [
+        889,
+        650
+      ]
+    },
+    {
+      "id": "enemy_boss_03_giant_squid",
+      "body": "abyss/enemy_boss_03_giant_squid_idle.png",
+      "part": "abyss/enemy_boss_03_giant_squid_fin.png",
+      "body_socket_top_left_px": [
+        442.4438454627134,
+        369.4734950584007
+      ],
+      "cocos_node_position_from_body_center": [
+        58.4438454627134,
+        14.526504941599285
+      ],
+      "part_anchor_bottom_left": [
+        0.5,
+        0.9
+      ],
+      "part_scale": 0.95,
+      "part_instances_angles_deg": [
+        -18,
+        18
+      ],
+      "preview_swing_degrees": [
+        -12,
+        0,
+        12,
+        0
+      ],
+      "source_socket_point_top_left_px": [
+        711,
+        613
+      ]
+    },
+    {
+      "id": "enemy_boss_04_abyss_whale",
+      "body": "abyss/enemy_boss_04_abyss_whale_idle.png",
+      "part": "abyss/enemy_boss_04_abyss_whale_fin.png",
+      "body_socket_top_left_px": [
+        468.82362592288763,
+        407.7506152584085
+      ],
+      "cocos_node_position_from_body_center": [
+        84.82362592288763,
+        -23.750615258408516
+      ],
+      "part_anchor_bottom_left": [
+        0.5,
+        0.9
+      ],
+      "part_scale": 0.78,
+      "part_instances_angles_deg": [
+        0
+      ],
+      "preview_swing_degrees": [
+        -12,
+        0,
+        12,
+        0
+      ],
+      "source_socket_point_top_left_px": [
+        764,
+        678
+      ]
+    }
+  ]
+}

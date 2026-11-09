@@ -1,0 +1,315 @@
+{
+  "tool": "built-in image_gen",
+  "production_version": "v1-r9",
+  "records": [
+    {
+      "id": "enemy_elite_01_storm_eel",
+      "prompt": "Use case: stylized-concept. One isolated production elite enemy IDLE sprite for Abyss Hunter. Input images are STYLE references only. Create STORM EEL: right-facing side view, long S-curved rounded eel body, broad swept dorsal sail, deep cyan-blue skin and violet segmented electric side markings, ONE amber eye on right head, closed rounded mouth. Visually more powerful and blue-violet than normal eel. Hand-painted softly dimensional 2D, simple chunky silhouette readable at48px, wondrous rather than scary. Square1024 source for final320x320. Entire creature centered with15% blank margin, true alpha0 background directly outside anatomy. Opaque body with cyan edge-light painted inside silhouette. No disconnected lightning, fog/halo, particles, ground shadow, scenery, UI, letters, numbers, teeth, blood, watermark. ONE creature only.",
+      "refs": [
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/imagegen/abyss-hunter-v1/03-abyss-boss.png",
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/game-assets/v1/twilight/enemy_normal_13_crystal_crab_idle.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-72f9cb7f308c/codex-home/generated_images/01a1c162-2d86-7553-bc4b-257a56d4ddc6/exec-99da43e9-840a-4949-9001-1f20df645e5b.png",
+      "transparent_background": true
+    },
+    {
+      "id": "enemy_elite_02_iron_hermit",
+      "prompt": "Use case: stylized-concept. One isolated production ELITE enemy IDLE sprite for Abyss Hunter. Inputs are STYLE references only. Hand-painted softly dimensional2D, simplified chunky readable48px silhouette, elegant and wondrous, not scary. Cyan/teal main surfaces, deep indigo shadows, violet identifying features, one amber eye at right-front head. Square1024 source for final320x320. Entire creature centered with15% empty safe margin, true alpha0 directly outside anatomy; opaque painted body. Crisp rimlight inside silhouette only. No exterior glow/fog/cloud, detached particles, bubbles, ground shadow, water/scenery, cards, UI, text/numbers/watermark, teeth or blood. IRON ARMORED HERMIT CRAB: facing RIGHT in side-three-quarter view, large rounded spiral shell made of broad overlapping blue steel-like natural shell plates with violet seams and cyan edges; six short thick legs and two rounded robust claws, one amber eye on short stalk. Shell clearly spiral, more massive than crystal crab, no crystals, no weapons, no spikes. ONE complete creature.",
+      "refs": [
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/imagegen/abyss-hunter-v1/03-abyss-boss.png",
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/game-assets/v1/twilight/enemy_normal_13_crystal_crab_idle.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-72f9cb7f308c/codex-home/generated_images/01a1c162-2d86-7553-bc4b-257a56d4ddc6/exec-9fc48fbc-d18e-4651-aba3-25fbdb2be551.png",
+      "transparent_background": true
+    },
+    {
+      "id": "enemy_elite_03_spear_guard",
+      "prompt": "Use case: stylized-concept. One isolated production ELITE enemy IDLE sprite for Abyss Hunter. Inputs are STYLE references only. Hand-painted softly dimensional2D, simplified chunky readable48px silhouette, elegant and wondrous, not scary. Cyan/teal main surfaces, deep indigo shadows, violet identifying features, one amber eye at right-front head. Square1024 source for final320x320. Entire creature centered with15% empty safe margin, true alpha0 directly outside anatomy; opaque painted body. Crisp rimlight inside silhouette only. No exterior glow/fog/cloud, detached particles, bubbles, ground shadow, water/scenery, cards, UI, text/numbers/watermark, teeth or blood. SWORD FISH RANGER: streamlined right-facing swordfish, short rounded chunky torpedo body, very long straight smooth cyan bill extending right, high swept violet dorsal sail, crescent tail at left, single amber eye and closed mouth, blue-teal natural scale armor with purple cheek stripe. Bill blunt stylized at tip, not a weapon held by a person; no costume. Full side view, one entire fish.",
+      "refs": [
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/imagegen/abyss-hunter-v1/03-abyss-boss.png",
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/game-assets/v1/twilight/enemy_normal_13_crystal_crab_idle.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-72f9cb7f308c/codex-home/generated_images/01a1c162-2d86-7553-bc4b-257a56d4ddc6/exec-690d2000-8141-4ae8-9c75-d8abeb27a4cc.png",
+      "transparent_background": true
+    },
+    {
+      "id": "enemy_elite_04_royal_jelly",
+      "prompt": "Use case: stylized-concept. One isolated production ELITE enemy IDLE sprite for Abyss Hunter. Inputs are STYLE references only. Hand-painted softly dimensional2D, simplified chunky readable48px silhouette, elegant and wondrous, not scary. Cyan/teal main surfaces, deep indigo shadows, violet identifying features, one amber eye at right-front head. Square1024 source for final320x320. Entire creature centered with15% empty safe margin, true alpha0 directly outside anatomy; opaque painted body. Crisp rimlight inside silhouette only. No exterior glow/fog/cloud, detached particles, bubbles, ground shadow, water/scenery, cards, UI, text/numbers/watermark, teeth or blood. ROYAL CROWN JELLYFISH: upright bell in subtly RIGHT-facing side view; broad flattened violet-blue dome topped by FIVE short rounded crown-lobes grown from its rim, cyan scalloped edge, a clearly opaque central blue bell with one small amber eye near right edge. Six broad elegant violet ribbon tentacles descend with gently curled tips, cyan inner markings, two short oral arms. Jewel-like crown silhouette distinct from normal jellyfish. No separate accessory crown, no transparent outer bubble, no aura. ONE complete creature.",
+      "refs": [
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/imagegen/abyss-hunter-v1/03-abyss-boss.png",
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/game-assets/v1/twilight/enemy_normal_13_crystal_crab_idle.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-72f9cb7f308c/codex-home/generated_images/01a1c162-2d86-7553-bc4b-257a56d4ddc6/exec-e80a24cc-ff2c-456f-bd98-1f487153fd87.png",
+      "transparent_background": true
+    },
+    {
+      "id": "enemy_elite_05_crystal_octopus",
+      "prompt": "Use case: stylized-concept. One isolated production ELITE enemy IDLE sprite for Abyss Hunter. Inputs are STYLE references only. Hand-painted softly dimensional2D, simplified chunky readable48px silhouette, elegant and wondrous, not scary. Cyan/teal main surfaces, deep indigo shadows, violet identifying features, one amber eye at right-front head. Square1024 source for final320x320. Entire creature centered with15% empty safe margin, true alpha0 directly outside anatomy; opaque painted body. Crisp rimlight inside silhouette only. No exterior glow/fog/cloud, detached particles, bubbles, ground shadow, water/scenery, cards, UI, text/numbers/watermark, teeth or blood. CRYSTAL-ARM OCTOPUS: right-facing three-quarter side view, large rounded indigo-teal domed head, ONE amber eye on right, eight chunky curling arms with distinct broad faceted CYAN CRYSTAL cuffs grown naturally along upper arm surfaces, violet undersides and a few large cyan suckers. Faceted geometric forearms and smooth bulbous head give clear identity. Arms compact and gracefully arranged with readable negative gaps, no thin spaghetti. Not squid, no triangular mantle, no crown, no separate gems. ONE complete creature.",
+      "refs": [
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/imagegen/abyss-hunter-v1/03-abyss-boss.png",
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/game-assets/v1/twilight/enemy_normal_13_crystal_crab_idle.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-72f9cb7f308c/codex-home/generated_images/01a1c162-2d86-7553-bc4b-257a56d4ddc6/exec-35c146cb-c649-46c5-be94-d7da5e6eda84.png",
+      "transparent_background": true
+    },
+    {
+      "id": "enemy_elite_06_mirror_ray",
+      "prompt": "Use case: stylized-concept. One isolated production ELITE enemy IDLE sprite for Abyss Hunter. Inputs are STYLE references only. Hand-painted softly dimensional2D, simplified chunky readable48px silhouette, elegant and wondrous, not scary. Cyan/teal main surfaces, deep indigo shadows, violet identifying features, one amber eye at right-front head. Square1024 source for final320x320. Entire creature centered with15% empty safe margin, true alpha0 directly outside anatomy; opaque painted body. Crisp rimlight inside silhouette only. No exterior glow/fog/cloud, detached particles, bubbles, ground shadow, water/scenery, cards, UI, text/numbers/watermark, teeth or blood. MIRROR-WING RAY: right-facing side-oblique view revealing broad diamond-shaped wings; short rounded head at right, one amber eye, long smooth thin trailing tail swept left/down. Wings are broad smooth reflective cyan SILVER-BLUE panels with one large violet chevron on each wing, rounded corners; silky mirror surfaces, not faceted crystal and not metal machinery. Compact manta body with elegant two broad fins spanning vertically, no teeth, no head horns, no crown. ONE entire creature.",
+      "refs": [
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/imagegen/abyss-hunter-v1/03-abyss-boss.png",
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/game-assets/v1/twilight/enemy_normal_13_crystal_crab_idle.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-72f9cb7f308c/codex-home/generated_images/01a1c162-2d86-7553-bc4b-257a56d4ddc6/exec-24907cee-9c9d-485c-8f1b-e77e4b2d2a91.png",
+      "transparent_background": true
+    },
+    {
+      "id": "enemy_elite_07_abyss_stalker",
+      "prompt": "Use case: stylized-concept. One isolated production ELITE enemy IDLE sprite for Abyss Hunter. Inputs are STYLE references only. Hand-painted softly dimensional2D, simplified chunky readable48px silhouette, elegant and wondrous, not scary. Cyan/teal main surfaces, deep indigo shadows, violet identifying features, one amber eye at right-front head. Square1024 source for final320x320. Entire creature centered with15% empty safe margin, true alpha0 directly outside anatomy; opaque painted body. Crisp rimlight inside silhouette only. No exterior glow/fog/cloud, detached particles, bubbles, ground shadow, water/scenery, cards, UI, text/numbers/watermark, teeth or blood. ABYSS STALKER: sleek deep-sea armored isopod predator, right-facing full side view; long low segmented dark INDIGO back with six broad rounded overlapping plates and luminous violet stripe, thick cyan face shield, ONE amber eye, three pairs of short broad swimming paddles underneath, large split violet tail fan left. Cylindrical low silhouette different from crab and eel, dignified patrol creature, rounded mandibles CLOSED and completely hidden, no claws, no horror. Restrained cyan edge highlights, more dark indigo than previous shallow creatures. ONE complete creature.",
+      "refs": [
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/imagegen/abyss-hunter-v1/03-abyss-boss.png",
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/game-assets/v1/twilight/enemy_normal_13_crystal_crab_idle.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-72f9cb7f308c/codex-home/generated_images/01a1c162-2d86-7553-bc4b-257a56d4ddc6/exec-c9439289-9fec-4829-b732-2e8f7bc78984.png",
+      "transparent_background": true
+    },
+    {
+      "id": "enemy_elite_08_violet_nautilus",
+      "prompt": "Use case: stylized-concept. One isolated production ELITE enemy IDLE sprite for Abyss Hunter. Inputs are STYLE references only. Hand-painted softly dimensional2D, simplified chunky readable48px silhouette, elegant and wondrous, not scary. Cyan/teal main surfaces, deep indigo shadows, violet identifying features, one amber eye at right-front head. Square1024 source for final320x320. Entire creature centered with15% empty safe margin, true alpha0 directly outside anatomy; opaque painted body. Crisp rimlight inside silhouette only. No exterior glow/fog/cloud, detached particles, bubbles, ground shadow, water/scenery, cards, UI, text/numbers/watermark, teeth or blood. VIOLET-STRIPED NAUTILUS: right-facing side view, very large perfect rounded spiral shell dark indigo with SIX broad luminous VIOLET radial stripes and thin cyan lip, small smooth teal head emerging at right with ONE amber eye and a compact fan of six short curled lavender arms. Wide circular silhouette, natural elegant living mollusk not hermit crab; no claws, legs, armored plates, crown or crystal. Shell predominantly deep violet and indigo, face cyan. ONE complete creature.",
+      "refs": [
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/imagegen/abyss-hunter-v1/03-abyss-boss.png",
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/game-assets/v1/twilight/enemy_normal_13_crystal_crab_idle.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-72f9cb7f308c/codex-home/generated_images/01a1c162-2d86-7553-bc4b-257a56d4ddc6/exec-2c0dbfbf-f90f-406e-b921-882b3212772c.png",
+      "transparent_background": true
+    },
+    {
+      "id": "enemy_elite_01_storm_eel_swim",
+      "prompt": "Use case: identity-preserve. Create ONE FOUR-FRAME SWIM SPRITESHEET from this EXACT elite sprite reference. Wide4:1 canvas, FOUR equal square cells in ONE row (target source2048x512, final1280x320). Exactly one creature per cell. Preserve identical anatomy, silhouette size, color markings, eye, textures and fixed RIGHT-facing camera in all four frames. SAME FIXED head and eye position and scale within each cell; no body translation, turn, tilt or zoom. Four subtle rhythmic phases cycling smoothly back to first at6fps. Each entire pose fits in its own cell with15% blank transparent margin, no overlaps. True alpha0 directly outside anatomy and between cells. Crisp isolated painted sprites, no exterior fog/haze/glow, no shadow, scenery, particles, panels/dividers, lettering or numerals. Keep hand-painted2D identity. STORM EEL: keep large head and dorsal sail steady, animate only gentle S-wave through lower tail and subtle pectoral fin paddling. Purple zigzag side markings and amber eye remain identical.",
+      "refs": [
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/game-assets/v1/source-masters/enemy_elite_01_storm_eel_idle.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-72f9cb7f308c/codex-home/generated_images/01a1c162-2d86-7553-bc4b-257a56d4ddc6/exec-02f42772-62ca-4acc-ac7c-3bee601b310d.png",
+      "transparent_background": true,
+      "export_kind": "swim_strip"
+    },
+    {
+      "id": "enemy_elite_02_iron_hermit_swim",
+      "prompt": "Use case: identity-preserve. Create ONE FOUR-FRAME SWIM SPRITESHEET from this EXACT elite sprite reference. Wide4:1 canvas, FOUR equal square cells in ONE row (target source2048x512, final1280x320). Exactly one creature per cell. Preserve identical anatomy, silhouette size, color markings, eye, textures and fixed RIGHT-facing camera in all four frames. SAME FIXED head and eye position and scale within each cell; no body translation, turn, tilt or zoom. Four subtle rhythmic phases cycling smoothly back to first at6fps. Each entire pose fits in its own cell with15% blank transparent margin, no overlaps. True alpha0 directly outside anatomy and between cells. Crisp isolated painted sprites, no exterior fog/haze/glow, no shadow, scenery, particles, panels/dividers, lettering or numerals. Keep hand-painted2D identity. IRON HERMIT CRAB: large spiral plated shell remains rigid and unchanged; ONLY short legs paddle alternately and claws open by a tiny amount. Keep same one eye, spiral shell plates and purple seams. No shell rolling or moving perspective.",
+      "refs": [
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/game-assets/v1/source-masters/enemy_elite_02_iron_hermit_idle.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-72f9cb7f308c/codex-home/generated_images/01a1c162-2d86-7553-bc4b-257a56d4ddc6/exec-b0465b65-70dc-49c7-861a-5579d3ff66ff.png",
+      "transparent_background": true,
+      "export_kind": "swim_strip"
+    },
+    {
+      "id": "enemy_elite_03_spear_guard_swim",
+      "prompt": "Use case: identity-preserve. Create ONE FOUR-FRAME SWIM SPRITESHEET from this EXACT elite sprite reference. Wide4:1 canvas, FOUR equal square cells in ONE row (target source2048x512, final1280x320). Exactly one creature per cell. Preserve identical anatomy, silhouette size, color markings, eye, textures and fixed RIGHT-facing camera in all four frames. SAME FIXED head and eye position and scale within each cell; no body translation, turn, tilt or zoom. Four subtle rhythmic phases cycling smoothly back to first at6fps. Each entire pose fits in its own cell with15% blank transparent margin, no overlaps. True alpha0 directly outside anatomy and between cells. Crisp isolated painted sprites, no exterior fog/haze/glow, no shadow, scenery, particles, panels/dividers, lettering or numerals. Keep hand-painted2D identity. SWORD FISH RANGER: rigid long bill and head stay unchanged; only crescent tail sweeps subtly and small pectoral fin paddles. Keep exact dorsal sail shape, overlapping teal scales and violet cheek stripe. Each pose a COMPLETE fish including entire bill and tail with generous clear margin, no cutoff.",
+      "refs": [
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/game-assets/v1/source-masters/enemy_elite_03_spear_guard_idle.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-72f9cb7f308c/codex-home/generated_images/01a1c162-2d86-7553-bc4b-257a56d4ddc6/exec-f54cb187-a996-4f77-8863-ca29724a026e.png",
+      "transparent_background": true,
+      "export_kind": "swim_strip"
+    },
+    {
+      "id": "enemy_elite_04_royal_jelly_swim",
+      "prompt": "Use case: identity-preserve. Create ONE FOUR-FRAME SWIM SPRITESHEET from this EXACT elite sprite reference. Wide4:1 canvas, FOUR equal square cells in ONE row (target source2048x512, final1280x320). Exactly one creature per cell. Preserve identical anatomy, silhouette size, color markings, eye, textures and fixed RIGHT-facing camera in all four frames. SAME FIXED head and eye position and scale within each cell; no body translation, turn, tilt or zoom. Four subtle rhythmic phases cycling smoothly back to first at6fps. Each entire pose fits in its own cell with15% blank transparent margin, no overlaps. True alpha0 directly outside anatomy and between cells. Crisp isolated painted sprites, no exterior fog/haze/glow, no shadow, scenery, particles, panels/dividers, lettering or numerals. Keep hand-painted2D identity. ROYAL CROWN JELLYFISH: keep crown lobes, bell shape and one eye fixed; only six ribbon arms sway gently alternately outward/inward; very mild lower bell pulse. Four phases with unchanged crown anatomy, diamond bell markings and amber eye.",
+      "refs": [
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/game-assets/v1/source-masters/enemy_elite_04_royal_jelly_idle.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-72f9cb7f308c/codex-home/generated_images/01a1c162-2d86-7553-bc4b-257a56d4ddc6/exec-608b8a8a-c051-4a27-9c73-44878cafb9be.png",
+      "transparent_background": true,
+      "export_kind": "swim_strip",
+      "status": "rejected",
+      "reason": "exterior colored haze"
+    },
+    {
+      "id": "enemy_elite_04_royal_jelly_swim",
+      "prompt": "Use case: background-extraction. EDIT ONLY BACKGROUND of this exact FOUR-FRAME jellyfish sprite strip. Preserve four creatures EXACTLY unchanged: poses, anatomy, colors, painted cyan highlights, amber eyes, all ribbon arms and crown lobes. REMOVE ALL colored haze/halo/cloud/glow/noise outside physical anatomy, including between ribbon arms and between creatures. Make all non-anatomy pixels TRUE ALPHA0. Edge should be crisp clean antialias, like a die-cut sticker with no border. NO exterior glow at all. Do not change composition, scale, frame spacing, canvas proportions, creatures or add anything. Four isolated opaque painted jellyfish, transparent background.",
+      "refs": [
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/game-assets/v1/source-masters/enemy_elite_04_royal_jelly_swim.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-72f9cb7f308c/codex-home/generated_images/01a1c162-2d86-7553-bc4b-257a56d4ddc6/exec-6a41b16b-597c-4256-b143-37e7ba3904f2.png",
+      "transparent_background": true,
+      "export_kind": "swim_strip",
+      "master_filename": "enemy_elite_04_royal_jelly_swim_clean_r9.png"
+    },
+    {
+      "id": "enemy_elite_05_crystal_octopus_swim",
+      "prompt": "Use case: identity-preserve. Create ONE FOUR-FRAME SWIM SPRITESHEET from this EXACT elite sprite reference. Wide4:1 canvas, FOUR equal square cells in ONE row (target source2048x512, final1280x320). Exactly one creature per cell. Preserve identical anatomy, silhouette size, color markings, eye, textures and fixed RIGHT-facing camera in all four frames. SAME FIXED head and eye position and scale within each cell; no body translation, turn, tilt or zoom. Four subtle rhythmic phases cycling smoothly back to first at6fps. Each entire pose fits in its own cell with15% blank transparent margin, no overlaps. True alpha0 directly outside anatomy and between cells. Crisp isolated painted sprites, no exterior fog/haze/glow, no shadow, scenery, particles, panels/dividers, lettering or numerals. Keep hand-painted2D identity. CRYSTAL-ARM OCTOPUS: hold large faceted domed head completely steady; ONLY eight thick arms curl a little through gentle sequential paddling phases. Keep identical crystal cuffs and cyan sucker patterns, same one eye. No stretching or changing head silhouette. Four complete separate octopuses, with extra empty room between them.",
+      "refs": [
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/game-assets/v1/source-masters/enemy_elite_05_crystal_octopus_idle.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-72f9cb7f308c/codex-home/generated_images/01a1c162-2d86-7553-bc4b-257a56d4ddc6/exec-3642661e-cc38-4576-b707-8849fa1f206f.png",
+      "transparent_background": true,
+      "export_kind": "swim_strip"
+    },
+    {
+      "id": "enemy_elite_06_mirror_ray_swim",
+      "prompt": "Use case: identity-preserve. Create ONE FOUR-FRAME SWIM SPRITESHEET from this EXACT elite sprite reference. Wide4:1 canvas, FOUR equal square cells in ONE row (target source2048x512, final1280x320). Exactly one creature per cell. Preserve identical anatomy, silhouette size, color markings, eye, textures and fixed RIGHT-facing camera in all four frames. SAME FIXED head and eye position and scale within each cell; no body translation, turn, tilt or zoom. Four subtle rhythmic phases cycling smoothly back to first at6fps. Each entire pose fits in its own cell with15% blank transparent margin, no overlaps. True alpha0 directly outside anatomy and between cells. Crisp isolated painted sprites, no exterior fog/haze/glow, no shadow, scenery, particles, panels/dividers, lettering or numerals. Keep hand-painted2D identity. MIRROR-WING RAY: keep right head and body rigid; broad mirrored wing surfaces gently flex at tips in four tiny up/neutral/down/neutral phases and tail makes tiny sweep. Keep exact reflective panel shape, purple chevrons, one amber eye and same side-oblique view. No turning or changing wing perspective. Complete tail in each cell.",
+      "refs": [
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/game-assets/v1/source-masters/enemy_elite_06_mirror_ray_idle.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-72f9cb7f308c/codex-home/generated_images/01a1c162-2d86-7553-bc4b-257a56d4ddc6/exec-bdbcd51c-2cb5-495e-9144-c4b90ae63656.png",
+      "transparent_background": true,
+      "export_kind": "swim_strip",
+      "status": "rejected",
+      "reason": "pale background haze"
+    },
+    {
+      "id": "enemy_elite_06_mirror_ray_swim",
+      "prompt": "Use case: background-extraction. Remove the entire pale gray/white cloudy background from this FOUR-FRAME ray sprite strip. All pixels outside the four physical ray bodies MUST become true transparent alpha0, including spaces within tail curves, between frames and outside fins. NO pale haze and NO shadows. Preserve all four physical ray creatures exactly, including opaque reflective fins, amber eyes, purple chevrons, same poses, same sizes and positions. Crisp clean cutout edges. Do not replace background with a color, checkerboard or any pixels: actually transparent. Keep wide strip composition. No exterior halo.",
+      "refs": [
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/game-assets/v1/source-masters/enemy_elite_06_mirror_ray_swim.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-72f9cb7f308c/codex-home/generated_images/01a1c162-2d86-7553-bc4b-257a56d4ddc6/exec-41ae806c-4ff6-415b-bc57-dadb474d567f.png",
+      "transparent_background": true,
+      "export_kind": "swim_strip",
+      "master_filename": "enemy_elite_06_mirror_ray_swim_clean_r9.png"
+    },
+    {
+      "id": "enemy_elite_07_abyss_stalker_swim",
+      "prompt": "Use case: identity-preserve. Create ONE FOUR-FRAME SWIM SPRITESHEET from this EXACT elite sprite reference. Wide4:1 canvas, FOUR equal square cells in ONE row (target source2048x512, final1280x320). Exactly one creature per cell. Preserve identical anatomy, silhouette size, color markings, eye, textures and fixed RIGHT-facing camera in all four frames. SAME FIXED head and eye position and scale within each cell; no body translation, turn, tilt or zoom. Four subtle rhythmic phases cycling smoothly back to first at6fps. Each entire pose fits in its own cell with15% blank transparent margin, no overlaps. True alpha0 directly outside anatomy and between cells. Crisp isolated painted sprites, no exterior fog/haze/glow, no shadow, scenery, particles, panels/dividers, lettering or numerals. Keep hand-painted2D identity. ABYSS STALKER: dark segmented back and cyan head shield remain completely rigid; ONLY three visible swimming paddles alternately sweep back/forward slightly, split tail fan flexes very mildly. Preserve exact back plates and purple stripe and single amber eye. No walking pose or body undulation, keep same head height.",
+      "refs": [
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/game-assets/v1/source-masters/enemy_elite_07_abyss_stalker_idle.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-72f9cb7f308c/codex-home/generated_images/01a1c162-2d86-7553-bc4b-257a56d4ddc6/exec-24f17e92-2cdb-4c14-9576-d0bcf5d7c95f.png",
+      "transparent_background": true,
+      "export_kind": "swim_strip"
+    },
+    {
+      "id": "enemy_elite_08_violet_nautilus_swim",
+      "prompt": "Use case: identity-preserve. Create ONE FOUR-FRAME SWIM SPRITESHEET from this EXACT elite sprite reference. Wide4:1 canvas, FOUR equal square cells in ONE row (target source2048x512, final1280x320). Exactly one creature per cell. Preserve identical anatomy, silhouette size, color markings, eye, textures and fixed RIGHT-facing camera in all four frames. SAME FIXED head and eye position and scale within each cell; no body translation, turn, tilt or zoom. Four subtle rhythmic phases cycling smoothly back to first at6fps. Each entire pose fits in its own cell with15% blank transparent margin, no overlaps. True alpha0 directly outside anatomy and between cells. Crisp isolated painted sprites, no exterior fog/haze/glow, no shadow, scenery, particles, panels/dividers, lettering or numerals. Keep hand-painted2D identity. VIOLET NAUTILUS: keep circular spiral shell, violet radial stripes and one amber eye completely rigid; ONLY the six short lavender arms fan in/out slightly through four gentle rhythmic phases. No shell rolling, no shell pulse, no perspective change. Preserve large circular shell and short compact arms.",
+      "refs": [
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/game-assets/v1/source-masters/enemy_elite_08_violet_nautilus_idle.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-72f9cb7f308c/codex-home/generated_images/01a1c162-2d86-7553-bc4b-257a56d4ddc6/exec-a85fbfaa-7ccd-4927-a5e7-d54d61df1fad.png",
+      "transparent_background": true,
+      "export_kind": "swim_strip"
+    },
+    {
+      "id": "enemy_boss_01_angler_king",
+      "prompt": "Use case: stylized-concept. One isolated production BOSS BODY for Abyss Hunter. STYLE reference is concept03; match its rounded hand-painted softly dimensional2D, elegant luminous cyan and violet anatomy against transparent alpha0. Wondrous and majestic, never horror. Square1024 source for final768x768. RIGHT-facing side-three-quarter view, entire centered main body with15% blank margin. Opaque painted surfaces, crisp interior rim light, no exterior aura/fog, no ground shadow, no particles, scenery, letters, UI, numbers, border or watermark. NO teeth, blood or realistic horror. Main body designed for a separate movable fin/arm node; provide a smooth overlapping shoulder/socket patch. ANGLER KING: very large rounded blue-teal anglerfish, RIGHT-facing side view, huge smooth closed friendly mouth with no teeth, single warm amber eye, elegant arched lantern stalk rising from forehead with a cyan pearl light attached, broad violet-blue dorsal scallops and short tail left. Large natural overlapping teal armor plates. Leave visible smooth circular teal shoulder area just below/behind eye for separate movable pectoral fin, do NOT paint that foreground fin. Small far-side fin may remain. Crown-like dorsal silhouette but no accessory crown. One body only, no detached objects.",
+      "refs": [
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/imagegen/abyss-hunter-v1/03-abyss-boss.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-72f9cb7f308c/codex-home/generated_images/01a1c162-2d86-7553-bc4b-257a56d4ddc6/exec-723a5287-27ab-4469-8aab-197ba8e75c05.png",
+      "transparent_background": true
+    },
+    {
+      "id": "enemy_boss_01_angler_king_tentacle",
+      "prompt": "Use case: stylized-concept. Create ONE isolated movable PECTORAL FIN cutout matching the angler king in reference, body NOT included. Same rounded cyan-blue/violet hand-painted2D material and broad curved fin rays. Square1024 source for512px part. Narrow ROUND TEAL ROOT CAP at TOP CENTER around(x50%,y15%), which attaches to the fish's circular shoulder socket. From this cap a single broad elegant leaf-shaped violet/cyan fin flows DOWN and slightly RIGHT, tapering to rounded lower tip, occupying central65% canvas. Root cap has enough opaque overlap to hide joint. Entire fin with15% clear margin, actual transparent alpha0 directly outside physical fin. No fish head/body/eye or separate diagram, no fog, glow, shadows, particles, text, labels, arrows, numbers or watermark. ONE FIN ONLY. Highlight inside painted anatomy only.",
+      "refs": [
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/game-assets/v1/source-masters/enemy_boss_01_angler_king_idle.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-72f9cb7f308c/codex-home/generated_images/01a1c162-2d86-7553-bc4b-257a56d4ddc6/exec-baa1a2be-d035-4775-b0dc-30bdc488f3c0.png",
+      "transparent_background": true,
+      "export_kind": "boss_part"
+    },
+    {
+      "id": "enemy_boss_02_tentacle_warden",
+      "prompt": "Use case: stylized-concept. One isolated production BOSS BODY for Abyss Hunter. STYLE reference is concept03; match its rounded hand-painted softly dimensional2D, elegant luminous cyan and violet anatomy against transparent alpha0. Wondrous and majestic, never horror. Square1024 source for final768x768. RIGHT-facing side-three-quarter view, entire centered main body with15% blank margin. Opaque painted surfaces, crisp interior rim light, no exterior aura/fog, no ground shadow, no particles, scenery, letters, UI, numbers, border or watermark. NO teeth, blood or realistic horror. Main body designed for a separate movable fin/arm node; provide a smooth overlapping shoulder/socket patch. RIFT WARDEN: massive rounded nautiloid cephalopod, dark indigo domed oval mantle with THREE broad layered cyan arches resembling a protective canopy, restrained violet seams, head emerging on RIGHT with ONE large cyan luminous oval eye. Four short sturdy curved violet arms sweep down from head, cyan oval photophores, no suction horror. Distinct from crown jelly and giant squid: broad heavy dome rather than triangular mantle. At right-lower cheek provide an opaque smooth rounded teal connector patch for one separate long foreground tentacle; do not paint the long foreground tentacle. Powerful and serene. One body only.",
+      "refs": [
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/imagegen/abyss-hunter-v1/03-abyss-boss.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-72f9cb7f308c/codex-home/generated_images/01a1c162-2d86-7553-bc4b-257a56d4ddc6/exec-23b87da3-aa11-499c-96d1-f7c5a511b5f7.png",
+      "transparent_background": true
+    },
+    {
+      "id": "enemy_boss_02_tentacle_warden_tentacle",
+      "prompt": "Use case: stylized-concept. ONE isolated movable TENTACLE cutout for exact Rift Warden reference. Body/head not included. Same purple-blue hand-painted2D flesh, smooth rounded forms, cyan oval luminous spots INSIDE anatomy. At TOP CENTER around(x50%,y15%) a small solid rounded TEAL ROOT CAP with opaque overlap for joint; one long thick violet arm extends DOWN in gentle S curve and ends in rounded inward hook at lower-right. Keep root narrow and arm continuous, no severed/fleshy cut texture, no blood or teeth. Square1024 source for512px part. Full arm centered within15% clear margin. True alpha0 background directly outside physical arm, no glow fog/haze, particles, shadows, body, eyes, scenery, UI, letters, arrows or watermark. ONE arm only.",
+      "refs": [
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/game-assets/v1/source-masters/enemy_boss_02_tentacle_warden_idle.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-72f9cb7f308c/codex-home/generated_images/01a1c162-2d86-7553-bc4b-257a56d4ddc6/exec-46277759-1200-4b36-ae7f-cf7fe9fac254.png",
+      "transparent_background": true,
+      "export_kind": "boss_part"
+    },
+    {
+      "id": "enemy_boss_03_giant_squid",
+      "prompt": "Use case: stylized-concept. One isolated production BOSS BODY for Abyss Hunter. STYLE reference is concept03; match its rounded hand-painted softly dimensional2D, elegant luminous cyan and violet anatomy against transparent alpha0. Wondrous and majestic, never horror. Square1024 source for final768x768. RIGHT-facing side-three-quarter view, entire centered main body with15% blank margin. Opaque painted surfaces, crisp interior rim light, no exterior aura/fog, no ground shadow, no particles, scenery, letters, UI, numbers, border or watermark. NO teeth, blood or realistic horror. Main body designed for a separate movable fin/arm node; provide a smooth overlapping shoulder/socket patch. LUMINOUS GIANT SQUID: faithfully translate the giant squid from concept03 into an isolated RIGHT-facing side-three-quarter game sprite. Long tapered triangular cyan-teal mantle extending back LEFT with five broad arched overlapping mantle segments, two broad violet side fins, large cyan oval eye near head on RIGHT, SIX graceful medium violet arms spreading down/right with cyan oval photophores. The two longest foreground hunting tentacles are excluded for separate nodes; leave smooth teal shoulder patch below eye for attachment. Mantle long and streamlined, clearly distinct from dome-shaped Rift Warden. Keep complete tapered tail and all included arms comfortably within canvas. ONE BODY only.",
+      "refs": [
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/imagegen/abyss-hunter-v1/03-abyss-boss.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-72f9cb7f308c/codex-home/generated_images/01a1c162-2d86-7553-bc4b-257a56d4ddc6/exec-a7c71c92-5ff8-45fc-9ffc-1accc3581672.png",
+      "transparent_background": true,
+      "status": "rejected",
+      "reason": "exterior colored haze"
+    },
+    {
+      "id": "enemy_boss_03_giant_squid",
+      "prompt": "Use case: background-extraction. Edit ONLY background of this giant squid game sprite. REMOVE every colored haze/cloud/halo/noisy patch outside physical squid anatomy and between arms. All non-anatomy must be TRUE ALPHA0, no exterior glow. Keep the entire opaque painted squid exactly unchanged: segmented mantle, fins, cyan eye, six arms, luminous spots, poses, colors, size and placement. Clean crisp antialiased physical edge. No added borders, scenery or text. Preserve transparent background.",
+      "refs": [
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/game-assets/v1/source-masters/enemy_boss_03_giant_squid_idle.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-72f9cb7f308c/codex-home/generated_images/01a1c162-2d86-7553-bc4b-257a56d4ddc6/exec-09de6857-b297-47fc-84d1-8f6b4966dac5.png",
+      "transparent_background": true,
+      "master_filename": "enemy_boss_03_giant_squid_idle_clean_r9.png"
+    },
+    {
+      "id": "enemy_boss_03_giant_squid_tentacle",
+      "prompt": "Use case: stylized-concept. ONE isolated LONG HUNTING TENTACLE movable part for exact giant squid reference, body/head NOT included. Same smooth violet-blue hand-painted2D material, cyan oval light organs and one flattened rounded cyan-lavender paddle tip. Solid narrow rounded TEAL ROOT CAP at TOP CENTER around(x50%,y15%) provides hidden overlap for joint. From root, a long slender elegant tentacle flows DOWN in a single wide shallow S; end has broad rounded club tip, distinguishing this hunting arm from Rift Warden hook. Opaque physical anatomy, square1024 source for512px part. Complete arm within15% clear margin. True alpha0 background, crisp cutout, no external fog/glow/haze/shadow/particles, no body/eyes or scenery, text, diagrams, arrows, labels or watermark. ONE arm only.",
+      "refs": [
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/game-assets/v1/source-masters/enemy_boss_03_giant_squid_idle_clean_r9.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-72f9cb7f308c/codex-home/generated_images/01a1c162-2d86-7553-bc4b-257a56d4ddc6/exec-a4a6a647-ae40-42eb-adb1-7eeaa4a68506.png",
+      "transparent_background": true,
+      "export_kind": "boss_part"
+    },
+    {
+      "id": "enemy_boss_04_abyss_whale",
+      "prompt": "Use case: stylized-concept. One isolated production BOSS BODY for Abyss Hunter. STYLE reference is concept03; match its rounded hand-painted softly dimensional2D, elegant luminous cyan and violet anatomy against transparent alpha0. Wondrous and majestic, never horror. Square1024 source for final768x768. RIGHT-facing side-three-quarter view, entire centered main body with15% blank margin. Opaque painted surfaces, crisp interior rim light, no exterior aura/fog, no ground shadow, no particles, scenery, letters, UI, numbers, border or watermark. NO teeth, blood or realistic horror. Main body designed for a separate movable fin/arm node; provide a smooth overlapping shoulder/socket patch. ABYSS WHALE: huge serene RIGHT-facing whale with rounded broad forehead, small cyan luminous eye and gently CLOSED smiling mouth, massive smooth indigo-blue barrel body, cyan curved bioluminescent runes that are NATURAL large curved markings not text, violet segmented throat grooves, wide horizontal violet-blue tail flukes at LEFT. Short smooth dorsal fin. Body should be predominantly DARK INDIGO with restrained cyan light bands, majestically readable, not crystalline and not mechanical. OMIT near-side pectoral fin, leaving a smooth teal oval shoulder patch behind/below eye for separate movable flipper. One whale main body only.",
+      "refs": [
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/imagegen/abyss-hunter-v1/03-abyss-boss.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-72f9cb7f308c/codex-home/generated_images/01a1c162-2d86-7553-bc4b-257a56d4ddc6/exec-29fbb3f5-b043-4f84-b8df-945394c7de04.png",
+      "transparent_background": true
+    },
+    {
+      "id": "enemy_boss_04_abyss_whale_tentacle",
+      "prompt": "Use case: stylized-concept. ONE isolated whale PECTORAL FLIPPER movable part for exact abyss whale reference, no body/head included. Same smooth dark indigo-blue skin, violet underside and TWO broad cyan curved light bands. Solid rounded TEAL ROOT CAP at TOP CENTER around(x50%,y15%) provides opaque overlap for shoulder joint. Flipper extends DOWN and slightly LEFT, broad rounded paddle shape tapering gently to round tip, no rays or scallops, a whale flipper distinct from fish fin. Square1024 source for512px part; entire flipper within15% clear margin. True alpha0 directly outside physical anatomy; no glow fog/haze/shadow/particles/scenery, labels/arrows/text or watermark. One part only. Soft dimensional hand-painted2D.",
+      "refs": [
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/game-assets/v1/source-masters/enemy_boss_04_abyss_whale_idle.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-72f9cb7f308c/codex-home/generated_images/01a1c162-2d86-7553-bc4b-257a56d4ddc6/exec-cf8beb1c-6219-4d47-896e-aa4418c0b544.png",
+      "transparent_background": true,
+      "export_kind": "boss_part"
+    },
+    {
+      "id": "fx_telegraph_violet",
+      "prompt": "Use case: stylized-concept. One isolated circular VIOLET boss attack TELEGRAPH game VFX sprite, final256x256 from1024 square source. Directly TOP-DOWN perfect CIRCLE, not ellipse/perspective. Two concentric fine lavender-purple rings, outer ring continuous, inner ring with12 clean evenly spaced short dashes. Elegant hand-painted2D cyan-violet optical material matching Abyss Hunter. Thin bright boundary with tiny tight antialiased purple falloff ONLY at ring edge, NO broad aura. Entire central75% diameter disk fully EMPTY TRUE ALPHA0, no center dot, fill, glow, rune, symbols or texture. Outside rings alpha0. Centered complete circle within15% clear margin. Only rings, no background, shadows, fog, particles, text/numbers/UI/watermark. Danger boundary clearly readable on dark indigo and pale backgrounds.",
+      "refs": [],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-72f9cb7f308c/codex-home/generated_images/01a1c162-2d86-7553-bc4b-257a56d4ddc6/exec-b07f4507-a89f-4b43-8bc5-ad2409188222.png",
+      "transparent_background": true,
+      "status": "rejected",
+      "reason": "over-wide exterior bloom"
+    },
+    {
+      "id": "fx_telegraph_violet",
+      "prompt": "Use case: background-extraction. Clean this game VFX ring. Preserve ONLY the physical fine continuous outer lavender circle and the twelve physical dashed inner lavender arcs exactly. REMOVE ALL colored fog/haze/noisy glow surrounding the lines and between them. Make entire middle disk and all outside space fully transparent alpha0, including gaps between dashed arcs. Thin clean solid lavender lines with tiny antialias only, no bloom or aura, no fill, no center mark. Do not change shape, positions, proportions or colors of the physical rings. Transparent PNG cutout.",
+      "refs": [
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/game-assets/v1/source-masters/fx_telegraph_violet.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-72f9cb7f308c/codex-home/generated_images/01a1c162-2d86-7553-bc4b-257a56d4ddc6/exec-3cd38348-3efd-4e81-b0a3-8fd0834c8870.png",
+      "transparent_background": true,
+      "master_filename": "fx_telegraph_violet_clean_r9.png"
+    },
+    {
+      "id": "fx_telegraph_amber",
+      "prompt": "Use case: precise-object-edit. Edit ONLY COLOR of this exact circular game telegraph ring. Replace lavender-violet line colors with warm AMBER ORANGE and pale golden inner highlight (#FFCA7A). Preserve exact continuous circle, twelve dashed inner arcs, line thickness, size, positions, shape, centered composition and actual transparent alpha background. Central disk fully alpha0 and outside empty alpha0. NO new glow, haze, fill, particles, symbols, lettering, watermark or scenery. Thin clean amber boundary ring and dashed inner ring ONLY, crisp antialias.",
+      "refs": [
+        "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/game-assets/v1/source-masters/fx_telegraph_violet_clean_r9.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-72f9cb7f308c/codex-home/generated_images/01a1c162-2d86-7553-bc4b-257a56d4ddc6/exec-5dd095db-aba5-4f7d-854d-bd8464238581.png",
+      "transparent_background": true
+    },
+    {
+      "id": "fx_boss_projectile",
+      "prompt": "Use case: stylized-concept. ONE isolated small violet BOSS PROJECTILE game sprite for Abyss Hunter, square1024 source for final64x64. Single compact rounded teardrop of luminous purple energy traveling UP: bright pale lavender rounded pointed nose at TOP, deep violet bulbous base below, a small cyan-white INNER core highlight. Chunky clear silhouette readable at16px, softly dimensional hand-painted2D optical material matching blue-violet underwater creatures. Opaque luminous core, tight antialiased edge, NO exterior halo, NO tail trail or particles. Entire object centered within25% empty margin for final8px transparent border. True alpha0 directly outside projectile. No background, fog, shadow, ring, text, symbol, UI, watermark, explosion or scenery. ONE projectile only.",
+      "refs": [],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-72f9cb7f308c/codex-home/generated_images/01a1c162-2d86-7553-bc4b-257a56d4ddc6/exec-ec90ed94-c322-444f-8f41-c78349d5c802.png",
+      "transparent_background": true
+    }
+  ]
+}

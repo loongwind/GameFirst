@@ -1,0 +1,27 @@
+{
+  "meta": {
+    "count": 47,
+    "png_bytes": 4982987,
+    "rgba8_bytes_without_mips": 18696192
+  },
+  "sunlight": {
+    "count": 34,
+    "png_bytes": 5626145,
+    "rgba8_bytes_without_mips": 27873280
+  },
+  "twilight": {
+    "count": 28,
+    "png_bytes": 5520397,
+    "rgba8_bytes_without_mips": 27508736
+  },
+  "abyss": {
+    "count": 31,
+    "png_bytes": 5216732,
+    "rgba8_bytes_without_mips": 29409280
+  },
+  "main": {
+    "count": 27,
+    "png_bytes": 1336997,
+    "rgba8_bytes_without_mips": 5470208
+  }
+}

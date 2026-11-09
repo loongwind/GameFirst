@@ -1,0 +1,26 @@
+{
+  "id": "enemy_boss_03_giant_squid_tentacle",
+  "source_root": [
+    625.0,
+    205.0
+  ],
+  "crop": [
+    402,
+    162,
+    484,
+    1037
+  ],
+  "scale": 0.45553319919517105,
+  "frame_size": [
+    512,
+    512
+  ],
+  "target_root_top_left": [
+    256,
+    51.2
+  ],
+  "cocos_anchor_bottom_left": [
+    0.5,
+    0.9
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "production_version": "v1-r9",
+  "new_completed": 27,
+  "mvp_completed": 167,
+  "mvp_remaining": 0,
+  "p1_deferred": 18,
+  "batches_passed": {
+    "C": 46,
+    "B": 46,
+    "D": 67,
+    "A": 8
+  },
+  "all_png_contracts_checked": 167,
+  "prior_140_sha256_preserved": true,
+  "new_reexport_byte_identical": [
+    "enemy_elite_01_storm_eel",
+    "enemy_elite_01_storm_eel_swim",
+    "enemy_elite_02_iron_hermit",
+    "enemy_elite_02_iron_hermit_swim",
+    "enemy_elite_03_spear_guard",
+    "enemy_elite_03_spear_guard_swim",
+    "enemy_elite_04_royal_jelly",
+    "enemy_elite_04_royal_jelly_swim",
+    "enemy_elite_05_crystal_octopus",
+    "enemy_elite_05_crystal_octopus_swim",
+    "enemy_elite_06_mirror_ray",
+    "enemy_elite_06_mirror_ray_swim",
+    "enemy_elite_07_abyss_stalker",
+    "enemy_elite_07_abyss_stalker_swim",
+    "enemy_elite_08_violet_nautilus",
+    "enemy_elite_08_violet_nautilus_swim",
+    "enemy_boss_01_angler_king",
+    "enemy_boss_01_angler_king_tentacle",
+    "enemy_boss_02_tentacle_warden",
+    "enemy_boss_02_tentacle_warden_tentacle",
+    "enemy_boss_03_giant_squid",
+    "enemy_boss_03_giant_squid_tentacle",
+    "enemy_boss_04_abyss_whale",
+    "enemy_boss_04_abyss_whale_tentacle",
+    "fx_telegraph_violet",
+    "fx_telegraph_amber",
+    "fx_boss_projectile"
+  ],
+  "animation_landmark_span_px": {
+    "enemy_elite_01_storm_eel_swim": [
+      0.2913207547169918,
+      0.2331034482758696
+    ],
+    "enemy_elite_02_iron_hermit_swim": [
+      0.057142857142878256,
+      0.3320105820105823
+    ],
+    "enemy_elite_03_spear_guard_swim": [
+      0.18500948766603642,
+      0.19758064516128115
+    ],
+    "enemy_elite_04_royal_jelly_swim": [
+      0.3735465116278931,
+      0.32325581395349445
+    ],
+    "enemy_elite_05_crystal_octopus_swim": [
+      0.2023492907801483,
+      0.24672284644194065
+    ],
+    "enemy_elite_06_mirror_ray_swim": [
+      0.4562937062937067,
+      0.2863636363636317
+    ],
+    "enemy_elite_07_abyss_stalker_swim": [
+      0.236842105263122,
+      0.314473684210526
+    ],
+    "enemy_elite_08_violet_nautilus_swim": [
+      0.3315753887762014,
+      0.46675786593709745
+    ]
+  },
+  "gif_measurements": {
+    "elite-twilight-swim-review-r9.gif": {
+      "frames": 4,
+      "durations_ms": [
+        170,
+        170,
+        170,
+        170
+      ],
+      "actual_fps": 5.882352941176471
+    },
+    "elite-sunlight-swim-review-r9.gif": {
+      "frames": 4,
+      "durations_ms": [
+        170,
+        170,
+        170,
+        170
+      ],
+      "actual_fps": 5.882352941176471
+    },
+    "elite-abyss-swim-review-r9.gif": {
+      "frames": 4,
+      "durations_ms": [
+        170,
+        170,
+        170,
+        170
+      ],
+      "actual_fps": 5.882352941176471
+    }
+  },
+  "not_validated": [
+    "Cocos import/runtime playback",
+    "texture atlas/budget compression",
+    "device performance",
+    "RGB edge dilation"
+  ]
+}

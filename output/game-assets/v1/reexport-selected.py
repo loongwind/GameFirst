@@ -19,7 +19,10 @@ for r in rows:
     elif kind == 'ui_bar':
         args = ['swift', str(root / 'export-ui-bar.swift'), str(root / r['source_master']), str(dest), *r['export_crop'].split(',')]
     elif kind == 'swim_strip':
-        args = ['swift', str(root / 'export-swim.swift'), str(root / r['source_master']), str(root / 'animation-layouts' / (r['id'] + '.json')), str(dest)]
+        script = 'export-elite-swim.swift' if r['高px'] == '320' else 'export-swim.swift'
+        args = ['swift', str(root / script), str(root / r['source_master']), str(root / 'animation-layouts' / (r['id'] + '.json')), str(dest)]
+    elif kind == 'boss_part':
+        args = ['swift', str(root / 'export-boss-part.swift'), str(root / r['source_master']), str(root / 'boss-layouts' / (r['id'] + '.json')), str(dest)]
     else:
         args = ['swift', str(root / 'export-png.swift'), str(root / r['source_master']), str(dest), r['宽px'], r['高px'], r.get('export_inset') or ('8' if r['透明'] == '是' else '0')]
         if r.get('export_crop'):
@@ -31,9 +34,10 @@ for r in rows:
     alpha = im.getchannel('A')
     if r['透明'] == '是':
         if kind == 'swim_strip':
+            size = im.width // 4
             for i in range(4):
-                bb = alpha.crop((i*192,0,(i+1)*192,192)).getbbox()
-                assert min(bb[0],bb[1],192-bb[2],192-bb[3]) >= 2
+                bb = alpha.crop((i*size,0,(i+1)*size,size)).getbbox()
+                assert min(bb[0],bb[1],size-bb[2],size-bb[3]) >= 2
         elif kind == 'ui_bar':
             assert alpha.crop((0,0,128,1)).getextrema()[1] > 0
             assert alpha.crop((0,15,128,16)).getextrema()[1] > 0

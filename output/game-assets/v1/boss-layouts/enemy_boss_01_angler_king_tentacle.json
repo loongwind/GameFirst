@@ -1,0 +1,26 @@
+{
+  "id": "enemy_boss_01_angler_king_tentacle",
+  "source_root": [
+    550.0,
+    265.0
+  ],
+  "crop": [
+    235,
+    182,
+    775,
+    930
+  ],
+  "scale": 0.5204819277108435,
+  "frame_size": [
+    512,
+    512
+  ],
+  "target_root_top_left": [
+    256,
+    51.2
+  ],
+  "cocos_anchor_bottom_left": [
+    0.5,
+    0.9
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "enemy_boss_04_abyss_whale_tentacle",
+  "source_root": [
+    778.0,
+    182.0
+  ],
+  "crop": [
+    117,
+    97,
+    885,
+    1063
+  ],
+  "scale": 0.3751891074130106,
+  "frame_size": [
+    512,
+    512
+  ],
+  "target_root_top_left": [
+    256,
+    51.2
+  ],
+  "cocos_anchor_bottom_left": [
+    0.5,
+    0.9
+  ]
+}
