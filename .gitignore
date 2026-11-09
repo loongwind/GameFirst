@@ -1,0 +1,5 @@
+# Multica 运行时文件与本地工作副本不入库
+.claude/
+.multica/
+CLAUDE.md
+attachments/
