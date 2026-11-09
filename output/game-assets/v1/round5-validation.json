@@ -1,0 +1,610 @@
+{
+  "version": "v1-r5",
+  "total_index": 185,
+  "passed_mvp": 69,
+  "new_production_files": 11,
+  "new_generated_or_edited_masters": 7,
+  "new_size_exports_from_existing_masters": 4,
+  "batch_counts": {
+    "C": 15,
+    "B": 46,
+    "A": 8
+  },
+  "mvp_remaining": 98,
+  "p1_deferred": 18,
+  "prior_58_sha256_unchanged": true,
+  "new_11_reexport_byte_identical": [
+    "hero_harbor",
+    "hero_diver",
+    "hero_avatar",
+    "equip_sonic",
+    "equip_torpedo",
+    "equip_arc",
+    "equip_mine",
+    "equip_searchlight",
+    "equip_fin",
+    "equip_armor",
+    "equip_magnet"
+  ],
+  "same_master_equipment": [
+    {
+      "id": "equip_sonic",
+      "reuse_of": "mount_sonic",
+      "master": "source-masters/mount_sonic.png",
+      "master_sha256": "24beb74fa0263049fd3f0619d4dcf208be3c7de52cd1bef4b67bf4d7d215b7a3"
+    },
+    {
+      "id": "equip_torpedo",
+      "reuse_of": "mount_torpedo",
+      "master": "source-masters/mount_torpedo.png",
+      "master_sha256": "91970dc0677151e2100e8490b083f0291edf797a32af97378dfae9950f2850d3"
+    },
+    {
+      "id": "equip_arc",
+      "reuse_of": "mount_arc",
+      "master": "source-masters/mount_arc.png",
+      "master_sha256": "a576907327eff13059b89d56465d2b8ba46dcc6035e9b7ee82b69fc313d332f6"
+    },
+    {
+      "id": "equip_mine",
+      "reuse_of": "mount_mine",
+      "master": "source-masters/mount_mine.png",
+      "master_sha256": "5c6b40284a1472f7a8ce1f8a555aad4269010a533937d3b8cb46c859d700ce66"
+    }
+  ],
+  "pngs": [
+    {
+      "id": "bg_harbor",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0bda50ebfd1c869428ad7f80d8ae800304920eebd0c63493e78787a6882d9cdc"
+    },
+    {
+      "id": "reef_harbor_left",
+      "size": [
+        384,
+        1536
+      ],
+      "sha256": "813a542ec9f93daae5d811e3a3ce50dc17a79f825bc8e4644242ac423c1b06e2"
+    },
+    {
+      "id": "reef_harbor_right",
+      "size": [
+        384,
+        1536
+      ],
+      "sha256": "e0c43082e33b685bf5fab507b5ecea1df9c04c4a4f987a7e1a4bd44b8a596e7d"
+    },
+    {
+      "id": "flora_harbor",
+      "size": [
+        512,
+        512
+      ],
+      "sha256": "a3fa4be62098531969bceb5d51cdefac0a122b065c02b29899feeabd3e6e054b"
+    },
+    {
+      "id": "bg_sunlight",
+      "size": [
+        1024,
+        1536
+      ],
+      "sha256": "0ec6efb39fa15f6bebc995ad789097995faf9622dc0f1585528dcd633e7c88f0"
+    },
+    {
+      "id": "reef_sunlight_left",
+      "size": [
+        384,
+        1536
+      ],
+      "sha256": "62a2cb5d36b14cd479b7754655b10396aa0fc9bc7f7e09bb9870a1d3504df6b5"
+    },
+    {
+      "id": "reef_sunlight_right",
+      "size": [
+        384,
+        1536
+      ],
+      "sha256": "30dd576b994ee2af6bcba5263008e03426ee6651688c51414a6679d42ad3c9c1"
+    },
+    {
+      "id": "flora_sunlight",
+      "size": [
+        512,
+        512
+      ],
+      "sha256": "22434f2b16f2ea7b98a87149178a837320423ab3da7cd6d2fddbc2f18c0c773c"
+    },
+    {
+      "id": "bg_sunlight_lite",
+      "size": [
+        512,
+        1024
+      ],
+      "sha256": "543cc2df28b6c5b02fc62d5356922a195cf2e7653e8d17dffd4851009b2822c5"
+    },
+    {
+      "id": "hero_ship",
+      "size": [
+        512,
+        512
+      ],
+      "sha256": "1415609a65de0d5217f43286ba7a29dd81c79483023f0a0155b8060a88ee68a2"
+    },
+    {
+      "id": "hero_harbor",
+      "size": [
+        768,
+        768
+      ],
+      "sha256": "437325f7c4cec9f040f861331305fe077f92ef9dc60a8068c7c51a2b0bfe6b86"
+    },
+    {
+      "id": "hero_damaged",
+      "size": [
+        512,
+        512
+      ],
+      "sha256": "23aeece2bd7ae1aa233052e46b471909eaf830ba5973f6f247d0a8650d80334c"
+    },
+    {
+      "id": "hero_diver",
+      "size": [
+        384,
+        512
+      ],
+      "sha256": "828a69c2cda1cac7a2f694768a352d21ea8bab3f66e26a2c4913a199fa4467d0"
+    },
+    {
+      "id": "hero_avatar",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "3ac1e5b5ec888edaa2669236a33df096f5569da199b8bff6928a6ad6396670d4"
+    },
+    {
+      "id": "enemy_normal_01_moon_jelly",
+      "size": [
+        192,
+        192
+      ],
+      "sha256": "f86c219ebcffc867199079d6409a2182c6a2d4a832742d0435f06806be3f2877"
+    },
+    {
+      "id": "enemy_normal_01_moon_jelly_swim",
+      "size": [
+        768,
+        192
+      ],
+      "sha256": "c4feded80cf326502a7d3748a904690c69989f8cf24f2974a6f4808a72a4d5b9"
+    },
+    {
+      "id": "enemy_normal_02_lantern_angler",
+      "size": [
+        192,
+        192
+      ],
+      "sha256": "53676d82061570e5e49040b3cfb2e0c05d79e28eb434c4ebc0fc090197ea58ae"
+    },
+    {
+      "id": "enemy_normal_02_lantern_angler_swim",
+      "size": [
+        768,
+        192
+      ],
+      "sha256": "c0dda4e99bbd214a2475b01a653dbb052d4423de41a82dcb53b12018cf5de535"
+    },
+    {
+      "id": "enemy_normal_03_electric_eel",
+      "size": [
+        192,
+        192
+      ],
+      "sha256": "1b0ba5e522bf06da5416813fb1303f1fb06d7df28088c918bc11a3777f2d98f6"
+    },
+    {
+      "id": "enemy_normal_03_electric_eel_swim",
+      "size": [
+        768,
+        192
+      ],
+      "sha256": "fd100dbd0063e41a79f016b2addb391bf0df2c9c205be3d0c1ee31612b8e680c"
+    },
+    {
+      "id": "enemy_normal_04_needlefish",
+      "size": [
+        192,
+        192
+      ],
+      "sha256": "72bdb2bcebe47c78b0db4905d9c370a8f428865a59a5016961a3e838015e797a"
+    },
+    {
+      "id": "enemy_normal_04_needlefish_swim",
+      "size": [
+        768,
+        192
+      ],
+      "sha256": "5a12b36c70934e22bfe900d10bb2acec1f507b9f25985642896f26409524c569"
+    },
+    {
+      "id": "enemy_normal_05_hermit_crab",
+      "size": [
+        192,
+        192
+      ],
+      "sha256": "7651b72b5cf6ff1ef9b04e1fed157c5130235d0d691e0e50a81012ca6cbaf523"
+    },
+    {
+      "id": "enemy_normal_05_hermit_crab_swim",
+      "size": [
+        768,
+        192
+      ],
+      "sha256": "b474f73dd20006ca1057d205dbfa17da938690a5a0f9070c7b30ddf55c0ebe7f"
+    },
+    {
+      "id": "enemy_normal_06_glass_shrimp",
+      "size": [
+        192,
+        192
+      ],
+      "sha256": "eddcf847862e8360da5d93c20df7417c77f4fc2551a8a40cbe44195050740579"
+    },
+    {
+      "id": "enemy_normal_06_glass_shrimp_swim",
+      "size": [
+        768,
+        192
+      ],
+      "sha256": "6821eb285ce19f75c65120d586c7be3216657f90c9c91eb529f0eae35de35846"
+    },
+    {
+      "id": "enemy_normal_07_moon_snail",
+      "size": [
+        192,
+        192
+      ],
+      "sha256": "33a3d205b7d2f18183e0840029123e5f4b62dc4d41ac94bed18d7895ab34b162"
+    },
+    {
+      "id": "enemy_normal_07_moon_snail_swim",
+      "size": [
+        768,
+        192
+      ],
+      "sha256": "6b8584daac1495e922ef27cc6ee6051e3dd0678be7c4f9d6ce00ade0e119bd89"
+    },
+    {
+      "id": "enemy_normal_08_comb_jelly",
+      "size": [
+        192,
+        192
+      ],
+      "sha256": "fc2c3f64d402244e0f68cc88a72fdbdccf88256ceb8f56e20859a60ee107be50"
+    },
+    {
+      "id": "enemy_normal_08_comb_jelly_swim",
+      "size": [
+        768,
+        192
+      ],
+      "sha256": "9000ce0ba7ecf22b5a4fc0f5f7e57228423540c5558bc8bb9164d4744fa358f3"
+    },
+    {
+      "id": "equip_sonic",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "e441b07d5ac032efafee5cf0e7b24e48aaeab86ab707f28af8f3659f882001b2"
+    },
+    {
+      "id": "mount_sonic",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "b4bf50ce3afdfb59ee97838f190398648a1114b5b3d3989ae7f554a176ce50d0"
+    },
+    {
+      "id": "equip_torpedo",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "d497a726555ba5c1e794266e14c949d0b5427d0611be8c10ee64b40863f523af"
+    },
+    {
+      "id": "mount_torpedo",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "9a4a6cdaf5a1c633603a0393e8bfeccb70b6072fa2cc7ae587179d90f2961bf9"
+    },
+    {
+      "id": "equip_arc",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "ef0449f74ee9c8f82e8e74c8fd3fd65e98149d6e18ca687494e8dabaf2b3de0c"
+    },
+    {
+      "id": "mount_arc",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "4be37a16ac4ccfc3309b093ddc6ac24325232d76547826d22bb166254fa25cba"
+    },
+    {
+      "id": "equip_mine",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "e4b3317349ade4eb18c680365d4ef6d20f8777dcfd965842a61cd791bfe83f9d"
+    },
+    {
+      "id": "mount_mine",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "2bedec28930b5a4214789201d25d691785fa4dd8ec6343395205c406504ad48d"
+    },
+    {
+      "id": "equip_searchlight",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "555c084df1b8ba744ec261f2d7b286e89003ba7db20ec66310b8ae7dad39ffa0"
+    },
+    {
+      "id": "equip_fin",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "d4296f8970bf09d5fb63cd5007ffc2d5d34fea760582f2c935ead33895813584"
+    },
+    {
+      "id": "equip_armor",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "4799b4446f30a3be9772278b382c4d87aaca0c4bcd1153cab6d43d81cdf8a602"
+    },
+    {
+      "id": "equip_magnet",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "8e03b757869411832a04b8e2b6abbc607240732d77dbe409094cceaa1df40454"
+    },
+    {
+      "id": "icon_crystal",
+      "size": [
+        96,
+        96
+      ],
+      "sha256": "a7eefb620473bbf939935f0d33c2bbad97026fa97c67a93bcb805130c5667873"
+    },
+    {
+      "id": "icon_hp",
+      "size": [
+        96,
+        96
+      ],
+      "sha256": "2d56477d729324d3ace54da0139f32144aa05e43450cfadc15dce5d63c6908bb"
+    },
+    {
+      "id": "icon_cargo",
+      "size": [
+        96,
+        96
+      ],
+      "sha256": "3eb241b51b6303294eb33567ecfcf78c59a5279eca60c7f98508525a096035b6"
+    },
+    {
+      "id": "icon_oxygen",
+      "size": [
+        96,
+        96
+      ],
+      "sha256": "248cb05e492720d9eaf7c2c19d4a0cc7b795f4e2e10ff1aace9bb4e51484395c"
+    },
+    {
+      "id": "icon_rescue",
+      "size": [
+        96,
+        96
+      ],
+      "sha256": "4debfb43a3cb75139038aeed9e5eced9ee660f719f56201a5f275cfdc6e54445"
+    },
+    {
+      "id": "icon_warning",
+      "size": [
+        96,
+        96
+      ],
+      "sha256": "b29bf70774ab2ccef0261243d25f1dc4e0a16c8b2c03a5c04d58ad1fd001d881"
+    },
+    {
+      "id": "icon_video",
+      "size": [
+        96,
+        96
+      ],
+      "sha256": "ea650b26e705257084ae3256a651922ee5c3c346d69f9ed69ba46e667ddb0947"
+    },
+    {
+      "id": "icon_pause",
+      "size": [
+        96,
+        96
+      ],
+      "sha256": "8e9c26498bafc8999cd5605f1eb72d8e14ed8a904659c4d52e985ed0f55947d3"
+    },
+    {
+      "id": "icon_ascend",
+      "size": [
+        96,
+        96
+      ],
+      "sha256": "207fd4169d212417b17fd92d33a86c83f52613bed025533765166c72c6e57417"
+    },
+    {
+      "id": "icon_depth_marker",
+      "size": [
+        96,
+        96
+      ],
+      "sha256": "ebf28e16a3689862208d66365a8b26685eafd39a21ef1f96766da1bad32c7e3c"
+    },
+    {
+      "id": "ui_panel",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "1dae0166144c675c0b4f5a019581f16fe51fde2b828224d4ffa911bfdbda9253"
+    },
+    {
+      "id": "ui_button_primary",
+      "size": [
+        160,
+        80
+      ],
+      "sha256": "134f77742234f6c67663cf170aa1434b5d49dff5ff76b02cccdf906c487e88dc"
+    },
+    {
+      "id": "ui_bar_track",
+      "size": [
+        128,
+        32
+      ],
+      "sha256": "d1bbd3feca2f493c048fa0909b3e90b8da8c47e370f27444f90ae9d9461e6070"
+    },
+    {
+      "id": "ui_bar_cyan",
+      "size": [
+        128,
+        16
+      ],
+      "sha256": "32588bf96f540e76b7fc746da2bc5bda834e527ee1874f3e4222114e03519e1a"
+    },
+    {
+      "id": "ui_bar_amber",
+      "size": [
+        128,
+        16
+      ],
+      "sha256": "ffedda22116d3669ba0668f4439e4e09e40245edba5b00f9adae62c5d66bd391"
+    },
+    {
+      "id": "ui_joystick_base",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "cb2b896368036051dfffefae33c0cc6e85b37f47824bc09757670df755f3a072"
+    },
+    {
+      "id": "ui_joystick_thumb",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "b6399f47112b5584ebccf83bbc7059eb8c6e542100cbe5fbbeefbccf8fcaab3f"
+    },
+    {
+      "id": "fx_bubble",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "9b0cd5ff3f9d892173ebe8a33aa1839f6ef942bd68bf9ad17061e8b795a353be"
+    },
+    {
+      "id": "fx_glow",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "be53c2e7a69d8f44f2e16e970e68e9dfe971f44a7f97a8b1109fd121eb17a33c"
+    },
+    {
+      "id": "fx_crystal_drop",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "3e2103ee341ca090d76f53a7281c276406a262b25d7967fffcd4eb953640d0b7"
+    },
+    {
+      "id": "fx_sonic_ring",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "dcb6f0ff4615bab6883f5184c09b78d9d95c9a8fde0a1974466087831cdb9a3f"
+    },
+    {
+      "id": "fx_torpedo",
+      "size": [
+        128,
+        64
+      ],
+      "sha256": "d1449a3fc66e9c3a379190bd9d633d769b8d903a551c6b82ca3e6a922f2e2dce"
+    },
+    {
+      "id": "fx_arc",
+      "size": [
+        256,
+        64
+      ],
+      "sha256": "cb7c2802be704c975d0dead038e49b956bfc8b4e44d1e2f6cb004aa2bcb588db"
+    },
+    {
+      "id": "fx_mine",
+      "size": [
+        96,
+        96
+      ],
+      "sha256": "1295fded4d0ee63b159bc20c0dc138a1195c5c3b92e4504f169dde258b36cdd8"
+    },
+    {
+      "id": "fx_hit",
+      "size": [
+        96,
+        96
+      ],
+      "sha256": "b54b6cbcbecf51821404869aa54d989986b5a8bc4610ad249f27e8458335833f"
+    },
+    {
+      "id": "fx_death_particle",
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "8219349ac09a77e5298c1e8302ba77d4f2fcdf474611a9e940fd82f8007c1eb9"
+    },
+    {
+      "id": "fx_thruster",
+      "size": [
+        128,
+        64
+      ],
+      "sha256": "65dfd24d4f105a9ab4f0bfde8e1d2dc4287de6aec14604f768459eaae4f224bf"
+    }
+  ],
+  "engine_device_validation": false
+}

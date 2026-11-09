@@ -1666,5 +1666,247 @@
       504
     ],
     "clear_margin_px": 8
+  },
+  {
+    "id": "hero_diver",
+    "size": [
+      384,
+      512
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 207437,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      74,
+      11,
+      308,
+      501
+    ],
+    "clear_margin_px": 11,
+    "generation_method": "built-in image_gen"
+  },
+  {
+    "id": "hero_harbor",
+    "size": [
+      768,
+      768
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 567185,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      8,
+      113,
+      757,
+      652
+    ],
+    "clear_margin_px": 8,
+    "generation_method": "built-in image_gen"
+  },
+  {
+    "id": "hero_avatar",
+    "size": [
+      128,
+      128
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 24605,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      9,
+      10,
+      119,
+      118
+    ],
+    "clear_margin_px": 9,
+    "generation_method": "built-in image_gen identity-preserving head extraction"
+  },
+  {
+    "id": "equip_sonic",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 80213,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      11,
+      30,
+      248,
+      226
+    ],
+    "clear_margin_px": 8,
+    "generation_method": "same generated master, new 256x256 export"
+  },
+  {
+    "id": "equip_torpedo",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 66319,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      10,
+      51,
+      246,
+      205
+    ],
+    "clear_margin_px": 10,
+    "generation_method": "same generated master, new 256x256 export"
+  },
+  {
+    "id": "equip_arc",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 59853,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      10,
+      56,
+      246,
+      199
+    ],
+    "clear_margin_px": 10,
+    "generation_method": "same generated master, new 256x256 export"
+  },
+  {
+    "id": "equip_mine",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 71088,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      8,
+      21,
+      246,
+      235
+    ],
+    "clear_margin_px": 8,
+    "generation_method": "same generated master, new 256x256 export"
+  },
+  {
+    "id": "equip_fin",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 46030,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      10,
+      53,
+      246,
+      203
+    ],
+    "clear_margin_px": 10,
+    "generation_method": "built-in image_gen"
+  },
+  {
+    "id": "equip_searchlight",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 74096,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      10,
+      33,
+      248,
+      223
+    ],
+    "clear_margin_px": 8,
+    "generation_method": "built-in image_gen"
+  },
+  {
+    "id": "equip_armor",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 76988,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      12,
+      10,
+      245,
+      248
+    ],
+    "clear_margin_px": 8,
+    "generation_method": "built-in image_gen"
+  },
+  {
+    "id": "equip_magnet",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 68222,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      10,
+      17,
+      247,
+      240
+    ],
+    "clear_margin_px": 9,
+    "generation_method": "built-in image_gen"
   }
 ]

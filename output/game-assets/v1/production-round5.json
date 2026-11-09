@@ -1,0 +1,141 @@
+{
+  "tool": "built-in image_gen plus existing generated master reuse",
+  "version": "v1-r5",
+  "records": [
+    {
+      "id": "hero_diver",
+      "prompt": "Use case: stylized-concept. Create ONE isolated production character sprite for Abyss Hunter harbor: a friendly small chibi marine research diver matching the reference concept's orange suited diver. The supplied harbor image is identity/material reference only, not an edit target; do not reproduce its scene or UI. Full body, standing relaxed, slight front-right 3/4 turn, TWO hands and TWO feet visibly separated, hands relaxed and empty (no thumbs-up). Orange soft diving suit, ivory helmet shell with muted orange top/side guards, exactly ONE large circular cyan glass FACE VISOR obscuring human facial features, dark navy seams, compact backpack air unit and small boots/gloves. Head-to-total-height about1:2.5, rounded friendly silhouette and simple readable limbs; head width only slightly larger than shoulder width. Soft hand-painted2D game illustration with 2-3 main values, consistent with H-01 white/orange/cyan materials. Standing figure centered on portrait canvas, intended384x512, full boots and helmet uncut, generous TRUE TRANSPARENT margin. No exterior glow, fog, aura, ground shadow, floor, pedestal, submarine, crane, cable, dock, sea, background, companion, separate prop, extra limbs, words, numbers, logo or watermark.",
+      "references": [
+        "output/imagegen/abyss-hunter-v1/01-harbor-preparation.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-8b2f076f870c/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-e3a739dd-60cd-4e02-acff-ac72e3c8d7b2.png",
+      "method": "built-in image_gen"
+    },
+    {
+      "id": "hero_harbor",
+      "prompt": "Use case: identity-preserve. Edit target: the supplied H-01 battle-state submarine. Create the harbor showcase production sprite of the EXACT SAME H-01. Preserve the existing silhouette, front-right 3/4 viewing angle, all proportions and part placement: one single large ROUND cyan glass front porthole with its green pilot seat visible, ivory shell with muted orange armor bands and top handle, two small side wings, one dorsal rear fin, exactly TWO forward underslung weapon pods, and ONE cyan rear thruster at the LEFT rear. No pilot or diver inside. Lightly refine the existing painted panel joins, bevel edges and specular highlights for a 768x768 harbor showcase. Do not redesign, add equipment, add windows, change relative porthole size, lengthen nose, remove weapon pods, or rotate the vehicle. Gentle neutral top-left light with the same white/orange/cyan palette, no damage. One isolated hand-painted2D rounded chibi mechanical game sprite, centered, with full uncut shape and generous true transparent margin. TRUE TRANSPARENT surrounding pixels; no large exterior glow, mist, aura, shadow, support stand, ground, dock, crane, cable, environment, UI, text, symbols, numbers, logo or watermark.",
+      "references": [
+        "output/game-assets/v1/main/hero_h01_idle.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-8b2f076f870c/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-929b3a46-ef7a-41e1-b4f2-aeb31575c57b.png",
+      "method": "built-in image_gen"
+    },
+    {
+      "id": "hero_avatar",
+      "prompt": "Use case: identity-preserve. Edit target: the supplied full-body orange-suited harbor diver. Extract ONLY THE SAME DIVER'S HELMETED HEAD as a clean isolated avatar sprite. Preserve the exact helmet shape, one round cyan front face visor, ivory shell panels, orange upper/side armor guards, navy seams, circular side earpiece, top-left lighting, hand-painted2D brush style, camera angle and proportions. Remove all body, shoulders, backpack, air tank, arms, belt and legs. Do not redesign the helmet, add a face, add hair or create a different character. Complete the very bottom of the head as a neat dark navy helmet rim, no cut shoulders. Center this single head on a square canvas with ample TRUE TRANSPARENT margin. Intended final128x128. No avatar badge, circle frame, external border, environment, floor, shadow, halo, glow, text, numbers, logo or watermark. Pixels outside helmet are alpha0.",
+      "references": [
+        "source-masters/npc_diver_harbor.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-8b2f076f870c/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-051c4da9-b3ce-40ff-b4cf-e09447e3067c.png",
+      "method": "built-in image_gen identity-preserving head extraction"
+    },
+    {
+      "id": "equip_sonic",
+      "method": "same generated master, new 256x256 export",
+      "reuse_of": "mount_sonic",
+      "source_master": "source-masters/mount_sonic.png",
+      "source": "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/game-assets/v1/source-masters/mount_sonic.png",
+      "export_crop": [
+        141,
+        225,
+        961,
+        796
+      ],
+      "references": [
+        "main/mount_sonic.png"
+      ],
+      "prompt": "Use case: stylized-concept. Create ONE isolated production BATTLE WEAPON MOUNT sprite for the H-01 submarine in Abyss Hunter, final128x128 square, genuine alpha transparent background. Image1 is ship identity/material/proportion reference; image2 supplies equipment art language. A compact detachable rounded white-ivory and muted-orange soft-mechanical weapon pod, cyan energy accents, right-facing 3/4 side view matching ship. Simple readable silhouette at48px, hand-painted dimensional 2D, restrained painted texture. Single weapon without the submarine. Keep shape centered with 12% transparent clear margin all sides. No base/pedestal/platform, no ground/shadow, no circular display ring, no frame/card, no background scene, no projectile/explosion, no text/letter/number/logo/watermark. SONIC CANNON: one short rounded cylindrical pod, one large circular cyan acoustic emitter ring facing front-RIGHT, concentric mechanical rings and central deep teal aperture, ivory shell, thin muted orange rear band. Distinct ring silhouette, not a multi-barrel gun, not a torpedo rack.",
+      "inherited_prompt_record": "production-round2.json#mount_sonic"
+    },
+    {
+      "id": "equip_torpedo",
+      "method": "same generated master, new 256x256 export",
+      "reuse_of": "mount_torpedo",
+      "source_master": "source-masters/mount_torpedo.png",
+      "source": "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/game-assets/v1/source-masters/mount_torpedo.png",
+      "export_crop": [
+        154,
+        317,
+        945,
+        625
+      ],
+      "references": [
+        "sunlight/mount_torpedo.png"
+      ],
+      "prompt": "Use case: stylized-concept. Create ONE isolated production BATTLE WEAPON MOUNT sprite for the H-01 submarine in Abyss Hunter, final128x128 square, genuine alpha transparent background. Image1 is ship identity/material/proportion reference; image2 supplies equipment art language. A compact detachable rounded white-ivory and muted-orange soft-mechanical weapon pod, cyan energy accents, right-facing 3/4 side view matching ship. Simple readable silhouette at48px, hand-painted dimensional 2D, restrained painted texture. Single weapon without the submarine. Keep shape centered with 12% transparent clear margin all sides. No base/pedestal/platform, no ground/shadow, no circular display ring, no frame/card, no background scene, no projectile/explosion, no text/letter/number/logo/watermark. TORPEDO NEST: one compact rounded rectangular ivory launcher pod with TWO short visible cylindrical launch tubes facing front-RIGHT, a pair of small muted-orange torpedo noses recessed inside the tubes, orange lower shell bands, tiny cyan status window. Distinct twin chamber silhouette, no acoustic ring, no coil or floating mines.",
+      "inherited_prompt_record": "production-round2.json#mount_torpedo"
+    },
+    {
+      "id": "equip_arc",
+      "method": "same generated master, new 256x256 export",
+      "reuse_of": "mount_arc",
+      "source_master": "source-masters/mount_arc.png",
+      "source": "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/game-assets/v1/source-masters/mount_arc.png",
+      "export_crop": [
+        131,
+        329,
+        991,
+        592
+      ],
+      "references": [
+        "sunlight/mount_arc.png"
+      ],
+      "prompt": "Use case: stylized-concept. Create ONE isolated production BATTLE WEAPON MOUNT sprite for H-01 submarine in Abyss Hunter, final128x128 square, actual alpha transparent background. Image1 is ship identity/material/proportion reference; image2 supplies equipment language. Compact detachable rounded white-ivory and muted-orange soft-mechanical weapon pod with cyan energy accents, right-facing3/4 side view, same H-01 material proportions. Simple silhouette readable at48px, hand-painted dimensional2D, restrained painted texture. Single weapon only, no submarine. Centered complete shape with12% transparent clear margin. No base/pedestal/platform, ground/shadow, display ring, framing card, background scene, projectile/explosion/lightning arcs, text, letters, numbers, logo or watermark. ELECTRIC ARC CHAIN WEAPON: compact horizontal ivory cylinder fitted with three thick clearly separate cyan energy coil rings and a two-prong rounded dark-teal emitter pointing RIGHT, a muted-orange backing cuff and small orange carrying tab on top. Distinct ribbed coil silhouette, no torpedo chambers or acoustic speaker aperture.",
+      "inherited_prompt_record": "production-round2.json#mount_arc"
+    },
+    {
+      "id": "equip_mine",
+      "method": "same generated master, new 256x256 export",
+      "reuse_of": "mount_mine",
+      "source_master": "source-masters/mount_mine.png",
+      "source": "/Users/loongwind/Documents/Workspace/GameSpace/GameFirst/output/game-assets/v1/source-masters/mount_mine.png",
+      "export_crop": [
+        162,
+        179,
+        929,
+        841
+      ],
+      "references": [
+        "sunlight/mount_mine.png"
+      ],
+      "prompt": "Use case: stylized-concept. Create ONE isolated production BATTLE WEAPON MOUNT sprite for H-01 submarine in Abyss Hunter, final128x128 square, actual alpha transparent background. Image1 is ship identity/material/proportion reference; image2 supplies equipment language. Compact detachable rounded white-ivory and muted-orange soft-mechanical weapon pod with cyan energy accents, right-facing3/4 side view, same H-01 material proportions. Simple silhouette readable at48px, hand-painted dimensional2D, restrained painted texture. Single weapon only, no submarine. Centered complete shape with12% transparent clear margin. No base/pedestal/platform, ground/shadow, display ring, framing card, background scene, projectile/explosion/lightning arcs, text, letters, numbers, logo or watermark. DECOY MINE LAUNCHER: compact spherical ivory/orange pod with three short rounded protective radial fins, a cyan equatorial energy band and small round cyan front sensor, a short dark-teal attachment lug tucked under its body. Distinct smooth BALL silhouette with a small launcher collar at rear-left. Friendly rounded edges, no sharp spikes. Do not add an anchor chain. Single pod only, no loose mine and no separate objects.",
+      "inherited_prompt_record": "production-round2.json#mount_mine"
+    },
+    {
+      "id": "equip_fin",
+      "prompt": "Use case: stylized-concept. ONE isolated production equipment icon for Abyss Hunter, intended256x256 and readable at48px. Use supplied H-01 as MATERIAL/PAINTING reference only; do NOT draw the submarine, porthole cabin or character. Rounded soft mechanical ivory white shell, muted orange armor accents, navy mechanical joints and small cyan optical/energy details. Same clean hand-painted2D chibi volume, simple 2-3 main value levels, restrained upper-left highlight. Full object in right-facing three-quarter side view, centered in square canvas occupying75%, with generous TRUE TRANSPARENT outer margin. No badge, card, quality frame, pedestal, stand, base, ground, floor, cast shadow, fog, halo, exterior glow, background, additional detached parts, letters, words, numbers, logo or watermark. Subject: one broad swept triangular HYDROFOIL FIN module, a distinctive wing-like silhouette. Flat but softly thick ivory fin blade with muted orange leading edge, a short navy root connector at LEFT/rear and one tiny cyan energy inset by the root. Swept tapered blade tip points RIGHT. Compact single mechanical fin, not a pair, no propeller, no engine, no round porthole or barrel. The broad fin surface has only a few clean panel seams.",
+      "references": [
+        "main/hero_h01_idle.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-8b2f076f870c/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-444526fb-a430-4ce7-85cf-dfbb01e3319f.png",
+      "method": "built-in image_gen"
+    },
+    {
+      "id": "equip_searchlight",
+      "prompt": "Use case: stylized-concept. ONE isolated production equipment icon for Abyss Hunter, intended256x256 and readable at48px. Use supplied H-01 as MATERIAL/PAINTING reference only; do NOT draw the submarine, porthole cabin or character. Rounded soft mechanical ivory white shell, muted orange armor accents, navy mechanical joints and small cyan optical/energy details. Same clean hand-painted2D chibi volume, simple 2-3 main value levels, restrained upper-left highlight. Full object in right-facing three-quarter side view, centered in square canvas occupying75%, with generous TRUE TRANSPARENT outer margin. No badge, card, quality frame, pedestal, stand, base, ground, floor, cast shadow, fog, halo, exterior glow, background, additional detached parts, letters, words, numbers, logo or watermark. Subject: one compact cylindrical SEARCHLIGHT module with a single fully FILLED convex cyan glass lens facing RIGHT at the front, ivory barrel housing, orange protective band, small navy back connector on LEFT and a tiny mounting yoke integrated into the body. Stubby lamp silhouette, lens is luminous glass NOT a hollow opening. No emitted beam or light cone. Do not add a big carry handle or a whole ship.",
+      "references": [
+        "main/hero_h01_idle.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-8b2f076f870c/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-ce753ada-1052-40ca-a9a4-c82b01f3cc88.png",
+      "method": "built-in image_gen"
+    },
+    {
+      "id": "equip_armor",
+      "prompt": "Use case: stylized-concept. ONE isolated production equipment icon for underwater game Abyss Hunter: a SINGLE compact layered armor plate module, intended256x256, clear at48px. Use supplied submarine ONLY as white/orange/navy material and hand-painted2D style reference, not subject. Broad softly beveled shield-like curved ivory metal PLATE, navy recessed outer backing layer, small muted orange shoulder-edge guards and one tiny cyan inset near upper middle. A few simple reinforcing panel joins. Show full plate at slight right-facing three-quarter side angle with subtle thickness visible on left. Clean recognizable armor silhouette, no straps or human torso. Rounded soft mechanical volume, 2-3 main values, restrained upper-left highlight. Centered square canvas,75% object, generous TRUE TRANSPARENT surrounding margin. No body, person, face, submarine, porthole, whole suit, weapon, emblem, insignia, card, quality frame, pedestal, display stand, base, floor, ground shadow, halo, glow, mist, environment, text, numbers, logo or watermark.",
+      "references": [
+        "main/hero_h01_idle.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-8b2f076f870c/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-4a55b6c3-485e-4b9e-b38b-1f6886b223b8.png",
+      "method": "built-in image_gen"
+    },
+    {
+      "id": "equip_magnet",
+      "prompt": "Use case: stylized-concept. ONE isolated production equipment icon for underwater game Abyss Hunter: a single chunky HORSESHOE PICKUP MAGNET module, intended256x256, instantly readable at48px. Use supplied submarine ONLY as palette and hand-painted2D material reference; do NOT depict a submarine. Clear thick U-shaped navy-and-ivory mechanical body with muted orange outer armor trim, exactly TWO blunt separated cyan pole tips. The U has a large genuinely TRANSPARENT central opening and open gap between the tips; the gap opens toward the upper RIGHT, so this is a right-facing3/4 module. One tiny cyan inset near curved LEFT/rear bridge. Simple bold horseshoe silhouette, softly beveled metal volume and 2-3 main values, restrained top-left highlights. Full object centered on square canvas at75%, generous true transparent margin. No magnetic field lines, captured loot, extra magnet, ring, glass porthole, hands, person, floor, pedestal, stand, base, ground shadow, beam, exterior glow, fog, halo, background, UI frame, card, text, numbers, logo or watermark.",
+      "references": [
+        "main/hero_h01_idle.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-8b2f076f870c/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-d7127941-e390-4716-889d-370d2f92842a.png",
+      "method": "built-in image_gen"
+    }
+  ]
+}
