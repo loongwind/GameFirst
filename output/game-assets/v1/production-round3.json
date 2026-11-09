@@ -1,0 +1,157 @@
+{
+  "tool": "built-in image_gen",
+  "production_version": "v1-r3",
+  "records": [
+    {
+      "id": "ui_bar_cyan",
+      "prompt": "Use case: stylized-concept. ONE production mobile game UI oxygen fill texture, ui_bar_cyan.png. Extremely thin horizontal solid blue-cyan rounded strip, target128x16 canvas, 8:1 aspect. A single filled plain flat blue-cyan face (muted RGB36,128,160) with a very thin brighter cyan highlight along top edge, short slightly rounded endcaps. Entire interior continuous solid color; no transparent holes. No frame, no track outline, no letters, numbers, ticks, symbols, icons, watermark or background. This is a fill segment to stretch horizontally with8px fixed end regions on left and right. Flat center so stretching adds no patterns; no large glow. Genuine alpha transparency OUTSIDE the strip silhouette only; filled face fully opaque. Strip reaches the top and bottom of its final16px canvas with0px vertical transparent padding; only rounded corners remain clear. Front orthographic view, clean simple dimensional2D aquarium game UI material. One strip only, no variations or stacked samples.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7fa7d58a6880/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-989f687a-9fc5-43a3-8969-d83679500f16.png",
+      "reference_paths": [],
+      "export_kind": "ui_bar",
+      "production_version": "v1-r3"
+    },
+    {
+      "id": "ui_bar_amber",
+      "prompt": "Use case: stylized-concept. ONE production mobile game UI cargo fill texture, ui_bar_amber.png. Extremely thin horizontal solid WARM AMBER rounded strip, target128x16 canvas, 8:1 aspect. A single filled plain flat amber face (muted golden amber approximately RGB220,164,78) with a very thin pale amber highlight along top edge, short slightly rounded endcaps. Entire interior continuous solid color; no transparent holes. No frame, no track outline, no letters, numbers, ticks, symbols, icons, watermark or background. This is a fill segment to stretch horizontally with8px fixed end regions on left and right. Flat center so stretching adds no patterns; no large glow. Genuine alpha transparency OUTSIDE the strip silhouette only; filled face fully opaque. Strip reaches the top and bottom of its final16px canvas with0px vertical transparent padding; only rounded corners remain clear. Front orthographic view, clean simple dimensional2D aquarium game UI material matching navy/cyan ocean UI. One strip only, no variations or stacked samples.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7fa7d58a6880/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-30b8e5ef-82c7-456d-8d69-f0b8706f8003.png",
+      "reference_paths": [],
+      "export_kind": "ui_bar",
+      "production_version": "v1-r3"
+    },
+    {
+      "id": "enemy_normal_01_moon_jelly_swim",
+      "prompt": "Use case: identity-preserve. Create ONE production animated sprite sheet for Abyss Hunter, enemy_normal_01_moon_jelly_swim.png. Input image is the exact moon-jelly IDENTITY reference. FOUR animation frames in ONE HORIZONTAL ROW, no other layout. Target768x192 (four equal192x192 square cells). Actual alpha transparent background. Each cell contains exactly ONE instance of this SAME cyan moon jelly, same umbrella bell, translucent cyan values, faint violet underside, identical facial/internal crescent marks and same tentacle count. Preserve reference hand-painted dimensional2D style and rightward swimming orientation. Keep bell's position and size IDENTICAL between all four cells, no camera/rotation/perspective change. Gentle6fps swimming cycle: frame1 neutral bell with tentacles curving left, frame2 slightly contracted bell and slightly drawn-up tentacles, frame3 neutral bell and relaxed downward tentacles, frame4 softly expanded bell with tentacles slightly trailing backward, then returns to1. Small subtle shape changes, about5-8%, no redesign. Character occupies about60% of each cell's height, centered at same per-cell coordinate; at least8px transparent margin per frame, especially at cell boundaries. No numbers, labels, frame dividers, grid, text, watermarks, backdrop, bubbles, detached glow clouds or extra creatures. Each frame is complete, isolated, no clipping into neighbor cells. FOUR poses of ONE jelly identity, not four different jellyfish.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7fa7d58a6880/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-4c240639-c90f-4322-ae15-c10f05d936e2.png",
+      "reference_paths": [
+        "output/game-assets/v1/sunlight/enemy_normal_01_moon_jelly_idle.png"
+      ],
+      "export_kind": "swim_strip",
+      "production_version": "v1-r3"
+    },
+    {
+      "id": "enemy_normal_02_lantern_angler_swim",
+      "prompt": "Use case: identity-preserve. ONE production animated sprite sheet for Abyss Hunter lantern anglerfish. Input image is exact creature IDENTITY reference. FOUR frames in ONE HORIZONTAL row, target768x192, four equal192x192 cells, genuine alpha transparent background. Each cell contains the SAME plump teal anglerfish facing RIGHT in the exact same side/three-quarter view: same single large amber eye, closed/small smiling mouth, short left tail, amber-tipped fins, curved lure above head with one pale amber bulb. Preserve hand-painted dimensional2D art, colors, proportions and scale. Body and eye anchored at SAME per-cell position. Six-fps gentle swim cycle:1 neutral tail,2 tail bends slightly upward and fins angle back,3 tail neutral with lure tip subtly forward,4 tail bends slightly downward and fins relax, then loop1. Tiny motions only; no body rotation or perspective changes, no shape redesign or exaggerated mouth. Whole fish/lure centered with at least8px clear margin per cell; never touch neighbor frames. No numbers, labels, separators, grid, text, watermark, scene, shadows, bubbles, sparks, background fish or other creatures. One complete fish per cell, four poses of one identity.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7fa7d58a6880/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-5acf4cd3-ba10-4dd8-b22b-3b864ce124bb.png",
+      "reference_paths": [
+        "output/game-assets/v1/sunlight/enemy_normal_02_lantern_angler_idle.png"
+      ],
+      "export_kind": "swim_strip",
+      "production_version": "v1-r3"
+    },
+    {
+      "id": "enemy_normal_03_electric_eel_swim",
+      "prompt": "Use case: identity-preserve. ONE production animated sprite sheet for Abyss Hunter electric eel. Input image is exact creature IDENTITY reference. FOUR frames in ONE HORIZONTAL row, target768x192, four equal192x192 cells, real alpha transparent background. Each cell contains the SAME blue-cyan electric eel facing RIGHT: one amber eye, rounded CLOSED mouth, sinuous tapering body with continuous cyan lightning stripe and muted violet dorsal fin edge. Preserve exact reference identity, dimensional hand-painted2D style, thickness, length and viewing angle. Head/eye fixed at SAME per-cell coordinate and same scale. Gentle6fps side swimming loop in4poses:1 neutral shallow S body,2 body S crest shifts slightly backward with tail up,3 neutral flowing S,4 opposite subtle S bend with tail down, then1. Only5-10% body flex; no sharp coils, no coiling into ring, no head turns, no perspective/camera change, no new fins or jaws. Whole eel centered and about70% of each cell width, at least8px clear margin per cell including tail. One complete eel per cell, four equal cells. No text, numbers, labels, frame lines, grid, watermark, detached bolts/particles, bubbles, backgrounds, scene, shadows or other creatures.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7fa7d58a6880/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-4b82a4e9-b369-46d4-ac32-e1c29abdc425.png",
+      "reference_paths": [
+        "output/game-assets/v1/sunlight/enemy_normal_03_electric_eel_idle.png"
+      ],
+      "export_kind": "swim_strip",
+      "production_version": "v1-r3"
+    },
+    {
+      "id": "enemy_normal_04_needlefish",
+      "prompt": "Use case: stylized-concept. ONE isolated production ordinary enemy sprite for Abyss Hunter SUNLIGHT zone, final192x192 square, genuine alpha transparent background. References provide the established clean hand-painted dimensional2D creature style, cool cyan/blue silhouette, baked crisp cyan rim and tiny amber eye accents. Right-facing side/three-quarter view, simple rounded micro-chibi shapes readable at48px, not photorealistic/horror. One complete creature centered within square with12% clear margin, no cutoff. No big glow cloud, no detached particles/bubbles, no ground/shadow/pedestal, no frame/card, no scene, submarine, other creatures, UI, text, numbers, logo or watermark. A SILVER NEEDLEFISH: long slim torpedo-like fish body, smoothly tapered short needle snout pointing RIGHT, closed mouth, one prominent small amber eye near head, forked tail to LEFT, two small triangular translucent cyan fins. Silvery icy cyan top planes over deep teal-blue underside, narrow bright cyan side stripe. Clearly a sleek fish with a straight body, not an eel, no lightning stripe, no lure, no exposed teeth. Friendly clean pointed silhouette without weapon props.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7fa7d58a6880/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-659aebe8-dcfa-42e5-978b-ff8d543ab9aa.png",
+      "reference_paths": [
+        "output/imagegen/abyss-hunter-v1/02-sunlight-combat.png",
+        "output/game-assets/v1/sunlight/enemy_normal_02_lantern_angler_idle.png"
+      ],
+      "export_kind": "standard",
+      "production_version": "v1-r3"
+    },
+    {
+      "id": "enemy_normal_05_hermit_crab",
+      "prompt": "Use case: stylized-concept. ONE isolated production ordinary enemy sprite for Abyss Hunter SUNLIGHT zone, final192x192 square, genuine alpha transparent background. References provide the established clean hand-painted dimensional2D creature style, cool cyan/blue silhouette, baked crisp cyan rim and tiny amber eye accents. Right-facing side/three-quarter view, simple rounded micro-chibi shapes readable at48px, not photorealistic/horror. One complete creature centered within square with12% clear margin, no cutoff. No big glow cloud, no detached particles/bubbles, no ground/shadow/pedestal, no frame/card, no scene, submarine, other creatures, UI, text, numbers, logo or watermark. A HERMIT CRAB: compact dark teal spiral sea-shell on back with one simple cyan spiral ridge, small rounded bright cyan crab body peeking from lower-right shell opening, two short eye stalks with tiny amber eyes facing RIGHT, one larger smooth rounded front claw to RIGHT and a smaller tucked claw, three visible short chunky segmented legs below. Teal/cyan majority, tiny violet edge on shell and muted amber joints. Strong shell-plus-claw silhouette, no spiky armor, no extra limbs, no skull shapes, no realistic insect detail or horror.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7fa7d58a6880/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-9d061300-7474-473b-aa06-269f27d323f1.png",
+      "reference_paths": [
+        "output/imagegen/abyss-hunter-v1/02-sunlight-combat.png",
+        "output/game-assets/v1/sunlight/enemy_normal_02_lantern_angler_idle.png"
+      ],
+      "export_kind": "standard",
+      "production_version": "v1-r3"
+    },
+    {
+      "id": "enemy_normal_06_glass_shrimp",
+      "prompt": "Use case: stylized-concept. ONE isolated production ordinary enemy sprite for Abyss Hunter SUNLIGHT zone, final192x192 square, genuine alpha transparent background. References supply established clean hand-painted dimensional2D creature style, cool cyan/blue silhouette, crisp baked cyan rim, tiny amber eyes. Right-facing side/three-quarter view, simple rounded micro-chibi readable at48px, not photorealistic or horror. Whole creature centered within square with12% clear margin all sides. No big halo, detached particles/bubbles, ground/shadow/pedestal, frame/card, scenery, submarine, other creatures, UI, text, numbers, logo or watermark. A GLASS SHRIMP: small translucent icy-cyan segmented shrimp body forming a gentle C curve, head at RIGHT with one prominent amber eye, two short gracefully curved antennae pointing forward-right, five visible short paired walking/swimmer legs kept as a clean grouped silhouette beneath body, broad small fan tail at LEFT. Clearly segmented shrimp with crystal-clear cyan shell planes and darker teal internal core, restrained pale-cyan highlights, tiny violet joint accents. Antennae must be short/thick enough to survive48px preview. No claw weapons, no realistic insect hairs, no extra legs or spines, no tiny detached limbs.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7fa7d58a6880/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-4916dfaf-203a-4e96-86e4-d21eb2db41f4.png",
+      "reference_paths": [
+        "output/imagegen/abyss-hunter-v1/02-sunlight-combat.png",
+        "output/game-assets/v1/sunlight/enemy_normal_02_lantern_angler_idle.png"
+      ],
+      "export_kind": "standard",
+      "production_version": "v1-r3"
+    },
+    {
+      "id": "enemy_normal_07_moon_snail",
+      "prompt": "Use case: stylized-concept. ONE isolated production ordinary enemy sprite for Abyss Hunter SUNLIGHT zone, final192x192 square, genuine alpha transparent background. References supply established clean hand-painted dimensional2D creature style, cool cyan/blue silhouette, crisp baked cyan rim, tiny amber eyes. Right-facing side/three-quarter view, simple rounded micro-chibi readable at48px, not photorealistic or horror. Whole creature centered within square with12% clear margin all sides. No big halo, detached particles/bubbles, ground/shadow/pedestal, frame/card, scenery, submarine, other creatures, UI, text, numbers, logo or watermark. A MOON SNAIL: one rounded deep-blue spiral shell with a pale cyan crescent-like glossy highlight on top, cyan luminous simple spiral ridge, a soft smooth bright teal snail foot extending to RIGHT, two short rounded cyan eye stalks with tiny amber eyes. Friendly compact underwater moon-snail, clean shell-plus-soft-foot silhouette, no claws or crab legs, no horn/spikes, no slime trail. Maintain cool blue/cyan with only a hint of violet shell rim. Thick readable eye stalks and no detached details.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7fa7d58a6880/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-fced8183-cf44-4d68-be4a-51f0e77b7fec.png",
+      "reference_paths": [
+        "output/imagegen/abyss-hunter-v1/02-sunlight-combat.png",
+        "output/game-assets/v1/sunlight/enemy_normal_02_lantern_angler_idle.png"
+      ],
+      "export_kind": "standard",
+      "production_version": "v1-r3"
+    },
+    {
+      "id": "enemy_normal_08_comb_jelly",
+      "prompt": "Use case: stylized-concept. ONE isolated production ordinary enemy sprite, comb jelly for Abyss Hunter sunlight zone, final192x192 square, actual transparent alpha background. Reference1 gives established dimensional2D cyan sea creature style, reference2 is moon jelly identity only to DIFFERENTIATE silhouette from. A single plump oval translucent cyan/teal COMB JELLY, like a short upright oval glass droplet in slight right-facing3/4 view. Eight clearly spaced softly luminous meridian comb rows running from crown to lower pole, dominant cyan/teal with tiny controlled lavender and pale amber comb glints; simple dark teal internal core, crisp cyan outline and two tiny low-position amber eye dots on right-facing side. No umbrella bell, no large trailing tentacles, no shrimp/crab limbs. Oval ribbed glowing body is the main unmistakable silhouette, a tiny pair of short soft lower ribbons only. Friendly micro-chibi hand-painted dimensional2D, not realistic or horror, legible at48px. Whole creature centered within square with12% transparent safe margin all sides. No big glow fog, detached sparkles/bubbles, scenery/water, shadow/pedestal, frame/card, other creatures, submarine, UI, words/letters/numbers/logo/watermark.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7fa7d58a6880/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-39d249b5-f34a-4b9e-bbe3-3a48b6aa2c1c.png",
+      "reference_paths": [
+        "output/imagegen/abyss-hunter-v1/02-sunlight-combat.png",
+        "output/game-assets/v1/sunlight/enemy_normal_01_moon_jelly_idle.png"
+      ],
+      "export_kind": "standard",
+      "production_version": "v1-r3"
+    },
+    {
+      "id": "enemy_normal_04_needlefish_swim",
+      "prompt": "Use case: identity-preserve. ONE production swimming sprite sheet. Input image is EXACT creature identity reference. FOUR frames in ONE HORIZONTAL row, target768x192, four equal192x192 cells, real transparent background. Same creature identity, colors, silhouette scale, right-facing3/4 side view and hand-painted dimensional2D style in ALL cells. Keep main body at same per-cell anchor, no perspective/camera changes. Gentle6fps cycle with subtle poses only, return frame4 smoothly to1. Complete creature in every cell, at least8px clear per-cell margin, no cell overlap. No text, digits, frame labels, gridlines, dividers, watermark, background/scenery, ground/shadows, bubbles, particles, other creatures or additional accessories. Preserve silver-cyan NEEDLEFISH: long straight slender fish with pointed RIGHT snout, one amber eye, cyan lateral stripe, small triangular fins and forked LEFT tail. Head/eye/snount position fixed exactly. Four poses: neutral tail, tail flexes slightly upward and fins back, neutral tail with fins relaxed, tail slightly downward and fins forward. Body remains nearly straight, no eel-like coils or body shortening, same snout length in all frames. No teeth, lure, lightning stripe, claws or extra fins.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7fa7d58a6880/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-31a6d196-7e9d-4b0d-baad-3e9f85663487.png",
+      "reference_paths": [
+        "output/game-assets/v1/sunlight/enemy_normal_04_needlefish_idle.png"
+      ],
+      "export_kind": "swim_strip",
+      "production_version": "v1-r3"
+    },
+    {
+      "id": "enemy_normal_05_hermit_crab_swim",
+      "prompt": "Use case: identity-preserve. ONE production swimming sprite sheet. Input image is EXACT creature identity reference. FOUR frames in ONE HORIZONTAL row, target768x192, four equal192x192 cells, real transparent background. Same creature identity, colors, silhouette scale, right-facing3/4 side view and hand-painted dimensional2D style in ALL cells. Keep main body at same per-cell anchor, no perspective/camera changes. Gentle6fps cycle with subtle poses only, return frame4 smoothly to1. Complete creature in every cell, at least8px clear per-cell margin, no cell overlap. No text, digits, frame labels, gridlines, dividers, watermark, background/scenery, ground/shadows, bubbles, particles, other creatures or additional accessories. Preserve teal HERMIT CRAB: same large cyan-ridged spiral shell, two short amber-eyed stalks, larger right claw, smaller tucked claw, exactly three visible walking/swimmer legs. Shell remains absolutely fixed in size, angle and location per cell. Four gentle underwater paddling poses:1 legs neutral,2 front leg forward/rear leg back and large claw tilts up a little,3 legs neutral with smaller claw relaxed,4 opposite paddle legs with large claw down a little, then1. Only legs/claws shift, no new legs, no shell rotation, no body squash or smiling face added.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7fa7d58a6880/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-0351a4c4-830c-4bcc-8b00-46ada08c9a52.png",
+      "reference_paths": [
+        "output/game-assets/v1/sunlight/enemy_normal_05_hermit_crab_idle.png"
+      ],
+      "export_kind": "swim_strip",
+      "production_version": "v1-r3"
+    },
+    {
+      "id": "enemy_normal_06_glass_shrimp_swim",
+      "prompt": "Use case: identity-preserve. ONE production swimming sprite sheet. Input image is EXACT creature identity reference. FOUR frames in ONE HORIZONTAL row, target768x192, four equal192x192 cells, real transparent background. Same creature identity, colors, silhouette scale, right-facing3/4 side view and hand-painted dimensional2D style in ALL cells. Keep main body at same per-cell anchor, no perspective/camera changes. Gentle6fps cycle with subtle poses only, return frame4 smoothly to1. Complete creature in every cell, at least8px clear per-cell margin, no cell overlap. No text, digits, frame labels, gridlines, dividers, watermark, background/scenery, ground/shadows, bubbles, particles, other creatures or accessories. Preserve GLASS SHRIMP identity: same translucent cyan segmented C-curve body, one amber eye at RIGHT, two short thick curved antennae, exactly five visible grouped swimmer legs and broad fan tail at LEFT. Fixed head/eye anchor. Four gentle paddling phases:1 relaxed tail/legs,2 slightly curled tail and legs sweep back,3 relaxed tail and legs centered,4 tail opens a little and legs sweep forward. Keep five legs and same segment/antenna count in every frame. No extra limbs, no body rotation, no open jaw, no new claws or armor.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7fa7d58a6880/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-c33cd8dc-2c3e-407f-b5d7-ae44340d65ab.png",
+      "reference_paths": [
+        "output/game-assets/v1/sunlight/enemy_normal_06_glass_shrimp_idle.png"
+      ],
+      "export_kind": "swim_strip",
+      "production_version": "v1-r3"
+    },
+    {
+      "id": "enemy_normal_07_moon_snail_swim",
+      "prompt": "Use case: identity-preserve. ONE production swimming sprite sheet. Input image is EXACT creature identity reference. FOUR frames in ONE HORIZONTAL row, target768x192, four equal192x192 cells, real transparent background. Same creature identity, colors, silhouette scale, right-facing3/4 side view and hand-painted dimensional2D style in ALL cells. Keep main body at same per-cell anchor, no perspective/camera changes. Gentle6fps cycle with subtle poses only, return frame4 smoothly to1. Complete creature in every cell, at least8px clear per-cell margin, no cell overlap. No text, digits, frame labels, gridlines, dividers, watermark, background/scenery, ground/shadows, bubbles, particles, other creatures or accessories. Preserve MOON SNAIL identity: same rounded deep-blue spiral shell with cyan crescent highlight, smooth teal foot extending RIGHT and two short amber-eye stalks. Shell remains fixed in position, size and angle in every cell. Four gentle underwater glide phases:1 foot relaxed,2 a small ripple raises front foot edge and eye stalks lean forward slightly,3 foot relaxed,4 a small ripple at rear foot and stalks relax slightly, then1. No crawl ground, no slime trail, no crab legs/claws, no additional eyes or new shell patterns. Small movements only; do not wobble or rotate shell.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7fa7d58a6880/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-096d30e5-bd44-4e98-bb27-ce2c73fac665.png",
+      "reference_paths": [
+        "output/game-assets/v1/sunlight/enemy_normal_07_moon_snail_idle.png"
+      ],
+      "export_kind": "swim_strip",
+      "production_version": "v1-r3"
+    },
+    {
+      "id": "enemy_normal_08_comb_jelly_swim",
+      "prompt": "Use case: identity-preserve. ONE production swimming sprite sheet for Abyss Hunter comb jelly. Exact creature identity is supplied input. FOUR animation frames in ONE horizontal row, target768x192, equal192x192 cells, genuine alpha transparent background. Preserve same oval translucent cyan/teal ribbed body, eight luminous meridian comb rows with small controlled lavender/amber glints, simple dark teal core, two tiny amber eyes on lower-right side and two short soft lower ribbons. Same right-facing3/4 view, scale and centered anchor across frames, dimensional hand-painted2D finish. Gentle6fps pulse cycle:1 neutral oval body,2 body very slightly narrower with ribbons curling inward and comb light shifts subtly,3 neutral oval and ribbons relaxed,4 body very slightly broader with ribbons trailing backward, then1. Tiny shape change maximum5%; keep eyes and body center fixed, no rotation or camera perspective change, no new rows/ribbons or facial features. Whole creature in each cell, at least8px clear margin per cell, no overlap. No frame labels/numbers, text, dividers/grid, watermark, scene, ground/shadows, bubbles, detached particles or other creatures.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7fa7d58a6880/codex-home/generated_images/01a1bff8-a6c9-7da1-bb00-19c2b48d2fa1/exec-5f10caa8-c4a4-4bb6-ba83-af1b3d51b930.png",
+      "reference_paths": [
+        "output/game-assets/v1/sunlight/enemy_normal_08_comb_jelly_idle.png"
+      ],
+      "export_kind": "swim_strip",
+      "production_version": "v1-r3"
+    }
+  ]
+}

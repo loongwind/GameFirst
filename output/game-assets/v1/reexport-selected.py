@@ -10,17 +10,31 @@ for r in rows:
         continue
     dest = root / r['path']
     previous = hashlib.sha256(dest.read_bytes()).hexdigest() if dest.exists() else ''
-    args = ['swift', str(root / 'export-png.swift'), str(root / r['source_master']), str(dest), r['宽px'], r['高px'], '8' if r['透明'] == '是' else '0']
-    if r.get('export_crop'):
-        args += r['export_crop'].split(',') + [r['export_alignment']]
+    kind = r.get('export_kind', 'standard')
+    if kind == 'ui_bar':
+        args = ['swift', str(root / 'export-ui-bar.swift'), str(root / r['source_master']), str(dest), *r['export_crop'].split(',')]
+    elif kind == 'swim_strip':
+        args = ['swift', str(root / 'export-swim.swift'), str(root / r['source_master']), str(root / 'animation-layouts' / (r['id'] + '.json')), str(dest)]
+    else:
+        args = ['swift', str(root / 'export-png.swift'), str(root / r['source_master']), str(dest), r['宽px'], r['高px'], r.get('export_inset') or ('8' if r['透明'] == '是' else '0')]
+        if r.get('export_crop'):
+            args += r['export_crop'].split(',') + [r['export_alignment']]
     subprocess.run(args, check=True, capture_output=True)
     im = Image.open(dest)
     assert im.size == (int(r['宽px']), int(r['高px']))
     assert im.info.get('icc_profile') or 'srgb' in im.info
     alpha = im.getchannel('A')
     if r['透明'] == '是':
-        bb = alpha.getbbox()
-        assert min(bb[0], bb[1], im.width-bb[2], im.height-bb[3]) >= 8
+        if kind == 'swim_strip':
+            for i in range(4):
+                bb = alpha.crop((i*192,0,(i+1)*192,192)).getbbox()
+                assert min(bb[0],bb[1],192-bb[2],192-bb[3]) >= 2
+        elif kind == 'ui_bar':
+            assert alpha.crop((0,0,128,1)).getextrema()[1] > 0
+            assert alpha.crop((0,15,128,16)).getextrema()[1] > 0
+        else:
+            bb = alpha.getbbox()
+            assert min(bb[0], bb[1], im.width-bb[2], im.height-bb[3]) >= 8
         assert alpha.getextrema()[0] == 0
     else:
         assert alpha.getextrema() == (255, 255)

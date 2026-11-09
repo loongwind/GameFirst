@@ -578,5 +578,724 @@
       2.3222925234328446,
       0.3479705037886281
     ]
+  },
+  {
+    "id": "ui_bar_cyan",
+    "size": [
+      128,
+      16
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 2743,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "vertical_clear_rows": 0,
+    "horizontal_slice_insets": [
+      8,
+      8
+    ],
+    "center_alpha_extrema": [
+      254,
+      255
+    ]
+  },
+  {
+    "id": "ui_bar_amber",
+    "size": [
+      128,
+      16
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 2855,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "vertical_clear_rows": 0,
+    "horizontal_slice_insets": [
+      8,
+      8
+    ],
+    "center_alpha_extrema": [
+      253,
+      255
+    ]
+  },
+  {
+    "id": "enemy_normal_01_moon_jelly_swim",
+    "size": [
+      768,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 104641,
+    "fps": 6,
+    "frame_count": 4,
+    "frames": [
+      {
+        "alpha_bbox": [
+          39,
+          39,
+          155,
+          148
+        ],
+        "clear_margin_px": 37,
+        "anchor": [
+          103.0,
+          46.0
+        ]
+      },
+      {
+        "alpha_bbox": [
+          44,
+          38,
+          153,
+          135
+        ],
+        "clear_margin_px": 38,
+        "anchor": [
+          103.0,
+          46.0
+        ]
+      },
+      {
+        "alpha_bbox": [
+          41,
+          39,
+          157,
+          152
+        ],
+        "clear_margin_px": 35,
+        "anchor": [
+          103.5,
+          46.0
+        ]
+      },
+      {
+        "alpha_bbox": [
+          31,
+          38,
+          156,
+          148
+        ],
+        "clear_margin_px": 31,
+        "anchor": [
+          103.5,
+          46.0
+        ]
+      }
+    ],
+    "unique_frame_pixel_hashes": 4,
+    "measured_anchor_range_px": [
+      0.5,
+      0.0
+    ]
+  },
+  {
+    "id": "enemy_normal_02_lantern_angler_swim",
+    "size": [
+      768,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 88212,
+    "fps": 6,
+    "frame_count": 4,
+    "frames": [
+      {
+        "alpha_bbox": [
+          28,
+          48,
+          167,
+          140
+        ],
+        "clear_margin_px": 25,
+        "anchor": [
+          112.24137931034483,
+          99.29310344827586
+        ]
+      },
+      {
+        "alpha_bbox": [
+          30,
+          50,
+          168,
+          141
+        ],
+        "clear_margin_px": 24,
+        "anchor": [
+          112.29824561403508,
+          99.24561403508773
+        ]
+      },
+      {
+        "alpha_bbox": [
+          28,
+          49,
+          171,
+          141
+        ],
+        "clear_margin_px": 21,
+        "anchor": [
+          112.30508474576271,
+          99.23728813559322
+        ]
+      },
+      {
+        "alpha_bbox": [
+          26,
+          47,
+          167,
+          141
+        ],
+        "clear_margin_px": 25,
+        "anchor": [
+          112.3157894736842,
+          99.40350877192982
+        ]
+      }
+    ],
+    "unique_frame_pixel_hashes": 4,
+    "measured_anchor_range_px": [
+      0.07441016333937966,
+      0.1662206363366039
+    ]
+  },
+  {
+    "id": "enemy_normal_03_electric_eel_swim",
+    "size": [
+      768,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 51382,
+    "fps": 6,
+    "frame_count": 4,
+    "frames": [
+      {
+        "alpha_bbox": [
+          22,
+          74,
+          168,
+          124
+        ],
+        "clear_margin_px": 22,
+        "anchor": [
+          154.16666666666666,
+          97.25
+        ]
+      },
+      {
+        "alpha_bbox": [
+          20,
+          73,
+          169,
+          123
+        ],
+        "clear_margin_px": 20,
+        "anchor": [
+          154.0,
+          97.15384615384616
+        ]
+      },
+      {
+        "alpha_bbox": [
+          19,
+          73,
+          170,
+          124
+        ],
+        "clear_margin_px": 19,
+        "anchor": [
+          153.92307692307693,
+          97.23076923076923
+        ]
+      },
+      {
+        "alpha_bbox": [
+          19,
+          75,
+          167,
+          123
+        ],
+        "clear_margin_px": 19,
+        "anchor": [
+          154.27272727272728,
+          96.9090909090909
+        ]
+      }
+    ],
+    "unique_frame_pixel_hashes": 4,
+    "measured_anchor_range_px": [
+      0.34965034965034647,
+      0.3409090909090935
+    ]
+  },
+  {
+    "id": "enemy_normal_04_needlefish",
+    "size": [
+      192,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 7895,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      25,
+      79,
+      167,
+      113
+    ],
+    "clear_margin_px": 25
+  },
+  {
+    "id": "enemy_normal_05_hermit_crab",
+    "size": [
+      192,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 31300,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      24,
+      38,
+      168,
+      153
+    ],
+    "clear_margin_px": 24
+  },
+  {
+    "id": "enemy_normal_06_glass_shrimp",
+    "size": [
+      192,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 18878,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      25,
+      54,
+      167,
+      139
+    ],
+    "clear_margin_px": 25
+  },
+  {
+    "id": "enemy_normal_07_moon_snail",
+    "size": [
+      192,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 30504,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      24,
+      46,
+      168,
+      146
+    ],
+    "clear_margin_px": 24
+  },
+  {
+    "id": "enemy_normal_08_comb_jelly",
+    "size": [
+      192,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 31798,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      41,
+      25,
+      151,
+      168
+    ],
+    "clear_margin_px": 24
+  },
+  {
+    "id": "enemy_normal_04_needlefish_swim",
+    "size": [
+      768,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 38059,
+    "fps": 6,
+    "frame_count": 4,
+    "frames": [
+      {
+        "alpha_bbox": [
+          23,
+          76,
+          165,
+          116
+        ],
+        "clear_margin_px": 23,
+        "anchor": [
+          133.0,
+          96.42857142857143
+        ]
+      },
+      {
+        "alpha_bbox": [
+          24,
+          77,
+          165,
+          113
+        ],
+        "clear_margin_px": 24,
+        "anchor": [
+          133.16666666666666,
+          96.66666666666667
+        ]
+      },
+      {
+        "alpha_bbox": [
+          22,
+          76,
+          165,
+          116
+        ],
+        "clear_margin_px": 22,
+        "anchor": [
+          133.11111111111111,
+          96.77777777777777
+        ]
+      },
+      {
+        "alpha_bbox": [
+          23,
+          76,
+          165,
+          119
+        ],
+        "clear_margin_px": 23,
+        "anchor": [
+          133.16666666666666,
+          96.66666666666667
+        ]
+      }
+    ],
+    "unique_frame_pixel_hashes": 4,
+    "measured_anchor_range_px": [
+      0.1666666666666572,
+      0.34920634920634086
+    ]
+  },
+  {
+    "id": "enemy_normal_05_hermit_crab_swim",
+    "size": [
+      768,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 126216,
+    "fps": 6,
+    "frame_count": 4,
+    "frames": [
+      {
+        "alpha_bbox": [
+          23,
+          37,
+          167,
+          157
+        ],
+        "clear_margin_px": 23,
+        "anchor": [
+          79.5,
+          41.0
+        ]
+      },
+      {
+        "alpha_bbox": [
+          23,
+          39,
+          163,
+          157
+        ],
+        "clear_margin_px": 23,
+        "anchor": [
+          79.5,
+          40.0
+        ]
+      },
+      {
+        "alpha_bbox": [
+          22,
+          39,
+          167,
+          157
+        ],
+        "clear_margin_px": 22,
+        "anchor": [
+          79.5,
+          41.0
+        ]
+      },
+      {
+        "alpha_bbox": [
+          23,
+          40,
+          162,
+          159
+        ],
+        "clear_margin_px": 23,
+        "anchor": [
+          79.5,
+          40.0
+        ]
+      }
+    ],
+    "unique_frame_pixel_hashes": 4,
+    "measured_anchor_range_px": [
+      0.0,
+      1.0
+    ]
+  },
+  {
+    "id": "enemy_normal_06_glass_shrimp_swim",
+    "size": [
+      768,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 103755,
+    "fps": 6,
+    "frame_count": 4,
+    "frames": [
+      {
+        "alpha_bbox": [
+          17,
+          46,
+          170,
+          145
+        ],
+        "clear_margin_px": 17,
+        "anchor": [
+          119.5,
+          91.05
+        ]
+      },
+      {
+        "alpha_bbox": [
+          22,
+          46,
+          168,
+          138
+        ],
+        "clear_margin_px": 22,
+        "anchor": [
+          119.3529411764706,
+          90.76470588235294
+        ]
+      },
+      {
+        "alpha_bbox": [
+          18,
+          46,
+          169,
+          144
+        ],
+        "clear_margin_px": 18,
+        "anchor": [
+          119.33333333333333,
+          90.77777777777777
+        ]
+      },
+      {
+        "alpha_bbox": [
+          16,
+          46,
+          169,
+          147
+        ],
+        "clear_margin_px": 16,
+        "anchor": [
+          119.3529411764706,
+          90.76470588235294
+        ]
+      }
+    ],
+    "unique_frame_pixel_hashes": 4,
+    "measured_anchor_range_px": [
+      0.1666666666666714,
+      0.28529411764705515
+    ]
+  },
+  {
+    "id": "enemy_normal_07_moon_snail_swim",
+    "size": [
+      768,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 120098,
+    "fps": 6,
+    "frame_count": 4,
+    "frames": [
+      {
+        "alpha_bbox": [
+          23,
+          45,
+          167,
+          151
+        ],
+        "clear_margin_px": 23,
+        "anchor": [
+          80.5,
+          49.0
+        ]
+      },
+      {
+        "alpha_bbox": [
+          23,
+          45,
+          169,
+          153
+        ],
+        "clear_margin_px": 23,
+        "anchor": [
+          80.5,
+          49.0
+        ]
+      },
+      {
+        "alpha_bbox": [
+          22,
+          45,
+          168,
+          152
+        ],
+        "clear_margin_px": 22,
+        "anchor": [
+          80.5,
+          49.0
+        ]
+      },
+      {
+        "alpha_bbox": [
+          23,
+          45,
+          164,
+          153
+        ],
+        "clear_margin_px": 23,
+        "anchor": [
+          80.5,
+          49.0
+        ]
+      }
+    ],
+    "unique_frame_pixel_hashes": 4,
+    "measured_anchor_range_px": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "id": "enemy_normal_08_comb_jelly_swim",
+    "size": [
+      768,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 144552,
+    "fps": 6,
+    "frame_count": 4,
+    "frames": [
+      {
+        "alpha_bbox": [
+          38,
+          21,
+          155,
+          172
+        ],
+        "clear_margin_px": 20,
+        "anchor": [
+          96.0,
+          26.0
+        ]
+      },
+      {
+        "alpha_bbox": [
+          43,
+          21,
+          149,
+          168
+        ],
+        "clear_margin_px": 21,
+        "anchor": [
+          96.0,
+          26.0
+        ]
+      },
+      {
+        "alpha_bbox": [
+          38,
+          21,
+          154,
+          173
+        ],
+        "clear_margin_px": 19,
+        "anchor": [
+          96.0,
+          26.0
+        ]
+      },
+      {
+        "alpha_bbox": [
+          32,
+          21,
+          160,
+          169
+        ],
+        "clear_margin_px": 21,
+        "anchor": [
+          96.5,
+          26.0
+        ]
+      }
+    ],
+    "unique_frame_pixel_hashes": 4,
+    "measured_anchor_range_px": [
+      0.5,
+      0.0
+    ]
   }
 ]
