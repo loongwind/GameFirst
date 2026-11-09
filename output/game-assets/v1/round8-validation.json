@@ -1,0 +1,119 @@
+{
+  "production_version": "v1-r8",
+  "new_completed": 24,
+  "mvp_completed": 140,
+  "mvp_remaining": 27,
+  "p1_deferred": 18,
+  "batches_passed": {
+    "C": 46,
+    "B": 46,
+    "D": 40,
+    "A": 8
+  },
+  "all_png_contracts_checked": 140,
+  "prior_116_sha256_preserved": true,
+  "new_reexport_byte_identical": [
+    "enemy_normal_13_crystal_crab",
+    "enemy_normal_13_crystal_crab_swim",
+    "enemy_normal_14_blue_ring_squid",
+    "enemy_normal_14_blue_ring_squid_swim",
+    "enemy_normal_15_ghost_jelly",
+    "enemy_normal_15_ghost_jelly_swim",
+    "enemy_normal_16_violet_fish",
+    "enemy_normal_16_violet_fish_swim",
+    "enemy_normal_17_firefly_squid",
+    "enemy_normal_17_firefly_squid_swim",
+    "enemy_normal_18_abyss_angler",
+    "enemy_normal_18_abyss_angler_swim",
+    "enemy_normal_19_tube_worm",
+    "enemy_normal_19_tube_worm_swim",
+    "enemy_normal_20_armored_isopod",
+    "enemy_normal_20_armored_isopod_swim",
+    "enemy_normal_21_siphonophore",
+    "enemy_normal_21_siphonophore_swim",
+    "enemy_normal_22_sea_spider",
+    "enemy_normal_22_sea_spider_swim",
+    "enemy_normal_23_deep_starfish",
+    "enemy_normal_23_deep_starfish_swim",
+    "enemy_normal_24_glass_sponge",
+    "enemy_normal_24_glass_sponge_swim"
+  ],
+  "animation_landmark_span_px": {
+    "enemy_normal_13_crystal_crab_swim": [
+      0.16452991452990773,
+      0.9166666666666714
+    ],
+    "enemy_normal_14_blue_ring_squid_swim": [
+      0.15024630541871886,
+      0.49938423645320995
+    ],
+    "enemy_normal_16_violet_fish_swim": [
+      0.5324675324675354,
+      0.2550505050505052
+    ],
+    "enemy_normal_15_ghost_jelly_swim": [
+      0.0,
+      0.0
+    ],
+    "enemy_normal_17_firefly_squid_swim": [
+      0.15555555555555145,
+      0.407407407407419
+    ],
+    "enemy_normal_18_abyss_angler_swim": [
+      0.34026548672567003,
+      0.3244837758112027
+    ],
+    "enemy_normal_19_tube_worm_swim": [
+      0.40833333333333144,
+      0.7208333333333314
+    ],
+    "enemy_normal_20_armored_isopod_swim": [
+      0.3166666666666629,
+      0.06060606060606233
+    ],
+    "enemy_normal_21_siphonophore_swim": [
+      0.0,
+      0.0
+    ],
+    "enemy_normal_22_sea_spider_swim": [
+      0.3029953917050676,
+      0.3104395604395478
+    ],
+    "enemy_normal_23_deep_starfish_swim": [
+      0.5737931034482671,
+      0.5603448275862064
+    ],
+    "enemy_normal_24_glass_sponge_swim": [
+      0.5,
+      0.0
+    ]
+  },
+  "gif_measurements": {
+    "twilight-swim-review-r8.gif": {
+      "frames": 4,
+      "durations_ms": [
+        170,
+        170,
+        170,
+        170
+      ],
+      "actual_fps": 5.882352941176471
+    },
+    "abyss-swim-review-r8.gif": {
+      "frames": 4,
+      "durations_ms": [
+        170,
+        170,
+        170,
+        170
+      ],
+      "actual_fps": 5.882352941176471
+    }
+  },
+  "not_validated": [
+    "Cocos import/runtime playback",
+    "texture atlas/budget compression",
+    "device performance",
+    "RGB edge dilation"
+  ]
+}

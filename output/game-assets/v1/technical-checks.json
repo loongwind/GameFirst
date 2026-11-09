@@ -3248,5 +3248,1097 @@
         ]
       }
     ]
+  },
+  {
+    "id": "enemy_normal_13_crystal_crab",
+    "size": [
+      192,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 34524,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      25,
+      37,
+      167,
+      155
+    ],
+    "clear_margin_px": 25
+  },
+  {
+    "id": "enemy_normal_14_blue_ring_squid",
+    "size": [
+      192,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 27987,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      24,
+      40,
+      167,
+      151
+    ],
+    "clear_margin_px": 24
+  },
+  {
+    "id": "enemy_normal_15_ghost_jelly",
+    "size": [
+      192,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 24092,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      24,
+      26,
+      167,
+      167
+    ],
+    "clear_margin_px": 24
+  },
+  {
+    "id": "enemy_normal_16_violet_fish",
+    "size": [
+      192,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 18372,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      25,
+      61,
+      167,
+      131
+    ],
+    "clear_margin_px": 25
+  },
+  {
+    "id": "enemy_normal_13_crystal_crab_swim",
+    "size": [
+      768,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 139336,
+    "fps": 6,
+    "frame_count": 4,
+    "anchor_span_px": [
+      0.16452991452990773,
+      0.9166666666666714
+    ],
+    "frames": [
+      {
+        "alpha_bbox": [
+          23,
+          35,
+          166,
+          157
+        ],
+        "clear_margin_px": 23,
+        "anchor": [
+          141.13888888888889,
+          93.08333333333333
+        ]
+      },
+      {
+        "alpha_bbox": [
+          25,
+          35,
+          166,
+          147
+        ],
+        "clear_margin_px": 25,
+        "anchor": [
+          140.97435897435898,
+          94.0
+        ]
+      },
+      {
+        "alpha_bbox": [
+          21,
+          34,
+          167,
+          159
+        ],
+        "clear_margin_px": 21,
+        "anchor": [
+          141.02777777777777,
+          93.77777777777777
+        ]
+      },
+      {
+        "alpha_bbox": [
+          23,
+          35,
+          165,
+          154
+        ],
+        "clear_margin_px": 23,
+        "anchor": [
+          141.05405405405406,
+          93.70270270270271
+        ]
+      }
+    ]
+  },
+  {
+    "id": "enemy_normal_14_blue_ring_squid_swim",
+    "size": [
+      768,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 119101,
+    "fps": 6,
+    "frame_count": 4,
+    "anchor_span_px": [
+      0.15024630541871886,
+      0.49938423645320995
+    ],
+    "frames": [
+      {
+        "alpha_bbox": [
+          20,
+          35,
+          165,
+          153
+        ],
+        "clear_margin_px": 20,
+        "anchor": [
+          127.65,
+          84.58333333333333
+        ]
+      },
+      {
+        "alpha_bbox": [
+          18,
+          40,
+          159,
+          140
+        ],
+        "clear_margin_px": 18,
+        "anchor": [
+          127.65517241379311,
+          84.48275862068965
+        ]
+      },
+      {
+        "alpha_bbox": [
+          19,
+          31,
+          166,
+          158
+        ],
+        "clear_margin_px": 19,
+        "anchor": [
+          127.79310344827586,
+          84.60344827586206
+        ]
+      },
+      {
+        "alpha_bbox": [
+          20,
+          35,
+          164,
+          154
+        ],
+        "clear_margin_px": 20,
+        "anchor": [
+          127.64285714285714,
+          84.98214285714286
+        ]
+      }
+    ]
+  },
+  {
+    "id": "enemy_normal_16_violet_fish_swim",
+    "size": [
+      768,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 74074,
+    "fps": 6,
+    "frame_count": 4,
+    "anchor_span_px": [
+      0.5324675324675354,
+      0.2550505050505052
+    ],
+    "frames": [
+      {
+        "alpha_bbox": [
+          26,
+          59,
+          167,
+          131
+        ],
+        "clear_margin_px": 25,
+        "anchor": [
+          148.1818181818182,
+          101.39393939393939
+        ]
+      },
+      {
+        "alpha_bbox": [
+          24,
+          55,
+          167,
+          130
+        ],
+        "clear_margin_px": 24,
+        "anchor": [
+          148.66666666666666,
+          101.3
+        ]
+      },
+      {
+        "alpha_bbox": [
+          26,
+          59,
+          168,
+          128
+        ],
+        "clear_margin_px": 24,
+        "anchor": [
+          148.71428571428572,
+          101.17142857142858
+        ]
+      },
+      {
+        "alpha_bbox": [
+          24,
+          60,
+          168,
+          132
+        ],
+        "clear_margin_px": 24,
+        "anchor": [
+          148.66666666666666,
+          101.13888888888889
+        ]
+      }
+    ]
+  },
+  {
+    "id": "enemy_normal_15_ghost_jelly_swim",
+    "size": [
+      768,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 108543,
+    "fps": 6,
+    "frame_count": 4,
+    "anchor_span_px": [
+      0.0,
+      0.0
+    ],
+    "frames": [
+      {
+        "alpha_bbox": [
+          26,
+          25,
+          171,
+          164
+        ],
+        "clear_margin_px": 21,
+        "anchor": [
+          139.0,
+          27.0
+        ]
+      },
+      {
+        "alpha_bbox": [
+          27,
+          25,
+          172,
+          162
+        ],
+        "clear_margin_px": 20,
+        "anchor": [
+          139.0,
+          27.0
+        ]
+      },
+      {
+        "alpha_bbox": [
+          25,
+          23,
+          171,
+          163
+        ],
+        "clear_margin_px": 21,
+        "anchor": [
+          139.0,
+          27.0
+        ]
+      },
+      {
+        "alpha_bbox": [
+          25,
+          25,
+          171,
+          165
+        ],
+        "clear_margin_px": 21,
+        "anchor": [
+          139.0,
+          27.0
+        ]
+      }
+    ]
+  },
+  {
+    "id": "enemy_normal_17_firefly_squid",
+    "size": [
+      192,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 17033,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      24,
+      61,
+      168,
+      130
+    ],
+    "clear_margin_px": 24
+  },
+  {
+    "id": "enemy_normal_18_abyss_angler",
+    "size": [
+      192,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 26336,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      24,
+      42,
+      167,
+      150
+    ],
+    "clear_margin_px": 24
+  },
+  {
+    "id": "enemy_normal_19_tube_worm",
+    "size": [
+      192,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 30548,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      24,
+      25,
+      167,
+      167
+    ],
+    "clear_margin_px": 24
+  },
+  {
+    "id": "enemy_normal_20_armored_isopod",
+    "size": [
+      192,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 16111,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      24,
+      71,
+      168,
+      121
+    ],
+    "clear_margin_px": 24
+  },
+  {
+    "id": "enemy_normal_21_siphonophore",
+    "size": [
+      192,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 17634,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      28,
+      24,
+      164,
+      168
+    ],
+    "clear_margin_px": 24
+  },
+  {
+    "id": "enemy_normal_22_sea_spider",
+    "size": [
+      192,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 24266,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      24,
+      38,
+      168,
+      154
+    ],
+    "clear_margin_px": 24
+  },
+  {
+    "id": "enemy_normal_23_deep_starfish",
+    "size": [
+      192,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 27576,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      25,
+      28,
+      168,
+      164
+    ],
+    "clear_margin_px": 24
+  },
+  {
+    "id": "enemy_normal_24_glass_sponge",
+    "size": [
+      192,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 21866,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      51,
+      24,
+      141,
+      167
+    ],
+    "clear_margin_px": 24
+  },
+  {
+    "id": "enemy_normal_17_firefly_squid_swim",
+    "size": [
+      768,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 71959,
+    "fps": 6,
+    "frame_count": 4,
+    "anchor_span_px": [
+      0.15555555555555145,
+      0.407407407407419
+    ],
+    "frames": [
+      {
+        "alpha_bbox": [
+          21,
+          60,
+          165,
+          131
+        ],
+        "clear_margin_px": 21,
+        "anchor": [
+          123.48148148148148,
+          86.81481481481481
+        ]
+      },
+      {
+        "alpha_bbox": [
+          20,
+          61,
+          162,
+          131
+        ],
+        "clear_margin_px": 20,
+        "anchor": [
+          123.4,
+          87.04
+        ]
+      },
+      {
+        "alpha_bbox": [
+          19,
+          63,
+          164,
+          129
+        ],
+        "clear_margin_px": 19,
+        "anchor": [
+          123.55555555555556,
+          86.85185185185185
+        ]
+      },
+      {
+        "alpha_bbox": [
+          18,
+          59,
+          166,
+          131
+        ],
+        "clear_margin_px": 18,
+        "anchor": [
+          123.51851851851852,
+          87.22222222222223
+        ]
+      }
+    ]
+  },
+  {
+    "id": "enemy_normal_18_abyss_angler_swim",
+    "size": [
+      768,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 105459,
+    "fps": 6,
+    "frame_count": 4,
+    "anchor_span_px": [
+      0.34026548672567003,
+      0.3244837758112027
+    ],
+    "frames": [
+      {
+        "alpha_bbox": [
+          28,
+          42,
+          168,
+          150
+        ],
+        "clear_margin_px": 24,
+        "anchor": [
+          121.46017699115045,
+          96.99115044247787
+        ]
+      },
+      {
+        "alpha_bbox": [
+          25,
+          43,
+          170,
+          150
+        ],
+        "clear_margin_px": 22,
+        "anchor": [
+          121.57522123893806,
+          96.7433628318584
+        ]
+      },
+      {
+        "alpha_bbox": [
+          28,
+          41,
+          170,
+          150
+        ],
+        "clear_margin_px": 22,
+        "anchor": [
+          121.30973451327434,
+          96.69911504424779
+        ]
+      },
+      {
+        "alpha_bbox": [
+          28,
+          43,
+          168,
+          150
+        ],
+        "clear_margin_px": 24,
+        "anchor": [
+          121.65,
+          96.66666666666667
+        ]
+      }
+    ]
+  },
+  {
+    "id": "enemy_normal_19_tube_worm_swim",
+    "size": [
+      768,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 117017,
+    "fps": 6,
+    "frame_count": 4,
+    "anchor_span_px": [
+      0.40833333333333144,
+      0.7208333333333314
+    ],
+    "frames": [
+      {
+        "alpha_bbox": [
+          31,
+          25,
+          166,
+          164
+        ],
+        "clear_margin_px": 25,
+        "anchor": [
+          136.46666666666667,
+          72.46666666666667
+        ]
+      },
+      {
+        "alpha_bbox": [
+          30,
+          24,
+          166,
+          166
+        ],
+        "clear_margin_px": 24,
+        "anchor": [
+          136.47058823529412,
+          72.70588235294117
+        ]
+      },
+      {
+        "alpha_bbox": [
+          30,
+          22,
+          168,
+          168
+        ],
+        "clear_margin_px": 22,
+        "anchor": [
+          136.625,
+          73.1875
+        ]
+      },
+      {
+        "alpha_bbox": [
+          32,
+          25,
+          165,
+          164
+        ],
+        "clear_margin_px": 25,
+        "anchor": [
+          136.875,
+          73.0
+        ]
+      }
+    ]
+  },
+  {
+    "id": "enemy_normal_20_armored_isopod_swim",
+    "size": [
+      768,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 69657,
+    "fps": 6,
+    "frame_count": 4,
+    "anchor_span_px": [
+      0.3166666666666629,
+      0.06060606060606233
+    ],
+    "frames": [
+      {
+        "alpha_bbox": [
+          24,
+          67,
+          167,
+          124
+        ],
+        "clear_margin_px": 24,
+        "anchor": [
+          142.58333333333334,
+          100.66666666666667
+        ]
+      },
+      {
+        "alpha_bbox": [
+          23,
+          66,
+          169,
+          125
+        ],
+        "clear_margin_px": 23,
+        "anchor": [
+          142.72727272727272,
+          100.72727272727273
+        ]
+      },
+      {
+        "alpha_bbox": [
+          25,
+          68,
+          169,
+          124
+        ],
+        "clear_margin_px": 23,
+        "anchor": [
+          142.9,
+          100.7
+        ]
+      },
+      {
+        "alpha_bbox": [
+          22,
+          68,
+          166,
+          123
+        ],
+        "clear_margin_px": 22,
+        "anchor": [
+          142.72727272727272,
+          100.72727272727273
+        ]
+      }
+    ]
+  },
+  {
+    "id": "enemy_normal_21_siphonophore_swim",
+    "size": [
+      768,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 64421,
+    "fps": 6,
+    "frame_count": 4,
+    "anchor_span_px": [
+      0.0,
+      0.0
+    ],
+    "frames": [
+      {
+        "alpha_bbox": [
+          35,
+          25,
+          164,
+          169
+        ],
+        "clear_margin_px": 23,
+        "anchor": [
+          132.5,
+          26.0
+        ]
+      },
+      {
+        "alpha_bbox": [
+          36,
+          25,
+          165,
+          167
+        ],
+        "clear_margin_px": 25,
+        "anchor": [
+          132.5,
+          26.0
+        ]
+      },
+      {
+        "alpha_bbox": [
+          35,
+          25,
+          165,
+          163
+        ],
+        "clear_margin_px": 25,
+        "anchor": [
+          132.5,
+          26.0
+        ]
+      },
+      {
+        "alpha_bbox": [
+          35,
+          25,
+          166,
+          168
+        ],
+        "clear_margin_px": 24,
+        "anchor": [
+          132.5,
+          26.0
+        ]
+      }
+    ]
+  },
+  {
+    "id": "enemy_normal_22_sea_spider_swim",
+    "size": [
+      768,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 100064,
+    "fps": 6,
+    "frame_count": 4,
+    "anchor_span_px": [
+      0.3029953917050676,
+      0.3104395604395478
+    ],
+    "frames": [
+      {
+        "alpha_bbox": [
+          23,
+          37,
+          166,
+          155
+        ],
+        "clear_margin_px": 23,
+        "anchor": [
+          122.46428571428571,
+          92.46428571428571
+        ]
+      },
+      {
+        "alpha_bbox": [
+          24,
+          36,
+          166,
+          147
+        ],
+        "clear_margin_px": 24,
+        "anchor": [
+          122.16129032258064,
+          92.16129032258064
+        ]
+      },
+      {
+        "alpha_bbox": [
+          24,
+          34,
+          167,
+          158
+        ],
+        "clear_margin_px": 24,
+        "anchor": [
+          122.32142857142857,
+          92.46428571428571
+        ]
+      },
+      {
+        "alpha_bbox": [
+          23,
+          36,
+          166,
+          153
+        ],
+        "clear_margin_px": 23,
+        "anchor": [
+          122.3076923076923,
+          92.15384615384616
+        ]
+      }
+    ]
+  },
+  {
+    "id": "enemy_normal_23_deep_starfish_swim",
+    "size": [
+      768,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 112578,
+    "fps": 6,
+    "frame_count": 4,
+    "anchor_span_px": [
+      0.5737931034482671,
+      0.5603448275862064
+    ],
+    "frames": [
+      {
+        "alpha_bbox": [
+          18,
+          23,
+          166,
+          168
+        ],
+        "clear_margin_px": 18,
+        "anchor": [
+          115.58620689655173,
+          80.6896551724138
+        ]
+      },
+      {
+        "alpha_bbox": [
+          26,
+          29,
+          164,
+          161
+        ],
+        "clear_margin_px": 26,
+        "anchor": [
+          116.16,
+          81.08
+        ]
+      },
+      {
+        "alpha_bbox": [
+          19,
+          22,
+          165,
+          170
+        ],
+        "clear_margin_px": 19,
+        "anchor": [
+          116.07692307692308,
+          80.92307692307692
+        ]
+      },
+      {
+        "alpha_bbox": [
+          19,
+          25,
+          164,
+          166
+        ],
+        "clear_margin_px": 19,
+        "anchor": [
+          116.08333333333333,
+          81.25
+        ]
+      }
+    ]
+  },
+  {
+    "id": "enemy_normal_24_glass_sponge_swim",
+    "size": [
+      768,
+      192
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 84163,
+    "fps": 6,
+    "frame_count": 4,
+    "anchor_span_px": [
+      0.5,
+      0.0
+    ],
+    "frames": [
+      {
+        "alpha_bbox": [
+          52,
+          27,
+          140,
+          167
+        ],
+        "clear_margin_px": 25,
+        "anchor": [
+          109.0,
+          28.0
+        ]
+      },
+      {
+        "alpha_bbox": [
+          51,
+          27,
+          139,
+          166
+        ],
+        "clear_margin_px": 26,
+        "anchor": [
+          108.5,
+          28.0
+        ]
+      },
+      {
+        "alpha_bbox": [
+          53,
+          27,
+          140,
+          169
+        ],
+        "clear_margin_px": 23,
+        "anchor": [
+          108.5,
+          28.0
+        ]
+      },
+      {
+        "alpha_bbox": [
+          53,
+          27,
+          141,
+          168
+        ],
+        "clear_margin_px": 24,
+        "anchor": [
+          109.0,
+          28.0
+        ]
+      }
+    ]
   }
 ]

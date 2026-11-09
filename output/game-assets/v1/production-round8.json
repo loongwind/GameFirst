@@ -1,0 +1,229 @@
+{
+  "tool": "built-in image_gen",
+  "production_version": "v1-r8",
+  "records": [
+    {
+      "id": "enemy_normal_13_crystal_crab",
+      "refs": [
+        "output/imagegen/abyss-hunter-v1/03-abyss-boss.png",
+        "output/game-assets/v1/twilight/enemy_normal_10_umbrella_octopus_idle.png"
+      ],
+      "prompt": "Use case: stylized-concept. One isolated production game sprite: CRYSTAL ARMORED CRAB, normal twilight enemy for Abyss Hunter. Square1024x1024 source, final192x192. Inputs are style/palette references only; create this distinct species. Rounded compact crab seen from RIGHT side with slight three-quarter readability, one large faceted teal/cyan crystal carapace, two small rounded claws, six short walking legs, one small amber eye visible near right-front head. Crystal shell uses broad simple facets, no needles/spikes. Cyan main body, indigo shadow, restrained violet shell seams, clean dimensional hand-painted2D matching the references. Friendly and wondrous, no horror/teeth/blood. Complete centered creature with15% empty transparent margin. Actual alpha0 background directly outside physical anatomy. Crisp lit edge inside silhouette only, no exterior halo/haze/fog, no detached particles, no ground shadow, no water/scenery/card/UI/text/numbers/watermark. ONE creature only.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-269090161d42/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-fdcfd707-b951-4d67-97f2-7744babb2833.png"
+    },
+    {
+      "id": "enemy_normal_14_blue_ring_squid",
+      "refs": [
+        "output/imagegen/abyss-hunter-v1/03-abyss-boss.png",
+        "output/game-assets/v1/twilight/enemy_normal_10_umbrella_octopus_idle.png"
+      ],
+      "prompt": "Use case: stylized-concept. ONE isolated production normal enemy idle sprite for Abyss Hunter twilight zone. Square1024 source for final192x192. Inputs are STYLE reference only. Same rounded softly dimensional hand-painted2D as reference, clean simplified readable silhouette at48px. Cyan/teal main color, indigo shadows, restrained violet details. Entire centered creature inside15% empty safe margin. True alpha0 background directly outside physical anatomy. Opaque painted anatomy with crisp lit edges INSIDE silhouette only. No exterior fog/halo/cloud, detached particles, bubbles, ground shadow, water/scenery, cards, UI, lettering/numbers/watermark. Wondrous rather than scary; no blood or teeth. BLUE-RING SQUID, right-facing side view. Streamlined rounded triangular mantle pointing left, two short broad fins on back-left, small round head on right with ONE amber eye, four visible short curved arms plus two slightly longer feeding arms sweeping right/down. Teal mantle carries THREE clearly defined dark-blue oval ring markings with thin cyan borders. Distinct compact squid, not a big boss and not webbed umbrella octopus. Ring motifs painted on mantle; no disconnected rings or long sprawling tentacles.",
+      "transparent_background": true,
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-269090161d42/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-4a2f3510-f9b7-4016-917d-e8228d6ae87e.png"
+    },
+    {
+      "id": "enemy_normal_15_ghost_jelly",
+      "refs": [
+        "output/imagegen/abyss-hunter-v1/03-abyss-boss.png"
+      ],
+      "prompt": "Use case: stylized-concept. ONE isolated production normal enemy idle sprite for Abyss Hunter twilight zone. Square1024 source for final192x192. Inputs are STYLE reference only. Same rounded softly dimensional hand-painted2D as reference, clean simplified readable silhouette at48px. Cyan/teal main color, indigo shadows, restrained violet details. Entire centered creature inside15% empty safe margin. True alpha0 background directly outside physical anatomy. Opaque painted anatomy with crisp lit edges INSIDE silhouette only. No exterior fog/halo/cloud, detached particles, bubbles, ground shadow, water/scenery, cards, UI, lettering/numbers/watermark. Wondrous rather than scary; no blood or teeth. GHOST JELLYFISH: taller narrow pale cyan pear-shaped bell with a gently pointed crown and wavy lavender lower lip. Two long smooth trailing cyan ribbons and four finer short violet oral arms sweep gently left to suggest swimming right. A few simple cyan curved ribs INSIDE bell. Elegant, no ghost face or human eyes. Distinct from round squat moon jelly: taller bell and only two dominant long ribbons. No giant glow cloud; the bell itself has painted semi-opaque cool glass volume.",
+      "transparent_background": true,
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-269090161d42/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-98dd932f-86fc-4d75-b74e-0f2a118a89a0.png",
+      "status": "rejected",
+      "rejection_reason": "Broad pale exterior glow haze; clean background edit selected."
+    },
+    {
+      "id": "enemy_normal_16_violet_fish",
+      "refs": [
+        "output/imagegen/abyss-hunter-v1/03-abyss-boss.png"
+      ],
+      "prompt": "Use case: stylized-concept. ONE isolated production normal enemy idle sprite for Abyss Hunter twilight zone. Square1024 source for final192x192. Inputs are STYLE reference only. Same rounded softly dimensional hand-painted2D as reference, clean simplified readable silhouette at48px. Cyan/teal main color, indigo shadows, restrained violet details. Entire centered creature inside15% empty safe margin. True alpha0 background directly outside physical anatomy. Opaque painted anatomy with crisp lit edges INSIDE silhouette only. No exterior fog/halo/cloud, detached particles, bubbles, ground shadow, water/scenery, cards, UI, lettering/numbers/watermark. Wondrous rather than scary; no blood or teeth. VIOLET-FIN FISH, right-facing side view. Small streamlined rounded fusiform teal fish with one amber eye near right-facing head and closed friendly mouth. One broad rounded violet dorsal sail, small violet belly fin, fan-shaped violet tail pointing left with cyan edge. Three short lavender diagonal bands on rear body. Body slender and oval rather than silver deep chest; do not repeat hatchetfish, no belly photophore row, no actual armor/gear.",
+      "transparent_background": true,
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-269090161d42/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-60c56f5b-12e1-4155-9e62-d85e25a6a7f3.png"
+    },
+    {
+      "id": "enemy_normal_13_crystal_crab_swim",
+      "export_kind": "swim_strip",
+      "refs": [
+        "output/game-assets/v1/source-masters/enemy_normal_13_crystal_crab_idle.png"
+      ],
+      "prompt": "Use case: identity-preserve. Create ONE FOUR-FRAME SWIM STRIP from this exact crystal crab sprite. Wide4:1 canvas, FOUR equally spaced square cells in ONE row, target1536x384 source/final768x192. Same exact carapace facets, eye, claws, legs and colors in every frame; same RIGHT-facing view and fixed shell/head position, same scale. Only short legs paddle gently and claws flex a little through four subtle rhythmic phases; fourth loops smoothly to first at6fps. Keep large crystal carapace entirely unchanged, no camera movement/rotation/zoom, no turning. One crab per cell,15% transparent margin in EACH cell, no touching neighbors. True alpha0 background directly outside anatomy and between frames; crisp isolated sprites, NO exterior glow/fog/haze, no shadows/scenery/particles. No panels/dividers/text/numerals/watermark. Preserve reference hand-painted2D identity.",
+      "transparent_background": true,
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-269090161d42/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-5f3b71e7-d615-49ac-bc70-51c2ed9b7235.png"
+    },
+    {
+      "id": "enemy_normal_14_blue_ring_squid_swim",
+      "export_kind": "swim_strip",
+      "refs": [
+        "output/game-assets/v1/source-masters/enemy_normal_14_blue_ring_squid_idle.png"
+      ],
+      "prompt": "Use case: identity-preserve. FOUR-PHASE SWIM STRIP of the exact supplied creature. Wide4:1 canvas, four equal square cells in ONE horizontal row, final768x192/each192x192. One identical RIGHT-facing creature per cell, exact same scale and fixed head/amber-eye position, same body shape and color pattern. No turning, zoom or perspective changes. Keep15% clear transparent margin EACH cell, whole creature contained, no overlapping cells. Only small rhythmic fin/tail/arm motion across four distinct phases, fourth transitions smoothly to first at6fps; NOT four exact duplicate poses. Preserve polished dimensional hand-painted2D reference identity. Actual alpha0 background right outside anatomy and between cells; no external halo/fog/haze, no particles, ground/shadow, water/scenery/UI/text/numbers/frame/dividers. Keep the THREE blue rings and mantle facets unchanged; small side fins flex and the existing six visible arms gently curl/unfurl, without adding/removing arms. Head and mantle fixed.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-269090161d42/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-92324878-ab36-4321-8512-9c80d92b88ab.png"
+    },
+    {
+      "id": "enemy_normal_16_violet_fish_swim",
+      "export_kind": "swim_strip",
+      "refs": [
+        "output/game-assets/v1/source-masters/enemy_normal_16_violet_fish_idle.png"
+      ],
+      "prompt": "Use case: identity-preserve. FOUR-PHASE SWIM STRIP of the exact supplied creature. Wide4:1 canvas, four equal square cells in ONE horizontal row, final768x192/each192x192. One identical RIGHT-facing creature per cell, exact same scale and fixed head/amber-eye position, same body shape and color pattern. No turning, zoom or perspective changes. Keep15% clear transparent margin EACH cell, whole creature contained, no overlapping cells. Only small rhythmic fin/tail/arm motion across four distinct phases, fourth transitions smoothly to first at6fps; NOT four exact duplicate poses. Preserve polished dimensional hand-painted2D reference identity. Actual alpha0 background right outside anatomy and between cells; no external halo/fog/haze, no particles, ground/shadow, water/scenery/UI/text/numbers/frame/dividers. Keep the three lavender rear stripes, oval cyan body, amber eye and broad purple dorsal fin design unchanged; small tail fan wag and dorsal/belly fin flex. Torso fixed.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-269090161d42/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-7b695663-ac43-46e6-be0e-30dbc23bef0a.png"
+    },
+    {
+      "id": "enemy_normal_15_ghost_jelly",
+      "target_id": "enemy_normal_15_ghost_jelly",
+      "master_filename": "enemy_normal_15_ghost_jelly_idle_clean_r8.png",
+      "refs": [
+        "output/game-assets/v1/source-masters/enemy_normal_15_ghost_jelly_idle.png"
+      ],
+      "prompt": "Cut out this ONE jellyfish perfectly onto a transparent background. Delete ALL exterior fog, pale haze, glow cloud and color spill, including between the ribbons. Preserve the exact tall pointed cyan bell, lavender lip, two long cyan ribbons, fine violet oral arms, pose, size, paint and colors. Only physical anatomy remains; all immediately outside pixels are transparent alpha0. Keep thin lit edge on the body itself, no white backdrop. No other changes.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-269090161d42/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-5f94a682-4ae4-4f70-aea6-36d99d4a4db9.png",
+      "record_key": "enemy_normal_15_ghost_jelly_clean"
+    },
+    {
+      "id": "enemy_normal_15_ghost_jelly_swim",
+      "export_kind": "swim_strip",
+      "refs": [
+        "output/game-assets/v1/source-masters/enemy_normal_15_ghost_jelly_idle_clean_r8.png"
+      ],
+      "prompt": "Use case: identity-preserve. FOUR swimming poses of this exact ghost jellyfish, one horizontal row of FOUR equally spaced square cells on a wide4:1 canvas (final768x192,4x192). Keep same tall pointed cyan bell, same lavender lip, same TWO long cyan ribbons and fine violet oral arms. Fixed crown and bell position in each cell, same scale and same rightward diagonal orientation. Only gentle lower-lip flex and ribbon/arm undulation through four small distinct cyclic phases at6fps; fourth transitions smoothly to first. No turning/zoom, no bell redesign or new arms. One complete jellyfish per cell with15% clear margin, no cropping/overlap. Actual transparent alpha0 background right outside anatomy and between all ribbons, NO pale fog/halo/cloud, no shadow or scenery. Preserve crisp hand-painted2D anatomy and colors. No frame/dividers/UI/text/numbers/watermark.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-269090161d42/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-f153e76b-0d35-46ac-b561-2297bf5c0737.png"
+    },
+    {
+      "id": "enemy_normal_17_firefly_squid",
+      "refs": [
+        "output/imagegen/abyss-hunter-v1/03-abyss-boss.png"
+      ],
+      "prompt": "Use case: stylized-concept. ONE isolated production NORMAL ABYSS enemy idle sprite for Abyss Hunter. Square1024x1024 source for final192x192. Input is STYLE/palette reference only. Same rounded softly dimensional hand-painted2D language as concept03, clean readable silhouette at48px. Deep navy/teal body with cyan anatomical edges, sparse lavender accents; small amber eye where specified. Wondrous, gentle fantasy deep-sea creature, no horror/blood/slime/fangs, no sharp needles. Right-facing SIDE view, entire creature centered within15% empty safe margin. Genuine transparent alpha0 immediately outside anatomy. Only body-bound edge light, NO fog/cloud/exterior halo, no detached particles or bubbles, no shadows/ground, water/scenery, framing card, UI, text/numbers/watermark. FIREFLY SQUID: slender dark teal tapered torpedo-shaped mantle pointing left, two short triangular rounded violet fins at left rear; compact rounded head right with ONE amber eye; six visible short elegant curved arms sweeping right/down. Five small cyan photophore dots in one row INSIDE the mantle underside, like tiny internal firefly lights. No blue rings, no ring patterns; distinct narrower and darker mantle than blue-ring squid. Small local glow on skin only, not outside.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-269090161d42/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-128dffb7-17f5-4ebc-a504-b308f45effa0.png"
+    },
+    {
+      "id": "enemy_normal_18_abyss_angler",
+      "refs": [
+        "output/imagegen/abyss-hunter-v1/03-abyss-boss.png"
+      ],
+      "prompt": "Use case: stylized-concept. ONE isolated production NORMAL ABYSS enemy idle sprite for Abyss Hunter. Square1024x1024 source for final192x192. Input is STYLE/palette reference only. Same rounded softly dimensional hand-painted2D language as concept03, clean readable silhouette at48px. Deep navy/teal body with cyan anatomical edges, sparse lavender accents; small amber eye where specified. Wondrous, gentle fantasy deep-sea creature, no horror/blood/slime/fangs, no sharp needles. Right-facing SIDE view, entire creature centered within15% empty safe margin. Genuine transparent alpha0 immediately outside anatomy. Only body-bound edge light, NO fog/cloud/exterior halo, no detached particles or bubbles, no shadows/ground, water/scenery, framing card, UI, text/numbers/watermark. ABYSS ANGLERFISH: squat spherical near-navy/teal fish body, very small tail fan at left and two short rounded fins, head facing right with ONE large amber eye, closed small friendly mouth with NO visible teeth. One gently curved forehead stalk ending in a pale CYAN teardrop lure held above-right of the head. Short cobalt dorsal crest made of three rounded lobes, thin cyan side seams and tiny lavender fin tips. Lure cyan, never amber; single amber feature is the eye. Distinct plump silhouette, no humanoid face, no scary gaping mouth.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-269090161d42/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-188eacae-67c2-4b0b-9962-06d9a4f0e18a.png"
+    },
+    {
+      "id": "enemy_normal_19_tube_worm",
+      "refs": [
+        "output/imagegen/abyss-hunter-v1/03-abyss-boss.png"
+      ],
+      "prompt": "Use case: stylized-concept. ONE isolated production NORMAL ABYSS enemy idle sprite for Abyss Hunter. Square1024x1024 source for final192x192. Input is STYLE/palette reference only. Same rounded softly dimensional hand-painted2D language as concept03, clean readable silhouette at48px. Deep navy/teal body with cyan anatomical edges, sparse lavender accents; small amber eye where specified. Wondrous, gentle fantasy deep-sea creature, no horror/blood/slime/fangs, no sharp needles. Right-facing SIDE view, entire creature centered within15% empty safe margin. Genuine transparent alpha0 immediately outside anatomy. Only body-bound edge light, NO fog/cloud/exterior halo, no detached particles or bubbles, no shadows/ground, water/scenery, framing card, UI, text/numbers/watermark. LUMINOUS TUBE WORM: a single flexible cobalt-blue segmented tube body curled into a compact open S-curve, blunt closed lower-left tip. At the upper-right open end, a small rounded teal worm head with ONE amber eye and a compact crown of six SHORT soft cyan feathery fronds edged lavender. Fan fronds are rounded soft lobes, no needles. Simple broad ring segments along the flexible tube, pale cyan seams on body. A swimming fantasy marine worm, not a plant on a rock: no root/base/seafloor/pedestal, no human hand, no mouth full of teeth.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-269090161d42/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-60a9bf5f-9c40-4877-9078-1afe5c0e3eff.png"
+    },
+    {
+      "id": "enemy_normal_20_armored_isopod",
+      "refs": [
+        "output/imagegen/abyss-hunter-v1/03-abyss-boss.png"
+      ],
+      "prompt": "Use case: stylized-concept. ONE isolated production NORMAL ABYSS enemy idle sprite for Abyss Hunter. Square1024x1024 source for final192x192. Input is STYLE/palette reference only. Same rounded softly dimensional hand-painted2D language as concept03, clean readable silhouette at48px. Deep navy/teal body with cyan anatomical edges, sparse lavender accents; small amber eye where specified. Wondrous, gentle fantasy deep-sea creature, no horror/blood/slime/fangs, no sharp needles. Right-facing SIDE view, entire creature centered within15% empty safe margin. Genuine transparent alpha0 immediately outside anatomy. Only body-bound edge light, NO fog/cloud/exterior halo, no detached particles or bubbles, no shadows/ground, water/scenery, framing card, UI, text/numbers/watermark. ARMORED ISOPOD: low elongated oval near-navy segmented carapace like a smooth pill-bug submarine, seven broad overlapping rounded armor plates, short tucked rounded swimming legs along underside, tiny rounded tail fan at left. Small distinct head on right with ONE amber eye and two SHORT curved feelers, no large mandibles. Cyan seams between shell plates, tiny violet lower shell trim. Natural creature, no actual machinery or weapons. Clearly different from a crab: no big claws, no giant single crystal shell, longer lower multi-plate silhouette.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-269090161d42/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-29de9ed6-0ddc-44e6-9c59-2203b16a4255.png"
+    },
+    {
+      "id": "enemy_normal_21_siphonophore",
+      "refs": [
+        "output/imagegen/abyss-hunter-v1/03-abyss-boss.png"
+      ],
+      "prompt": "Use case: stylized-concept. ONE isolated production NORMAL ABYSS enemy idle sprite for Abyss Hunter. Square1024 source/final192x192. Input STYLE/palette reference only: same softly dimensional rounded hand-painted2D. Deep teal/navy, crisp cyan body-bound edges and small lavender accents. Wondrous calm exploration, never horror: no teeth/blood/slime/needles. Clear distinct silhouette readable at48px. Rightward side/three-quarter readable view, complete shape centered within15% empty margin. Actual alpha0 background directly outside anatomy and through openings. Opaque painted anatomy, no fog/halo/cloud, particles, bubbles, water/scenery, ground/cast shadow/pedestal/card/UI/text/numbers/watermark. SIPHONOPHORE CHAIN-LANTERN JELLY: one continuous slightly curved vertical organism with a large smooth oval cyan float at upper-right, and FOUR smaller pear-shaped teal swimmer bulbs descending on a clearly visible short connecting blue tube toward lower-left. A few short lavender fine tendrils trail below the lower bulbs. Each bulb has simple cyan inner rib markings, no eyes/faces. One connected organism, not five separate enemies, not a string of jewelry. Large top float simple unbroken oval for identity; no detached lights.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-269090161d42/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-deb8c493-b0d7-4ed6-b9a5-2415cde73e2a.png"
+    },
+    {
+      "id": "enemy_normal_22_sea_spider",
+      "refs": [
+        "output/imagegen/abyss-hunter-v1/03-abyss-boss.png"
+      ],
+      "prompt": "Use case: stylized-concept. ONE isolated production NORMAL ABYSS enemy idle sprite for Abyss Hunter. Square1024 source/final192x192. Input STYLE/palette reference only: same softly dimensional rounded hand-painted2D. Deep teal/navy, crisp cyan body-bound edges and small lavender accents. Wondrous calm exploration, never horror: no teeth/blood/slime/needles. Clear distinct silhouette readable at48px. Rightward side/three-quarter readable view, complete shape centered within15% empty margin. Actual alpha0 background directly outside anatomy and through openings. Opaque painted anatomy, no fog/halo/cloud, particles, bubbles, water/scenery, ground/cast shadow/pedestal/card/UI/text/numbers/watermark. STAR-FOOT SEA SPIDER: small smooth oval teal central body, very small rounded head on right with ONE amber eye; EIGHT slender jointed swimming legs fan around body in an airy star-like arrangement, each with two simple bends and a rounded lavender paddle tip. Cyan bands along legs, simple dark-indigo underside. Marine arthropod with clean smooth skin, no hair/fangs/spikes or scary real-spider texture. Keep legs compact enough to fit square with margin, all connected to single body, no detached limbs.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-269090161d42/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-f577aff8-55f8-4578-b29e-92d517ca2336.png"
+    },
+    {
+      "id": "enemy_normal_23_deep_starfish",
+      "refs": [
+        "output/imagegen/abyss-hunter-v1/03-abyss-boss.png"
+      ],
+      "prompt": "Use case: stylized-concept. ONE isolated production NORMAL ABYSS enemy idle sprite for Abyss Hunter. Square1024 source/final192x192. Input STYLE/palette reference only: same softly dimensional rounded hand-painted2D. Deep teal/navy, crisp cyan body-bound edges and small lavender accents. Wondrous calm exploration, never horror: no teeth/blood/slime/needles. Clear distinct silhouette readable at48px. Rightward side/three-quarter readable view, complete shape centered within15% empty margin. Actual alpha0 background directly outside anatomy and through openings. Opaque painted anatomy, no fog/halo/cloud, particles, bubbles, water/scenery, ground/cast shadow/pedestal/card/UI/text/numbers/watermark. DEEP SEA STAR: one chunky five-armed starfish with rounded tapering arms, gently asymmetric swimming pose facing right. Broad teal central disc, cobalt-blue underside, pale cyan shallow dotted seams running along all five arms, small lavender rounded tips. One small amber eye on the upper-right of central disc, no human mouth. Simple thick smooth arms, not sharp points or thin spider legs. Natural soft painted volume, no crystal shell, no clothing/gear, no detached sparkles.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-269090161d42/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-1bc2e0b9-22f2-476b-afa8-4e5c23ce1e1b.png"
+    },
+    {
+      "id": "enemy_normal_24_glass_sponge",
+      "refs": [
+        "output/imagegen/abyss-hunter-v1/03-abyss-boss.png"
+      ],
+      "prompt": "Use case: stylized-concept. ONE isolated production NORMAL ABYSS enemy idle sprite for Abyss Hunter. Square1024 source/final192x192. Input STYLE/palette reference only: same softly dimensional rounded hand-painted2D. Deep teal/navy, crisp cyan body-bound edges and small lavender accents. Wondrous calm exploration, never horror: no teeth/blood/slime/needles. Clear distinct silhouette readable at48px. Rightward side/three-quarter readable view, complete shape centered within15% empty margin. Actual alpha0 background directly outside anatomy and through openings. Opaque painted anatomy, no fog/halo/cloud, particles, bubbles, water/scenery, ground/cast shadow/pedestal/card/UI/text/numbers/watermark. GLASS SPONGE: one compact tall softly faceted blue-teal vase-shaped free-floating sea sponge, leaning gently right. A broad smooth oval cyan rim opening near upper-right, simplified broad hexagonal lattice ribs on body with SEVEN large clearly transparent openings, a few short rounded lavender root fibers below that drift freely, no base rock. Main vase mostly deep cobalt painted glass material with local cyan rib highlights, crisp lattice silhouette readable at48px. No face/eyes or lightbulbs. No external glow fog, no water trapped as background, all holes clear alpha.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-269090161d42/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-79b61417-c032-4446-92d9-a7011d4b7058.png"
+    },
+    {
+      "id": "enemy_normal_17_firefly_squid_swim",
+      "export_kind": "swim_strip",
+      "refs": [
+        "output/game-assets/v1/source-masters/enemy_normal_17_firefly_squid_idle.png"
+      ],
+      "prompt": "Use case: identity-preserve. ONE FOUR-FRAME SWIM SPRITE STRIP of the EXACT supplied abyss creature. Four equally spaced square cells in ONE horizontal row on wide4:1 canvas, final768x192 with4x192 cells. One complete same RIGHT-facing animal per cell, same scale, fixed head/amber-eye and torso position. Four subtle distinct rhythmic phases at6fps, fourth loops smoothly to first. No rotation, zoom, viewpoint/body redesign.15% transparent safe margin EACH cell; no clipping/overlap or extra copies inside a cell. Exact source colors, markings, anatomy and softly dimensional hand-painted2D style. True alpha0 transparent background directly outside physical anatomy, no exterior glow fog/haze/cloud, no loose particles/bubbles, no shadow/water/scenery/card/UI/text/numerals/frame/dividers. Keep the long dark mantle and FIVE cyan photophore dots exactly unchanged; only the existing arms curl gently and two rear fins flex. No new rings, dots or limbs.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-269090161d42/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-fbf0ebfc-57ab-41b8-b282-894013df9494.png"
+    },
+    {
+      "id": "enemy_normal_18_abyss_angler_swim",
+      "export_kind": "swim_strip",
+      "refs": [
+        "output/game-assets/v1/source-masters/enemy_normal_18_abyss_angler_idle.png"
+      ],
+      "prompt": "Use case: identity-preserve. ONE FOUR-FRAME SWIM SPRITE STRIP of the EXACT supplied abyss creature. Four equally spaced square cells in ONE horizontal row on wide4:1 canvas, final768x192 with4x192 cells. One complete same RIGHT-facing animal per cell, same scale, fixed head/amber-eye and torso position. Four subtle distinct rhythmic phases at6fps, fourth loops smoothly to first. No rotation, zoom, viewpoint/body redesign.15% transparent safe margin EACH cell; no clipping/overlap or extra copies inside a cell. Exact source colors, markings, anatomy and softly dimensional hand-painted2D style. True alpha0 transparent background directly outside physical anatomy, no exterior glow fog/haze/cloud, no loose particles/bubbles, no shadow/water/scenery/card/UI/text/numerals/frame/dividers. Keep spherical body, amber eye and three-lobed dorsal crest fixed; only small tail/side fins wag and cyan lure stalk flexes slightly. Mouth stays closed, no teeth.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-269090161d42/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-e20137d8-0cb5-474e-8b27-76e1213a45b6.png"
+    },
+    {
+      "id": "enemy_normal_19_tube_worm_swim",
+      "export_kind": "swim_strip",
+      "refs": [
+        "output/game-assets/v1/source-masters/enemy_normal_19_tube_worm_idle.png"
+      ],
+      "prompt": "Use case: identity-preserve. ONE FOUR-FRAME SWIM SPRITE STRIP of the EXACT supplied abyss creature. Four equally spaced square cells in ONE horizontal row on wide4:1 canvas, final768x192 with4x192 cells. One complete same RIGHT-facing animal per cell, same scale, fixed head/amber-eye and torso position. Four subtle distinct rhythmic phases at6fps, fourth loops smoothly to first. No rotation, zoom, viewpoint/body redesign.15% transparent safe margin EACH cell; no clipping/overlap or extra copies inside a cell. Exact source colors, markings, anatomy and softly dimensional hand-painted2D style. True alpha0 transparent background directly outside physical anatomy, no exterior glow fog/haze/cloud, no loose particles/bubbles, no shadow/water/scenery/card/UI/text/numerals/frame/dividers. Keep the main S-curved tube shape, ring segments, small head and amber eye fixed. Only the existing six short crown fronds softly fan and the blunt lower tip flexes a little. No uncoiling, no turning into a long snake.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-269090161d42/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-8ab9d982-d7b0-493b-9e7c-d199d72506be.png"
+    },
+    {
+      "id": "enemy_normal_20_armored_isopod_swim",
+      "export_kind": "swim_strip",
+      "refs": [
+        "output/game-assets/v1/source-masters/enemy_normal_20_armored_isopod_idle.png"
+      ],
+      "prompt": "Use case: identity-preserve. ONE FOUR-FRAME SWIM SPRITE STRIP of the EXACT supplied abyss creature. Four equally spaced square cells in ONE horizontal row on wide4:1 canvas, final768x192 with4x192 cells. One complete same RIGHT-facing animal per cell, same scale, fixed head/amber-eye and torso position. Four subtle distinct rhythmic phases at6fps, fourth loops smoothly to first. No rotation, zoom, viewpoint/body redesign.15% transparent safe margin EACH cell; no clipping/overlap or extra copies inside a cell. Exact source colors, markings, anatomy and softly dimensional hand-painted2D style. True alpha0 transparent background directly outside physical anatomy, no exterior glow fog/haze/cloud, no loose particles/bubbles, no shadow/water/scenery/card/UI/text/numerals/frame/dividers. Keep oval shell, plate count, amber eye and head fixed. Only short swimming legs paddle in sequence, feelers and tiny tail fan flex. No shell plate count changes or giant claws.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-269090161d42/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-73b1c34a-a759-4b4f-b9a4-1dc7636bef51.png"
+    },
+    {
+      "id": "enemy_normal_21_siphonophore_swim",
+      "export_kind": "swim_strip",
+      "refs": [
+        "output/game-assets/v1/source-masters/enemy_normal_21_siphonophore_idle.png"
+      ],
+      "prompt": "Use case: identity-preserve. ONE FOUR-FRAME SWIM SPRITE STRIP from the exact input abyss creature. Four equal square cells in a single horizontal row, wide4:1 canvas, final768x192/4x192. Exactly ONE same complete right-facing organism per cell, same scale, fixed main body/head, same markings/materials. Four subtle distinct rhythmic phases, fourth loops to first at6fps. Keep15% empty margin in EVERY cell, no cropping/overlap. No zoom, rotation or camera change. Preserve same hand-painted dimensional2D design and colors. Actual alpha0 background directly outside anatomy, between limbs and through holes; no exterior glow cloud, fog/haze, loose particles, ground/cast shadow, water/scenery/UI/text/numerals/borders/dividers. Keep the large upper float exactly fixed in position, size and oval shape. Only the FOUR connected lower swimmer bulbs and tiny tentacles flex by a few degrees on the same connecting tube. Keep all FIVE bulbs and same connections, no new separate jellyfish.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-269090161d42/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-48a617e7-4ba2-4b84-9158-2be4dd32dd3d.png"
+    },
+    {
+      "id": "enemy_normal_22_sea_spider_swim",
+      "export_kind": "swim_strip",
+      "refs": [
+        "output/game-assets/v1/source-masters/enemy_normal_22_sea_spider_idle.png"
+      ],
+      "prompt": "Use case: identity-preserve. ONE FOUR-FRAME SWIM SPRITE STRIP from the exact input abyss creature. Four equal square cells in a single horizontal row, wide4:1 canvas, final768x192/4x192. Exactly ONE same complete right-facing organism per cell, same scale, fixed main body/head, same markings/materials. Four subtle distinct rhythmic phases, fourth loops to first at6fps. Keep15% empty margin in EVERY cell, no cropping/overlap. No zoom, rotation or camera change. Preserve same hand-painted dimensional2D design and colors. Actual alpha0 background directly outside anatomy, between limbs and through holes; no exterior glow cloud, fog/haze, loose particles, ground/cast shadow, water/scenery/UI/text/numerals/borders/dividers. Keep the small central carapace, head and amber eye fixed. The SAME EIGHT jointed legs with purple paddle tips gently paddle through four small alternating phases. Same joints and leg count; no new limbs or animal redesign.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-269090161d42/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-93a56f02-4e42-4e7b-8fa9-e489b1c9b5c5.png"
+    },
+    {
+      "id": "enemy_normal_23_deep_starfish_swim",
+      "export_kind": "swim_strip",
+      "refs": [
+        "output/game-assets/v1/source-masters/enemy_normal_23_deep_starfish_idle.png"
+      ],
+      "prompt": "Use case: identity-preserve. ONE FOUR-FRAME SWIM SPRITE STRIP from the exact input abyss creature. Four equal square cells in a single horizontal row, wide4:1 canvas, final768x192/4x192. Exactly ONE same complete right-facing organism per cell, same scale, fixed main body/head, same markings/materials. Four subtle distinct rhythmic phases, fourth loops to first at6fps. Keep15% empty margin in EVERY cell, no cropping/overlap. No zoom, rotation or camera change. Preserve same hand-painted dimensional2D design and colors. Actual alpha0 background directly outside anatomy, between limbs and through holes; no exterior glow cloud, fog/haze, loose particles, ground/cast shadow, water/scenery/UI/text/numerals/borders/dividers. Keep central disc and single amber eye fixed. The SAME FIVE thick rounded arms bend their tips slightly through a four-phase swimming cycle. Preserve cyan dotted seams and purple tips. No spinning, no change to body size or arm count.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-269090161d42/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-588fcf77-9e7a-45d9-b67c-fbd3c4ab39b2.png"
+    },
+    {
+      "id": "enemy_normal_24_glass_sponge_swim",
+      "export_kind": "swim_strip",
+      "refs": [
+        "output/game-assets/v1/source-masters/enemy_normal_24_glass_sponge_idle.png"
+      ],
+      "prompt": "Use case: identity-preserve. ONE FOUR-FRAME SWIM SPRITE STRIP from the exact input abyss creature. Four equal square cells in a single horizontal row, wide4:1 canvas, final768x192/4x192. Exactly ONE same complete right-facing organism per cell, same scale, fixed main body/head, same markings/materials. Four subtle distinct rhythmic phases, fourth loops to first at6fps. Keep15% empty margin in EVERY cell, no cropping/overlap. No zoom, rotation or camera change. Preserve same hand-painted dimensional2D design and colors. Actual alpha0 background directly outside anatomy, between limbs and through holes; no exterior glow cloud, fog/haze, loose particles, ground/cast shadow, water/scenery/UI/text/numerals/borders/dividers. Keep the main glass vase cage and upper oval rim rigid and fixed in position/size, preserve the same SEVEN clear hexagonal openings. Only the short lavender bottom root fibers flutter gently through four distinct phases. Hole centers must stay clear alpha0. No pulsing that changes vase shape, no eyes or face.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-269090161d42/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-3e748b39-cb4c-4d5b-b07e-6c9b5919373f.png"
+    }
+  ]
+}
