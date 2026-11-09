@@ -1,0 +1,68 @@
+{
+  "production_version": "v1-r7",
+  "mvp_completed": 116,
+  "mvp_remaining": 51,
+  "p1_deferred": 18,
+  "batches_passed": {
+    "C": 46,
+    "B": 46,
+    "D": 16,
+    "A": 8
+  },
+  "all_png_contracts_checked": 116,
+  "prior_100_sha256_preserved": true,
+  "new_16_reexport_byte_identical": [
+    "bg_twilight",
+    "reef_twilight_left",
+    "reef_twilight_right",
+    "flora_twilight",
+    "bg_abyss",
+    "reef_abyss_left",
+    "reef_abyss_right",
+    "flora_abyss",
+    "enemy_normal_09_ribbon_eel",
+    "enemy_normal_09_ribbon_eel_swim",
+    "enemy_normal_10_umbrella_octopus",
+    "enemy_normal_10_umbrella_octopus_swim",
+    "enemy_normal_11_hatchetfish",
+    "enemy_normal_11_hatchetfish_swim",
+    "enemy_normal_12_lantern_shrimp",
+    "enemy_normal_12_lantern_shrimp_swim"
+  ],
+  "animation_anchor_span_px": {
+    "enemy_normal_09_ribbon_eel_swim": [
+      0.5,
+      0.46666666666666856
+    ],
+    "enemy_normal_10_umbrella_octopus_swim": [
+      0.15758962623951334,
+      0.09008390541571032
+    ],
+    "enemy_normal_11_hatchetfish_swim": [
+      0.14860681114549834,
+      0.45510835913313485
+    ],
+    "enemy_normal_12_lantern_shrimp_swim": [
+      0.07692307692306599,
+      0.2857142857142918
+    ]
+  },
+  "gif_frames": 4,
+  "gif_durations_ms": [
+    170,
+    170,
+    170,
+    170
+  ],
+  "gif_actual_fps": 5.882352941176471,
+  "visual_review": [
+    "scene-review-r7.png",
+    "creature-review-r7.png"
+  ],
+  "not_validated": [
+    "Cocos import/runtime playback",
+    "texture atlas/budget compression",
+    "device performance",
+    "RGB edge dilation"
+  ]
+}

@@ -1,0 +1,244 @@
+{
+  "tool": "built-in image_gen",
+  "production_version": "v1-r7",
+  "records": [
+    {
+      "id": "bg_twilight",
+      "transparent_background": false,
+      "refs": [
+        "output/imagegen/abyss-hunter-v1/03-abyss-boss.png",
+        "output/game-assets/v1/sunlight/bg_sunlight_far.png"
+      ],
+      "prompt": "Use case: stylized-concept. ONE isolated production far-background layer for Abyss Hunter twilight zone, bg_twilight_far.png. Portrait1024x1536, 2:3, opaque full bleed. Input1 is STYLE and deep-ocean palette reference ONLY; input2 is layout reference for the quieter far background. Paint ink-blue underwater open sea transitioning between sunlight and abyss; very weak diffuse cyan top light fading quickly into navy lower half. Smooth low contrast hand-painted depth with faint distant rock contours only at outermost left/right 8% edges. Center84% width uninterrupted empty open water at ALL heights. Match the rounded faceted dimensional2D hand-painted reference language. No water surface line, no seabed/floor or ground closure, no foreground reefs/coral (separate assets), no full-screen purple fog, no bright rays across central playfield, no particles, fish, jellyfish, squid, submarines, diver, enemies, bullets, loot, rings, shadows of creatures, UI/HUD, words, numbers, watermark or border. This is a quiet gameplay backplate, not a screenshot. Color: navy ink blue, restrained cyan at top, tiny indigo hints at far edges; center clean for bullets and player readability.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7e56896a6b71/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-e2e19f2d-a60c-4ef9-be1c-ec44f8c4ed1a.png"
+    },
+    {
+      "id": "bg_abyss",
+      "transparent_background": false,
+      "refs": [
+        "output/imagegen/abyss-hunter-v1/03-abyss-boss.png"
+      ],
+      "prompt": "Use case: stylized-concept. ONE production far-background layer for Abyss Hunter ABYSS zone, bg_abyss_far.png. Portrait1024x1536 2:3 opaque full bleed. Input is STYLE/palette reference only. Quiet near-black navy/indigo open ocean for deep boss gameplay, subtle cool blue depth toward upper left and very faint distant faceted cliff silhouettes at outermost8% left/right. Center84% uninterrupted empty near-black navy water at EVERY height, enough tonal blue to see depth but low contrast. Same softly dimensional painted2D language as reference. No water surface, no direct sunlight, no floor/seabed/ground closure, no bright spot in center, no foreground coral/rocks (separate overlays), no purple screen fog, no particles, no fish/jellyfish/squid/whale, no creature silhouettes, no submarine/diver, bullets/projectiles, loot, rings, UI/HUD/health bars/buttons, lettering/numbers/watermark/border. Extract only the mood of dark water from input, remove ALL gameplay and UI. Enchanting and calm rather than horror.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7e56896a6b71/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-8647b9ad-f12b-4b8b-9916-6ccf99667021.png"
+    },
+    {
+      "id": "reef_twilight_left",
+      "side": "LEFT",
+      "zone": "twilight",
+      "tone": "dark ink-blue rock masses, subtle teal lit top faces, sparse dim cyan and muted lavender rounded coral sprigs. Weaker top illumination than sunlight zone, but brighter than abyss",
+      "refs": [
+        "output/imagegen/abyss-hunter-v1/03-abyss-boss.png",
+        "output/game-assets/v1/sunlight/deco_sunlight_left.png"
+      ],
+      "prompt": "Use case: stylized-concept. Create ONE isolated production twilight zone SIDE REEF BORDER for Abyss Hunter. Target384x1536 portrait extremely tall narrow1:4 canvas. Real transparent background. Ref1 style/palette only; ref2 is SHAPE/LAYOUT language for a side-wall sprite. dark ink-blue rock masses, subtle teal lit top faces, sparse dim cyan and muted lavender rounded coral sprigs. Weaker top illumination than sunlight zone, but brighter than abyss. One slender vertically continuous wall of softly faceted rounded rocks filling height with tapering transparent ends. LEFT version: broad outer rock face hugs canvas LEFT edge inside safety margin, jagged rounded inner contour and short coral tips face RIGHT toward playable water. Keep most of opposite half of strip transparent. Distinct staggered ledges, not a mirrored clone. Preserve restrained hand-painted dimensional2D reference style, not photographic. Center playfield must remain open after compositing; no horizontal floor/seabed. Entire object including glow safely inside canvas at least8px final transparent border. No ocean background, fog, fish/creatures, enemies, submarine/diver, bullets/loot, HUD, text/numerals/watermark/frame. A single continuous skinny side-wall object only, with actual transparent exterior. No bottom-wide rock platform.",
+      "transparent_background": true,
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7e56896a6b71/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-cfc8c7d4-1c05-4278-9e6c-1a7dae643e5d.png"
+    },
+    {
+      "id": "reef_twilight_right",
+      "side": "RIGHT",
+      "zone": "twilight",
+      "tone": "dark ink-blue rock masses, subtle teal lit top faces, sparse dim cyan and muted lavender rounded coral sprigs. Weaker top illumination than sunlight zone, but brighter than abyss",
+      "refs": [
+        "output/imagegen/abyss-hunter-v1/03-abyss-boss.png",
+        "output/game-assets/v1/sunlight/deco_sunlight_left.png"
+      ],
+      "prompt": "Use case: stylized-concept. Create ONE isolated production twilight zone SIDE REEF BORDER for Abyss Hunter. Target384x1536 portrait extremely tall narrow1:4 canvas. Real transparent background. Ref1 style/palette only; ref2 is SHAPE/LAYOUT language for a side-wall sprite. dark ink-blue rock masses, subtle teal lit top faces, sparse dim cyan and muted lavender rounded coral sprigs. Weaker top illumination than sunlight zone, but brighter than abyss. One slender vertically continuous wall of softly faceted rounded rocks filling height with tapering transparent ends. RIGHT version: broad outer rock face hugs canvas RIGHT edge inside safety margin, jagged rounded inner contour and short coral tips face LEFT toward playable water. Keep most of opposite half of strip transparent. Distinct staggered ledges, not a mirrored clone. Preserve restrained hand-painted dimensional2D reference style, not photographic. Center playfield must remain open after compositing; no horizontal floor/seabed. Entire object including glow safely inside canvas at least8px final transparent border. No ocean background, fog, fish/creatures, enemies, submarine/diver, bullets/loot, HUD, text/numerals/watermark/frame. A single continuous skinny side-wall object only, with actual transparent exterior. No bottom-wide rock platform.",
+      "transparent_background": true,
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7e56896a6b71/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-f9d85bab-380f-44d4-b2db-f991920df4c0.png"
+    },
+    {
+      "id": "flora_twilight",
+      "zone": "twilight",
+      "refs": [
+        "output/imagegen/abyss-hunter-v1/03-abyss-boss.png"
+      ],
+      "prompt": "Use case: stylized-concept. ONE isolated production fore-layer coral decoration for Abyss Hunter TWILIGHT, deco_twilight_flora.png, square512x512 final. True transparent alpha. Input is STYLE/palette reference only, not scene to reproduce. Single compact rooted group: two slender rounded cyan-blue coral stems, a small muted lavender sea fan, all joined at one small dark ink-blue rounded rock. Restrained dim cyan tips and sparse lavender highlights, no large outer glow. Same clean dimensional2D hand-painted rounded faceted language as concept. Ink-blue majority, small cyan/purple accents, enchanting not scary. Complete centered shape within generous12% transparent margin, no cut tips. Not a whole coastline. No creatures/fish/jellyfish/submarine, no loot crystals, no detached sparkles or bubbles, no water/scene/ground plane/drop shadow/pedestal/card/frame, no text/numerals/watermark/UI. Actual transparent surrounding negative space, not checkerboard painted into background.",
+      "transparent_background": true,
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7e56896a6b71/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-cabee9eb-f98d-4bec-8d4f-18f411b47f3d.png"
+    },
+    {
+      "id": "reef_abyss_left",
+      "refs": [
+        "output/imagegen/abyss-hunter-v1/03-abyss-boss.png",
+        "output/game-assets/v1/sunlight/deco_sunlight_left.png"
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: stylized-concept. ONE isolated production ABYSS SIDE REEF BORDER for Abyss Hunter. Target384x1536 portrait extremely narrow1:4 canvas, genuine alpha background. Ref1 is deep-abyss STYLE/palette and rock/coral language; ref2 is only a layout/shape reference. Near-black navy/indigo rounded faceted rock wall, sparse small violet coral fingers and cyan pin-tip bioluminescence ONLY at a few ledges. Much darker rock faces and less teal light than sunlight reef; no full-screen glow. Same polished hand-painted dimensional2D, adventurous and wondrous not horror. LEFT border: outside broad face hugs far LEFT inside8px safety margin, skinny jagged inner outline faces RIGHT toward open water, short coral fingers point inward. Mostly transparent opposite half of strip. One slender continuous vertical wall with distinct staggered rounded ledges top to bottom, tapered ends, no bottom platform, no horizontal seabed/ground closure. Object fully contained including thin edge light, minimum8px transparent final border. NOT a complete underwater scene, no water/fog/black background, no fish/jellyfish/squid/submarine/creatures, no floating particles/loot/projectiles/healthbars/UI, no letters/numbers/watermark/frame. Only one skinny isolated rock wall, actual transparent exterior. Avoid sharp needles/teeth, keep rounded elegant coral.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7e56896a6b71/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-e2b4541b-6da2-4cc3-9212-f62d6745241c.png"
+    },
+    {
+      "id": "reef_abyss_right",
+      "refs": [
+        "output/imagegen/abyss-hunter-v1/03-abyss-boss.png",
+        "output/game-assets/v1/sunlight/deco_sunlight_left.png"
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: stylized-concept. ONE isolated production ABYSS SIDE REEF BORDER for Abyss Hunter. Target384x1536 portrait extremely narrow1:4 canvas, genuine alpha background. Ref1 is deep-abyss STYLE/palette and rock/coral language; ref2 is only a layout/shape reference. Near-black navy/indigo rounded faceted rock wall, sparse small violet coral fingers and cyan pin-tip bioluminescence ONLY at a few ledges. Much darker rock faces and less teal light than sunlight reef; no full-screen glow. Same polished hand-painted dimensional2D, adventurous and wondrous not horror. RIGHT border: outside broad face hugs far RIGHT inside8px safety margin, skinny jagged inner outline faces LEFT toward open water, short coral fingers point inward. Mostly transparent opposite half of strip. One slender continuous vertical wall with distinct staggered rounded ledges top to bottom, tapered ends, no bottom platform, no horizontal seabed/ground closure. Object fully contained including thin edge light, minimum8px transparent final border. NOT a complete underwater scene, no water/fog/black background, no fish/jellyfish/squid/submarine/creatures, no floating particles/loot/projectiles/healthbars/UI, no letters/numbers/watermark/frame. Only one skinny isolated rock wall, actual transparent exterior. Avoid sharp needles/teeth, keep rounded elegant coral.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7e56896a6b71/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-1ae72c93-9ccc-4db6-8fcb-aca74742b5fc.png"
+    },
+    {
+      "id": "flora_abyss",
+      "refs": [
+        "output/imagegen/abyss-hunter-v1/03-abyss-boss.png"
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: stylized-concept. ONE isolated production foreground ABYSS coral decoration for Abyss Hunter, deco_abyss_flora.png, final512x512 square. Actual transparent alpha. Style/palette reference input only. A single compact cluster of five elegant rounded tapering violet coral fingers of varied lengths, with small pale-cyan luminous tips and a tiny cyan branch on side, rooted on one near-black indigo rounded faceted pebble. Echo the violet margin coral in concept03. Mostly dark indigo with LOCAL lavender/cyan accents, no wide glow or purple mist. Beautiful and mysterious rather than horror; soft bulb tips no needles. Same polished hand-painted dimensional2D small readable masses. Full shape centered, generous12% clear margin, no cut tips. No fish/jellyfish/squid/creatures/eyes, no crystals/loot, no detached sparks/bubbles, no water/background/ground plane/cast shadow/pedestal/card/frame, no UI/lettering/numbers/watermark. One connected decorative plant cluster with genuinely transparent negative space around and between branches.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7e56896a6b71/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-d6f1966d-0bb3-4161-9439-bf357ae37234.png"
+    },
+    {
+      "id": "enemy_normal_09_ribbon_eel",
+      "refs": [
+        "output/imagegen/abyss-hunter-v1/03-abyss-boss.png",
+        "output/game-assets/v1/sunlight/enemy_normal_03_electric_eel_idle.png"
+      ],
+      "prompt": "Use case: stylized-concept. ONE isolated production NORMAL enemy idle identity baseline for Abyss Hunter TWILIGHT zone. Final192x192 square, true alpha transparency. Inputs are STYLE references only: concept03 for elegant deep-ocean creatures, established small enemy for coherent softly dimensional hand-painted2D proportions. Clean simple rounded slightly chibi readable silhouette at48px, mostly luminous cyan/teal with restrained violet trim and a single small amber eye for a stable landmark. Right-facing SIDE view, no perspective change. Friendly-enchanting rather than horror. Entire single creature centered with generous15% transparent margin. No realistic teeth/fangs, blood, slime, scary mouth, external halo, detached specks, bubbles, water/scenery/ground shadow/platform/card/frame/UI/text/numerals/watermark. Do not copy the reference creature species; paint the distinct species described. RIBBON EEL: a very slender long satin ribbon-like turquoise eel with a small round head facing right, one amber eye, closed tiny friendly mouth. Long continuous cyan dorsal ribbon fin edged muted violet, tail curls once upward on left. Thin flowing S-curve body, translucent fins. More delicate flat ribbon than muscular electric eel; no lightning spikes.",
+      "transparent_background": true,
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7e56896a6b71/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-7657e1b5-6d9b-44ac-b349-db6e536ee7b5.png"
+    },
+    {
+      "id": "enemy_normal_10_umbrella_octopus",
+      "refs": [
+        "output/imagegen/abyss-hunter-v1/03-abyss-boss.png",
+        "output/game-assets/v1/sunlight/enemy_normal_01_moon_jelly_idle.png"
+      ],
+      "prompt": "Use case: stylized-concept. ONE isolated production NORMAL enemy idle identity baseline for Abyss Hunter TWILIGHT zone. Final192x192 square, true alpha transparency. Inputs are STYLE references only: concept03 for elegant deep-ocean creatures, established small enemy for coherent softly dimensional hand-painted2D proportions. Clean simple rounded slightly chibi readable silhouette at48px, mostly luminous cyan/teal with restrained violet trim and a single small amber eye for a stable landmark. Right-facing SIDE view, no perspective change. Friendly-enchanting rather than horror. Entire single creature centered with generous15% transparent margin. No realistic teeth/fangs, blood, slime, scary mouth, external halo, detached specks, bubbles, water/scenery/ground shadow/platform/card/frame/UI/text/numerals/watermark. Do not copy the reference creature species; paint the distinct species described. UMBRELLA OCTOPUS: compact pear-shaped rounded cyan head/mantle, one big amber eye on right side, two small soft ear-like fins. Underneath a connected skirt of eight SHORT webbed arms forming a shallow umbrella; scalloped skirt tipped subtle lavender. Clearly an octopus with solid head and webbed umbrella arms, NOT a transparent jellyfish bell, not a squid's pointed mantle. Modest rightward tilt, no long sprawling tentacles.",
+      "transparent_background": true,
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7e56896a6b71/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-9f5c7f3f-ca9b-468b-b695-1abc1837808b.png"
+    },
+    {
+      "id": "enemy_normal_11_hatchetfish",
+      "refs": [
+        "output/imagegen/abyss-hunter-v1/03-abyss-boss.png",
+        "output/game-assets/v1/sunlight/enemy_normal_03_electric_eel_idle.png"
+      ],
+      "prompt": "Use case: stylized-concept. ONE isolated production NORMAL enemy idle identity baseline for Abyss Hunter TWILIGHT zone. Final192x192 square, true alpha transparency. Inputs are STYLE references only: concept03 for elegant deep-ocean creatures, established small enemy for coherent softly dimensional hand-painted2D proportions. Clean simple rounded slightly chibi readable silhouette at48px, mostly luminous cyan/teal with restrained violet trim and a single small amber eye for a stable landmark. Right-facing SIDE view, no perspective change. Friendly-enchanting rather than horror. Entire single creature centered with generous15% transparent margin. No realistic teeth/fangs, blood, slime, scary mouth, external halo, detached specks, bubbles, water/scenery/ground shadow/platform/card/frame/UI/text/numerals/watermark. Do not copy the reference creature species; paint the distinct species described. SILVER HATCHETFISH: short deep-bodied silver-blue fish with a tall gently rounded trapezoid chest and narrow tapering caudal peduncle to left, small forked cyan tail. Head on right with ONE amber eye, mouth closed, no visible teeth. Pale silver cyan flat side plane, indigo belly edge with four tiny cyan photophores, small lavender dorsal and pelvic fins. Hatchet-like deep chest silhouette but rounded friendly edges; no actual axe/tool, no metal gear.",
+      "transparent_background": true,
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7e56896a6b71/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-6cb9f555-8688-4515-b8d9-fecd7dda7cb3.png"
+    },
+    {
+      "id": "enemy_normal_12_lantern_shrimp",
+      "refs": [
+        "output/imagegen/abyss-hunter-v1/03-abyss-boss.png",
+        "output/game-assets/v1/sunlight/enemy_normal_03_electric_eel_idle.png"
+      ],
+      "prompt": "Use case: stylized-concept. ONE isolated production NORMAL enemy idle identity baseline for Abyss Hunter TWILIGHT zone. Final192x192 square, true alpha transparency. Inputs are STYLE references only: concept03 for elegant deep-ocean creatures, established small enemy for coherent softly dimensional hand-painted2D proportions. Clean simple rounded slightly chibi readable silhouette at48px, mostly luminous cyan/teal with restrained violet trim and a single small amber eye for a stable landmark. Right-facing SIDE view, no perspective change. Friendly-enchanting rather than horror. Entire single creature centered with generous15% transparent margin. No realistic teeth/fangs, blood, slime, scary mouth, external halo, detached specks, bubbles, water/scenery/ground shadow/platform/card/frame/UI/text/numerals/watermark. Do not copy the reference creature species; paint the distinct species described. LANTERN SHRIMP: one small translucent teal shrimp with a gently arched segmented body, compact tail fan on left, head facing right with one amber eye. A single rounded amber luminous organ inside the underside of thorax, not a separate lantern prop. Six short simple cyan swimming legs tucked below, two smooth curved antennae sweeping upward/back, muted lavender shell joint accents. Distinct shrimp identity, no claws like crab, no weapons/gear, clean small silhouette.",
+      "transparent_background": true,
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7e56896a6b71/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-1131e399-2fcc-4513-80c7-efe7bc46f372.png",
+      "status": "rejected",
+      "rejection_reason": "Broad pale white/cyan fog halo outside creature silhouette; retained for provenance only."
+    },
+    {
+      "id": "enemy_normal_09_ribbon_eel_swim",
+      "export_kind": "swim_strip",
+      "refs": [
+        "output/game-assets/v1/source-masters/enemy_normal_09_ribbon_eel_idle.png"
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: identity-preserve. Production SWIM SPRITE STRIP for Abyss Hunter. Use the input as the exact approved creature identity and preserve its species, silhouette proportions, face/amber eye position, color pattern and rendering. Create ONE horizontal strip, FOUR equally spaced cells left-to-right in a SINGLE ROW, wide4:1 canvas target1536x384 (final768x192 with4 cells192x192). Every cell contains the SAME ONE right-facing creature, identical scale and fixed head/amber eye position in its cell. True transparent alpha between and around frames, no panels/borders/dividers, no labels/numbers/words/watermark/scenery. Whole creature within each cell with15% transparent safety margin; no touching neighboring cell, no duplicates within cell, no cropping. Four distinct subtle swim phases at 0/25/50/75% of a seamless6fps loop, fourth transitions smoothly to first. Head and solid torso stay nearly identical and stationary, only tail/fins/skirt make small rhythmic motion, not a turn or zoom. Do NOT merely repeat exact same pose. Preserve clean softly dimensional hand-painted2D cyan/purple micro-chibi reference style. No extra glow fog, particles, teeth or blood. Gently wave the dorsal ribbon and the LEFT tail tip: neutral curl, slightly lifted, neutral opposite curve, slightly lowered. Keep head and body thickness unchanged, one continuous connected eel in each frame.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7e56896a6b71/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-c40693b5-13fd-4ac2-b142-ad33683d182d.png"
+    },
+    {
+      "id": "enemy_normal_10_umbrella_octopus_swim",
+      "export_kind": "swim_strip",
+      "refs": [
+        "output/game-assets/v1/source-masters/enemy_normal_10_umbrella_octopus_idle.png"
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: identity-preserve. Production SWIM SPRITE STRIP for Abyss Hunter. Use the input as the exact approved creature identity and preserve its species, silhouette proportions, face/amber eye position, color pattern and rendering. Create ONE horizontal strip, FOUR equally spaced cells left-to-right in a SINGLE ROW, wide4:1 canvas target1536x384 (final768x192 with4 cells192x192). Every cell contains the SAME ONE right-facing creature, identical scale and fixed head/amber eye position in its cell. True transparent alpha between and around frames, no panels/borders/dividers, no labels/numbers/words/watermark/scenery. Whole creature within each cell with15% transparent safety margin; no touching neighboring cell, no duplicates within cell, no cropping. Four distinct subtle swim phases at 0/25/50/75% of a seamless6fps loop, fourth transitions smoothly to first. Head and solid torso stay nearly identical and stationary, only tail/fins/skirt make small rhythmic motion, not a turn or zoom. Do NOT merely repeat exact same pose. Preserve clean softly dimensional hand-painted2D cyan/purple micro-chibi reference style. No extra glow fog, particles, teeth or blood. Keep the large rounded solid head and amber eye fixed; softly open/close the short webbed umbrella skirt and tiny ear fins, small excursion only, no long new arms. Preserve same number/arrangement of visible scalloped web lobes.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7e56896a6b71/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-f3d6184f-542d-4427-b03a-ee5fa627eea6.png",
+      "status": "rejected",
+      "rejection_reason": "Broad pale exterior haze violates isolated sprite transparency; clean edit selected instead."
+    },
+    {
+      "id": "enemy_normal_11_hatchetfish_swim",
+      "export_kind": "swim_strip",
+      "refs": [
+        "output/game-assets/v1/source-masters/enemy_normal_11_hatchetfish_idle.png"
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: identity-preserve. Production SWIM SPRITE STRIP for Abyss Hunter. Use the input as the exact approved creature identity and preserve its species, silhouette proportions, face/amber eye position, color pattern and rendering. Create ONE horizontal strip, FOUR equally spaced cells left-to-right in a SINGLE ROW, wide4:1 canvas target1536x384 (final768x192 with4 cells192x192). Every cell contains the SAME ONE right-facing creature, identical scale and fixed head/amber eye position in its cell. True transparent alpha between and around frames, no panels/borders/dividers, no labels/numbers/words/watermark/scenery. Whole creature within each cell with15% transparent safety margin; no touching neighboring cell, no duplicates within cell, no cropping. Four distinct subtle swim phases at 0/25/50/75% of a seamless6fps loop, fourth transitions smoothly to first. Head and solid torso stay nearly identical and stationary, only tail/fins/skirt make small rhythmic motion, not a turn or zoom. Do NOT merely repeat exact same pose. Preserve clean softly dimensional hand-painted2D cyan/purple micro-chibi reference style. No extra glow fog, particles, teeth or blood. Keep silver trapezoid chest and amber eye fixed; small left tail-fin wag and slight dorsal/pelvic-fin flex. Preserve the four blue belly photophores and forked tail. No body inflation or shape redesign.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7e56896a6b71/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-c83263f7-a3a8-455d-bf81-4f44ce6fe742.png",
+      "status": "rejected",
+      "rejection_reason": "Broad pale exterior haze violates isolated sprite transparency; clean edit selected instead."
+    },
+    {
+      "id": "enemy_normal_12_lantern_shrimp",
+      "target_id": "enemy_normal_12_lantern_shrimp",
+      "master_filename": "enemy_normal_12_lantern_shrimp_idle_clean_r7.png",
+      "refs": [
+        "output/game-assets/v1/source-masters/enemy_normal_12_lantern_shrimp_idle.png"
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: background-extraction. Edit the supplied exact production shrimp sprite to REMOVE ONLY the large pale white/cyan fog halo surrounding it. Preserve the SAME right-facing translucent segmented cyan/lavender shrimp, amber eye, internal amber thorax light, antennae, tail fan and legs, same pose and materials and proportions. Output ONE isolated creature on genuinely transparent alpha; immediate exterior outside its silhouette must be clear alpha0, not a blurred pale glow cloud. Retain only a thin local cyan luminous rim hugging the animal, at most3px in a1024square source. Remove broad surrounding white haze between antennae and above/under animal, preserve fine antennae and legs themselves. Keep the internal yellow light bounded INSIDE thorax. No new objects, no shadows or background, no letters/numbers/watermark/frame. Square canvas with generous15% transparent margin. Same hand-painted dimensional2D and exact identity.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7e56896a6b71/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-a4fb262d-cabe-4b08-998c-602c19fa86ac.png",
+      "record_key": "enemy_normal_12_lantern_shrimp_clean"
+    },
+    {
+      "id": "enemy_normal_10_umbrella_octopus_swim",
+      "target_id": "enemy_normal_10_umbrella_octopus_swim",
+      "master_filename": "enemy_normal_10_umbrella_octopus_swim_clean_r7.png",
+      "export_kind": "swim_strip",
+      "refs": [
+        "output/game-assets/v1/source-masters/enemy_normal_10_umbrella_octopus_swim.png"
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: background-extraction. Edit this EXACT FOUR-FRAME horizontal creature sprite strip. Keep all four creatures' pose differences, shape, identity, eye, colors, frame order, placement and scale unchanged. Remove ONLY the broad PALE WHITE/CYAN FOG/HALO exterior around every animal, including between the four animals and between fins/arms. Actual alpha0 clear negative space right up to creature silhouettes, only very thin existing cyan rim may remain. No new glow, no haze, no white backdrop, no particles. Preserve all actual body and fins, all four subtly different poses, same single row of FOUR equal cells on the same wide canvas. No labels, border, text or extra characters. Retain transparent exterior, crisp isolated game sprites. Do not trim or merge cells, do not change viewpoint.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7e56896a6b71/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-e9e9a8fb-f700-4d65-8cc8-d05eaa742eed.png",
+      "record_key": "enemy_normal_10_umbrella_octopus_swim_clean"
+    },
+    {
+      "id": "enemy_normal_11_hatchetfish_swim",
+      "target_id": "enemy_normal_11_hatchetfish_swim",
+      "master_filename": "enemy_normal_11_hatchetfish_swim_clean_r7.png",
+      "export_kind": "swim_strip",
+      "refs": [
+        "output/game-assets/v1/source-masters/enemy_normal_11_hatchetfish_swim.png"
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: background-extraction. Edit this EXACT FOUR-FRAME horizontal creature sprite strip. Keep all four creatures' pose differences, shape, identity, eye, colors, frame order, placement and scale unchanged. Remove ONLY the broad PALE WHITE/CYAN FOG/HALO exterior around every animal, including between the four animals and between fins/arms. Actual alpha0 clear negative space right up to creature silhouettes, only very thin existing cyan rim may remain. No new glow, no haze, no white backdrop, no particles. Preserve all actual body and fins, all four subtly different poses, same single row of FOUR equal cells on the same wide canvas. No labels, border, text or extra characters. Retain transparent exterior, crisp isolated game sprites. Do not trim or merge cells, do not change viewpoint.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7e56896a6b71/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-880bc1d1-7308-46b4-8489-3dab8802b4b0.png",
+      "record_key": "enemy_normal_11_hatchetfish_swim_clean"
+    },
+    {
+      "id": "enemy_normal_12_lantern_shrimp_swim",
+      "export_kind": "swim_strip",
+      "refs": [
+        "output/game-assets/v1/source-masters/enemy_normal_12_lantern_shrimp_idle_clean_r7.png"
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: identity-preserve. Create FOUR swimming poses of this EXACT approved shrimp sprite, in ONE SINGLE HORIZONTAL ROW of FOUR EQUAL square cells. Wide4:1 canvas1536x384 target, final768x192. Actual alpha0 transparent background around and between every creature. Preserve the exact cyan segmented body, lavender joints, amber eye, amber organ INSIDE thorax, curved paired antennae, tail fan and small legs. Keep head and eye fixed in each cell and identical scale. ONLY subtle rhythmic antenna/tail/leg motion in four phases of a seamless6fps swim loop; body shape stays same, all frames facingRIGHT side-view. ONE shrimp per cell, no duplicate in a cell,15% clear margin in every cell, no clipping or contact with neighboring cell. Critically NO PALE WHITE/CYAN CLOUD AROUND THE SHRIMP, NO exterior glow fog, NO luminous backdrop, NO halo layer. The exterior right next to animal silhouette is CLEAR ALPHA0. Thin lit edge within animal only. Same clean hand-painted2D rendering and identity. No text/numbers/panels/dividers/frame, no particles, no scenery/water/ground shadow.",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7e56896a6b71/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-a2c62e44-9cf7-416b-88a6-aeb1578fb238.png",
+      "status": "rejected",
+      "rejection_reason": "Broad pale exterior haze; replaced by image_gen background cleanup."
+    },
+    {
+      "id": "enemy_normal_12_lantern_shrimp_swim",
+      "target_id": "enemy_normal_12_lantern_shrimp_swim",
+      "master_filename": "enemy_normal_12_lantern_shrimp_swim_clean_r7.png",
+      "export_kind": "swim_strip",
+      "refs": [
+        "output/game-assets/v1/source-masters/enemy_normal_12_lantern_shrimp_swim.png"
+      ],
+      "transparent_background": true,
+      "prompt": "Use case: background-extraction. Remove the surrounding pale gray/cyan FOG from this exact FOUR-FRAME SHRIMP SPRITE STRIP, including the fog under/above antennae and legs and between the four creatures. Keep all four shrimp themselves completely unchanged: exact segmented body, fins, antennae, legs, amber eye and internal amber organ, four distinct poses, same scale, position and frame order. Immediately outside each real physical silhouette must be EMPTY ALPHA0 transparency, no broad white haze, no exterior glow cloud. Keep only thin lit edges on actual body. Wide canvas unchanged, four equal cells in one row. Do not crop/move/resize shrimp or create extra objects. Genuine transparent background, not checkerboard painting, no text or frame. This is background removal only.",
+      "record_key": "enemy_normal_12_lantern_shrimp_swim_clean",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7e56896a6b71/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-3e6e0f92-42cc-4570-afe1-7367862b72f3.png",
+      "status": "rejected",
+      "rejection_reason": "First cleanup retained visible pale rectangular haze; rejected after dark/light review."
+    },
+    {
+      "id": "enemy_normal_12_lantern_shrimp_swim",
+      "target_id": "enemy_normal_12_lantern_shrimp_swim",
+      "master_filename": "enemy_normal_12_lantern_shrimp_swim_cutout_r7.png",
+      "export_kind": "swim_strip",
+      "refs": [
+        "output/game-assets/v1/source-masters/enemy_normal_12_lantern_shrimp_swim.png"
+      ],
+      "transparent_background": true,
+      "prompt": "Cut out the FOUR shrimp shapes perfectly onto a transparent background. Delete ALL haze, exterior glow and color spill outside the physical anatomy, including between antennae and legs. Keep all four shrimp anatomy, poses, positions, scale and colors exactly identical. Keep the four frames in one horizontal row. Only solid shrimp anatomy remains; all outside pixels are transparent. No white backdrop. No other changes.",
+      "record_key": "enemy_normal_12_lantern_shrimp_swim_cutout",
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-7e56896a6b71/codex-home/generated_images/01a1c077-9891-7ea0-818c-434f35b75618/exec-28734027-161a-438a-8f32-350505854677.png"
+    }
+  ]
+}
