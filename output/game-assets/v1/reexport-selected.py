@@ -11,7 +11,10 @@ for r in rows:
     dest = root / r['path']
     previous = hashlib.sha256(dest.read_bytes()).hexdigest() if dest.exists() else ''
     kind = r.get('export_kind', 'standard')
-    if kind in ('ui_panel_sampled', 'ui_track'):
+    if kind == 'ui_skin_r6':
+        slices = {'ui_button_secondary':[32,24,32,24],'ui_slot':[24,24,24,24],'ui_toast':[24,16,24,16]}[r['id']]
+        args = ['swift', str(root / 'export-ui-skin-r6.swift'), str(root / r['source_master']), str(dest), r['宽px'], r['高px'], *map(str,slices), *r['export_crop'].split(',')]
+    elif kind in ('ui_panel_sampled', 'ui_track'):
         args = ['swift', str(root / 'export-ui-sampled.swift'), str(root / r['source_master']), str(dest), 'panel' if kind == 'ui_panel_sampled' else 'track', *r['export_crop'].split(',')]
     elif kind == 'ui_bar':
         args = ['swift', str(root / 'export-ui-bar.swift'), str(root / r['source_master']), str(dest), *r['export_crop'].split(',')]

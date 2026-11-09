@@ -1,0 +1,285 @@
+{
+  "tool": "built-in image_gen",
+  "version": "v1-r6",
+  "records": [
+    {
+      "id": "icon_pearl",
+      "prompt": "Use case: stylized-concept. ONE isolated production resource icon for underwater game Abyss Hunter, final96x96, clear at48px. Match supplied oxygen icon's rounded hand-painted2D soft optical/mechanical volume and navy edge separation, simple2-3 main value levels, restrained upper-left highlight. Full single object centered on square canvas,75% occupied, generous TRUE TRANSPARENT outer margin. No outer badge, card background, quality frame, pedestal, ground shadow, floor, big glow, halo, fog, backdrop, loose extra particles, words, letters, digits, logo or watermark. Reference is STYLE ONLY, do not draw a tank. Subject: one large lustrous nearly spherical ivory PEARL, softly pearlescent with a subtle warm amber lower rim and cool cyan reflected accent. Smooth simple sphere silhouette, a tiny curved specular highlight, no clam shell, no stand, no jewelry, no metal outer ring.",
+      "references": [
+        "main/icon_oxygen.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-c78b9c26ae53/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-0caaeca0-4320-4104-b8e6-373d5a6f82f6.png",
+      "method": "built-in image_gen"
+    },
+    {
+      "id": "icon_marrow",
+      "prompt": "Use case: stylized-concept. ONE isolated production resource icon for underwater game Abyss Hunter, final96x96, clear at48px. Match supplied oxygen icon's rounded hand-painted2D soft optical/mechanical volume and navy edge separation, simple2-3 main value levels, restrained upper-left highlight. Full single object centered on square canvas,75% occupied, generous TRUE TRANSPARENT outer margin. No outer badge, card background, quality frame, pedestal, ground shadow, floor, big glow, halo, fog, backdrop, loose extra particles, words, letters, digits, logo or watermark. Reference is STYLE ONLY, do not draw a tank. Subject: one compact DEEP SEA MARROW mineral pod, a distinctive organic teardrop/bean-shaped translucent violet biomineral with a pale lavender shell edge and a small cyan inner vein. Soft rounded asymmetrical silhouette, richer purple denoting rare material. Not a pearl, not a mechanical core, not a cluster of sharp crystals, no tentacles or eyes.",
+      "references": [
+        "main/icon_oxygen.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-c78b9c26ae53/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-7f7b6ce5-2167-40a5-b0da-cf1cdb86d8f5.png",
+      "method": "built-in image_gen"
+    },
+    {
+      "id": "icon_core_cyan",
+      "prompt": "Use case: stylized-concept. ONE isolated production resource icon for underwater game Abyss Hunter, final96x96, clear at48px. Match supplied oxygen icon's rounded hand-painted2D soft optical/mechanical volume and navy edge separation, simple2-3 main value levels, restrained upper-left highlight. Full single object centered on square canvas,75% occupied, generous TRUE TRANSPARENT outer margin. No outer badge, card background, quality frame, pedestal, ground shadow, floor, big glow, halo, fog, backdrop, loose extra particles, words, letters, digits, logo or watermark. Reference is STYLE ONLY, do not draw a tank. Subject: one compact CYAN ABYSS CORE energy module. A single rounded faceted cyan glass core enclosed by THREE short ivory-and-navy retaining claws around its rim, with tiny muted orange fastening points. Bright solid cyan inner heart, technical round/faceted silhouette, not a hollow ring, not a pearl, no bolts floating separately.",
+      "references": [
+        "main/icon_oxygen.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-c78b9c26ae53/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-29222673-42bb-41bc-bb4a-57970fb925c9.png",
+      "method": "built-in image_gen"
+    },
+    {
+      "id": "icon_core_red",
+      "prompt": "Use case: precise-object-edit. Edit target: supplied cyan abyss core icon. Create its CRIMSON abyss core variant. Keep the exact silhouette, faceted core shape, three ivory/navy retaining claws, tiny orange fasteners, view, shading, scale and transparency. Change ONLY the cyan glass core and cyan reflected light to rich luminous rose/crimson-red glass with warm coral highlights; not orange and not purple. Claws stay ivory/navy. No added objects or effects. Preserve true transparent margin, no outside glow, fog, background, text, digits, logos or watermark.",
+      "references": [
+        "source-masters/icon_core_cyan.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-c78b9c26ae53/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-e2990917-db5a-4252-ba10-604b1425f628.png",
+      "method": "built-in image_gen"
+    },
+    {
+      "id": "icon_ticket",
+      "prompt": "Use case: stylized-concept. ONE isolated production resource icon for underwater game Abyss Hunter, final96x96, clear at48px. Match supplied oxygen icon's rounded hand-painted2D soft optical/mechanical volume and navy edge separation, simple2-3 main value levels, restrained upper-left highlight. Full single object centered on square canvas,75% occupied, generous TRUE TRANSPARENT outer margin. No outer badge, card background, quality frame, pedestal, ground shadow, floor, big glow, halo, fog, backdrop, loose extra particles, words, letters, digits, logo or watermark. Reference is STYLE ONLY, do not draw a tank. Subject: one thin rectangular EQUIPMENT UPGRADE TICKET with small semicircular notches on both short ends. Ivory rigid paper/metal face, muted orange edge, one broad cyan stripe and a single raised upward chevron pictogram in the center. Slight right-facing3/4 view, corners rounded. Clearly a ticket silhouette, no words, serial number, pseudo-writing, bar code, QR code or extra card behind it.",
+      "references": [
+        "main/icon_oxygen.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-c78b9c26ae53/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-7d2b2de0-a6a0-448f-9393-e2c670384803.png",
+      "method": "built-in image_gen"
+    },
+    {
+      "id": "icon_attack",
+      "prompt": "Use case: stylized-concept. ONE isolated production attribute icon for underwater game Abyss Hunter, final96x96, clear at48px. Match supplied oxygen icon's rounded hand-painted2D soft optical/mechanical volume and navy edge separation, simple2-3 main value levels, restrained upper-left highlight. Full single object centered on square canvas,75% occupied, generous TRUE TRANSPARENT outer margin. No outer badge, card background, quality frame, pedestal, ground shadow, floor, big glow, halo, fog, backdrop, loose extra particles, words, letters, digits, logo or watermark. Reference is STYLE ONLY, do not draw a tank. Subject: ATTACK stat, one compact stylized cyan ENERGY SPEARHEAD pointing diagonally upper RIGHT. Broad faceted diamond-shaped cyan tip, short ivory mechanical collar and small muted orange base at lower LEFT. Simple powerful pointed silhouette, no blade handle, no bow, no gun body, no motion trail or explosion.",
+      "references": [
+        "main/icon_oxygen.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-c78b9c26ae53/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-f8b46526-aa0d-4d23-9b75-d882fc3fda56.png",
+      "method": "built-in image_gen"
+    },
+    {
+      "id": "icon_attack_speed",
+      "prompt": "Use case: stylized-concept. ONE isolated production attribute icon for underwater game Abyss Hunter, final96x96, clear at48px. Match supplied oxygen icon's rounded hand-painted2D soft optical/mechanical volume and navy edge separation, simple2-3 main value levels, restrained upper-left highlight. Full single object centered on square canvas,75% occupied, generous TRUE TRANSPARENT outer margin. No outer badge, card background, quality frame, pedestal, ground shadow, floor, big glow, halo, fog, backdrop, loose extra particles, words, letters, digits, logo or watermark. Reference is STYLE ONLY, do not draw a tank. Subject: ATTACK SPEED stat, one bold thick zigzag LIGHTNING BOLT with a solid cyan glass face and narrow ivory beveled edge, slanted upper-left to lower-right. Exactly TWO short navy/cyan speed slashes attached at its left side as part of the single compact icon. Dynamic simple silhouette. No clock, numbers, weapons or extra scattered sparks.",
+      "references": [
+        "main/icon_oxygen.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-c78b9c26ae53/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-7702b420-fb9d-4efc-b17b-8fc2229295f8.png",
+      "method": "built-in image_gen"
+    },
+    {
+      "id": "icon_move_speed",
+      "prompt": "Use case: stylized-concept. ONE isolated production attribute icon for underwater game Abyss Hunter, final96x96, clear at48px. Match supplied oxygen icon's rounded hand-painted2D soft optical/mechanical volume and navy edge separation, simple2-3 main value levels, restrained upper-left highlight. Full single object centered on square canvas,75% occupied, generous TRUE TRANSPARENT outer margin. No outer badge, card background, quality frame, pedestal, ground shadow, floor, big glow, halo, fog, backdrop, loose extra particles, words, letters, digits, logo or watermark. Reference is STYLE ONLY, do not draw a tank. Subject: MOVEMENT SPEED stat, one compact marine THRUSTER PROPELLER with exactly THREE broad rounded ivory blades arranged around a navy hub with a cyan central energy cap. Small muted orange blade-root accents. Slight right-facing3/4 front view, easily readable three-blade silhouette. No full engine housing, stand, submarine, motion trail or water spray.",
+      "references": [
+        "main/icon_oxygen.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-c78b9c26ae53/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-3595574e-30f8-4557-8a89-3fb0d0922ad9.png",
+      "method": "built-in image_gen"
+    },
+    {
+      "id": "icon_home",
+      "prompt": "Use case: stylized-concept. ONE isolated production navigation icon for underwater game Abyss Hunter, final96x96, clear at48px. Match supplied oxygen icon's rounded hand-painted2D soft optical/mechanical volume and navy edge separation, simple2-3 main value levels, restrained upper-left highlight. Full single object centered on square canvas,75% occupied, generous TRUE TRANSPARENT outer margin. No outer badge, card background, quality frame, pedestal, ground shadow, floor, big glow, halo, fog, backdrop, loose extra particles, words, letters, digits, logo or watermark. Reference is STYLE ONLY, do not draw a tank. Subject: HOME HARBOR entrance, one small compact marine research station building. Rounded ivory walls, low navy roof with a tiny cyan glass science dome, one broad cyan window and muted orange door trim. Clean house/station silhouette in slight3/4 view. No land, pier, water, ground or extra buildings.",
+      "references": [
+        "main/icon_oxygen.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-c78b9c26ae53/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-e9eccd5e-e128-4aa1-aa1e-34c2cee80e37.png",
+      "method": "built-in image_gen"
+    },
+    {
+      "id": "icon_equipment",
+      "prompt": "Use case: stylized-concept. ONE isolated production navigation icon for underwater game Abyss Hunter, final96x96, clear at48px. Match supplied oxygen icon's rounded hand-painted2D soft optical/mechanical volume and navy edge separation, simple2-3 main value levels, restrained upper-left highlight. Full single object centered on square canvas,75% occupied, generous TRUE TRANSPARENT outer margin. No outer badge, card background, quality frame, pedestal, ground shadow, floor, big glow, halo, fog, backdrop, loose extra particles, words, letters, digits, logo or watermark. Reference is STYLE ONLY, do not draw a tank. Subject: EQUIPMENT entrance, one wide low ivory-and-navy mechanic's TOOLBOX with a muted orange handle and one large raised cyan WRENCH pictogram on its front. Toolbox silhouette broader and lower than a cargo crate. Simple single case, no loose tools, no text or extra objects.",
+      "references": [
+        "main/icon_oxygen.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-c78b9c26ae53/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-10acc2af-e61c-41c6-b63b-bdd3b8ef4382.png",
+      "method": "built-in image_gen"
+    },
+    {
+      "id": "icon_upgrade",
+      "prompt": "Use case: stylized-concept. ONE isolated production navigation icon for underwater game Abyss Hunter, final96x96, clear at48px. Match supplied oxygen icon's rounded hand-painted2D soft optical/mechanical volume and navy edge separation, simple2-3 main value levels, restrained upper-left highlight. Full single object centered on square canvas,75% occupied, generous TRUE TRANSPARENT outer margin. No outer badge, card background, quality frame, pedestal, ground shadow, floor, big glow, halo, fog, backdrop, loose extra particles, words, letters, digits, logo or watermark. Reference is STYLE ONLY, do not draw a tank. Subject: UPGRADE entrance, one chunky ivory mechanical GEAR with exactly six broad rounded teeth and a solid cyan upward chevron inset in its center. Tiny muted orange inner fastening accent. Gear silhouette is primary, upward chevron secondary, no hollow central hole, no other arrows or detached parts.",
+      "references": [
+        "main/icon_oxygen.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-c78b9c26ae53/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-a96e4bb1-e94d-47d5-9cbb-e75d120553a2.png",
+      "method": "built-in image_gen"
+    },
+    {
+      "id": "icon_tech",
+      "prompt": "Use case: stylized-concept. ONE isolated production navigation icon for underwater game Abyss Hunter, final96x96, clear at48px. Match supplied oxygen icon's rounded hand-painted2D soft optical/mechanical volume and navy edge separation, simple2-3 main value levels, restrained upper-left highlight. Full single object centered on square canvas,75% occupied, generous TRUE TRANSPARENT outer margin. No outer badge, card background, quality frame, pedestal, ground shadow, floor, big glow, halo, fog, backdrop, loose extra particles, words, letters, digits, logo or watermark. Reference is STYLE ONLY, do not draw a tank. Subject: TECHNOLOGY entrance, one rounded laboratory FLASK with thick ivory neck rim, a navy stopper and a broad transparent cyan glass triangular bulb containing bright cyan liquid and exactly two simple round bubbles. Small muted orange neck band. Crisp flask silhouette, no writing, measurement ticks or digits.",
+      "references": [
+        "main/icon_oxygen.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-c78b9c26ae53/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-5416d97b-32b8-46f0-a675-f184de185361.png",
+      "method": "built-in image_gen"
+    },
+    {
+      "id": "icon_supply",
+      "prompt": "Use case: stylized-concept. ONE isolated production navigation icon for underwater game Abyss Hunter, final96x96, clear at48px. Match supplied oxygen icon's rounded hand-painted2D soft optical/mechanical volume and navy edge separation, simple2-3 main value levels, restrained upper-left highlight. Full single object centered on square canvas,75% occupied, generous TRUE TRANSPARENT outer margin. No outer badge, card background, quality frame, pedestal, ground shadow, floor, big glow, halo, fog, backdrop, loose extra particles, words, letters, digits, logo or watermark. Reference is STYLE ONLY, do not draw a tank. Subject: SUPPLY STATION entrance, one compact upright sealed IVORY SUPPLY CANISTER with navy reinforced edges, an orange top latch and one broad cyan water-droplet pictogram embossed on the front. Rounded squat rectangular canister, no handle across the top, distinct from a toolbox. No medical cross, text, loose supplies or duplicate canisters.",
+      "references": [
+        "main/icon_oxygen.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-c78b9c26ae53/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-36d2931a-20d2-4304-b123-1169a9df84e5.png",
+      "method": "built-in image_gen"
+    },
+    {
+      "id": "icon_archive",
+      "prompt": "Use case: stylized-concept. ONE isolated production navigation icon for underwater game Abyss Hunter, final96x96, clear at48px. Match supplied oxygen icon's rounded hand-painted2D soft optical/mechanical volume and navy edge separation, simple2-3 main value levels, restrained upper-left highlight. Full single object centered on square canvas,75% occupied, generous TRUE TRANSPARENT outer margin. No outer badge, card background, quality frame, pedestal, ground shadow, floor, big glow, halo, fog, backdrop, loose extra particles, words, letters, digits, logo or watermark. Reference is STYLE ONLY, do not draw a tank. Subject: EXPLORATION ARCHIVE entrance, one compact closed navy-and-ivory LOGBOOK with softly rounded cover corners, a cyan fish-shaped relief centered on the cover and small muted orange spine clasp. Slight right-facing3/4 view showing a thin ivory page edge. No printed lines, letters, numbers, map, label or card frame.",
+      "references": [
+        "main/icon_oxygen.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-c78b9c26ae53/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-492889ed-5dc5-4596-b3f1-6821b9aa05dd.png",
+      "method": "built-in image_gen"
+    },
+    {
+      "id": "icon_gift",
+      "prompt": "Use case: stylized-concept. ONE isolated production navigation icon for underwater game Abyss Hunter, final96x96, clear at48px. Match supplied oxygen icon's rounded hand-painted2D soft optical/mechanical volume and navy edge separation, simple2-3 main value levels, restrained upper-left highlight. Full single object centered on square canvas,75% occupied, generous TRUE TRANSPARENT outer margin. No outer badge, card background, quality frame, pedestal, ground shadow, floor, big glow, halo, fog, backdrop, loose extra particles, words, letters, digits, logo or watermark. Reference is STYLE ONLY, do not draw a tank. Subject: DEEP SEA GIFT entrance, one compact ivory gift box with a broad muted orange band and a glossy cyan ribbon tied into TWO simple loops on top. Slight right-facing3/4 view. Single closed gift silhouette, no floating ribbons or confetti, no padlock, text or emblem.",
+      "references": [
+        "main/icon_oxygen.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-c78b9c26ae53/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-e158bee5-7156-4fa1-8c40-87457bc8363d.png",
+      "method": "built-in image_gen"
+    },
+    {
+      "id": "icon_blessing",
+      "prompt": "Use case: stylized-concept. ONE isolated production navigation icon for underwater game Abyss Hunter, final96x96, clear at48px. Match supplied oxygen icon's rounded hand-painted2D soft optical/mechanical volume and navy edge separation, simple2-3 main value levels, restrained upper-left highlight. Full single object centered on square canvas,75% occupied, generous TRUE TRANSPARENT outer margin. No outer badge, card background, quality frame, pedestal, ground shadow, floor, big glow, halo, fog, backdrop, loose extra particles, words, letters, digits, logo or watermark. Reference is STYLE ONLY, do not draw a tank. Subject: OCEAN CURRENT BLESSING, a single sculptural emblem made of THREE broad nested flowing CYAN WAVE curves with narrow ivory bevel edges. Compact rounded sweeping silhouette, like a friendly current curling toward upper right, not a spiral storm. The gaps between curves are genuinely transparent. No outer circle, badge, fish, stars or particles.",
+      "references": [
+        "main/icon_oxygen.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-c78b9c26ae53/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-d659d03d-6628-4f0d-a762-2df8c7b56e49.png",
+      "method": "built-in image_gen"
+    },
+    {
+      "id": "icon_sonar",
+      "prompt": "Use case: stylized-concept. ONE isolated production navigation icon for underwater game Abyss Hunter, final96x96, clear at48px. Match supplied oxygen icon's rounded hand-painted2D soft optical/mechanical volume and navy edge separation, simple2-3 main value levels, restrained upper-left highlight. Full single object centered on square canvas,75% occupied, generous TRUE TRANSPARENT outer margin. No outer badge, card background, quality frame, pedestal, ground shadow, floor, big glow, halo, fog, backdrop, loose extra particles, words, letters, digits, logo or watermark. Reference is STYLE ONLY, do not draw a tank. Subject: SONAR ASSIST, one compact ivory/navy sonar transducer disk seen in slight right-facing3/4 view with a solid cyan sensor face, plus TWO short clean cyan concentric signal arcs extending just to its RIGHT as part of the same compact symbol. A tiny muted orange back connector. No long beam, ring surrounding entire icon, stand, pedestal or ship.",
+      "references": [
+        "main/icon_oxygen.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-c78b9c26ae53/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-004c0041-fa31-431c-8c37-c580b3d7b82b.png",
+      "method": "built-in image_gen"
+    },
+    {
+      "id": "icon_locked",
+      "prompt": "Use case: stylized-concept. ONE isolated production resource icon for underwater game Abyss Hunter, final96x96, clear at48px. Match supplied oxygen icon's rounded hand-painted2D soft optical/mechanical volume and navy edge separation, simple2-3 main value levels, restrained upper-left highlight. Full single object centered on square canvas,75% occupied, generous TRUE TRANSPARENT outer margin. No outer badge, card background, quality frame, pedestal, ground shadow, floor, big glow, halo, fog, backdrop, loose extra particles, words, letters, digits, logo or watermark. Reference is STYLE ONLY, do not draw a tank. Subject: LOCKED feedback, one chunky closed PADLOCK with an ivory/narrow navy U-shaped shackle and a compact muted orange rounded rectangular body. A simple cyan keyhole inset centered on body, no engraved marks. Slight right-facing3/4 view, clear lock silhouette, no chain, key, tag, badge or extra objects.",
+      "references": [
+        "main/icon_oxygen.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-c78b9c26ae53/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-9544661a-b17a-4d5e-b33e-cfcd7b529d00.png",
+      "method": "built-in image_gen"
+    },
+    {
+      "id": "icon_silver_chest",
+      "prompt": "Use case: stylized-concept. ONE isolated production resource icon for underwater game Abyss Hunter, final96x96, clear at48px. Match supplied oxygen icon's rounded hand-painted2D soft optical/mechanical volume and navy edge separation, simple2-3 main value levels, restrained upper-left highlight. Full single object centered on square canvas,75% occupied, generous TRUE TRANSPARENT outer margin. No outer badge, card background, quality frame, pedestal, ground shadow, floor, big glow, halo, fog, backdrop, loose extra particles, words, letters, digits, logo or watermark. Reference is STYLE ONLY, do not draw a tank. Subject: one small CLOSED SILVER PEARL TREASURE CHEST, silver/ivory rounded metal lid and box, navy reinforced corner bands, warm amber front latch bearing ONE small ivory pearl-shaped circular relief. Tiny cyan seam accents only. Slight right-facing3/4 view, clear arched chest silhouette. No feet or base, no handle, no ribbons, no open lid, no visible loot or loose pearls, no gems or letters.",
+      "references": [
+        "main/icon_oxygen.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-c78b9c26ae53/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-1cfebcf9-4081-41c7-981a-27c3089b7661.png",
+      "method": "built-in image_gen"
+    },
+    {
+      "id": "icon_close",
+      "prompt": "Use case: stylized-concept. ONE isolated production resource icon for underwater game Abyss Hunter, final96x96, clear at48px. Match supplied oxygen icon's rounded hand-painted2D soft optical/mechanical volume and navy edge separation, simple2-3 main value levels, restrained upper-left highlight. Full single object centered on square canvas,75% occupied, generous TRUE TRANSPARENT outer margin. No outer badge, card background, quality frame, pedestal, ground shadow, floor, big glow, halo, fog, backdrop, loose extra particles, words, letters, digits, logo or watermark. Reference is STYLE ONLY, do not draw a tank. Subject: CLOSE symbol consisting of one thick rounded diagonal X made of two crossing bars, cyan glass face with narrow ivory bevel and navy edge, matched to the supplied pause symbol. Front orthographic view. Exactly one X; no circle, surrounding button, badge, hole, letters or other symbols.",
+      "references": [
+        "main/icon_pause.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-c78b9c26ae53/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-423cf4f3-5b47-40ab-af60-75674b6be162.png",
+      "method": "built-in image_gen"
+    },
+    {
+      "id": "icon_gold_chest",
+      "prompt": "Use case: precise-object-edit. Edit target: supplied closed silver pearl chest. Create its GOLD PEARL CHEST variant. Preserve exact arched lid, closed box silhouette, navy reinforcement bands, pearl-shaped front latch emblem, tiny cyan seams, view, scale and transparent margins. Change only the broad silver/ivory metal panels to warm polished amber GOLD with pale gold highlights, and latch to slightly richer gold. Keep pearl emblem ivory and bands navy. No new gems, spikes, handles, loose pearls, particle effects or text. Background truly transparent, no halo, shadow or pedestal.",
+      "references": [
+        "source-masters/icon_silver_chest.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-c78b9c26ae53/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-98849fab-6213-4b3a-9a0d-31eb861eb318.png",
+      "method": "built-in image_gen"
+    },
+    {
+      "id": "icon_dive",
+      "prompt": "Use case: precise-object-edit. Edit target: supplied upward double-chevron icon. Produce the matching DIVE icon. Change direction to exactly TWO thick identical DOWNWARD-pointing chevrons stacked vertically, with a clear transparent gap. Keep same cyan glass, ivory bevel, navy edge, rounded stroke thickness, frontal view and upper-left highlight. Both peaks must point DOWN. Full icon centered in square canvas at75% with ample true transparent margin, final96x96. No up arrow, text, numbers, circle, frame, background, glow, shadow or watermark.",
+      "references": [
+        "main/icon_ascend.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-c78b9c26ae53/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-1677ded3-f627-4bda-84c0-0f0f6b27963e.png",
+      "method": "built-in image_gen"
+    },
+    {
+      "id": "ui_slot",
+      "prompt": "Use case: stylized-concept. ONE isolated production UI SKIN for underwater game Abyss Hunter. Supplied panel is STYLE reference only. Front orthographic view, navy #082D40 solid continuous filled surface and narrow muted teal #246073 rim, subtle softly rounded corner bevels. Upper-left restrained edge highlight. Entire central region must be UNIFORM FLAT OPAQUE navy, without gradient, pattern, scratches, light, texture or transparency. NOT a hollow frame; all interior is filled and continuous. TRUE transparency ONLY OUTSIDE the complete rounded rectangle, ample outer margin. No text, digits, icons, symbols, screws, ornaments, large glow, fog, shadow, background or watermark. Subject: EMPTY EQUIPMENT SLOT skin, a SQUARE with softly rounded corners, visible shape1:1. Intended128x128 with24px nine-slice. Subtle inset lip along outer rim only, center completely filled plain navy, no item, no cross, no inner hole.",
+      "references": [
+        "main/ui_panel.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-c78b9c26ae53/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-211f4fdd-2b9a-4732-a855-a0392e67c262.png",
+      "method": "built-in image_gen"
+    },
+    {
+      "id": "ui_toast",
+      "prompt": "Use case: stylized-concept. ONE isolated production UI SKIN for underwater game Abyss Hunter. Supplied panel is STYLE reference only. Front orthographic view, navy #082D40 solid continuous filled surface and narrow muted teal #246073 rim, subtle softly rounded corner bevels. Upper-left restrained edge highlight. Entire central region must be UNIFORM FLAT OPAQUE navy, without gradient, pattern, scratches, light, texture or transparency. NOT a hollow frame; all interior is filled and continuous. TRUE transparency ONLY OUTSIDE the complete rounded rectangle, ample outer margin. No text, digits, icons, symbols, screws, ornaments, large glow, fog, shadow, background or watermark. Subject: TOAST MESSAGE background skin, low horizontal rounded rectangle, visible shape approximately2.33:1. Intended128x64 with left/right24 top/bottom16 nine-slice. Clean minimal narrow rim, plain filled navy center.",
+      "references": [
+        "main/ui_panel.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-c78b9c26ae53/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-a8b3b9fa-bd38-45d3-90ae-7dc925656857.png",
+      "method": "built-in image_gen"
+    },
+    {
+      "id": "ui_button_secondary",
+      "prompt": "Use case: stylized-concept. ONE isolated production UI SKIN for underwater game Abyss Hunter. Supplied panel is STYLE reference only. Front orthographic view, navy #082D40 solid continuous filled surface and narrow muted teal #246073 rim, subtle softly rounded corner bevels. Upper-left restrained edge highlight. Entire central region must be UNIFORM FLAT OPAQUE navy, without gradient, pattern, scratches, light, texture or transparency. NOT a hollow frame; all interior is filled and continuous. TRUE transparency ONLY OUTSIDE the complete rounded rectangle, ample outer margin. No text, digits, icons, symbols, screws, ornaments, large glow, fog, shadow, background or watermark. Subject: SECONDARY BUTTON skin, broad low horizontal rounded rectangle, visible shape approximately2.25:1. Intended160x80 with left/right32 top/bottom24 nine-slice. Fine teal rim and very subtle edge volume; no cyan filled center.",
+      "references": [
+        "main/ui_panel.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-c78b9c26ae53/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-645aea69-4637-4741-842f-127c69babe86.png",
+      "method": "built-in image_gen"
+    },
+    {
+      "id": "ui_red_dot",
+      "prompt": "Use case: stylized-concept. ONE tiny production notification RED DOT for Abyss Hunter UI. A single plain circular coral-red bead, front view, small subtle top-left highlight, shallow softly beveled volume, no outline frame. Target final32x32 with a16px visible bead and8px true transparent margin on each side. Centered square canvas. Solid coral/red surface, no white number, no exclamation, no icon, no text, no ring, no shadow, no glow, no background or watermark. Soft hand-painted2D material consistent with the supplied UI reference.",
+      "references": [
+        "main/ui_panel.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-c78b9c26ae53/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-f74f435f-3e1b-4666-a98b-192864f596f7.png",
+      "method": "built-in image_gen"
+    },
+    {
+      "id": "frame_broken",
+      "prompt": "Use case: stylized-concept. ONE isolated production GRAY QUALITY FRAME for Abyss Hunter equipment. EXACTLY a HOLLOW ROUNDED-SQUARE METAL OUTLINE, straight front orthographic view. Four thin cool neutral gray metal edges with a narrow dark navy outer bevel and very small pale gray upper-left edge highlights. Smooth square with softly rounded corners, no ornaments or cracks, no symbols. Border band width about6% of the visible square; modest corner radius about12%. Centered with full uncut frame and generous TRUE TRANSPARENT outer margin. The ENTIRE large square INNER AREA is completely TRANSPARENT alpha0, not navy, not glass, not filled, not shaded. Only the narrow rim contains any opaque pixels. Intended128x128 with24px nine-slice; center80x80 entirely clear. Hand-painted2D subtle edge volume matching existing UI. No item, icon, label, words, numbers, backdrop, checkerboard, gray haze, inner shadow, glow, ground shadow, pedestal or watermark.",
+      "references": [
+        "main/ui_panel.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-c78b9c26ae53/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-4dae1f15-7ce9-472e-ab31-babc7e842b20.png",
+      "method": "built-in image_gen"
+    },
+    {
+      "id": "frame_standard",
+      "prompt": "Use case: precise-object-edit. Edit target: supplied hollow gray rounded-square quality frame. Change ONLY the gray metal rim color to saturated clean ocean BLUE #4FA4E7, darker blue bevel and pale blue highlight. Preserve EXACT same thin rim thickness, rounded-square silhouette, corner radius, frontal view, scale, upper-left light and transparent areas. Entire inner opening must stay truly TRANSPARENT alpha0; no interior fill or glass. Outside frame also true transparent with generous margin. No new ornaments, badge, item, lettering, digits, extra frame, glow, fog, shadow, background or watermark. Production128x128 with24px nine-slice; center80x80 clear.",
+      "references": [
+        "source-masters/frame_broken.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-c78b9c26ae53/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-7d574f11-6506-4150-8056-65ac7651186b.png",
+      "method": "built-in image_gen color-variant edit"
+    },
+    {
+      "id": "frame_fine",
+      "prompt": "Use case: precise-object-edit. Edit target: supplied hollow gray rounded-square quality frame. Change ONLY the gray metal rim color to bright restrained CYAN #54EEE2, darker teal bevel and pale cyan highlight. Preserve EXACT same thin rim thickness, rounded-square silhouette, corner radius, frontal view, scale, upper-left light and transparent areas. Entire inner opening must stay truly TRANSPARENT alpha0; no interior fill or glass. Outside frame also true transparent with generous margin. No new ornaments, badge, item, lettering, digits, extra frame, glow, fog, shadow, background or watermark. Production128x128 with24px nine-slice; center80x80 clear.",
+      "references": [
+        "source-masters/frame_broken.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-c78b9c26ae53/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-0498b8e3-bbb0-4533-bcf9-acf40470471d.png",
+      "method": "built-in image_gen color-variant edit"
+    },
+    {
+      "id": "frame_legend",
+      "prompt": "Use case: precise-object-edit. Edit target: supplied hollow gray rounded-square quality frame. Change ONLY the gray metal rim color to warm AMBER GOLD #FFCA7A, darker warm gold bevel and pale golden highlight. Preserve EXACT same thin rim thickness, rounded-square silhouette, corner radius, frontal view, scale, upper-left light and transparent areas. Entire inner opening must stay truly TRANSPARENT alpha0; no interior fill or glass. Outside frame also true transparent with generous margin. No new ornaments, badge, item, lettering, digits, extra frame, glow, fog, shadow, background or watermark. Production128x128 with24px nine-slice; center80x80 clear.",
+      "references": [
+        "source-masters/frame_broken.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-c78b9c26ae53/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-cd0e4bfb-36d0-418e-bddf-4573f7458970.png",
+      "method": "built-in image_gen color-variant edit"
+    },
+    {
+      "id": "frame_epic",
+      "prompt": "Use case: precise-object-edit. Edit target: supplied hollow gray rounded-square quality frame. Change ONLY the gray metal rim color to soft luminous VIOLET #BB9DF4, darker muted violet bevel and pale lavender highlight. Preserve EXACT same thin rim thickness, rounded-square silhouette, corner radius, frontal view, scale, upper-left light and transparent areas. Entire inner opening must stay truly TRANSPARENT alpha0; no interior fill or glass. Outside frame also true transparent with generous margin. No new ornaments, badge, item, lettering, digits, extra frame, glow, fog, shadow, background or watermark. Production128x128 with24px nine-slice; center80x80 clear.",
+      "references": [
+        "source-masters/frame_broken.png"
+      ],
+      "source": "/Users/loongwind/multica_workspaces_desktop-api.multica.ai/loongwind-725f0f8a0031/loo-45-c78b9c26ae53/codex-home/generated_images/01a1c033-1b73-7f00-8f43-9fcaf55e78f5/exec-e655138a-d677-448a-80e2-d968af49ce4e.png",
+      "method": "built-in image_gen color-variant edit"
+    }
+  ]
+}

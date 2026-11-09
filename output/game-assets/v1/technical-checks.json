@@ -1908,5 +1908,827 @@
     ],
     "clear_margin_px": 9,
     "generation_method": "built-in image_gen"
+  },
+  {
+    "id": "icon_pearl",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 11590,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      9,
+      9,
+      87,
+      87
+    ],
+    "clear_margin_px": 9,
+    "generation_method": "built-in image_gen"
+  },
+  {
+    "id": "icon_marrow",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 10547,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      17,
+      9,
+      79,
+      88
+    ],
+    "clear_margin_px": 8,
+    "generation_method": "built-in image_gen"
+  },
+  {
+    "id": "icon_core_cyan",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 12083,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      9,
+      9,
+      87,
+      87
+    ],
+    "clear_margin_px": 9,
+    "generation_method": "built-in image_gen"
+  },
+  {
+    "id": "icon_core_red",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 12402,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      9,
+      9,
+      87,
+      87
+    ],
+    "clear_margin_px": 9,
+    "generation_method": "built-in image_gen"
+  },
+  {
+    "id": "icon_ticket",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 9875,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      8,
+      19,
+      88,
+      77
+    ],
+    "clear_margin_px": 8,
+    "generation_method": "built-in image_gen"
+  },
+  {
+    "id": "icon_attack",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 8544,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      11,
+      9,
+      85,
+      87
+    ],
+    "clear_margin_px": 9,
+    "generation_method": "built-in image_gen"
+  },
+  {
+    "id": "icon_attack_speed",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 9264,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      10,
+      9,
+      86,
+      87
+    ],
+    "clear_margin_px": 9,
+    "generation_method": "built-in image_gen"
+  },
+  {
+    "id": "icon_move_speed",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 10891,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      9,
+      9,
+      87,
+      87
+    ],
+    "clear_margin_px": 9,
+    "generation_method": "built-in image_gen"
+  },
+  {
+    "id": "icon_home",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 12801,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      8,
+      12,
+      87,
+      83
+    ],
+    "clear_margin_px": 8,
+    "generation_method": "built-in image_gen"
+  },
+  {
+    "id": "icon_equipment",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 9423,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      8,
+      21,
+      88,
+      76
+    ],
+    "clear_margin_px": 8,
+    "generation_method": "built-in image_gen"
+  },
+  {
+    "id": "icon_upgrade",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 12625,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      10,
+      9,
+      86,
+      87
+    ],
+    "clear_margin_px": 9,
+    "generation_method": "built-in image_gen"
+  },
+  {
+    "id": "icon_tech",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 8605,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      20,
+      9,
+      76,
+      87
+    ],
+    "clear_margin_px": 9,
+    "generation_method": "built-in image_gen"
+  },
+  {
+    "id": "icon_supply",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 10573,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      20,
+      9,
+      76,
+      87
+    ],
+    "clear_margin_px": 9,
+    "generation_method": "built-in image_gen"
+  },
+  {
+    "id": "icon_archive",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 13071,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      12,
+      9,
+      84,
+      87
+    ],
+    "clear_margin_px": 9,
+    "generation_method": "built-in image_gen"
+  },
+  {
+    "id": "icon_gift",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 12390,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      14,
+      9,
+      82,
+      87
+    ],
+    "clear_margin_px": 9,
+    "generation_method": "built-in image_gen"
+  },
+  {
+    "id": "icon_blessing",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 10268,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      8,
+      16,
+      87,
+      80
+    ],
+    "clear_margin_px": 8,
+    "generation_method": "built-in image_gen"
+  },
+  {
+    "id": "icon_sonar",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 9817,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      9,
+      19,
+      87,
+      77
+    ],
+    "clear_margin_px": 9,
+    "generation_method": "built-in image_gen"
+  },
+  {
+    "id": "icon_locked",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 10197,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      17,
+      9,
+      79,
+      87
+    ],
+    "clear_margin_px": 9,
+    "generation_method": "built-in image_gen"
+  },
+  {
+    "id": "icon_silver_chest",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 12633,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      9,
+      14,
+      87,
+      82
+    ],
+    "clear_margin_px": 9,
+    "generation_method": "built-in image_gen"
+  },
+  {
+    "id": "icon_close",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 13052,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      9,
+      9,
+      87,
+      87
+    ],
+    "clear_margin_px": 9,
+    "generation_method": "built-in image_gen"
+  },
+  {
+    "id": "icon_gold_chest",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 12976,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      9,
+      14,
+      87,
+      82
+    ],
+    "clear_margin_px": 9,
+    "generation_method": "built-in image_gen"
+  },
+  {
+    "id": "icon_dive",
+    "size": [
+      96,
+      96
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 12056,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      13,
+      8,
+      83,
+      87
+    ],
+    "clear_margin_px": 8,
+    "generation_method": "built-in image_gen"
+  },
+  {
+    "id": "ui_slot",
+    "size": [
+      128,
+      128
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 3423,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      8,
+      8,
+      120,
+      120
+    ],
+    "clear_margin_px": 8,
+    "generation_method": "built-in image_gen",
+    "nine_slice_insets": [
+      24,
+      24,
+      24,
+      24
+    ],
+    "center_channel_extrema": [
+      [
+        2,
+        2
+      ],
+      [
+        21,
+        21
+      ],
+      [
+        33,
+        33
+      ],
+      [
+        252,
+        252
+      ]
+    ],
+    "center_channel_stddev": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "id": "ui_toast",
+    "size": [
+      128,
+      64
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 1784,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      8,
+      8,
+      120,
+      56
+    ],
+    "clear_margin_px": 8,
+    "generation_method": "built-in image_gen",
+    "nine_slice_insets": [
+      24,
+      16,
+      24,
+      16
+    ],
+    "center_channel_extrema": [
+      [
+        4,
+        4
+      ],
+      [
+        39,
+        39
+      ],
+      [
+        59,
+        59
+      ],
+      [
+        254,
+        254
+      ]
+    ],
+    "center_channel_stddev": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "id": "ui_button_secondary",
+    "size": [
+      160,
+      80
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 3217,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      8,
+      8,
+      152,
+      72
+    ],
+    "clear_margin_px": 8,
+    "generation_method": "built-in image_gen",
+    "nine_slice_insets": [
+      32,
+      24,
+      32,
+      24
+    ],
+    "center_channel_extrema": [
+      [
+        4,
+        4
+      ],
+      [
+        38,
+        38
+      ],
+      [
+        59,
+        59
+      ],
+      [
+        254,
+        254
+      ]
+    ],
+    "center_channel_stddev": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "id": "ui_red_dot",
+    "size": [
+      32,
+      32
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 895,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      8,
+      8,
+      24,
+      24
+    ],
+    "clear_margin_px": 8,
+    "generation_method": "built-in image_gen"
+  },
+  {
+    "id": "frame_broken",
+    "size": [
+      128,
+      128
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 7043,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      9,
+      9,
+      119,
+      119
+    ],
+    "clear_margin_px": 9,
+    "generation_method": "built-in image_gen",
+    "nine_slice_insets": [
+      24,
+      24,
+      24,
+      24
+    ],
+    "center_alpha_extrema": [
+      0,
+      1
+    ]
+  },
+  {
+    "id": "frame_standard",
+    "size": [
+      128,
+      128
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 6901,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      9,
+      9,
+      119,
+      119
+    ],
+    "clear_margin_px": 9,
+    "generation_method": "built-in image_gen color-variant edit",
+    "nine_slice_insets": [
+      24,
+      24,
+      24,
+      24
+    ],
+    "center_alpha_extrema": [
+      0,
+      1
+    ]
+  },
+  {
+    "id": "frame_fine",
+    "size": [
+      128,
+      128
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 6870,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      9,
+      9,
+      119,
+      119
+    ],
+    "clear_margin_px": 9,
+    "generation_method": "built-in image_gen color-variant edit",
+    "nine_slice_insets": [
+      24,
+      24,
+      24,
+      24
+    ],
+    "center_alpha_extrema": [
+      0,
+      1
+    ]
+  },
+  {
+    "id": "frame_legend",
+    "size": [
+      128,
+      128
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 6955,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      9,
+      9,
+      119,
+      119
+    ],
+    "clear_margin_px": 9,
+    "generation_method": "built-in image_gen color-variant edit",
+    "nine_slice_insets": [
+      24,
+      24,
+      24,
+      24
+    ],
+    "center_alpha_extrema": [
+      0,
+      0
+    ]
+  },
+  {
+    "id": "frame_epic",
+    "size": [
+      128,
+      128
+    ],
+    "mode": "RGBA",
+    "srgb_profile": true,
+    "bytes": 6959,
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "alpha_bbox": [
+      9,
+      9,
+      119,
+      119
+    ],
+    "clear_margin_px": 9,
+    "generation_method": "built-in image_gen color-variant edit",
+    "nine_slice_insets": [
+      24,
+      24,
+      24,
+      24
+    ],
+    "center_alpha_extrema": [
+      0,
+      0
+    ]
   }
 ]
