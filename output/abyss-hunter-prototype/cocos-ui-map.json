@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "designWidth": 750,
+  "referenceHeight": 1500,
+  "units": "Cocos UI design units; prototype logical pixels × 2",
+  "implementation": "Cocos Creator 3.8 Canvas + UITransform + Widget + Layout + Button + Sprite; WXML shell is review only",
+  "safeArea": "runtime platform safeArea; top capsule reservation; bottom inset",
+  "scenes": {
+    "Boot": {"bundle":"main","next":"Dive","children":["PlatformAdapter","PauseManager","UIRoot"]},
+    "Dive": {"bundle":"main","routes":["battle","abyss"],"children":["WorldRoot/Backdrop","WorldRoot/Actors","WorldRoot/Projectiles","WorldRoot/Loot","WorldRoot/Fx","Canvas/HUD/OxygenBar","Canvas/HUD/CargoBar","Canvas/HUD/HP","Canvas/DepthRuler","Canvas/Joystick","Canvas/MountSlots","Canvas/AscentButton","OverlayRoot"]},
+    "Harbor": {"bundle":"meta","routes":["harbor"],"children":["HarborRoot/SubDisplay","Canvas/Wallet","Canvas/TaskStrip","Canvas/LaunchButton","Canvas/SupplyButton","Canvas/ArchiveButton","Canvas/BottomNav","OverlayRoot"]}
+  },
+  "prefabs": [
+    {"name":"UpgradePanel","route":"upgrade","bundle":"meta","components":["UpgradeRow×6","CostButton","Wallet"],"actions":["upgrade:hp","upgrade:attack","upgrade:speed","upgrade:move","upgrade:cargo","upgrade:oxygen"]},
+    {"name":"TechPanel","route":"tech","bundle":"meta","components":["TabGroup×5","TechNode","PrerequisiteLine","CostButton"],"actions":["branch:0..4","tech"]},
+    {"name":"EquipmentPanel","route":"equipment","bundle":"meta","components":["MountSlot×4","VirtualInventory","MergeButton"],"actions":["equip","merge","locked"]},
+    {"name":"SupplyPanel","route":"rewards","bundle":"meta","actions":["gift","blessing","sonar","buySilver","buyGold","ad:silver","ad:gold"]},
+    {"name":"OxygenModal","panel":"oxygen","bundle":"main","actions":["ad:oxygen","close"]},
+    {"name":"RescueModal","panel":"rescue","bundle":"main","actions":["ad:rescue","abandon"]},
+    {"name":"SettlementModal","panel":"settlement","bundle":"meta","actions":["unload"],"contract":"diveId + opId; pending separate from confirmed wallet"},
+    {"name":"ArchivePanel","route":"codex","bundle":"social","phase":"P1","components":["CodexList","SymbiontGrid","OpenDataCanvas","PosterPreview"]}
+  ],
+  "binding": {"oxygen":"ProgressBar + Label","cargo":"ProgressBar + Label","depth":"BMFont + ruler","wallet":"cloud confirmed balance","pending":"pending operation label","ad":"AdService rewardToken; native wx video; no local direct currency grant in production"},
+  "assetManifest":"docs/潜渊猎手-完整素材清单.csv",
+  "prohibitedReleaseAssets":["assets/01-harbor-preparation.png","assets/02-sunlight-combat.png","assets/03-abyss-boss.png"],
+  "note":"Specification for implementation, not serialized Cocos .scene/.prefab files."
+}

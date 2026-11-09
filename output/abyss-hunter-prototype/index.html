@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>潜渊猎手 · 交互原型 v1</title>
+<link rel="stylesheet" href="review.css">
+<body>
+<aside>
+  <a class="brand" href="#"><span class="brand-mark">↓</span><span>潜渊猎手<small>ABYSS HUNTER</small></span></a>
+  <div class="edition">DESIGN PROTOTYPE <span>V.01</span></div>
+  <p class="intro">向下，寻找新的光。<br>向上，带回你的收获。</p>
+  <nav aria-label="原型场景">
+    <span class="nav-label">01 — 核心航程</span>
+    <button data-action="route:harbor">母港整备 <em>01</em></button>
+    <button data-action="route:battle">日光层探索 <em>02</em></button>
+    <button data-action="route:abyss">深渊渊主战 <em>03</em></button>
+    <span class="nav-label">02 — 成长与补给</span>
+    <button data-action="route:upgrade">机体强化 <em>04</em></button>
+    <button data-action="route:tech">潜航科技 <em>05</em></button>
+    <button data-action="route:equipment">挂载装备 <em>06</em></button>
+    <button data-action="route:rewards">深海补给 <em>07</em></button>
+    <button data-action="route:codex">探索档案 <em>P1</em></button>
+  </nav>
+  <footer>冷色海洋 · 微 Q 潜航器 · 生物荧光<br>基于既有三张概念稿，未生成新图片。</footer>
+</aside>
+<main>
+  <header><div><span class="eyebrow">INTERACTION STUDY / 微信小游戏</span><h1>一次下潜的完整旅程</h1></div><span class="status">● 本地模拟</span></header>
+  <div class="workspace">
+    <section class="device-wrap" aria-label="可交互游戏原型">
+      <div class="device"><canvas id="game" width="750" height="1500" aria-label="潜渊猎手游戏画面"></canvas><div id="hit-layer"></div></div>
+      <div class="device-caption"><span id="viewport">375 × 750</span><span>竖屏 · 安全区已预留</span></div>
+    </section>
+    <section class="notes">
+      <span class="eyebrow">CURRENT SCENE</span><h2 id="scene-name">日光层探索</h2>
+      <p id="scene-note">氧气决定时间，舱容决定收益。上浮卸货后，荧晶才会进入永久余额。</p>
+      <div class="rule"><span>核心决策</span><strong>再向下，还是先回家？</strong><p>深度、氧气、舱容同时可见；主操作始终是向上返航。</p></div>
+      <div class="scenario"><span class="nav-label">交互检查</span><button data-action="tutorial">重放首次下潜</button><button data-action="oxygen">查看应急供氧</button><button data-action="die">触发死亡救援</button><button data-action="disconnect">模拟断网</button><button data-action="reconnect">恢复连接 / 确认收益</button></div>
+      <label class="nav-label" for="ui-state">状态展示</label><select id="ui-state"><option value="default">默认</option><option value="loading">加载中</option><option value="empty">空状态</option><option value="error">错误 / 重试</option></select>
+      <label class="nav-label" for="size">画布尺寸</label><select id="size"><option value="750">375 × 750</option><option value="667">375 × 667（短屏）</option><option value="812">375 × 812（长屏）</option></select>
+      <p class="disclosure">画面复用整张概念图，摇杆展示输入反馈；此原型不模拟完整碰撞和敌人 AI。广告、奖励与云确认均为本地样例。图鉴、共生体、榜单为 P1 预览。</p>
+    </section>
+  </div>
+</main>
+<script src="shared/model.js"></script><script src="shared/view.js"></script><script src="web.js"></script>
+</body></html>

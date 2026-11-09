@@ -1,0 +1,5 @@
+/* 750rpx 为外层基准；Canvas 内部采用 375 逻辑像素，由 DPR 适配。 */
+.stage { position: relative; width: 750rpx; height: 100vh; background: #041b2a; }
+.prototype { position: absolute; }
+.error { position: absolute; left: 48rpx; right: 48rpx; top: 40%; padding: 32rpx; border: 1rpx solid #246073; border-radius: 24rpx; color: #eafaff; background: #082d40; font-size: 28rpx; }
+.error button { margin-top: 24rpx; background: #54eee2; color: #041b2a; }

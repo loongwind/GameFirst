@@ -1,0 +1,5 @@
+<!-- 所有逻辑页面共用一个 Canvas 视图；UI 状态与浏览器原型一致。 -->
+<view class="stage">
+  <canvas type="2d" id="prototype" class="prototype" style="width:{{canvasWidth}}px;height:{{canvasHeight}}px;left:{{canvasLeft}}px;top:{{canvasTop}}px" bindtouchstart="onTouchStart" catchtouchmove="onTouchMove" bindtouchend="onTouchEnd" bindtouchcancel="onTouchEnd"></canvas>
+  <view wx:if="error" class="error"><text>{{error}}</text><button bindtap="onRetry">重试加载</button></view>
+</view>

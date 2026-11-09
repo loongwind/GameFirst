@@ -1,0 +1,36 @@
+{
+  "description": "潜渊猎手设计评审预览壳，非正式小游戏",
+  "projectname": "abyss-hunter-prototype",
+  "appid": "touristappid",
+  "compileType": "miniprogram",
+  "miniprogramRoot": "./",
+  "setting": {
+    "es6": true,
+    "minified": false,
+    "urlCheck": false
+  },
+  "packOptions": {
+    "ignore": [
+      {
+        "type": "folder",
+        "value": "tests"
+      },
+      {
+        "type": "folder",
+        "value": "evidence"
+      },
+      {
+        "type": "file",
+        "value": "index.html"
+      },
+      {
+        "type": "file",
+        "value": "review.css"
+      },
+      {
+        "type": "file",
+        "value": "web.js"
+      }
+    ]
+  }
+}
