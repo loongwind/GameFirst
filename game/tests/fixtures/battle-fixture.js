@@ -1,4 +1,5 @@
-import { Battle, joystickVector } from '/assets/scripts/battle/index.ts';
+import { Battle } from '/assets/scripts/battle/Battle.ts';
+import { joystickVector } from '/assets/scripts/battle/input.ts';
 
 const params = new URLSearchParams(location.search);
 const enemyCount = params.get('enemies') === '40' ? 40 : 80;

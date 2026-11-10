@@ -3,6 +3,7 @@ import type { Pooled } from './pool';
 export interface Body extends Pooled { x: number; y: number; previousX: number; previousY: number; radius: number }
 export interface Enemy extends Body {
   hp: number; speed: number; vx: number; vy: number; lootValue: number; nextContactTick: number;
+  kind: 'normal' | 'elite' | 'boss';
 }
 export type WeaponKind = 'sonic' | 'torpedo' | 'arc' | 'mine';
 export interface WeaponSpec {
@@ -25,6 +26,7 @@ export interface Capacities { enemies: number; projectiles: number; loot: number
 export interface BattleOptions {
   /** Returns the amount accepted by the hold; overflow stays in the world. */
   collectLoot?: (value: number) => number;
+  onKill?: (enemy: Readonly<Enemy>) => number | undefined;
   seed?: number; spawn?: boolean; spawnIntervalTicks?: number; weapons?: WeaponInput[]; capacities?: Partial<Capacities>;
 }
 export const STEP_SECONDS = 1 / 30;
@@ -60,6 +62,11 @@ export class SeededRandom {
     x ^= x << 13; x ^= x >>> 17; x ^= x << 5;
     this.state = x >>> 0;
     return this.state / 0x100000000;
+  }
+  checkpoint(): number { return this.state; }
+  restore(value: number): void {
+    if (!Number.isInteger(value) || value < 0 || value > 0xffffffff) throw new RangeError('Invalid random state');
+    this.state = value;
   }
 }
 

@@ -1,4 +1,4 @@
-/** Schemas only in P1-01. Domain tables and validation are implemented in P1-04. */
+/** Envelope shared with domain table validation in balance.ts. */
 export interface ConfigEnvelope<T> {
   schemaVersion: number;
   configVersion: string;

@@ -94,11 +94,17 @@ test(`${target}: real Cocos Dive renders HUD, accepts touches and preserves over
     });
     await page.waitForTimeout(100); assert.equal((await read()).state, 'RescuePending');
     await page.screenshot({ path: new URL(`rescue-${target}.png`, artifacts).pathname });
-    await invoke('onRescueAuthorized'); assert.equal((await read()).diveId, diveId);
+    assert.equal(await invoke('onRescueAuthorized', 'unclaimed-token'), false);
+    await page.evaluate(async () => {
+      const { director } = await System.import('cc'), c = director.getScene().getChildByName('Canvas').getComponent('DiveController');
+      const token = c.economy.dispatch({ type: 'ad.prepare', opId: 'hud-rescue.prepare', slot: 'rescue', context: { diveId: c.session.diveId, eventId: c.session.deathEventId } }).token;
+      c.economy.dispatch({ type: 'ad.complete', opId: 'hud-rescue.complete', token });
+      c.economy.dispatch({ type: 'ad.claim', opId: 'hud-rescue.claim', token }); c.onRescueAuthorized(token);
+    }); assert.equal((await read()).diveId, diveId);
     await page.evaluate(async () => { const { director } = await System.import('cc'); director.getScene().getChildByName('Canvas').getComponent('DiveController').session.battle.player.hp = 0; });
     await page.waitForTimeout(100); const secondary = (await read()).layout.secondary;
     await page.mouse.click(secondary.x + secondary.width / 2, secondary.y + secondary.height / 2);
-    await page.waitForTimeout(100); s = await read(); assert.equal(s.state, 'PendingSettlement');
+    await page.waitForTimeout(100); s = await read(); assert.equal(s.state, 'Settled');
     assert.deepEqual(s.cargo, { crystal: 0, pearl: 3, marrow: 2, core: 1 });
     assert.equal(s.diveId, diveId);
     const pendingImage = await page.screenshot({ path: new URL(`pending-${target}.png`, artifacts).pathname });

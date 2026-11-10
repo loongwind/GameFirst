@@ -70,7 +70,7 @@ export class DiveHud {
     const oxygenColor = s.oxygen / s.oxygenCapacity < 0.15 ? danger : mint;
     this.box(g, { x: l.oxygen.x + 12, y: l.oxygen.y + 29, width: l.oxygen.width - 24, height: 4 }, line, 2);
     this.box(g, { x: l.oxygen.x + 12, y: l.oxygen.y + 29, width: (l.oxygen.width - 24) * s.oxygen / s.oxygenCapacity, height: 4 }, oxygenColor, 2);
-    this.box(g, { x: l.cargo.x, y: l.cargo.y + l.cargo.height - 3, width: l.cargo.width * s.cargo.crystal / s.cargoCapacity, height: 3 }, amber, 0);
+    this.box(g, { x: l.cargo.x, y: l.cargo.y + l.cargo.height - 3, width: l.cargo.width * Math.min(1, s.cargo.crystal / s.cargoCapacity), height: 3 }, amber, 0);
     this.set('oxygen', `O₂  氧气储量                         ${Math.ceil(s.oxygen / s.oxygenCapacity * 100)}%`);
     this.set('cargo', `收集舱   ${Math.floor(s.cargo.crystal)} / ${s.cargoCapacity} 荧晶`);
     this.set('hp', `生命  ${Math.ceil(s.hp)} / ${s.maxHp}`);
@@ -109,8 +109,8 @@ export class DiveHud {
       primary = '救援浮标'; secondary = '放弃救援 · 返航';
     } else if (s.state === 'PendingSettlement' || s.state === 'Settled') {
       title = s.state === 'Settled' ? '结算已确认' : '已返航 · 待结算';
-      body = `荧晶 ${Math.floor(s.cargo.crystal)}    珍珠 ${s.cargo.pearl}\n深海髓 ${s.cargo.marrow}    渊核 ${s.cargo.core}\n货物已冻结，等待结算服务确认。`;
-      primary = '货物安全保留'; secondary = '等待结算确认';
+      body = notice || `荧晶 ${Math.floor(s.cargo.crystal)}    珍珠 ${s.cargo.pearl}\n深海髓 ${s.cargo.marrow}    渊核 ${s.cargo.core}\n${s.state === 'Settled' ? '收获已入账，进度已保存。' : '货物已冻结，等待保存确认。'}`;
+      primary = s.state === 'Settled' ? '已安全入账' : '货物安全保留'; secondary = s.state === 'Settled' ? '' : '等待保存确认';
     } else if (s.state === 'Returning') { title = '正在返航'; body = '正在冻结本局收获…'; primary = '返航中'; secondary = ''; }
     else if (session.pause.has('background')) { title = '已冻结现场'; body = '回到前台后倒计时恢复。'; primary = '等待回到前台'; secondary = ''; }
     else if (session.pause.has('ad')) { title = '等待补给'; body = '战斗与氧气已冻结。'; primary = '等待广告结束'; secondary = ''; }

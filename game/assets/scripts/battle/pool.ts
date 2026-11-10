@@ -1,4 +1,5 @@
 export interface Pooled { id: number; active: boolean }
+export interface PoolCheckpoint { serial: number; slots: unknown[]; free: number[] }
 
 /** Fixed storage. Consumers retain IDs, never a mutable slot across ticks. */
 export class Pool<T extends Pooled> {
@@ -42,4 +43,22 @@ export class Pool<T extends Pooled> {
   }
 
   clear(): void { for (const item of this.values()) this.release(item.id); }
+
+  checkpoint(encode: (item: T) => unknown = item => ({ ...item })): PoolCheckpoint {
+    return { serial: this.serial, slots: this.slots.map(encode), free: this.free.map(item => this.slots.indexOf(item)) };
+  }
+  restore(saved: PoolCheckpoint, decode: (value: unknown) => T = value => value as T): void {
+    if (!saved || !Number.isSafeInteger(saved.serial) || saved.serial < 0 || saved.slots.length !== this.capacity || new Set(saved.free).size !== saved.free.length) throw new RangeError('Invalid pool checkpoint');
+    this.live.clear(); this.free.length = 0; this.serial = saved.serial;
+    saved.slots.forEach((value, i) => {
+      const item = decode(value);
+      if (!item || typeof item.active !== 'boolean' || !Number.isSafeInteger(item.id) || item.id < 0 || item.id > saved.serial || (item.active && (item.id === 0 || this.live.has(item.id)))) throw new RangeError('Invalid pool item');
+      Object.assign(this.slots[i], item); if (item.active) this.live.set(item.id, this.slots[i]);
+    });
+    for (const i of saved.free) {
+      if (!Number.isInteger(i) || !this.slots[i] || this.slots[i].active) throw new RangeError('Invalid free slot');
+      this.free.push(this.slots[i]);
+    }
+    if (this.live.size + this.free.length !== this.capacity) throw new RangeError('Incomplete pool checkpoint');
+  }
 }

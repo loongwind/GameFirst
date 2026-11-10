@@ -2,13 +2,15 @@ import { Battle } from './Battle';
 import { STEP_SECONDS } from './model';
 import type { BattleOptions } from './model';
 import { PauseManager } from './PauseManager';
+import { DEFAULT_BALANCE, monsterDrop, integer } from '@abyss-hunter/shared';
+import type { BattleCheckpoint } from './Battle';
 
 export type DiveState = 'Running' | 'RescuePending' | 'Returning' | 'PendingSettlement' | 'Settled';
 export type Material = 'crystal' | 'pearl' | 'marrow' | 'core';
 export type Cargo = Readonly<Record<Material, number>>;
 export interface DiveOptions {
   diveId: string;
-  battle?: Omit<BattleOptions, 'collectLoot'>;
+  battle?: Omit<BattleOptions, 'collectLoot' | 'onKill'>;
   oxygenCapacity?: number;
   cargoCapacity?: number;
   maxHp?: number;
@@ -24,6 +26,14 @@ export interface DiveSnapshot {
 export interface Settlement {
   readonly diveId: string; readonly reason: 'return' | 'death' | 'disconnect';
   readonly cargo: Cargo; readonly activeSeconds: number; readonly depth: number;
+  readonly xp?: number;
+}
+export interface DiveCheckpoint {
+  version: 1; options: Omit<DiveOptions, 'battle'>; state: DiveState; cargo: Record<Material, number>;
+  oxygen: number; activeSeconds: number; xp: number; countdown: number; disconnectedAt?: number;
+  frozenDeath?: DiveSnapshot; settlement?: Settlement; returnReason: Settlement['reason'];
+  deaths: number; refills: number; appliedAdTokens: string[]; pauseReasons: string[]; battle: BattleCheckpoint;
+  benefits: { yield: number; oxygen: number; cargo: number };
 }
 
 function nonnegative(value: number): void {
@@ -35,8 +45,8 @@ export class DiveSession {
   readonly battle: Battle;
   readonly pause: PauseManager;
   readonly diveId: string;
-  readonly oxygenCapacity: number;
-  readonly cargoCapacity: number;
+  private readonly baseOxygenCapacity: number;
+  private readonly baseCargoCapacity: number;
   readonly maxHp: number;
   private currentState: DiveState = 'Running';
   private cargo: Record<Material, number> = { crystal: 0, pearl: 0, marrow: 0, core: 0 };
@@ -50,12 +60,17 @@ export class DiveSession {
   private returnReason: Settlement['reason'] = 'return';
   private readonly baseRate: number;
   private readonly depthIncrement: number;
+  private xp = 0;
+  private deaths = 0;
+  private refills = 0;
+  private readonly appliedAdTokens = new Set<string>();
+  private benefits = { yield: 1, oxygen: 1, cargo: 1 };
 
   constructor(options: DiveOptions) {
     if (!options.diveId.trim()) throw new RangeError('Missing diveId');
     this.diveId = options.diveId;
-    this.oxygenCapacity = options.oxygenCapacity ?? 120;
-    this.cargoCapacity = options.cargoCapacity ?? 300;
+    this.baseOxygenCapacity = options.oxygenCapacity ?? 120;
+    this.baseCargoCapacity = options.cargoCapacity ?? DEFAULT_BALANCE.attributes.baseValues[4];
     this.maxHp = options.maxHp ?? 200;
     this.baseRate = options.oxygenBaseRate ?? 1;
     this.depthIncrement = options.oxygenDepthIncrement ?? 0.2;
@@ -64,15 +79,31 @@ export class DiveSession {
     }
     nonnegative(this.depthIncrement);
     this.oxygen = this.oxygenCapacity;
-    this.battle = new Battle({ ...options.battle, collectLoot: value => this.collect('crystal', value) });
+    this.battle = new Battle({ ...options.battle, collectLoot: value => this.collect('crystal', value), onKill: enemy => {
+      const drop = monsterDrop(enemy.kind, Math.min(this.depth, DEFAULT_BALANCE.drops.maxDepth), [this.battle.randomSample(), this.battle.randomSample()]);
+      this.xp += DEFAULT_BALANCE.progression.killXp[enemy.kind];
+      for (const kind of ['pearl', 'marrow', 'core'] as const) this.collect(kind, drop[kind]);
+      return Math.round(drop.crystal * this.benefits.yield);
+    } });
     this.battle.player.hp = this.maxHp;
     this.pause = new PauseManager(() => this.syncPause());
   }
 
   get state(): DiveState { return this.currentState; }
+  get oxygenCapacity(): number { return this.baseOxygenCapacity * this.benefits.oxygen; }
+  get cargoCapacity(): number { return Math.floor(this.baseCargoCapacity * this.benefits.cargo); }
   get depth(): number { return Math.max(0, this.battle.player.y); }
   get deathSnapshot(): DiveSnapshot | undefined { return this.frozenDeath; }
   get pendingSettlement(): Settlement | undefined { return this.settlement; }
+  get deathEventId(): string { return `${this.diveId}.death.${this.deaths}`; }
+  get oxygenEventId(): string { return `${this.diveId}.oxygen.${this.refills}`; }
+  hasAdToken(token: string): boolean { return this.appliedAdTokens.has(token); }
+  setBenefits(benefits: { yield: number; oxygen: number; cargo: number }): void {
+    for (const value of [benefits.yield, benefits.oxygen, benefits.cargo]) if (!Number.isFinite(value) || value < 1 || value > Math.max(...DEFAULT_BALANCE.ads.blessingMultipliers)) throw new RangeError('Invalid benefits');
+    const ratio = benefits.oxygen / this.benefits.oxygen;
+    this.oxygen = Math.min(this.oxygen * ratio, this.baseOxygenCapacity * benefits.oxygen);
+    this.benefits = { yield: benefits.yield, oxygen: benefits.oxygen, cargo: benefits.cargo };
+  }
   get snapshot(): DiveSnapshot {
     return Object.freeze({ diveId: this.diveId, state: this.state, depth: this.depth,
       oxygen: this.oxygen, oxygenCapacity: this.oxygenCapacity, hp: this.battle.player.hp, maxHp: this.maxHp,
@@ -84,11 +115,11 @@ export class DiveSession {
   setInput(x: number, y: number): void { this.battle.setInput(x, y); }
 
   collect(kind: Material, amount: number): number {
-    nonnegative(amount);
+    integer(amount);
     if (!(kind in this.cargo)) throw new RangeError('Unknown material');
     if (this.state !== 'Running' || this.pause.paused) return 0;
-    const accepted = kind === 'crystal' ? Math.min(amount, this.cargoCapacity - this.cargo.crystal) : amount;
-    if (!Number.isFinite(this.cargo[kind] + accepted)) throw new RangeError('Cargo overflow');
+    const accepted = kind === 'crystal' ? Math.min(amount, Math.max(0, this.cargoCapacity - this.cargo.crystal)) : amount;
+    if (!Number.isSafeInteger(this.cargo[kind] + accepted)) throw new RangeError('Cargo overflow');
     this.cargo[kind] += accepted;
     return accepted;
   }
@@ -118,6 +149,7 @@ export class DiveSession {
       this.oxygen = Math.max(0, this.oxygen - rate * STEP_SECONDS);
       this.battle.player.hp = Math.max(0, this.battle.player.hp - this.maxHp * 0.02 * drySeconds);
       if (this.battle.player.hp <= 0) this.die();
+      else if (this.activeSeconds >= DEFAULT_BALANCE.session.maxActiveSeconds) this.beginReturn('return');
     }
   }
 
@@ -149,12 +181,18 @@ export class DiveSession {
   }
 
   /** Called only after a reward service has authorized this rescue. */
-  rescue(): boolean {
+  rescue(token?: string): boolean {
+    if (token && this.appliedAdTokens.has(token)) return false;
     if (this.state !== 'RescuePending' || this.disconnectedAt !== undefined) return false;
     this.battle.player.hp = this.maxHp * 0.5;
     this.currentState = 'Running'; this.frozenDeath = undefined;
+    if (token) this.appliedAdTokens.add(token);
     this.syncPause();
     return true;
+  }
+  refillOxygen(token: string): boolean {
+    if (!token || this.appliedAdTokens.has(token) || this.state !== 'Running' || this.disconnectedAt !== undefined || this.oxygen / this.oxygenCapacity >= DEFAULT_BALANCE.ads.lowOxygenRatio) return false;
+    this.oxygen = this.oxygenCapacity; this.refills++; this.appliedAdTokens.add(token); return true;
   }
   declineRescue(): boolean {
     if (this.state !== 'RescuePending') return false;
@@ -170,7 +208,7 @@ export class DiveSession {
     if (this.state !== 'Returning') return false;
     this.currentState = 'PendingSettlement';
     this.settlement = Object.freeze({ diveId: this.diveId, reason: this.returnReason,
-      cargo: Object.freeze({ ...this.cargo }), activeSeconds: this.activeSeconds, depth: this.depth });
+      cargo: Object.freeze({ ...this.cargo }), activeSeconds: this.activeSeconds, depth: this.depth, xp: this.xp });
     this.syncPause(); return true;
   }
   /** This acknowledgement does not credit a wallet. The settlement service owns that. */
@@ -179,9 +217,39 @@ export class DiveSession {
     this.currentState = 'Settled'; return true;
   }
 
+  checkpoint(): DiveCheckpoint {
+    return JSON.parse(JSON.stringify({ version: 1, options: { diveId: this.diveId, oxygenCapacity: this.baseOxygenCapacity, cargoCapacity: this.baseCargoCapacity,
+      maxHp: this.maxHp, oxygenBaseRate: this.baseRate, oxygenDepthIncrement: this.depthIncrement }, state: this.state, cargo: this.cargo,
+      oxygen: this.oxygen, activeSeconds: this.activeSeconds, xp: this.xp, countdown: this.countdown, disconnectedAt: this.disconnectedAt,
+      frozenDeath: this.frozenDeath, settlement: this.settlement, returnReason: this.returnReason, deaths: this.deaths, refills: this.refills,
+      appliedAdTokens: Array.from(this.appliedAdTokens), pauseReasons: this.pause.reasons, benefits: this.benefits, battle: this.battle.checkpoint() }));
+  }
+  static restore(saved: DiveCheckpoint): DiveSession {
+    if (!saved || saved.version !== 1 || !['Running', 'RescuePending', 'Returning', 'PendingSettlement', 'Settled'].includes(saved.state)) throw new RangeError('Invalid dive checkpoint');
+    const session = new DiveSession({ ...saved.options, battle: saved.battle.options });
+    session.setBenefits(saved.benefits);
+    for (const kind of ['crystal', 'pearl', 'marrow', 'core'] as const) integer(saved.cargo[kind]);
+    for (const n of [saved.oxygen, saved.activeSeconds, saved.countdown]) nonnegative(n);
+    for (const n of [saved.xp, saved.deaths, saved.refills]) integer(n);
+    if (saved.oxygen > session.oxygenCapacity || saved.cargo.crystal > session.baseCargoCapacity * Math.max(...DEFAULT_BALANCE.ads.blessingMultipliers) ||
+      (saved.state === 'RescuePending' && !saved.frozenDeath) || (['PendingSettlement', 'Settled'].includes(saved.state) && !saved.settlement)) throw new RangeError('Incomplete dive checkpoint');
+    session.currentState = saved.state; session.cargo = { ...saved.cargo }; session.oxygen = saved.oxygen;
+    session.activeSeconds = saved.activeSeconds; session.xp = saved.xp; session.countdown = 0; session.disconnectedAt = saved.disconnectedAt;
+    session.returnReason = saved.returnReason; session.deaths = saved.deaths; session.refills = saved.refills;
+    for (const token of saved.appliedAdTokens) session.appliedAdTokens.add(token);
+    session.frozenDeath = saved.frozenDeath ? Object.freeze({ ...saved.frozenDeath, cargo: Object.freeze({ ...saved.frozenDeath.cargo }) }) : undefined;
+    session.settlement = saved.settlement ? Object.freeze({ ...saved.settlement, cargo: Object.freeze({ ...saved.settlement.cargo }) }) : undefined;
+    session.battle.restore(saved.battle);
+    // Fresh foreground always resumes through a countdown; stale ad pauses are reconciled by the reward service.
+    for (const reason of saved.pauseReasons) if (reason === 'modal' || reason === 'reconnect') session.pause.add(reason);
+    if (session.state === 'Running') { session.hide(); session.show(); }
+    session.syncPause(); return session;
+  }
+
   private die(): void {
     this.battle.player.hp = 0;
     this.currentState = 'RescuePending';
+    this.deaths++;
     this.frozenDeath = this.snapshot;
     this.syncPause();
   }

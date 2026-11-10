@@ -1,0 +1,658 @@
+{
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "enum": [
+        1
+      ]
+    },
+    "configVersion": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "attributes": {
+      "type": "object",
+      "properties": {
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "minItems": 6,
+          "maxItems": 6
+        },
+        "maxLevel": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000
+        },
+        "baseCost": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000000
+        },
+        "growthNumerator": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000
+        },
+        "growthDenominator": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000
+        },
+        "baseValues": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "minimum": 0.001,
+            "maximum": 1000000000
+          },
+          "minItems": 6,
+          "maxItems": 6
+        },
+        "gainPerLevel": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "minItems": 6,
+          "maxItems": 6
+        },
+        "coreMilestone": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000
+        },
+        "coreCost": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000000
+        }
+      },
+      "required": [
+        "ids",
+        "maxLevel",
+        "baseCost",
+        "growthNumerator",
+        "growthDenominator",
+        "baseValues",
+        "gainPerLevel",
+        "coreMilestone",
+        "coreCost"
+      ],
+      "additionalProperties": false
+    },
+    "progression": {
+      "type": "object",
+      "properties": {
+        "maxLevel": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000
+        },
+        "baseXp": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000
+        },
+        "stepXp": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000
+        },
+        "killXp": {
+          "type": "object",
+          "properties": {
+            "normal": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1000
+            },
+            "elite": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1000
+            },
+            "boss": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1000
+            }
+          },
+          "required": [
+            "normal",
+            "elite",
+            "boss"
+          ],
+          "additionalProperties": false
+        },
+        "taskXp": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000
+        },
+        "equipmentLevel": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000
+        },
+        "fourthSlotLevel": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000
+        }
+      },
+      "required": [
+        "maxLevel",
+        "baseXp",
+        "stepXp",
+        "killXp",
+        "taskXp",
+        "equipmentLevel",
+        "fourthSlotLevel"
+      ],
+      "additionalProperties": false
+    },
+    "tech": {
+      "type": "object",
+      "properties": {
+        "trees": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "minItems": 5,
+          "maxItems": 5
+        },
+        "nodes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "tree": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "requires": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "minItems": 0,
+                "maxItems": 20
+              },
+              "crystal": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128,
+                "pattern": "^(0|[1-9][0-9]{0,255})$"
+              },
+              "core": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128,
+                "pattern": "^(0|[1-9][0-9]{0,255})$"
+              },
+              "effect": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              }
+            },
+            "required": [
+              "id",
+              "tree",
+              "requires",
+              "crystal",
+              "core",
+              "effect"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 100,
+          "maxItems": 100
+        }
+      },
+      "required": [
+        "trees",
+        "nodes"
+      ],
+      "additionalProperties": false
+    },
+    "equipment": {
+      "type": "object",
+      "properties": {
+        "templates": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "minItems": 8,
+          "maxItems": 8
+        },
+        "maxLevels": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000
+          },
+          "minItems": 5,
+          "maxItems": 5
+        },
+        "baseUpgradeCost": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000000
+        },
+        "upgradeStep": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000000
+        },
+        "inventoryLimit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000
+        },
+        "allowMixedLevels": {
+          "type": "boolean"
+        },
+        "refundAuxiliary": {
+          "type": "boolean"
+        },
+        "unlockLevel": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000
+        },
+        "fourthSlotLevel": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000
+        }
+      },
+      "required": [
+        "templates",
+        "maxLevels",
+        "baseUpgradeCost",
+        "upgradeStep",
+        "inventoryLimit",
+        "allowMixedLevels",
+        "refundAuxiliary",
+        "unlockLevel",
+        "fourthSlotLevel"
+      ],
+      "additionalProperties": false
+    },
+    "boxes": {
+      "type": "object",
+      "properties": {
+        "gold": {
+          "type": "object",
+          "properties": {
+            "price": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000000000
+            },
+            "weights": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "minItems": 6,
+              "maxItems": 6
+            },
+            "pity": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "pityMinQuality": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4
+            }
+          },
+          "required": [
+            "price",
+            "weights",
+            "pity",
+            "pityMinQuality"
+          ],
+          "additionalProperties": false
+        },
+        "silver": {
+          "type": "object",
+          "properties": {
+            "price": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000000000
+            },
+            "weights": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "minItems": 6,
+              "maxItems": 6
+            },
+            "pity": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "pityMinQuality": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4
+            }
+          },
+          "required": [
+            "price",
+            "weights",
+            "pity",
+            "pityMinQuality"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "gold",
+        "silver"
+      ],
+      "additionalProperties": false
+    },
+    "drops": {
+      "type": "object",
+      "properties": {
+        "depthBand": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000000
+        },
+        "maxDepth": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100000
+        },
+        "baseCrystal": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000000
+        },
+        "growth": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 2
+        },
+        "variance": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "eliteMarrow": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000000
+        },
+        "eliteCoreChance": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "bossPearl": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000000
+        },
+        "bossCore": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000000
+        }
+      },
+      "required": [
+        "depthBand",
+        "maxDepth",
+        "baseCrystal",
+        "growth",
+        "variance",
+        "eliteMarrow",
+        "eliteCoreChance",
+        "bossPearl",
+        "bossCore"
+      ],
+      "additionalProperties": false
+    },
+    "ads": {
+      "type": "object",
+      "properties": {
+        "timezoneOffsetMinutes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 840
+        },
+        "unlockLevel": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000
+        },
+        "showWindowMs": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000000
+        },
+        "claimWindowMs": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000000
+        },
+        "maxRetries": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "sonarDurationMs": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000000
+        },
+        "sonarRenewWindowMs": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000000
+        },
+        "blessingDurationMs": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000000
+        },
+        "blessingChoices": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "blessingMultipliers": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 10
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "lowOxygenRatio": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "fallback": {
+          "enum": [
+            false
+          ]
+        },
+        "slots": {
+          "type": "object",
+          "properties": {
+            "gift": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "blessing": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "sonar": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "silver": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "gold": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "rescue": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "oxygen": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            }
+          },
+          "required": [
+            "gift",
+            "blessing",
+            "sonar",
+            "silver",
+            "gold",
+            "rescue",
+            "oxygen"
+          ],
+          "additionalProperties": false
+        },
+        "giftRewards": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "currency": {
+                "enum": [
+                  "crystal",
+                  "pearl",
+                  "marrow",
+                  "core"
+                ]
+              },
+              "amount": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128,
+                "pattern": "^(0|[1-9][0-9]{0,255})$"
+              }
+            },
+            "required": [
+              "currency",
+              "amount"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 100
+        }
+      },
+      "required": [
+        "timezoneOffsetMinutes",
+        "unlockLevel",
+        "showWindowMs",
+        "claimWindowMs",
+        "maxRetries",
+        "sonarDurationMs",
+        "sonarRenewWindowMs",
+        "blessingDurationMs",
+        "blessingChoices",
+        "blessingMultipliers",
+        "lowOxygenRatio",
+        "fallback",
+        "slots",
+        "giftRewards"
+      ],
+      "additionalProperties": false
+    },
+    "session": {
+      "type": "object",
+      "properties": {
+        "maxActiveSeconds": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 86400
+        },
+        "resumeWindowMs": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000000
+        }
+      },
+      "required": [
+        "maxActiveSeconds",
+        "resumeWindowMs"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "configVersion",
+    "attributes",
+    "progression",
+    "tech",
+    "equipment",
+    "boxes",
+    "drops",
+    "ads",
+    "session"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

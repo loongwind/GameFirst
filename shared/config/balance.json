@@ -1,0 +1,1168 @@
+{
+  "schemaVersion": 1,
+  "configVersion": "p1-04-default-1",
+  "attributes": {
+    "ids": [
+      "hp",
+      "attack",
+      "attackSpeed",
+      "moveSpeed",
+      "cargo",
+      "oxygen"
+    ],
+    "maxLevel": 1000,
+    "baseCost": 80,
+    "growthNumerator": 116,
+    "growthDenominator": 100,
+    "baseValues": [
+      200,
+      20,
+      1,
+      3,
+      500,
+      120
+    ],
+    "gainPerLevel": [
+      0.05,
+      0.05,
+      0.01,
+      0.01,
+      0.05,
+      0.01
+    ],
+    "coreMilestone": 100,
+    "coreCost": 1
+  },
+  "progression": {
+    "maxLevel": 1000,
+    "baseXp": 20,
+    "stepXp": 5,
+    "killXp": {
+      "normal": 1,
+      "elite": 5,
+      "boss": 50
+    },
+    "taskXp": 20,
+    "equipmentLevel": 8,
+    "fourthSlotLevel": 40
+  },
+  "tech": {
+    "trees": [
+      "attack",
+      "survival",
+      "oxygen",
+      "cargo",
+      "special"
+    ],
+    "nodes": [
+      {
+        "id": "attack.1",
+        "tree": "attack",
+        "requires": [],
+        "crystal": "100",
+        "core": "0",
+        "effect": 0.01
+      },
+      {
+        "id": "attack.2",
+        "tree": "attack",
+        "requires": [
+          "attack.1"
+        ],
+        "crystal": "200",
+        "core": "0",
+        "effect": 0.02
+      },
+      {
+        "id": "attack.3",
+        "tree": "attack",
+        "requires": [
+          "attack.2"
+        ],
+        "crystal": "300",
+        "core": "0",
+        "effect": 0.03
+      },
+      {
+        "id": "attack.4",
+        "tree": "attack",
+        "requires": [
+          "attack.3"
+        ],
+        "crystal": "400",
+        "core": "0",
+        "effect": 0.04
+      },
+      {
+        "id": "attack.5",
+        "tree": "attack",
+        "requires": [
+          "attack.4"
+        ],
+        "crystal": "500",
+        "core": "1",
+        "effect": 0.05
+      },
+      {
+        "id": "attack.6",
+        "tree": "attack",
+        "requires": [
+          "attack.5"
+        ],
+        "crystal": "600",
+        "core": "1",
+        "effect": 0.06
+      },
+      {
+        "id": "attack.7",
+        "tree": "attack",
+        "requires": [
+          "attack.6"
+        ],
+        "crystal": "700",
+        "core": "1",
+        "effect": 0.07
+      },
+      {
+        "id": "attack.8",
+        "tree": "attack",
+        "requires": [
+          "attack.7"
+        ],
+        "crystal": "800",
+        "core": "1",
+        "effect": 0.08
+      },
+      {
+        "id": "attack.9",
+        "tree": "attack",
+        "requires": [
+          "attack.8"
+        ],
+        "crystal": "900",
+        "core": "1",
+        "effect": 0.09
+      },
+      {
+        "id": "attack.10",
+        "tree": "attack",
+        "requires": [
+          "attack.9"
+        ],
+        "crystal": "1000",
+        "core": "2",
+        "effect": 0.1
+      },
+      {
+        "id": "attack.11",
+        "tree": "attack",
+        "requires": [
+          "attack.10"
+        ],
+        "crystal": "1100",
+        "core": "2",
+        "effect": 0.11
+      },
+      {
+        "id": "attack.12",
+        "tree": "attack",
+        "requires": [
+          "attack.11"
+        ],
+        "crystal": "1200",
+        "core": "2",
+        "effect": 0.12
+      },
+      {
+        "id": "attack.13",
+        "tree": "attack",
+        "requires": [
+          "attack.12"
+        ],
+        "crystal": "1300",
+        "core": "2",
+        "effect": 0.13
+      },
+      {
+        "id": "attack.14",
+        "tree": "attack",
+        "requires": [
+          "attack.13"
+        ],
+        "crystal": "1400",
+        "core": "2",
+        "effect": 0.14
+      },
+      {
+        "id": "attack.15",
+        "tree": "attack",
+        "requires": [
+          "attack.14"
+        ],
+        "crystal": "1500",
+        "core": "3",
+        "effect": 0.15
+      },
+      {
+        "id": "attack.16",
+        "tree": "attack",
+        "requires": [
+          "attack.15"
+        ],
+        "crystal": "1600",
+        "core": "3",
+        "effect": 0.16
+      },
+      {
+        "id": "attack.17",
+        "tree": "attack",
+        "requires": [
+          "attack.16"
+        ],
+        "crystal": "1700",
+        "core": "3",
+        "effect": 0.17
+      },
+      {
+        "id": "attack.18",
+        "tree": "attack",
+        "requires": [
+          "attack.17"
+        ],
+        "crystal": "1800",
+        "core": "3",
+        "effect": 0.18
+      },
+      {
+        "id": "attack.19",
+        "tree": "attack",
+        "requires": [
+          "attack.18"
+        ],
+        "crystal": "1900",
+        "core": "3",
+        "effect": 0.19
+      },
+      {
+        "id": "attack.20",
+        "tree": "attack",
+        "requires": [
+          "attack.19"
+        ],
+        "crystal": "2000",
+        "core": "4",
+        "effect": 0.2
+      },
+      {
+        "id": "survival.1",
+        "tree": "survival",
+        "requires": [],
+        "crystal": "100",
+        "core": "0",
+        "effect": 0.01
+      },
+      {
+        "id": "survival.2",
+        "tree": "survival",
+        "requires": [
+          "survival.1"
+        ],
+        "crystal": "200",
+        "core": "0",
+        "effect": 0.02
+      },
+      {
+        "id": "survival.3",
+        "tree": "survival",
+        "requires": [
+          "survival.2"
+        ],
+        "crystal": "300",
+        "core": "0",
+        "effect": 0.03
+      },
+      {
+        "id": "survival.4",
+        "tree": "survival",
+        "requires": [
+          "survival.3"
+        ],
+        "crystal": "400",
+        "core": "0",
+        "effect": 0.04
+      },
+      {
+        "id": "survival.5",
+        "tree": "survival",
+        "requires": [
+          "survival.4"
+        ],
+        "crystal": "500",
+        "core": "1",
+        "effect": 0.05
+      },
+      {
+        "id": "survival.6",
+        "tree": "survival",
+        "requires": [
+          "survival.5"
+        ],
+        "crystal": "600",
+        "core": "1",
+        "effect": 0.06
+      },
+      {
+        "id": "survival.7",
+        "tree": "survival",
+        "requires": [
+          "survival.6"
+        ],
+        "crystal": "700",
+        "core": "1",
+        "effect": 0.07
+      },
+      {
+        "id": "survival.8",
+        "tree": "survival",
+        "requires": [
+          "survival.7"
+        ],
+        "crystal": "800",
+        "core": "1",
+        "effect": 0.08
+      },
+      {
+        "id": "survival.9",
+        "tree": "survival",
+        "requires": [
+          "survival.8"
+        ],
+        "crystal": "900",
+        "core": "1",
+        "effect": 0.09
+      },
+      {
+        "id": "survival.10",
+        "tree": "survival",
+        "requires": [
+          "survival.9"
+        ],
+        "crystal": "1000",
+        "core": "2",
+        "effect": 0.1
+      },
+      {
+        "id": "survival.11",
+        "tree": "survival",
+        "requires": [
+          "survival.10"
+        ],
+        "crystal": "1100",
+        "core": "2",
+        "effect": 0.11
+      },
+      {
+        "id": "survival.12",
+        "tree": "survival",
+        "requires": [
+          "survival.11"
+        ],
+        "crystal": "1200",
+        "core": "2",
+        "effect": 0.12
+      },
+      {
+        "id": "survival.13",
+        "tree": "survival",
+        "requires": [
+          "survival.12"
+        ],
+        "crystal": "1300",
+        "core": "2",
+        "effect": 0.13
+      },
+      {
+        "id": "survival.14",
+        "tree": "survival",
+        "requires": [
+          "survival.13"
+        ],
+        "crystal": "1400",
+        "core": "2",
+        "effect": 0.14
+      },
+      {
+        "id": "survival.15",
+        "tree": "survival",
+        "requires": [
+          "survival.14"
+        ],
+        "crystal": "1500",
+        "core": "3",
+        "effect": 0.15
+      },
+      {
+        "id": "survival.16",
+        "tree": "survival",
+        "requires": [
+          "survival.15"
+        ],
+        "crystal": "1600",
+        "core": "3",
+        "effect": 0.16
+      },
+      {
+        "id": "survival.17",
+        "tree": "survival",
+        "requires": [
+          "survival.16"
+        ],
+        "crystal": "1700",
+        "core": "3",
+        "effect": 0.17
+      },
+      {
+        "id": "survival.18",
+        "tree": "survival",
+        "requires": [
+          "survival.17"
+        ],
+        "crystal": "1800",
+        "core": "3",
+        "effect": 0.18
+      },
+      {
+        "id": "survival.19",
+        "tree": "survival",
+        "requires": [
+          "survival.18"
+        ],
+        "crystal": "1900",
+        "core": "3",
+        "effect": 0.19
+      },
+      {
+        "id": "survival.20",
+        "tree": "survival",
+        "requires": [
+          "survival.19"
+        ],
+        "crystal": "2000",
+        "core": "4",
+        "effect": 0.2
+      },
+      {
+        "id": "oxygen.1",
+        "tree": "oxygen",
+        "requires": [],
+        "crystal": "100",
+        "core": "0",
+        "effect": 0.01
+      },
+      {
+        "id": "oxygen.2",
+        "tree": "oxygen",
+        "requires": [
+          "oxygen.1"
+        ],
+        "crystal": "200",
+        "core": "0",
+        "effect": 0.02
+      },
+      {
+        "id": "oxygen.3",
+        "tree": "oxygen",
+        "requires": [
+          "oxygen.2"
+        ],
+        "crystal": "300",
+        "core": "0",
+        "effect": 0.03
+      },
+      {
+        "id": "oxygen.4",
+        "tree": "oxygen",
+        "requires": [
+          "oxygen.3"
+        ],
+        "crystal": "400",
+        "core": "0",
+        "effect": 0.04
+      },
+      {
+        "id": "oxygen.5",
+        "tree": "oxygen",
+        "requires": [
+          "oxygen.4"
+        ],
+        "crystal": "500",
+        "core": "1",
+        "effect": 0.05
+      },
+      {
+        "id": "oxygen.6",
+        "tree": "oxygen",
+        "requires": [
+          "oxygen.5"
+        ],
+        "crystal": "600",
+        "core": "1",
+        "effect": 0.06
+      },
+      {
+        "id": "oxygen.7",
+        "tree": "oxygen",
+        "requires": [
+          "oxygen.6"
+        ],
+        "crystal": "700",
+        "core": "1",
+        "effect": 0.07
+      },
+      {
+        "id": "oxygen.8",
+        "tree": "oxygen",
+        "requires": [
+          "oxygen.7"
+        ],
+        "crystal": "800",
+        "core": "1",
+        "effect": 0.08
+      },
+      {
+        "id": "oxygen.9",
+        "tree": "oxygen",
+        "requires": [
+          "oxygen.8"
+        ],
+        "crystal": "900",
+        "core": "1",
+        "effect": 0.09
+      },
+      {
+        "id": "oxygen.10",
+        "tree": "oxygen",
+        "requires": [
+          "oxygen.9"
+        ],
+        "crystal": "1000",
+        "core": "2",
+        "effect": 0.1
+      },
+      {
+        "id": "oxygen.11",
+        "tree": "oxygen",
+        "requires": [
+          "oxygen.10"
+        ],
+        "crystal": "1100",
+        "core": "2",
+        "effect": 0.11
+      },
+      {
+        "id": "oxygen.12",
+        "tree": "oxygen",
+        "requires": [
+          "oxygen.11"
+        ],
+        "crystal": "1200",
+        "core": "2",
+        "effect": 0.12
+      },
+      {
+        "id": "oxygen.13",
+        "tree": "oxygen",
+        "requires": [
+          "oxygen.12"
+        ],
+        "crystal": "1300",
+        "core": "2",
+        "effect": 0.13
+      },
+      {
+        "id": "oxygen.14",
+        "tree": "oxygen",
+        "requires": [
+          "oxygen.13"
+        ],
+        "crystal": "1400",
+        "core": "2",
+        "effect": 0.14
+      },
+      {
+        "id": "oxygen.15",
+        "tree": "oxygen",
+        "requires": [
+          "oxygen.14"
+        ],
+        "crystal": "1500",
+        "core": "3",
+        "effect": 0.15
+      },
+      {
+        "id": "oxygen.16",
+        "tree": "oxygen",
+        "requires": [
+          "oxygen.15"
+        ],
+        "crystal": "1600",
+        "core": "3",
+        "effect": 0.16
+      },
+      {
+        "id": "oxygen.17",
+        "tree": "oxygen",
+        "requires": [
+          "oxygen.16"
+        ],
+        "crystal": "1700",
+        "core": "3",
+        "effect": 0.17
+      },
+      {
+        "id": "oxygen.18",
+        "tree": "oxygen",
+        "requires": [
+          "oxygen.17"
+        ],
+        "crystal": "1800",
+        "core": "3",
+        "effect": 0.18
+      },
+      {
+        "id": "oxygen.19",
+        "tree": "oxygen",
+        "requires": [
+          "oxygen.18"
+        ],
+        "crystal": "1900",
+        "core": "3",
+        "effect": 0.19
+      },
+      {
+        "id": "oxygen.20",
+        "tree": "oxygen",
+        "requires": [
+          "oxygen.19"
+        ],
+        "crystal": "2000",
+        "core": "4",
+        "effect": 0.2
+      },
+      {
+        "id": "cargo.1",
+        "tree": "cargo",
+        "requires": [],
+        "crystal": "100",
+        "core": "0",
+        "effect": 0.01
+      },
+      {
+        "id": "cargo.2",
+        "tree": "cargo",
+        "requires": [
+          "cargo.1"
+        ],
+        "crystal": "200",
+        "core": "0",
+        "effect": 0.02
+      },
+      {
+        "id": "cargo.3",
+        "tree": "cargo",
+        "requires": [
+          "cargo.2"
+        ],
+        "crystal": "300",
+        "core": "0",
+        "effect": 0.03
+      },
+      {
+        "id": "cargo.4",
+        "tree": "cargo",
+        "requires": [
+          "cargo.3"
+        ],
+        "crystal": "400",
+        "core": "0",
+        "effect": 0.04
+      },
+      {
+        "id": "cargo.5",
+        "tree": "cargo",
+        "requires": [
+          "cargo.4"
+        ],
+        "crystal": "500",
+        "core": "1",
+        "effect": 0.05
+      },
+      {
+        "id": "cargo.6",
+        "tree": "cargo",
+        "requires": [
+          "cargo.5"
+        ],
+        "crystal": "600",
+        "core": "1",
+        "effect": 0.06
+      },
+      {
+        "id": "cargo.7",
+        "tree": "cargo",
+        "requires": [
+          "cargo.6"
+        ],
+        "crystal": "700",
+        "core": "1",
+        "effect": 0.07
+      },
+      {
+        "id": "cargo.8",
+        "tree": "cargo",
+        "requires": [
+          "cargo.7"
+        ],
+        "crystal": "800",
+        "core": "1",
+        "effect": 0.08
+      },
+      {
+        "id": "cargo.9",
+        "tree": "cargo",
+        "requires": [
+          "cargo.8"
+        ],
+        "crystal": "900",
+        "core": "1",
+        "effect": 0.09
+      },
+      {
+        "id": "cargo.10",
+        "tree": "cargo",
+        "requires": [
+          "cargo.9"
+        ],
+        "crystal": "1000",
+        "core": "2",
+        "effect": 0.1
+      },
+      {
+        "id": "cargo.11",
+        "tree": "cargo",
+        "requires": [
+          "cargo.10"
+        ],
+        "crystal": "1100",
+        "core": "2",
+        "effect": 0.11
+      },
+      {
+        "id": "cargo.12",
+        "tree": "cargo",
+        "requires": [
+          "cargo.11"
+        ],
+        "crystal": "1200",
+        "core": "2",
+        "effect": 0.12
+      },
+      {
+        "id": "cargo.13",
+        "tree": "cargo",
+        "requires": [
+          "cargo.12"
+        ],
+        "crystal": "1300",
+        "core": "2",
+        "effect": 0.13
+      },
+      {
+        "id": "cargo.14",
+        "tree": "cargo",
+        "requires": [
+          "cargo.13"
+        ],
+        "crystal": "1400",
+        "core": "2",
+        "effect": 0.14
+      },
+      {
+        "id": "cargo.15",
+        "tree": "cargo",
+        "requires": [
+          "cargo.14"
+        ],
+        "crystal": "1500",
+        "core": "3",
+        "effect": 0.15
+      },
+      {
+        "id": "cargo.16",
+        "tree": "cargo",
+        "requires": [
+          "cargo.15"
+        ],
+        "crystal": "1600",
+        "core": "3",
+        "effect": 0.16
+      },
+      {
+        "id": "cargo.17",
+        "tree": "cargo",
+        "requires": [
+          "cargo.16"
+        ],
+        "crystal": "1700",
+        "core": "3",
+        "effect": 0.17
+      },
+      {
+        "id": "cargo.18",
+        "tree": "cargo",
+        "requires": [
+          "cargo.17"
+        ],
+        "crystal": "1800",
+        "core": "3",
+        "effect": 0.18
+      },
+      {
+        "id": "cargo.19",
+        "tree": "cargo",
+        "requires": [
+          "cargo.18"
+        ],
+        "crystal": "1900",
+        "core": "3",
+        "effect": 0.19
+      },
+      {
+        "id": "cargo.20",
+        "tree": "cargo",
+        "requires": [
+          "cargo.19"
+        ],
+        "crystal": "2000",
+        "core": "4",
+        "effect": 0.2
+      },
+      {
+        "id": "special.1",
+        "tree": "special",
+        "requires": [],
+        "crystal": "100",
+        "core": "0",
+        "effect": 0.01
+      },
+      {
+        "id": "special.2",
+        "tree": "special",
+        "requires": [
+          "special.1"
+        ],
+        "crystal": "200",
+        "core": "0",
+        "effect": 0.02
+      },
+      {
+        "id": "special.3",
+        "tree": "special",
+        "requires": [
+          "special.2"
+        ],
+        "crystal": "300",
+        "core": "0",
+        "effect": 0.03
+      },
+      {
+        "id": "special.4",
+        "tree": "special",
+        "requires": [
+          "special.3"
+        ],
+        "crystal": "400",
+        "core": "0",
+        "effect": 0.04
+      },
+      {
+        "id": "special.5",
+        "tree": "special",
+        "requires": [
+          "special.4"
+        ],
+        "crystal": "500",
+        "core": "1",
+        "effect": 0.05
+      },
+      {
+        "id": "special.6",
+        "tree": "special",
+        "requires": [
+          "special.5"
+        ],
+        "crystal": "600",
+        "core": "1",
+        "effect": 0.06
+      },
+      {
+        "id": "special.7",
+        "tree": "special",
+        "requires": [
+          "special.6"
+        ],
+        "crystal": "700",
+        "core": "1",
+        "effect": 0.07
+      },
+      {
+        "id": "special.8",
+        "tree": "special",
+        "requires": [
+          "special.7"
+        ],
+        "crystal": "800",
+        "core": "1",
+        "effect": 0.08
+      },
+      {
+        "id": "special.9",
+        "tree": "special",
+        "requires": [
+          "special.8"
+        ],
+        "crystal": "900",
+        "core": "1",
+        "effect": 0.09
+      },
+      {
+        "id": "special.10",
+        "tree": "special",
+        "requires": [
+          "special.9"
+        ],
+        "crystal": "1000",
+        "core": "2",
+        "effect": 0.1
+      },
+      {
+        "id": "special.11",
+        "tree": "special",
+        "requires": [
+          "special.10"
+        ],
+        "crystal": "1100",
+        "core": "2",
+        "effect": 0.11
+      },
+      {
+        "id": "special.12",
+        "tree": "special",
+        "requires": [
+          "special.11"
+        ],
+        "crystal": "1200",
+        "core": "2",
+        "effect": 0.12
+      },
+      {
+        "id": "special.13",
+        "tree": "special",
+        "requires": [
+          "special.12"
+        ],
+        "crystal": "1300",
+        "core": "2",
+        "effect": 0.13
+      },
+      {
+        "id": "special.14",
+        "tree": "special",
+        "requires": [
+          "special.13"
+        ],
+        "crystal": "1400",
+        "core": "2",
+        "effect": 0.14
+      },
+      {
+        "id": "special.15",
+        "tree": "special",
+        "requires": [
+          "special.14"
+        ],
+        "crystal": "1500",
+        "core": "3",
+        "effect": 0.15
+      },
+      {
+        "id": "special.16",
+        "tree": "special",
+        "requires": [
+          "special.15"
+        ],
+        "crystal": "1600",
+        "core": "3",
+        "effect": 0.16
+      },
+      {
+        "id": "special.17",
+        "tree": "special",
+        "requires": [
+          "special.16"
+        ],
+        "crystal": "1700",
+        "core": "3",
+        "effect": 0.17
+      },
+      {
+        "id": "special.18",
+        "tree": "special",
+        "requires": [
+          "special.17"
+        ],
+        "crystal": "1800",
+        "core": "3",
+        "effect": 0.18
+      },
+      {
+        "id": "special.19",
+        "tree": "special",
+        "requires": [
+          "special.18"
+        ],
+        "crystal": "1900",
+        "core": "3",
+        "effect": 0.19
+      },
+      {
+        "id": "special.20",
+        "tree": "special",
+        "requires": [
+          "special.19"
+        ],
+        "crystal": "2000",
+        "core": "4",
+        "effect": 0.2
+      }
+    ]
+  },
+  "equipment": {
+    "templates": [
+      "sonic",
+      "torpedo",
+      "arc",
+      "mine",
+      "light",
+      "fin",
+      "armor",
+      "magnet"
+    ],
+    "maxLevels": [
+      1000,
+      1000,
+      1000,
+      1000,
+      1000
+    ],
+    "baseUpgradeCost": 5,
+    "upgradeStep": 2,
+    "inventoryLimit": 200,
+    "allowMixedLevels": true,
+    "refundAuxiliary": true,
+    "unlockLevel": 8,
+    "fourthSlotLevel": 40
+  },
+  "boxes": {
+    "gold": {
+      "price": 100,
+      "weights": [
+        25,
+        40,
+        20,
+        8,
+        2,
+        5
+      ],
+      "pity": 10,
+      "pityMinQuality": 3
+    },
+    "silver": {
+      "price": 50,
+      "weights": [
+        45,
+        35,
+        13,
+        2,
+        0,
+        5
+      ],
+      "pity": 0,
+      "pityMinQuality": 3
+    }
+  },
+  "drops": {
+    "depthBand": 100,
+    "maxDepth": 2400,
+    "baseCrystal": 10,
+    "growth": 1.18,
+    "variance": 0.3,
+    "eliteMarrow": 1,
+    "eliteCoreChance": 0.1,
+    "bossPearl": 2,
+    "bossCore": 1
+  },
+  "ads": {
+    "timezoneOffsetMinutes": 480,
+    "unlockLevel": 5,
+    "showWindowMs": 600000,
+    "claimWindowMs": 86400000,
+    "maxRetries": 1,
+    "sonarDurationMs": 900000,
+    "sonarRenewWindowMs": 60000,
+    "blessingDurationMs": 1200000,
+    "blessingChoices": [
+      "yield",
+      "oxygen",
+      "cargo"
+    ],
+    "blessingMultipliers": [
+      1.1,
+      1.2,
+      1.2
+    ],
+    "lowOxygenRatio": 0.15,
+    "fallback": false,
+    "slots": {
+      "gift": 5,
+      "blessing": 2,
+      "sonar": 6,
+      "silver": 3,
+      "gold": 2,
+      "rescue": 3,
+      "oxygen": 3
+    },
+    "giftRewards": [
+      {
+        "currency": "crystal",
+        "amount": "100"
+      },
+      {
+        "currency": "pearl",
+        "amount": "10"
+      },
+      {
+        "currency": "marrow",
+        "amount": "2"
+      },
+      {
+        "currency": "core",
+        "amount": "1"
+      }
+    ]
+  },
+  "session": {
+    "maxActiveSeconds": 600,
+    "resumeWindowMs": 86400000
+  }
+}

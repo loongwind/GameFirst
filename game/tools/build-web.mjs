@@ -7,6 +7,8 @@ import { assertReleaseSources } from './release-guard.mjs';
 const root = fileURLToPath(new URL('..', import.meta.url));
 const target = process.argv[2] || 'web-debug';
 if (!['web-debug', 'web-release'].includes(target)) throw new Error(`Unknown build target: ${target}`);
+const balanceExport = spawnSync(process.execPath, ['tools/export-balance.mjs', '--check'], { cwd: root, stdio: 'inherit' });
+if (balanceExport.status !== 0) process.exit(balanceExport.status || 1);
 const executable = process.env.CREATOR_EXECUTABLE || '/Applications/Cocos/Creator/3.8.8/CocosCreator.app/Contents/MacOS/CocosCreator';
 const expected = JSON.parse(readFileSync(path.join(root, 'editor-version.json'), 'utf8'));
 const installed = JSON.parse(readFileSync(path.resolve(executable, '../../Resources/info.json'), 'utf8'));
@@ -19,6 +21,8 @@ if (target === 'web-release') {
 }
 const shared = spawnSync(path.join(root, 'node_modules/.bin/tsc'), ['-p', path.join(root, '../shared/tsconfig.json')], { stdio: 'inherit' });
 if (shared.status !== 0) process.exit(shared.status || 1);
+// Import validates JSON-derived balance schema before invoking the expensive editor build.
+await import(new URL('../../shared/dist/index.js', import.meta.url));
 const configPath = path.join(root, 'build-configs', `${target}.json`);
 const logDirectory = path.join(root, 'temp/build-logs');
 mkdirSync(logDirectory, { recursive: true });

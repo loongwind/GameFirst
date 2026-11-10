@@ -13,6 +13,11 @@ P1-03 的 `DiveSession` / `PauseManager` 位于同一纯数据模块，Dive场�
 前后台倒计时、断线保留与安全区。运行 `npm run test:dive:web` 验证真实构建，
 接入契约与边界见 [session-hud-verification.md](docs/session-hud-verification.md)。
 
+P1-04 已接入本地经济、双槽存档与潜航检查点；卸货持久化后确认，刷新沿原局恢复。
+纯数值配置位于 `../shared/config/`，资产命令通过 `EconomyService.dispatch(action)`。
+广告状态机、开发 Mock、每日额度和埋点接口见
+[economy-verification.md](docs/economy-verification.md)。
+
 ## 环境与复现
 
 - Cocos Creator **3.8.8**，完整 editor/engine 指纹见 `editor-version.json`。
@@ -53,12 +58,13 @@ WEB_TARGET=web-release npm run test:web
 | `assets/scripts/meta/` | 预留养成模块 |
 | `assets/scripts/ui/` | Cocos HUD与375宽纯布局函数 |
 | `assets/scripts/platform/` | 存储、前后台、设备信息契约及浏览器实现 |
-| `assets/scripts/services/` | Boot 与后续服务编排 |
+| `assets/scripts/services/` | Boot、Dive 编排与 local 经济/存档/广告/埋点服务 |
+| `development/` | 不进入 Cocos assets 的广告 Mock 驱动 |
 | `assets/bundles/` | meta、sunlight、twilight、abyss、social、symbiont 空 Bundle |
 | `../shared/` | 可在客户端/服务端复用的纯 TS 包 |
 
 浏览器存储键使用 `abyss-hunter:` 前缀，不清理其他产品的数据；存储受限或配额耗尽时
-直接上抛错误，后续 SaveService 负责提示与恢复。生命周期合并 visibilitychange 与
+由 SaveService 向调用方报告错误、保留有效槽并允许重试。生命周期合并 visibilitychange 与
 pagehide/pageshow，按状态转换去重，支持退订与 dispose。设备信息每次读取当前窗口；
 浏览器 safeArea 读取全屏模板中的CSS环境安全区；微信原生安全区待其实现。
 
@@ -67,7 +73,8 @@ pagehide/pageshow，按状态转换去重，支持退订与 dispose。设备信�
 `platform/wechat/` 仅留说明。选择微信平台会明确失败，不会回落浏览器。
 此阶段只验收 Web；无需 AppID，也不复用原型中的 project.config.json。
 
-当前没有 Mock 实现。未来 Mock 必须置于 `mock/`，使用 `Mock*` 名称、
-`isMock: true` 和 `@development-only` 标记；Web release 构建扫描并拒绝这些来源。
+广告 Mock 位于 `development/MockAdService.ts`，使用 `Mock*` 名称、
+`isMock: true` 和 `@development-only` 标记；Web release 构建扫描并拒绝这些来源，
+包括以别名从 assets 外导入的开发代码。
 Boot 也拒绝模拟平台。测试夹具位于 `tests/`，不在 Cocos assets 构建图内。
 微信 release 配置应在阶段三由目标 AppID 的实际编辑器配置导出后提交，避免假配置。

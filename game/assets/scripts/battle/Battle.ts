@@ -1,7 +1,14 @@
 import { Pool } from './pool';
+import type { PoolCheckpoint } from './pool';
 import { SpatialGrid, circlesOverlap, segmentHitsCircle, expandingRingHitsCircle } from './geometry';
 import { body, resetBody, SeededRandom, STEP_SECONDS, weaponSpec } from './model';
 import type { BattleOptions, Capacities, Effect, Enemy, FloatingText, Loot, Player, Projectile, WeaponKind, WeaponState } from './model';
+
+export interface BattleCheckpoint {
+  tick: number; player: Player; stats: Battle['stats']; random: number; nextSpawnTick: number;
+  options: Pick<BattleOptions, 'spawn' | 'spawnIntervalTicks' | 'weapons' | 'capacities'>;
+  weapons: WeaponState[]; pools: Record<'enemies' | 'projectiles' | 'loot' | 'texts' | 'effects', PoolCheckpoint>;
+}
 
 export class Battle {
   readonly enemies: Pool<Enemy>;
@@ -22,6 +29,7 @@ export class Battle {
   private readonly grid = new SpatialGrid<Enemy>();
   private readonly autoSpawn: boolean;
   private readonly collectLoot: (value: number) => number;
+  private readonly onKill?: BattleOptions['onKill'];
   private readonly spawnInterval: number;
   private readonly pendingHits: { id: number; damage: number }[] = [];
   private readonly pendingDrops: { x: number; y: number; value: number }[] = [];
@@ -30,11 +38,13 @@ export class Battle {
     this.random = new SeededRandom(options.seed ?? 1);
     this.autoSpawn = options.spawn ?? true;
     this.collectLoot = options.collectLoot ?? (value => value);
+    this.onKill = options.onKill;
     this.spawnInterval = options.spawnIntervalTicks ?? 15;
     if (!Number.isSafeInteger(this.spawnInterval) || this.spawnInterval < 1) throw new RangeError('Invalid spawn interval');
     const caps: Capacities = { enemies: 80, projectiles: 200, loot: 100, texts: 64, effects: 64, ...options.capacities };
-    this.enemies = new Pool(caps.enemies, () => ({ ...body(), hp: 0, speed: 0, vx: 0, vy: 0, lootValue: 0, nextContactTick: 0 }), e => {
+    this.enemies = new Pool<Enemy>(caps.enemies, () => ({ ...body(), hp: 0, speed: 0, vx: 0, vy: 0, lootValue: 0, nextContactTick: 0, kind: 'normal' }), e => {
       resetBody(e); e.hp = e.speed = e.vx = e.vy = e.lootValue = e.nextContactTick = 0;
+      e.kind = 'normal';
     });
     this.projectiles = new Pool<Projectile>(caps.projectiles, () => ({ ...body(), kind: 'torpedo' as const, vx: 0, vy: 0, damage: 0, bornTick: 0, expiresTick: 0, owner: 0, range: 0, speed: 0, innerRadius: 0, triggerRadius: 0, hits: new Set<number>() }), p => {
       resetBody(p); p.hits.clear(); p.kind = 'torpedo'; p.vx = p.vy = p.damage = p.bornTick = p.expiresTick = p.owner = p.range = p.speed = p.innerRadius = p.triggerRadius = 0;
@@ -77,13 +87,14 @@ export class Battle {
     return { x: this.player.previousX + (this.player.x - this.player.previousX) * t, y: this.player.previousY + (this.player.y - this.player.previousY) * t };
   }
 
-  spawnEnemy(spec: { x: number; y: number; hp?: number; speed?: number; radius?: number; lootValue?: number }): Enemy | undefined {
+  spawnEnemy(spec: { x: number; y: number; hp?: number; speed?: number; radius?: number; lootValue?: number; kind?: Enemy['kind'] }): Enemy | undefined {
     if (![spec.x, spec.y, spec.hp ?? 50, spec.speed ?? 30, spec.radius ?? 10, spec.lootValue ?? 10].every(Number.isFinite)
       || (spec.hp ?? 50) <= 0 || (spec.speed ?? 30) < 0 || (spec.radius ?? 10) < 0 || (spec.lootValue ?? 10) < 0) throw new RangeError('Invalid enemy spawn');
     const e = this.enemies.acquire();
     if (!e) return undefined;
     e.x = e.previousX = spec.x; e.y = e.previousY = spec.y;
     e.hp = spec.hp ?? 50; e.speed = spec.speed ?? 30; e.radius = spec.radius ?? 10; e.lootValue = spec.lootValue ?? 10;
+    e.kind = spec.kind ?? 'normal';
     return e;
   }
 
@@ -105,6 +116,28 @@ export class Battle {
     for (const weapon of this.weapons) weapon.targetId = 0;
     this.pendingHits.length = this.pendingDrops.length = 0;
     this.grid.rebuild([]);
+  }
+
+  randomSample(): number { return this.random.next(); }
+  checkpoint(): BattleCheckpoint {
+    const result: BattleCheckpoint = { tick: this.tick, player: { ...this.player }, stats: { ...this.stats }, random: this.random.checkpoint(), nextSpawnTick: this.nextSpawnTick,
+      options: { spawn: this.autoSpawn, spawnIntervalTicks: this.spawnInterval, weapons: this.weapons.map(w => ({ ...w.spec })),
+        capacities: { enemies: this.enemies.capacity, projectiles: this.projectiles.capacity, loot: this.loot.capacity, texts: this.texts.capacity, effects: this.effects.capacity } },
+      weapons: this.weapons.map(w => ({ ...w, spec: { ...w.spec } })),
+      pools: { enemies: this.enemies.checkpoint(), projectiles: this.projectiles.checkpoint(p => ({ ...p, hits: Array.from(p.hits) })),
+        loot: this.loot.checkpoint(), texts: this.texts.checkpoint(), effects: this.effects.checkpoint() } };
+    return JSON.parse(JSON.stringify(result));
+  }
+  restore(saved: BattleCheckpoint): void {
+    if (!saved || !Number.isSafeInteger(saved.tick) || saved.tick < 0 || !Number.isSafeInteger(saved.nextSpawnTick) || saved.nextSpawnTick < 1) throw new RangeError('Invalid battle checkpoint');
+    this.tick = saved.tick; this.nextSpawnTick = saved.nextSpawnTick; this.random.restore(saved.random);
+    Object.assign(this.player, saved.player); Object.assign(this.stats, saved.stats);
+    this.weapons.splice(0, this.weapons.length, ...saved.weapons.map(w => ({ ...w, spec: { ...w.spec } })));
+    this.enemies.restore(saved.pools.enemies); this.loot.restore(saved.pools.loot); this.texts.restore(saved.pools.texts); this.effects.restore(saved.pools.effects);
+    this.projectiles.restore(saved.pools.projectiles, value => {
+      const p = value as Omit<Projectile, 'hits'> & { hits: number[] }; return { ...p, hits: new Set(p.hits) };
+    });
+    this.accumulator = 0; this.inputX = this.inputY = 0; this.grid.rebuild(this.enemies.values(), true);
   }
 
   private spawnSystem(): void {
@@ -241,7 +274,7 @@ export class Battle {
     this.addText(e.x, e.y, amount);
     if (e.hp <= 0) {
       this.stats.kills++;
-      this.pendingDrops.push({ x: e.x, y: e.y, value: e.lootValue });
+      this.pendingDrops.push({ x: e.x, y: e.y, value: this.onKill?.(e) ?? e.lootValue });
       this.enemies.release(id);
     }
   }
