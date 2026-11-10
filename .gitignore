@@ -7,3 +7,4 @@ attachments/
 # macOS 系统文件与临时交付打包不入库
 .DS_Store
 output/deliverables/
+tools/__pycache__/
