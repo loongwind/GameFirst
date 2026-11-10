@@ -85,11 +85,16 @@ async function runStress(page) {
           p.owner = 1; p.range = 400; p.speed = 420; p.innerRadius = 0; p.triggerRadius = 0; p.radius = 4;
         }
         s.advance(1 / 30);
+        // The disabled controller cannot paint; do exactly what its update() does per frame
+        // so the measured frames include the real Cocos presentation cost.
+        c.hud.render(s, '', c.ads.view, c.economy.snapshot);
         stepsMs.push(advanceMs);
         const counts = { enemies: b.enemies.size, projectiles: b.projectiles.size, loot: b.loot.size, texts: b.texts.size };
         for (const key of Object.keys(counts)) { minima[key] = Math.min(minima[key], counts[key]); maxima[key] = Math.max(maxima[key], counts[key]); }
         if (++frame >= frames) {
           s.setInput(0, 0);
+          // Paint the fully loaded scene so the evidence screenshot shows the stress state.
+          c.hud.render(s, '', c.ads.view, c.economy.snapshot);
           resolve({ minima, maxima, frameMs: frameDeltas.slice(1), stepsMs, kills: b.stats.kills, hits: b.stats.hits, dropped: b.stats.droppedSteps, tick: b.tick });
           return;
         }
