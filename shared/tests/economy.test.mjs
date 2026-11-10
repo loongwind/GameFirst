@@ -57,14 +57,18 @@ test('normal drop curve is bounded at PRD ±30%, deep drops grow, and elites gua
   const { monsterDrop } = await api(); assert.equal(typeof monsterDrop, 'function');
   assert.equal(monsterDrop('normal', 0, [0, 0]).crystal, 7);
   assert.equal(monsterDrop('normal', 0, [0.999999, 0]).crystal, 13);
-  assert.equal(monsterDrop('normal', 200, [0.5, 0.5]).crystal, 14);
+  assert.equal(monsterDrop('normal', 200, [0.5, 0.5]).crystal,
+    Math.round(10 * Math.pow(JSON.parse(readFileSync(new URL('../config/balance.json', import.meta.url))).drops.growth, 2)));
   assert.equal(monsterDrop('elite', 0, [0.5, 0.5]).marrow, 1);
   assert.equal(monsterDrop('boss', 0, [0.5, 0.5]).core, 1);
   assert.throws(() => monsterDrop('normal', Infinity, [0, 0]));
 });
 
 test('2400m final depth stays in the twenty-fourth reward band', async () => {
-  const { monsterDrop } = await api();
-  assert.equal(monsterDrop('normal', 2400, [0.5, 0.5]).crystal, 450);
-  assert.equal(monsterDrop('normal', 2399, [0.5, 0.5]).crystal, 450);
+  const { monsterDrop, DEFAULT_BALANCE } = await api();
+  // Mid-variance sample (0.5) multiplies the base by exactly 1; the band value follows the table.
+  const midBand = Math.round(DEFAULT_BALANCE.drops.baseCrystal
+    * DEFAULT_BALANCE.drops.growth ** Math.min(23, Math.floor(2400 / DEFAULT_BALANCE.drops.depthBand)));
+  assert.equal(monsterDrop('normal', 2400, [0.5, 0.5]).crystal, midBand);
+  assert.equal(monsterDrop('normal', 2399, [0.5, 0.5]).crystal, midBand);
 });

@@ -49,6 +49,7 @@ test(`${target}: natural economy progression reaches all three sea layers withou
     await page.evaluate(() => {
       window.testDriver = { isMock: true, shows: 0, async load() {}, async show() { this.shows++; return 'completed'; } };
     });
+    await page.evaluate(effects => { window.__techEffect = effects; }, Object.fromEntries(balance.tech.nodes.map(n => [n.id, n.effect])));
     await diveReady(page);
     // --- Tutorial completion on the production fixed clock (real services, no resource injection) ---
     await page.evaluate(() => { window.c.enabled = false; });
@@ -85,36 +86,81 @@ test(`${target}: natural economy progression reaches all three sea layers withou
     const dives = [];
     let reached2400 = false, deaths = 0, rescues = 0, oxygenAds = 0, pearlIncome = 0;
     for (let n = 1; n <= MAX_DIVES && !reached2400; n++) {
-      const record = await page.evaluate(async () => {
+      const record = await page.evaluate(async n => {
         const c = window.c, s = c.session;
         c.enabled = false;
         c.configureAds(window.testDriver);
         const startPearls = BigInt(c.economy.snapshot.wallet.pearl);
         let usedRescue = 0, usedOxygen = 0;
+        // Boss readiness (pure arithmetic on the real buildable state; no game state is written):
+        // fight the guardian only when its HP falls inside the oxygen window its depth allows.
+        const mult = () => (1 + .05 * c.economy.snapshot.attributes.attack) *
+          (1 + c.economy.snapshot.tech.filter(t => t.startsWith('attack.')).reduce((a, id) => a + (window.__techEffect?.[id] ?? 0), 0));
+        const oxygenRate = () => {
+          const attr = c.economy.snapshot.attributes.oxygen;
+          const tech = 1 + c.economy.snapshot.tech.filter(t => t.startsWith('oxygen.')).reduce((a, id) => a + (window.__techEffect?.[id] ?? 0), 0);
+          return 120 / (120 * (1 + .01 * attr)) / tech;
+        };
+        const bossReady = () => {
+          const gate = s.content.gateDepth;
+          if (gate === undefined || gate >= 2400 && s.battle.contentProgress.defeatedBosses.includes('enemy_boss_03_giant_squid')) return true;
+          const bossHp = 50 * Math.pow(1.18, Math.min(23, Math.floor(gate / 100))) * 40;
+          const rate = oxygenRate() + .2 * Math.floor(gate / 500);
+          // Oxygen ads unlock at player level 5 (ads.unlockLevel); before that only one bar remains.
+          const bars = 1 + (c.economy.snapshot.playerLevel >= 5 ? 3 : 0);
+          const window = 120 / rate * bars * .8;
+          // Adds spawn two a second for the whole fight: keep the engagement under a minute
+          // so the swarm stays clearable by the sonic ring.
+          return bossHp / (53 * mult()) <= Math.min(60, window);
+        };
+        window.__progress = { bossReady: bossReady(), dir: 1 };
         const steer = () => {
           const b = s.battle, p = b.player, gate = s.content.gateDepth ?? 2400;
-          // Repulsion keeps every chaser out of contact range; weapons out-range all of them.
-          let fx = 0, fy = 0;
+          const state = window.__progress;
+          const ceiling = Math.min(gate, state.bossReady ? gate : Math.max(300, gate - 150));
+          // Horizontal sweep with a slow descent: keep lateral momentum so the swarm trails
+          // behind instead of straddling a flip path; hover is what gets a diver surrounded.
+          if (p.x > 220) state.dir = -1;
+          if (p.x < -220) state.dir = 1;
+          let x = state.dir * 100, y = p.y < ceiling - 25 ? 35 : 0;
+          // Repulsion: outrun every chaser; a moving 120 beats a 30 chase.
+          let fx = 0, fy = 0, cluster = 0, cx = 0, cy = 0;
           for (const e of b.enemies.values()) {
             const dx = p.x - e.x, dy = p.y - e.y, d = Math.hypot(dx, dy) || 1;
-            const threat = e.kind === 'boss' ? 250 : e.kind === 'elite' ? 130 : 80;
+            const threat = e.kind === 'boss' ? 260 : e.kind === 'elite' ? 170 : 120;
             if (d < threat) { fx += dx / d * (threat - d); fy += dy / d * (threat - d); }
+            if (d < 200) { cluster++; cx += e.x; cy += e.y; }
           }
-          let x = fx, y = fy;
-          if (Math.hypot(fx, fy) < 40) {
-            // Free to move: work down toward the next gate (or circle at the gate line while
-            // the guardian blocks it), keeping a lane so the kite never corners.
-            if (p.y < gate - 30) { y = 100; x = p.x > 220 ? -60 : p.x < -220 ? 60 : 0; }
-            else { x = p.x >= 0 ? 100 : -100; y = 0; }
-            if (s.snapshot.cargo.crystal < s.snapshot.cargoCapacity) {
-              const loot = [...b.loot.values()].sort((a, b2) => Math.hypot(a.x - p.x, a.y - p.y) - Math.hypot(b2.x - p.x, b2.y - p.y))[0];
-              if (loot && Math.hypot(loot.x - p.x, loot.y - p.y) < 200) { x = loot.x - p.x; y = loot.y - p.y; }
-            }
+          if (cluster >= 3) { const dx = p.x - cx / cluster, dy = p.y - cy / cluster, d = Math.hypot(dx, dy) || 1; fx += dx / d * 60; fy += dy / d * 60; }
+          const boss = [...b.enemies.values()].find(e => e.kind === 'boss');
+          if (boss) {
+            const d = Math.hypot(p.x - boss.x, p.y - boss.y) || 1;
+            if (d < 220 || !state.bossReady) { fx += (p.x - boss.x) / d * 130; fy += (p.y - boss.y) / d * 130; }
+            else if (d > 380) { fx += (boss.x - p.x) / d * 60; fy += (boss.y - p.y) / d * 60; }
           }
+          if (Math.hypot(fx, fy) > 30) {
+            // Never flee into a boundary: the gate clamp and world walls are where divers die.
+            if (fy > 0 && p.y > ceiling - 60) fy = 0;
+            if (fy < 0 && p.y < 60) fy = 0;
+            if (fx > 0 && p.x > 300) fx = 0;
+            if (fx < 0 && p.x < -300) fx = 0;
+            if (Math.hypot(fx, fy) < 30) { fx = state.dir * 100; }
+            x = fx; y = fy;
+          }
+          // Hurt: climb to weak water immediately; the hold is the dive's real payoff.
+          if (p.hp < s.maxHp * .45) { y = -100; x = p.x > 0 ? -40 : 40; }
           const norm = Math.hypot(x, y) || 1;
           return { x: x / norm * 200, y: y / norm * 200 };
         };
         for (let frame = 0; frame < 20000; frame++) {
+          if (n <= 3) {
+            const trace = (window.__trace ??= []);
+            if (frame % 150 === 0) {
+              const boss = [...s.battle.enemies.values()].find(e => e.kind === 'boss');
+              trace.push({ t: Math.round(s.snapshot.activeSeconds), y: Math.round(s.battle.player.y), hp: Math.round(s.battle.player.hp),
+                x: Math.round(s.battle.player.x), n: s.battle.enemies.size, boss: boss ? Math.round(Math.hypot(boss.x - s.battle.player.x, boss.y - s.battle.player.y)) : null });
+            }
+          }
           if (s.state === 'RescuePending') {
             if (c.ads.view.rescueRemaining > 0) { await c.ads.watch('rescue'); usedRescue++; }
             else { s.declineRescue(); }
@@ -122,12 +168,19 @@ test(`${target}: natural economy progression reaches all three sea layers withou
           if (s.state !== 'Running') break;
           if (s.oxygen / s.oxygenCapacity < .15 && c.ads.view.oxygenPrompt && c.ads.view.oxygenRemaining > 0) {
             await c.ads.watch('oxygen'); usedOxygen++;
-          } else if (s.oxygen / s.oxygenCapacity < .3 || s.snapshot.cargo.crystal >= s.snapshot.cargoCapacity || s.snapshot.activeSeconds > 540) {
+          } else if (s.oxygen / s.oxygenCapacity < .3 || s.snapshot.cargo.crystal >= s.snapshot.cargoCapacity
+            || s.battle.player.hp < s.maxHp * .3 || s.snapshot.activeSeconds > 540) {
             s.requestReturn();
           }
           if (s.state !== 'Running') break;
-          const v = steer(); s.setInput(v.x, v.y);
-          for (let k = 0; k < 10 && s.state === 'Running'; k++) s.advance(.1);
+          const v = steer();
+          for (let k = 0; k < 30 && s.state === 'Running'; k++) {
+            // 30Hz control: holding one input for a whole fast-forwarded second lets chasers
+            // close an 80-unit threat gap, so re-aim every step like real per-frame input.
+            s.setInput(v.x, v.y);
+            s.advance(1 / 30);
+            const nv = steer(); v.x = nv.x; v.y = nv.y;
+          }
           if (s.battle.contentProgress.defeatedBosses.includes('enemy_boss_03_giant_squid') && s.battle.stats.maxDepth >= 2399) break;
         }
         s.setInput(0, 0);
@@ -142,8 +195,9 @@ test(`${target}: natural economy progression reaches all three sea layers withou
         c.hud.render(s, '', c.ads.view, c.economy.snapshot);
         const wallet = c.economy.snapshot.wallet;
         return { finished, wallet, settled, usedRescue, usedOxygen, reason: s.settlement?.reason,
+          trace: n <= 3 ? (window.__trace ?? []).splice(0) : undefined,
           pearlGain: (BigInt(wallet.pearl) - startPearls).toString() };
-      });
+      }, n);
       dives.push({ n, ...record });
       deaths += record.usedRescue + (record.reason === 'death' ? 1 : 0);
       rescues += record.usedRescue; oxygenAds += record.usedOxygen;
@@ -169,26 +223,40 @@ test(`${target}: natural economy progression reaches all three sea layers withou
   });
 });
 
-/** Spend through the exact dispatch actions the harbor UI buttons emit. */
+/** Spend through the exact dispatch actions the harbor UI buttons emit, greedily buying the
+ *  best %-per-crystal option across attributes and tech (tech also needs cores from elites). */
 async function spend(page, dive) {
   await page.evaluate(async ({ techNodes, dive }) => {
-    const h = window.h;
-    const crystal = () => BigInt(h.economy.snapshot.wallet.crystal);
-    // Attack first (damage gates every depth band), then oxygen time, fire rate, HP; each line keeps its reserve share.
-    for (const [attribute, share] of [['attack', 60], ['oxygen', 30], ['attackSpeed', 30], ['hp', 30], ['moveSpeed', 15], ['cargo', 15]]) {
-      for (let guard = 0; guard < 200; guard++) {
-        const level = h.economy.snapshot.attributes[attribute], price = BigInt(Math.ceil(80 * Math.pow(1.16, level)));
-        if (price > crystal() * BigInt(share) / 100n) break;
-        try { h.economy.dispatch({ type: 'attribute.upgrade', attribute, opId: `progression-${dive}-attr-${attribute}-${level}` }); }
-        catch { break; }
+    const h = window.h, wallet = () => BigInt(h.economy.snapshot.wallet.crystal);
+    const RESERVE = 60n; // keep one attribute level affordable for the next dive
+    const options = () => {
+      const s = h.economy.snapshot, list = [];
+      const spec = { attack: 5, attackSpeed: 1, hp: 5, oxygen: 1, cargo: 5, moveSpeed: 1 };
+      for (const [attribute, gain] of Object.entries(spec)) {
+        const level = s.attributes[attribute];
+        const cost = BigInt(Math.ceil(80 * Math.pow(1.16, level)));
+        list.push({ kind: 'attribute.upgrade', attribute, level, gain, cost });
       }
-    }
-    // Tech: cheapest enabled nodes in balance order, capped at a quarter of the wallet.
-    const unlocked = new Set(h.economy.snapshot.tech);
-    for (const node of techNodes) {
-      if (unlocked.has(node.id) || !node.requires.every(r => unlocked.has(r))) continue;
-      if (BigInt(node.crystal) > crystal() / 4n) continue;
-      try { h.economy.dispatch({ type: 'tech.unlock', nodeId: node.id, opId: `progression-${dive}-tech-${node.id}` }); unlocked.add(node.id); }
+      const cores = BigInt(s.wallet.core);
+      // One next node per tree: chains gate each other, five trees run in parallel.
+      const trees = new Set();
+      for (const node of techNodes) {
+        if (trees.has(node.tree) || s.tech.includes(node.id) || !node.requires.every(r => s.tech.includes(r))) continue;
+        trees.add(node.tree);
+        list.push({ kind: 'tech.unlock', nodeId: node.id, gain: node.effect * 100, cost: BigInt(node.crystal), core: BigInt(node.core), cores });
+      }
+      return list.filter(o => o.cost > 0n);
+    };
+    for (let guard = 0; guard < 400; guard++) {
+      const affordable = options()
+        .filter(o => o.cost <= wallet() - RESERVE && wallet() >= o.cost)
+        .filter(o => !o.core || o.cores >= o.core)
+        .map(o => ({ ...o, ratio: Number(o.gain) / Number(o.cost) * (o.kind === 'attribute.upgrade' && o.attribute === 'attack' && o.level < 12 ? 3 : 1) }))
+        .sort((a, b) => b.ratio - a.ratio);
+      const pick = affordable[0];
+      if (!pick) break;
+      const tag = pick.kind === 'attribute.upgrade' ? `${pick.attribute}-${pick.level}` : pick.nodeId;
+      try { h.economy.dispatch({ type: pick.kind, attribute: pick.attribute, nodeId: pick.nodeId, opId: `progression-${dive}-${pick.kind}-${tag}` }); }
       catch { break; }
     }
     // Pearl boxes when a draw is finally affordable (bosses pay 2 pearls each).
