@@ -23,6 +23,8 @@ export interface Effect extends Body { endX: number; endY: number; expiresTick: 
 export interface Player { x: number; y: number; previousX: number; previousY: number; radius: number; hp: number; speed: number }
 export interface Capacities { enemies: number; projectiles: number; loot: number; texts: number; effects: number }
 export interface BattleOptions {
+  /** Returns the amount accepted by the hold; overflow stays in the world. */
+  collectLoot?: (value: number) => number;
   seed?: number; spawn?: boolean; spawnIntervalTicks?: number; weapons?: WeaponInput[]; capacities?: Partial<Capacities>;
 }
 export const STEP_SECONDS = 1 / 30;

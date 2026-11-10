@@ -49,6 +49,9 @@
       },
       {
         "__id__": 7
+      },
+      {
+        "__id__": 15
       }
     ],
     "_prefab": null,
@@ -374,5 +377,16 @@
     "__type__": "cc.SkinInfo",
     "_enabled": false,
     "_scale": 5
+  },
+  {
+    "__type__": "420e6ZS/n5au4+DIgf1N+ta",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 2
+    },
+    "_enabled": true,
+    "__prefab": null,
+    "_id": "246fe7b1-4919-5583-b109-c9b8186a057c"
   }
 ]

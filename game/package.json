@@ -14,6 +14,7 @@
     "test:web": "node --test tests/web.smoke.mjs",
     "typecheck:battle": "tsc --noEmit -p tsconfig.battle.json",
     "test:battle:web": "node --test tests/battle-browser.mjs",
+    "test:dive:web": "node --test tests/dive.smoke.mjs",
     "battle:serve": "node tools/battle-fixture-server.mjs"
   },
   "dependencies": { "@abyss-hunter/shared": "file:../shared" },

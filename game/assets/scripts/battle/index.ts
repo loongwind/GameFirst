@@ -1,4 +1,8 @@
 export { Battle } from './Battle';
+export { DiveSession } from './DiveSession';
+export type { DiveOptions, DiveSnapshot, DiveState, Cargo, Material, Settlement } from './DiveSession';
+export { PauseManager } from './PauseManager';
+export type { PauseReason } from './PauseManager';
 export { Pool } from './pool';
 export { SpatialGrid, circlesOverlap, segmentHitsCircle, expandingRingHitsCircle } from './geometry';
 export { joystickVector } from './input';

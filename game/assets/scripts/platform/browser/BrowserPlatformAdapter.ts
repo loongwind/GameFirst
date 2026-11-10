@@ -37,6 +37,13 @@ export class BrowserPlatformAdapter implements PlatformAdapter {
 
   getDeviceInfo(): DeviceInfo {
     const { host } = this;
+    const style = host.getComputedStyle(host.document.documentElement);
+    const edge = (name: string, limit: number): number => {
+      const value = parseFloat(style.getPropertyValue(`--safe-${name}`));
+      return Number.isFinite(value) ? Math.min(limit, Math.max(0, value)) : 0;
+    };
+    const left = edge('left', host.innerWidth), top = edge('top', host.innerHeight);
+    const right = edge('right', host.innerWidth - left), bottom = edge('bottom', host.innerHeight - top);
     return {
       platform: this.kind,
       system: host.navigator.platform,
@@ -45,8 +52,7 @@ export class BrowserPlatformAdapter implements PlatformAdapter {
       windowWidth: host.innerWidth,
       windowHeight: host.innerHeight,
       pixelRatio: host.devicePixelRatio,
-      // A browser reports its layout viewport; native safe areas belong to the WeChat adapter.
-      safeArea: { left: 0, top: 0, width: host.innerWidth, height: host.innerHeight },
+      safeArea: { left, top, width: host.innerWidth - left - right, height: host.innerHeight - top - bottom },
     };
   }
 
@@ -71,6 +77,6 @@ export class BrowserPlatformAdapter implements PlatformAdapter {
     if (this.disposed || this.visible === visible) return;
     this.visible = visible;
     const listeners = visible ? this.showListeners : this.hideListeners;
-    for (const listener of [...listeners]) listener();
+    for (const listener of Array.from(listeners)) listener();
   }
 }

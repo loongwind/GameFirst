@@ -21,6 +21,7 @@ export class Battle {
   private readonly random: SeededRandom;
   private readonly grid = new SpatialGrid<Enemy>();
   private readonly autoSpawn: boolean;
+  private readonly collectLoot: (value: number) => number;
   private readonly spawnInterval: number;
   private readonly pendingHits: { id: number; damage: number }[] = [];
   private readonly pendingDrops: { x: number; y: number; value: number }[] = [];
@@ -28,6 +29,7 @@ export class Battle {
   constructor(options: BattleOptions = {}) {
     this.random = new SeededRandom(options.seed ?? 1);
     this.autoSpawn = options.spawn ?? true;
+    this.collectLoot = options.collectLoot ?? (value => value);
     this.spawnInterval = options.spawnIntervalTicks ?? 15;
     if (!Number.isSafeInteger(this.spawnInterval) || this.spawnInterval < 1) throw new RangeError('Invalid spawn interval');
     const caps: Capacities = { enemies: 80, projectiles: 200, loot: 100, texts: 64, effects: 64, ...options.capacities };
@@ -248,7 +250,10 @@ export class Battle {
     for (const drop of this.pendingDrops) this.addLoot(drop.x, drop.y, drop.value);
     this.pendingDrops.length = 0;
     for (const l of this.loot.values()) if (circlesOverlap(this.player.x, this.player.y, this.player.radius, l.x, l.y, l.radius)) {
-      this.stats.lootCollected += l.value; this.loot.release(l.id);
+      const accepted = this.collectLoot(l.value);
+      if (!Number.isFinite(accepted) || accepted < 0 || accepted > l.value) throw new RangeError('Invalid accepted loot');
+      this.stats.lootCollected += accepted; l.value -= accepted;
+      if (l.value <= 0) this.loot.release(l.id);
     }
   }
 

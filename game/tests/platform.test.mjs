@@ -80,3 +80,17 @@ test('blocked storage propagates failure rather than reporting a successful save
     assert.equal(result, 'SecurityError');
   });
 });
+
+test('browser safe area honors CSS environment insets used by the fullscreen game shell', async () => {
+  await withBrowser(root, async page => {
+    const safe = await page.evaluate(async () => {
+      const { BrowserPlatformAdapter } = await import('/assets/scripts/platform/browser/BrowserPlatformAdapter.ts');
+      const style = document.documentElement.style;
+      style.setProperty('--safe-top', '44px'); style.setProperty('--safe-bottom', '34px');
+      style.setProperty('--safe-left', '6px'); style.setProperty('--safe-right', '8px');
+      const adapter = new BrowserPlatformAdapter();
+      try { return adapter.getDeviceInfo().safeArea; } finally { adapter.dispose(); }
+    });
+    assert.deepEqual(safe, { left: 6, top: 44, width: 361, height: 734 });
+  });
+});

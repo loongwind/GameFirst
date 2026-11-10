@@ -1,0 +1,13 @@
+import { Application } from '<%= applicationJS %>';
+
+const application = new Application();
+application.showFPS = false;
+System.import('cc').then(engine => {
+  application.init(engine);
+  // The desktop builder defaults this setting to false. The game uses a
+  // full viewport canvas so resize must update the engine's logical surface.
+  engine.game.onPostBaseInitDelegate.add(() => {
+    engine.settings.overrideSettings('screen', 'exactFitScreen', true);
+  });
+  return application.start();
+}).catch(error => console.error(error));

@@ -1,12 +1,17 @@
 # 潜渊猎手 · Cocos 工程
 
-P1-01 工程骨架：Boot 初始化真实浏览器适配层后保持空场景；Dive / Harbor
-只保留 Canvas 与 Camera。后续玩法在这些场景与模块上实现。
+P1-01 工程骨架：Boot 初始化真实浏览器适配层后保持空场景；Harbor保留 Canvas 与 Camera。
+P1-03 已将战斗、状态与HUD接入Dive场景。
 
 P1-02 已加入纯数据战斗核心及独立浏览器验证页，入口为
 `assets/scripts/battle/index.ts`。使用契约、压测复现与性能记录见
 [battle-verification.md](docs/battle-verification.md)。运行 `npm run battle:serve`
 可查看四武器、摇杆及持续 80/200/100 满载夹具；此页不进入正式发布包。
+
+P1-03 的 `DiveSession` / `PauseManager` 位于同一纯数据模块，Dive场景绑定
+`DiveController` 与原生Cocos HUD。包含双压力、死亡冻结/救援、原因集合暂停、
+前后台倒计时、断线保留与安全区。运行 `npm run test:dive:web` 验证真实构建，
+接入契约与边界见 [session-hud-verification.md](docs/session-hud-verification.md)。
 
 ## 环境与复现
 
@@ -44,9 +49,9 @@ WEB_TARGET=web-release npm run test:web
 | 目录 | 用途 |
 | --- | --- |
 | `assets/scenes/` | Boot / Dive / Harbor 与稳定 UUID |
-| `assets/scripts/battle/` | 预留纯数据战斗逻辑，不引入平台/UI |
+| `assets/scripts/battle/` | 纯数据战斗、DiveSession与PauseManager，不引入平台/UI |
 | `assets/scripts/meta/` | 预留养成模块 |
-| `assets/scripts/ui/` | 预留表现层 |
+| `assets/scripts/ui/` | Cocos HUD与375宽纯布局函数 |
 | `assets/scripts/platform/` | 存储、前后台、设备信息契约及浏览器实现 |
 | `assets/scripts/services/` | Boot 与后续服务编排 |
 | `assets/bundles/` | meta、sunlight、twilight、abyss、social、symbiont 空 Bundle |
@@ -55,7 +60,7 @@ WEB_TARGET=web-release npm run test:web
 浏览器存储键使用 `abyss-hunter:` 前缀，不清理其他产品的数据；存储受限或配额耗尽时
 直接上抛错误，后续 SaveService 负责提示与恢复。生命周期合并 visibilitychange 与
 pagehide/pageshow，按状态转换去重，支持退订与 dispose。设备信息每次读取当前窗口；
-浏览器 safeArea 为整个布局视口，微信原生安全区待其实现。
+浏览器 safeArea 读取全屏模板中的CSS环境安全区；微信原生安全区待其实现。
 
 ## 微信槽位与发布隔离
 
