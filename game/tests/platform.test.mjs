@@ -1,0 +1,82 @@
+import assert from 'node:assert/strict';
+import { test } from 'node:test';
+import { fileURLToPath } from 'node:url';
+import { withBrowser } from './browser-helpers.mjs';
+
+const root = fileURLToPath(new URL('..', import.meta.url));
+
+test('storage survives reload, namespaces keys, and preserves unrelated data', async () => {
+  await withBrowser(root, async page => {
+    await page.evaluate(async () => {
+      const { BrowserPlatformAdapter } = await import('/assets/scripts/platform/browser/BrowserPlatformAdapter.ts');
+      const adapter = new BrowserPlatformAdapter();
+      localStorage.setItem('other-product', 'kept');
+      adapter.storage.setItem('slot', '{"revision":7}');
+    });
+    await page.reload();
+    const result = await page.evaluate(async () => {
+      const { BrowserPlatformAdapter } = await import('/assets/scripts/platform/browser/BrowserPlatformAdapter.ts');
+      const adapter = new BrowserPlatformAdapter();
+      const saved = adapter.storage.getItem('slot');
+      adapter.storage.removeItem('slot');
+      const removed = adapter.storage.getItem('slot');
+      const unrelated = localStorage.getItem('other-product');
+      return { saved, removed, unrelated, isMock: adapter.isMock };
+    });
+    assert.deepEqual(result, { saved: '{"revision":7}', removed: null, unrelated: 'kept', isMock: false });
+  });
+});
+
+test('foreground changes are deduplicated and listeners can unsubscribe', async () => {
+  await withBrowser(root, async page => {
+    const events = await page.evaluate(async () => {
+      const { BrowserPlatformAdapter } = await import('/assets/scripts/platform/browser/BrowserPlatformAdapter.ts');
+      const adapter = new BrowserPlatformAdapter();
+      const events = [];
+      const offHide = adapter.onHide(() => events.push('hide'));
+      const offShow = adapter.onShow(() => events.push('show'));
+      window.dispatchEvent(new PageTransitionEvent('pagehide'));
+      window.dispatchEvent(new PageTransitionEvent('pagehide'));
+      window.dispatchEvent(new PageTransitionEvent('pageshow'));
+      window.dispatchEvent(new PageTransitionEvent('pageshow'));
+      offHide(); offShow();
+      window.dispatchEvent(new PageTransitionEvent('pagehide'));
+      adapter.dispose();
+      return events;
+    });
+    assert.deepEqual(events, ['hide', 'show']);
+  });
+});
+
+test('device information follows viewport changes and reports pixel ratio', async () => {
+  await withBrowser(root, async page => {
+    const read = () => page.evaluate(async () => {
+      const { BrowserPlatformAdapter } = await import('/assets/scripts/platform/browser/BrowserPlatformAdapter.ts');
+      const adapter = new BrowserPlatformAdapter();
+      try { return adapter.getDeviceInfo(); } finally { adapter.dispose(); }
+    });
+    const initial = await read();
+    assert.equal(initial.windowWidth, 375);
+    assert.equal(initial.windowHeight, 812);
+    assert.equal(initial.pixelRatio, 2);
+    await page.setViewportSize({ width: 812, height: 375 });
+    const rotated = await read();
+    assert.equal(rotated.windowWidth, 812);
+    assert.equal(rotated.windowHeight, 375);
+  });
+});
+
+test('blocked storage propagates failure rather than reporting a successful save', async () => {
+  await withBrowser(root, async page => {
+    const result = await page.evaluate(async () => {
+      const { BrowserPlatformAdapter } = await import('/assets/scripts/platform/browser/BrowserPlatformAdapter.ts');
+      Object.defineProperty(window, 'localStorage', { get() { throw new DOMException('blocked', 'SecurityError'); } });
+      try {
+        const adapter = new BrowserPlatformAdapter();
+        try { adapter.storage.setItem('slot', 'value'); } finally { adapter.dispose(); }
+        return 'unexpected-success';
+      } catch (error) { return error.name; }
+    });
+    assert.equal(result, 'SecurityError');
+  });
+});

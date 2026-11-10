@@ -1,0 +1,30 @@
+{
+  "name": "AbyssHunter",
+  "platform": "web-desktop",
+  "buildPath": "project://build",
+  "outputName": "web-release",
+  "debug": false,
+  "md5Cache": true,
+  "sourceMaps": false,
+  "startScene": "7dea9181-cb26-5345-bb8f-1b8140f4f064",
+  "scenes": [
+    {
+      "url": "db://assets/scenes/Boot.scene",
+      "uuid": "7dea9181-cb26-5345-bb8f-1b8140f4f064"
+    },
+    {
+      "url": "db://assets/scenes/Dive.scene",
+      "uuid": "3c25d2eb-3b66-5054-b3ad-ce62aea96731"
+    },
+    {
+      "url": "db://assets/scenes/Harbor.scene",
+      "uuid": "64384d7f-a03c-5e1b-a0b7-55eb3a644ea7"
+    }
+  ],
+  "mainBundleIsRemote": false,
+  "packages": {
+    "web-desktop": {
+      "useWebGPU": false
+    }
+  }
+}

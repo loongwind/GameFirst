@@ -1,0 +1,10 @@
+node_modules/
+library/
+temp/
+build/
+profiles/
+.artifacts/
+.DS_Store
+*.log
+# Editor service/marketing state is not project configuration.
+settings/v2/packages/information.json
