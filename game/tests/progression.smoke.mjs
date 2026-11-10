@@ -86,12 +86,16 @@ test(`${target}: natural economy progression reaches all three sea layers withou
     const dives = [];
     let reached2400 = false, deaths = 0, rescues = 0, oxygenAds = 0, pearlIncome = 0;
     for (let n = 1; n <= MAX_DIVES && !reached2400; n++) {
-      const record = await page.evaluate(async n => {
+      const record = await page.evaluate(async ({ n, techEffects }) => {
         const c = window.c, s = c.session;
         c.enabled = false;
+        // A page reload wipes injected globals; re-arm the mock video driver and the tech
+        // table here so every dive starts with real, working rescue/oxygen eligibility.
+        window.__techEffect = techEffects;
+        window.testDriver ??= { isMock: true, shows: 0, async load() {}, async show() { this.shows++; return 'completed'; } };
         c.configureAds(window.testDriver);
         const startPearls = BigInt(c.economy.snapshot.wallet.pearl);
-        let usedRescue = 0, usedOxygen = 0;
+        let usedRescue = 0, usedOxygen = 0, deathsThisDive = 0;
         // Boss readiness (pure arithmetic on the real buildable state; no game state is written):
         // fight the guardian only when its HP falls inside the oxygen window its depth allows.
         const mult = () => (1 + .05 * c.economy.snapshot.attributes.attack) *
@@ -109,15 +113,17 @@ test(`${target}: natural economy progression reaches all three sea layers withou
           // Oxygen ads unlock at player level 5 (ads.unlockLevel); before that only one bar remains.
           const bars = 1 + (c.economy.snapshot.playerLevel >= 5 ? 3 : 0);
           const window = 120 / rate * bars * .8;
-          // Adds spawn two a second for the whole fight: keep the engagement under a minute
-          // so the swarm stays clearable by the sonic ring.
-          return bossHp / (53 * mult()) <= Math.min(60, window);
+          // Keep the engagement inside one oxygen bar; rescues (3/day) cover the tail risk.
+          return bossHp / (53 * mult()) <= Math.min(100, window);
         };
         window.__progress = { bossReady: bossReady(), dir: 1 };
         const steer = () => {
           const b = s.battle, p = b.player, gate = s.content.gateDepth ?? 2400;
           const state = window.__progress;
-          const ceiling = Math.min(gate, state.bossReady ? gate : Math.max(300, gate - 150));
+          // Farm where kills outpace spawns: deeper is only richer once the cargo cap stops
+          // binding, so weak divers sweep shallower water where enemies die in a few shots.
+          const power = 140 + 45 * c.economy.snapshot.attributes.attack + 12 * c.economy.snapshot.attributes.hp;
+          const ceiling = Math.min(gate, state.bossReady ? gate : Math.max(260, Math.min(gate - 150, power)));
           // Horizontal sweep with a slow descent: keep lateral momentum so the swarm trails
           // behind instead of straddling a flip path; hover is what gets a diver surrounded.
           if (p.x > 220) state.dir = -1;
@@ -162,8 +168,12 @@ test(`${target}: natural economy progression reaches all three sea layers withou
             }
           }
           if (s.state === 'RescuePending') {
-            if (c.ads.view.rescueRemaining > 0) { await c.ads.watch('rescue'); usedRescue++; }
-            else { s.declineRescue(); }
+            deathsThisDive++;
+            if (c.ads.view.rescueRemaining > 0) {
+              await c.ads.watch('rescue');
+              if (s.state === 'Running') usedRescue++; // count only claims that revived the diver
+            }
+            if (s.state === 'RescuePending') s.declineRescue();
           }
           if (s.state !== 'Running') break;
           if (s.oxygen / s.oxygenCapacity < .15 && c.ads.view.oxygenPrompt && c.ads.view.oxygenRemaining > 0) {
@@ -194,12 +204,12 @@ test(`${target}: natural economy progression reaches all three sea layers withou
         // real primary-touch button actually receives the click.
         c.hud.render(s, '', c.ads.view, c.economy.snapshot);
         const wallet = c.economy.snapshot.wallet;
-        return { finished, wallet, settled, usedRescue, usedOxygen, reason: s.settlement?.reason,
+        return { finished, wallet, settled, usedRescue, usedOxygen, deaths: deathsThisDive, reason: s.settlement?.reason,
           trace: n <= 3 ? (window.__trace ?? []).splice(0) : undefined,
           pearlGain: (BigInt(wallet.pearl) - startPearls).toString() };
-      }, n);
+      }, { n, techEffects: Object.fromEntries(balance.tech.nodes.map(node => [node.id, node.effect])) });
       dives.push({ n, ...record });
-      deaths += record.usedRescue + (record.reason === 'death' ? 1 : 0);
+      deaths += record.deaths;
       rescues += record.usedRescue; oxygenAds += record.usedOxygen;
       pearlIncome += Number(record.pearlGain || 0);
       if (record.finished.bosses.includes('enemy_boss_03_giant_squid') && record.finished.depth >= 2399) { reached2400 = true; break; }

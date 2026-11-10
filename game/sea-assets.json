@@ -1,7 +1,7 @@
 {
   "version": 1,
   "sourceIndex": "output/game-assets/v1/asset-index-final.csv",
-  "sourceIndexSha256": "dd5d58f08c24a1ee575bc2718fc030cb6c2f2832cba871b24e4baaf0454e81ed",
+  "sourceIndexSha256": "81be0a7a070eaed26b956b9b33da8062f0f604a810cf8106541fbdad9361f88c",
   "sourceRigs": "output/game-assets/v1/boss-rigs-r9.json",
   "sourceRigsSha256": "3361bb0795029740b11ae48830ea9814663940f82b0a5a660108b034e8dbc468",
   "animationFps": 6,

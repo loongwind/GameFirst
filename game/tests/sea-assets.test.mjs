@@ -8,6 +8,8 @@ const root = new URL('../../', import.meta.url);
 const read = path => readFileSync(new URL(path, root));
 const json = path => JSON.parse(read(path));
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+// Provenance hashes are text-normalized so a checkout's CRLF/LF choice cannot break them.
+const shaText = path => sha(Buffer.from(read(path).toString('utf8').replace(/^\uFEFF/, '').replace(/\r\n/g, '\n'), 'utf8'));
 const manifest = () => json('game/sea-assets.json');
 // Parse the production CSV, including quoted commas/newlines and its UTF-8 BOM.
 function csv(text) {
@@ -30,8 +32,8 @@ async function art() {
 
 test('every sea import is traceable to the genuine production index and bounded PNG', () => {
   const m = manifest(), index = new Map(sourceRows().map(row => [row.id, row]));
-  assert.equal(m.sourceIndexSha256, sha(read(m.sourceIndex)));
-  assert.equal(m.sourceRigsSha256, sha(read(m.sourceRigs)));
+  assert.equal(m.sourceIndexSha256, shaText(m.sourceIndex));
+  assert.equal(m.sourceRigsSha256, shaText(m.sourceRigs));
   assert.equal(m.assets.length, 85); // 12 scenes + 64 idle/swim + 8 boss parts + hero.
   const paths = new Set();
   for (const a of m.assets) {

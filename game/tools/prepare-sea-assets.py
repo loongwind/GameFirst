@@ -25,6 +25,11 @@ def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def text_digest(path):
+    """Hash normalized text so a checkout's CRLF/LF choice cannot break provenance."""
+    return hashlib.sha256(path.read_text(encoding='utf-8-sig').replace('\r\n', '\n').encode('utf-8')).hexdigest()
+
+
 def relative(path):
     return path.relative_to(ROOT).as_posix()
 
@@ -168,8 +173,8 @@ def main():
             'downloadBudgetBytes': (2 if bundle == 'sunlight' else 1 if bundle == 'dive' else 4) * 1024 * 1024,
             'textureBudgetBytes': (1 if bundle == 'dive' else 12) * 1024 * 1024,
         }
-    manifest = {'version': 1, 'sourceIndex': relative(INDEX), 'sourceIndexSha256': digest(INDEX),
-                'sourceRigs': relative(RIGS), 'sourceRigsSha256': digest(RIGS),
+    manifest = {'version': 1, 'sourceIndex': relative(INDEX), 'sourceIndexSha256': text_digest(INDEX),
+                'sourceRigs': relative(RIGS), 'sourceRigsSha256': text_digest(RIGS),
                 'animationFps': 6, 'maxTextureEdge': 2048, 'bundles': bundles,
                 'identities': identities, 'assets': records}
     write_json(ROOT / 'game/sea-assets.json', manifest)
