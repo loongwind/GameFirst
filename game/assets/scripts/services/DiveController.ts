@@ -54,7 +54,7 @@ export class DiveController extends Component {
     try { this.dives.reconcileAds(this.session); }
     catch { this.needsAdRecovery = true; this.session.pause.add('ad'); this.notice = '奖励确认中，请勿重复观看。'; }
     this.ads = new DiveAdModel(this.economy, this.dives, this.session, Date.now, { started: () => this.onAdStarted(), closed: () => this.onAdClosed() });
-    this.hud = new DiveHud(this.node, action => this.handleAction(action));
+    this.hud = new DiveHud(this.node, action => this.handleAction(action), this.platform.getDeviceInfo().quality === 'low');
     this.subscriptions.push(this.platform.onHide(this.onHide), this.platform.onShow(this.onShow));
     game.on(Game.EVENT_HIDE, this.onHide); game.on(Game.EVENT_SHOW, this.onShow);
     input.on(Input.EventType.KEY_DOWN, this.keyDown, this); input.on(Input.EventType.KEY_UP, this.keyUp, this);

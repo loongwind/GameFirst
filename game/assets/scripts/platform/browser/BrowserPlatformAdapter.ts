@@ -67,8 +67,17 @@ export class BrowserPlatformAdapter implements PlatformAdapter {
       windowWidth: host.innerWidth,
       windowHeight: host.innerHeight,
       pixelRatio: host.devicePixelRatio,
+      quality: this.detectQuality(),
       safeArea: { left, top, width: host.innerWidth - left - right, height: host.innerHeight - top - bottom },
     };
+  }
+
+  /** Explicit ?quality= override wins, then a conservative capability heuristic for weak devices. */
+  private detectQuality(): 'high' | 'low' {
+    const requested = new URLSearchParams(this.host.location.search).get('quality');
+    if (requested === 'low' || requested === 'high') return requested;
+    const memory = (this.host.navigator as Navigator & { deviceMemory?: number }).deviceMemory;
+    return this.host.navigator.hardwareConcurrency <= 4 || (memory !== undefined && memory <= 4) ? 'low' : 'high';
   }
 
   dispose(): void {

@@ -13,6 +13,9 @@ const amber = new Color(255, 189, 99), danger = new Color(255, 110, 111);
 
 export type HudAction = 'pause' | 'return' | 'primary' | 'secondary' | 'sonar' | 'oxygen' | 'dismissOxygen';
 
+/** Spec cap for concurrent damage numbers (技术方案 §活跃对象: 飘字30组). */
+const TEXT_POOL = 30;
+
 /** Cocos presentation only: reads a session, emits commands through callbacks. */
 export class DiveHud {
   readonly root: Node;
@@ -30,8 +33,8 @@ export class DiveHud {
   private insetsKey = '';
   private depositStarted = 0;
 
-  constructor(parent: Node, private readonly action: (action: HudAction) => void) {
-    this.sea = new SeaWorldView(parent);
+  constructor(parent: Node, private readonly action: (action: HudAction) => void, readonly lowEnd = false) {
+    this.sea = new SeaWorldView(parent, lowEnd);
     this.root = this.node('DiveHUD', parent);
   }
 
@@ -75,6 +78,12 @@ export class DiveHud {
     this.button('oxygen', l.oxygenAd, '观看 · 氧气回满', this.oxygenCard);
     this.button('dismissOxygen', l.oxygenDismiss, '坚持上浮 · 关闭', this.oxygenCard);
     this.label('stick', '下 潜', l.joystick.x + 24, l.joystick.y + 46, 80, 20, 11, muted);
+    if (!this.lowEnd) for (let i = 0; i < TEXT_POOL; i++) {
+      this.label(`dmg-${i}`, '', 0, 0, 80, 20, 12, mint);
+      const transform = this.labels.get(`dmg-${i}`)!.node.getComponent(UITransform)!;
+      transform.setAnchorPoint(.5, .5);
+      this.labels.get(`dmg-${i}`)!.node.active = false;
+    }
     this.overlay = this.node('DiveOverlay', this.root);
     this.overlay.getComponent(UITransform)!.setContentSize(375, l.height);
     this.overlay.addComponent(BlockInputEvents);
@@ -196,12 +205,14 @@ export class DiveHud {
     for (const e of b.projectiles.values()) {
       const p = point(e);
       if (e.kind === 'torpedo') this.dot(g, p.x, p.y, 3, cream);
+      else if (this.lowEnd) this.dot(g, p.x, p.y, 3, e.kind === 'mine' ? amber : mint);
       else { g.strokeColor = e.kind === 'mine' ? amber : mint; g.circle(p.x - 187.5, l.height / 2 - p.y, e.radius); g.stroke(); }
     }
-    for (const e of b.effects.values()) {
+    if (!this.lowEnd) for (const e of b.effects.values()) {
       const p = point(e), end = point({ x: e.endX, y: e.endY }); g.strokeColor = mint;
       g.moveTo(p.x - 187.5, l.height / 2 - p.y); g.lineTo(end.x - 187.5, l.height / 2 - end.y); g.stroke();
     }
+    this.drawTexts(session, cy);
     const gate = session.content.gateDepth;
     if (gate !== undefined && Math.abs(gate - session.depth) < 240) {
       const y = l.height / 2 - cy - gate + session.depth;
@@ -212,6 +223,23 @@ export class DiveHud {
       const previous = session.depth < 1600 ? 800 : 1600, distance = previous - session.depth;
       if (Math.abs(distance) < 240) { g.ellipse(-7.5, l.height / 2 - cy - distance, 32, 8); g.stroke(); }
     }
+  }
+
+  /** Damage numbers ride the battle's own text pool; low-end devices skip them entirely. */
+  private drawTexts(session: DiveSession, cy: number): void {
+    if (this.lowEnd) return;
+    const b = session.battle, l = this.layout;
+    let shown = 0;
+    for (const t of b.texts.values()) {
+      if (shown >= TEXT_POOL) break;
+      const label = this.labels.get(`dmg-${shown}`)!, node = label.node;
+      node.active = true;
+      node.setPosition(-7.5 + t.x - b.player.x, l.height / 2 - cy - t.y + b.player.y);
+      const value = String(Math.round(t.value));
+      if (label.string !== value) label.string = value;
+      shown++;
+    }
+    for (; shown < TEXT_POOL; shown++) this.labels.get(`dmg-${shown}`)!.node.active = false;
   }
 
   private node(name: string, parent: Node): Node {

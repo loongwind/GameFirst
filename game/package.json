@@ -24,7 +24,10 @@
     "battle:serve": "node tools/battle-fixture-server.mjs",
     "test:harbor:web": "node --test tests/harbor.smoke.mjs",
     "test:sea:web": "node --test tests/sea-content.smoke.mjs",
-    "test:tutorial:web": "node --test tests/tutorial.smoke.mjs"
+    "test:tutorial:web": "node --test tests/tutorial.smoke.mjs",
+    "test:quality:web": "node --test tests/quality.smoke.mjs",
+    "test:perf:web": "node --test tests/perf-stress.smoke.mjs",
+    "test:progression:web": "node --test tests/progression.smoke.mjs"
   },
   "dependencies": { "@abyss-hunter/shared": "file:../shared" },
   "devDependencies": { "playwright": "1.56.1", "typescript": "5.9.3" }

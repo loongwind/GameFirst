@@ -78,6 +78,8 @@ export function combatLoadout(state: LocalState): Omit<DiveOptions, 'diveId'> {
     oxygenBaseRate: DEFAULT_BALANCE.attributes.baseValues[5] / attributeValue('oxygen', attrs.oxygen) / (1 + tech.oxygen),
     battle: {
       weapons,
+      // 飘字30组 per the active-object spec; the battle default (64) stays for the stress fixture.
+      capacities: { texts: 30 },
       playerSpeed: attributeValue('moveSpeed', attrs.moveSpeed) * COMBAT_GROWTH.worldUnitsPerMetre * (1 + fin),
       pickupRadius: COMBAT_GROWTH.collectionReach * (tech.special + magnet),
     },

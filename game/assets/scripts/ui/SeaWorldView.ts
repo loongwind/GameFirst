@@ -26,12 +26,23 @@ export class SeaWorldView {
   private direction: 1 | -1 = 1;
   private height = 812;
   private current?: SeaLayer;
-  constructor(parent: Node) {
+  private snow?: Graphics;
+  private readonly snowDots = Array.from({ length: 28 }, (_, i) => {
+    const phase = (i * 97) % 211 / 211, drift = (i * 53) % 89 / 89;
+    return { x: (phase - .5) * 420, speed: 14 + drift * 22, size: .8 + (i % 3) * .35, wobble: 6 + drift * 10 };
+  });
+  constructor(parent: Node, private readonly lowEnd = false) {
     this.root = this.node('SeaWorld', parent);
     this.background = this.node('SeaBackground', this.root);
+    if (!lowEnd) this.buildSnow();
     this.actorsRoot = this.node('SeaActors', this.root);
     this.leases = new SeaBundleLease(layer => this.load(layer), value => this.release(value), layer => this.removeLayer(layer));
     void this.loadCommon();
+  }
+  private buildSnow(): void {
+    this.snow = this.node('MarineSnow', this.root).addComponent(Graphics);
+    // Suspended matter drifts between the backdrop and the actors.
+    this.snow.node.setSiblingIndex(1);
   }
   get status(): 'loading' | 'ready' | 'error' {
     if (this.commonState === 'error' || this.current && this.leases.state(this.current) === 'error') return 'error';
@@ -85,7 +96,7 @@ export class SeaWorldView {
       actor.node.setPosition(...point(enemy.x, enemy.y), 0);
       actor.node.active = Math.abs(enemy.x - b.player.x) < 240 && Math.abs(enemy.y - b.player.y) < this.height / 2;
       const sequence = art.sequences.get(identity.swim ?? '');
-      if (sequence) actor.sprite.spriteFrame = sequence[Math.floor(b.tick / 5) % 4];
+      if (sequence) actor.sprite.spriteFrame = sequence[this.lowEnd ? 0 : Math.floor(b.tick / 5) % 4];
       const rig = BOSS_RIGS[key];
       if (rig) actor.parts.forEach((part, i) => { part.angle = rig.angles[i] + Math.sin(b.tick / 30 * Math.PI * 1.5) * 12; });
       if (actor.bar) {
@@ -98,6 +109,21 @@ export class SeaWorldView {
     for (const [id, actor] of this.actors) if (!alive.has(id)) { actor.node.destroy(); this.actors.delete(id); }
     if (this.common && !this.player) this.player = this.actor('player', PLAYER_ART, 60, this.common);
     if (this.player) this.player.node.setPosition(-7.5, this.height / 2 - cy, 0);
+    this.renderSnow(b, cy);
+  }
+
+  /** Decorative suspended matter: pure presentation, safe to drop on low-end devices. */
+  private renderSnow(b: DiveSession['battle'], cy: number): void {
+    if (!this.snow) return;
+    const g = this.snow; g.clear(); g.fillColor = new Color(190, 224, 234, 88);
+    const span = this.height + 300;
+    // Rises on screen while diving: screenY = phase - cy, phase grows with tick and depth.
+    for (let i = 0; i < this.snowDots.length; i++) {
+      const dot = this.snowDots[i], phase = (b.tick * dot.speed + i * span / this.snowDots.length + b.player.y * .12) % span;
+      const x = dot.x + Math.sin(b.tick / 40 + i) * dot.wobble - b.player.x * .25;
+      g.circle(x - 7.5, phase - cy, dot.size);
+    }
+    g.fill();
   }
   destroy(): void {
     if (this.dead) return;

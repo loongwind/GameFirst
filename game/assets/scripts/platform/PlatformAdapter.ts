@@ -18,6 +18,8 @@ export interface DeviceInfo {
   readonly windowWidth: number;
   readonly windowHeight: number;
   readonly pixelRatio: number;
+  /** Rendering tier: low degrades decorative layers, never collision or danger hints. */
+  readonly quality: 'high' | 'low';
   /** Native menu button bounds, in window logical pixels. */
   readonly capsule?: { readonly bottom: number };
   readonly safeArea: { readonly left: number; readonly top: number; readonly width: number; readonly height: number };
