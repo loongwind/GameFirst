@@ -2,15 +2,26 @@ import { Pool } from './pool';
 import type { PoolCheckpoint } from './pool';
 import { SpatialGrid, circlesOverlap, segmentHitsCircle, expandingRingHitsCircle } from './geometry';
 import { body, resetBody, SeededRandom, STEP_SECONDS, weaponSpec } from './model';
+import { SonarSteering, canMove } from './SonarSteering';
+import type { TerrainCircle } from './model';
 import type { BattleOptions, Capacities, Effect, Enemy, FloatingText, Loot, Player, Projectile, WeaponKind, WeaponState } from './model';
 
 export interface BattleCheckpoint {
   tick: number; player: Player; stats: Battle['stats']; random: number; nextSpawnTick: number;
-  options: Pick<BattleOptions, 'spawn' | 'spawnIntervalTicks' | 'weapons' | 'capacities'>;
+  options: Pick<BattleOptions, 'spawn' | 'spawnIntervalTicks' | 'weapons' | 'capacities' | 'obstacles' | 'dangerZones'>;
   weapons: WeaponState[]; pools: Record<'enemies' | 'projectiles' | 'loot' | 'texts' | 'effects', PoolCheckpoint>;
 }
 
 export class Battle {
+  readonly obstacles: readonly TerrainCircle[];
+  readonly dangerZones: readonly TerrainCircle[];
+  private readonly steering = new SonarSteering();
+  private sonar = false;
+  private manual = false;
+  private lowOxygen = false;
+  private canCollect = true;
+  get movementMode(): 'manual' | 'sonar' | 'idle' { return this.manual ? 'manual' : this.sonar ? 'sonar' : 'idle'; }
+  setSonar(enabled: boolean, lowOxygen = false, canCollect = true): void { this.sonar = enabled; this.lowOxygen = lowOxygen; this.canCollect = canCollect; }
   readonly enemies: Pool<Enemy>;
   readonly projectiles: Pool<Projectile>;
   readonly loot: Pool<Loot>;
@@ -35,6 +46,11 @@ export class Battle {
   private readonly pendingDrops: { x: number; y: number; value: number }[] = [];
 
   constructor(options: BattleOptions = {}) {
+    const terrain = (items: readonly TerrainCircle[] = []) => Object.freeze(items.map(o => {
+      if (![o.x, o.y, o.radius].every(Number.isFinite) || o.radius < 0) throw new RangeError('Invalid terrain');
+      return Object.freeze({ ...o });
+    }));
+    this.obstacles = terrain(options.obstacles); this.dangerZones = terrain(options.dangerZones);
     this.random = new SeededRandom(options.seed ?? 1);
     this.autoSpawn = options.spawn ?? true;
     this.collectLoot = options.collectLoot ?? (value => value);
@@ -55,13 +71,15 @@ export class Battle {
     this.weapons = (options.weapons ?? [{ kind: 'sonic' }, { kind: 'torpedo' }]).map(spec => ({ spec: weaponSpec(spec), nextFireTick: 1, targetId: 0 }));
   }
 
-  setInput(x: number, y: number): void {
-    if (this.paused || !Number.isFinite(x) || !Number.isFinite(y)) { this.inputX = this.inputY = 0; return; }
+  setInput(x: number, y: number, held = false): void {
+    if (this.paused || !Number.isFinite(x) || !Number.isFinite(y)) { this.manual = false; this.inputX = this.inputY = 0; return; }
+    this.manual = held || x !== 0 || y !== 0;
     const length = Math.max(1, Math.hypot(x, y));
     this.inputX = x / length; this.inputY = y / length;
   }
 
   setPaused(paused: boolean): void {
+    this.manual = false;
     this.paused = paused; this.accumulator = 0; this.inputX = this.inputY = 0;
     this.player.previousX = this.player.x; this.player.previousY = this.player.y;
     for (const pool of [this.enemies, this.projectiles, this.loot, this.texts, this.effects]) {
@@ -121,7 +139,7 @@ export class Battle {
   randomSample(): number { return this.random.next(); }
   checkpoint(): BattleCheckpoint {
     const result: BattleCheckpoint = { tick: this.tick, player: { ...this.player }, stats: { ...this.stats }, random: this.random.checkpoint(), nextSpawnTick: this.nextSpawnTick,
-      options: { spawn: this.autoSpawn, spawnIntervalTicks: this.spawnInterval, weapons: this.weapons.map(w => ({ ...w.spec })),
+      options: { spawn: this.autoSpawn, spawnIntervalTicks: this.spawnInterval, weapons: this.weapons.map(w => ({ ...w.spec })), obstacles: this.obstacles, dangerZones: this.dangerZones,
         capacities: { enemies: this.enemies.capacity, projectiles: this.projectiles.capacity, loot: this.loot.capacity, texts: this.texts.capacity, effects: this.effects.capacity } },
       weapons: this.weapons.map(w => ({ ...w, spec: { ...w.spec } })),
       pools: { enemies: this.enemies.checkpoint(), projectiles: this.projectiles.checkpoint(p => ({ ...p, hits: Array.from(p.hits) })),
@@ -151,7 +169,11 @@ export class Battle {
   private movementSystem(): void {
     const player = this.player;
     player.previousX = player.x; player.previousY = player.y;
-    player.x += this.inputX * player.speed * STEP_SECONDS; player.y += this.inputY * player.speed * STEP_SECONDS;
+    const v = this.sonar && !this.manual ? this.steering.direction(player, this.enemies.values(), this.loot.values(), this.obstacles, this.dangerZones, this.lowOxygen, this.canCollect) : { x: this.inputX, y: this.inputY };
+    const dx = v.x * player.speed * STEP_SECONDS, dy = v.y * player.speed * STEP_SECONDS;
+    if (canMove(player, dx, dy, this.obstacles)) { player.x += dx; player.y += dy; }
+    else if (canMove(player, dx, 0, this.obstacles)) player.x += dx;
+    else if (canMove(player, 0, dy, this.obstacles)) player.y += dy;
     for (const e of this.enemies.values()) {
       e.previousX = e.x; e.previousY = e.y;
       const dx = player.x - e.x, dy = player.y - e.y, distance = Math.hypot(dx, dy);

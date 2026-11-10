@@ -25,15 +25,21 @@ export class AdService {
   private busy = false;
   private pending: { token: string; opId: string; completedInMemory: boolean } | null = null;
   constructor(private readonly economy: EconomyService, readonly driver: AdDriver, private readonly hooks: AdHooks = {}) {
-    const saved = economy.snapshot;
+    this.recoverIntent();
+  }
+  private recoverIntent(): void {
+    // A previous cancellation write may have failed. Never cancel an in-memory completed video.
+    if (this.pending) return;
+    const saved = this.economy.snapshot;
     if (saved.pendingAd) {
       const intent = saved.intents[saved.pendingAd], opId = intent.token.slice(0, -'.prepare.token'.length);
       if (intent.status === 'completed') this.pending = { token: intent.token, opId, completedInMemory: true };
-      else economy.dispatch({ type: 'ad.cancel', opId: `${opId}.cancel`, token: intent.token });
+      else this.economy.dispatch({ type: 'ad.cancel', opId: `${opId}.cancel`, token: intent.token });
     }
   }
   async watch(request: AdRequest): Promise<AdOutcome> {
     if (this.busy) throw new Error('AD_BUSY');
+    this.recoverIntent();
     if (this.pending) throw new Error('AD_CLAIM_PENDING');
     identifier(request.opId); if (request.opId.length > 100) throw new RangeError('Ad opId too long');
     this.busy = true; let token: string | undefined, started = false;

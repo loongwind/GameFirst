@@ -23,12 +23,19 @@ export class LocalDiveService {
   save(session: DiveSession): void {
     this.economy.checkpoint({ savedAt: this.now(), startedAt: this.startedAt, session: session.checkpoint() } satisfies SavedDive);
   }
+  /** Called only after the platform confirms connectivity, including a fresh already-online page. */
+  restoreConnection(session: DiveSession, videoInProgress = false): boolean {
+    const unresolvedReward = Object.values(this.economy.snapshot.intents).some(intent => intent.diveId === session.diveId &&
+      (intent.status === 'completed' || intent.status === 'claimed' && !session.hasAdToken(intent.token)));
+    return session.connectionRestored(this.now(), videoInProgress || unresolvedReward);
+  }
   reconcileAds(session: DiveSession): void {
     const pending = this.economy.snapshot.pendingAd;
     if (pending) {
       const intent = this.economy.snapshot.intents[pending];
       if (intent.status === 'completed' && this.now() <= intent.claimUntil) {
-        this.economy.dispatch({ type: 'ad.claim', opId: `recover:${pending}`, token: pending });
+        const originalOpId = pending.slice(0, -'.prepare.token'.length);
+        this.economy.dispatch({ type: 'ad.claim', opId: `${originalOpId}.claim`, token: pending });
       } else this.economy.dispatch({ type: 'ad.cancel', opId: `cancel:${pending}`, token: pending });
     }
     for (const intent of Object.values(this.economy.snapshot.intents)) {

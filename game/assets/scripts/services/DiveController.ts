@@ -12,6 +12,7 @@ import { LocalSaveService } from './local/SaveService';
 import { LocalDiveService } from './local/LocalDiveService';
 import { AdService } from './local/AdService';
 import type { AdDriver } from './local/AdService';
+import { DiveAdModel } from './local/DiveAdModel';
 
 const { ccclass } = _decorator;
 
@@ -21,6 +22,7 @@ export class DiveController extends Component {
   hud!: DiveHud;
   economy!: EconomyService;
   dives!: LocalDiveService;
+  ads!: DiveAdModel;
   private platform!: PlatformAdapter;
   private readonly subscriptions: Unsubscribe[] = [];
   private readonly keys = new Set<number>();
@@ -44,10 +46,13 @@ export class DiveController extends Component {
     this.session = this.dives.open(`dive-${Date.now()}-${Math.random().toString(36).slice(2)}`, {
       maxHp: attributeValue('hp', attrs.hp), cargoCapacity: Math.floor(attributeValue('cargo', attrs.cargo)),
       oxygenCapacity: DEFAULT_BALANCE.attributes.baseValues[5], oxygenBaseRate: 1 / (1 + DEFAULT_BALANCE.attributes.gainPerLevel[5] * attrs.oxygen),
+      battle: { obstacles: [{ x: 70, y: 180, radius: 34 }, { x: -75, y: 380, radius: 46 }], dangerZones: [{ x: 135, y: 400, radius: 60 }] },
     });
     if (this.economy.saveStatus === 'recovered') this.notice = '已恢复上一份有效存档。';
+    if (!WECHAT && navigator.onLine && this.session.pause.has('reconnect')) this.dives.restoreConnection(this.session);
     try { this.dives.reconcileAds(this.session); }
     catch { this.needsAdRecovery = true; this.session.pause.add('ad'); this.notice = '奖励确认中，请勿重复观看。'; }
+    this.ads = new DiveAdModel(this.economy, this.dives, this.session, Date.now, { started: () => this.onAdStarted(), closed: () => this.onAdClosed() });
     this.hud = new DiveHud(this.node, action => this.handleAction(action));
     this.subscriptions.push(this.platform.onHide(this.onHide), this.platform.onShow(this.onShow));
     game.on(Game.EVENT_HIDE, this.onHide); game.on(Game.EVENT_SHOW, this.onShow);
@@ -79,16 +84,17 @@ export class DiveController extends Component {
       try { this.dives.reconcileAds(this.session); this.needsAdRecovery = false; this.notice = ''; }
       catch { /* Keep the same reward and paused session retryable. */ }
     }
-    if (!this.needsAdRecovery) this.session.checkConnectionTimeout(Date.now());
+    if (!this.needsAdRecovery && !this.ads.view.rewardPending && !this.ads.view.busy) this.session.checkConnectionTimeout(Date.now());
     if (this.session.pause.paused || this.session.state !== 'Running') this.clearInput();
     else {
       const x = Number(this.keys.has(KeyCode.KEY_D) || this.keys.has(KeyCode.ARROW_RIGHT)) - Number(this.keys.has(KeyCode.KEY_A) || this.keys.has(KeyCode.ARROW_LEFT));
       const y = Number(this.keys.has(KeyCode.KEY_S) || this.keys.has(KeyCode.ARROW_DOWN)) - Number(this.keys.has(KeyCode.KEY_W) || this.keys.has(KeyCode.ARROW_UP));
-      this.session.setInput(this.pointer === undefined ? x : this.stick.x, this.pointer === undefined ? y : this.stick.y);
+      this.session.setInput(this.pointer === undefined ? x : this.stick.x, this.pointer === undefined ? y : this.stick.y, this.pointer !== undefined);
     }
     // Lifecycle gaps are wall time, never active time or foreground countdown.
     this.session.advance(this.freshFrame ? 0 : seconds);
     this.freshFrame = false;
+    if (this.session.state === 'RescuePending' && this.savedState !== 'RescuePending' && !this.ads.view.rewardPending && !this.ads.view.busy) { this.ads.notice = ''; this.notice = ''; }
     if (this.session.state === 'Returning') this.session.arriveHarbor();
     if (!this.needsAdRecovery && this.session.state === 'PendingSettlement' && Date.now() >= this.nextSettlementAttempt) {
       this.nextSettlementAttempt = Date.now() + 1000;
@@ -96,7 +102,7 @@ export class DiveController extends Component {
       catch { this.notice = '存档未确认，收获保持冻结，正在重试保存。'; }
     }
     if (this.savedState !== this.session.state || Date.now() >= this.nextSaveAt) this.saveProgress();
-    this.hud.render(this.session, this.notice);
+    this.hud.render(this.session, this.notice || this.ads.notice, this.ads.view);
   }
 
   // Service integration points: a real ad/reward service owns authorization and payout.
@@ -111,8 +117,13 @@ export class DiveController extends Component {
     return new AdService(this.economy, driver, { onAdStarted: () => this.onAdStarted(), onAdClosed: () => this.onAdClosed(),
       onReward: (_result, token) => { this.dives.applyAdReward(this.session, token); this.freshFrame = true; } });
   }
+  configureAds(driver?: AdDriver): void { this.ads.configure(driver); }
   readonly onConnectionLost = (): void => { this.clearInput(); this.session.connectionLost(Date.now()); };
-  readonly onConnectionRestored = (): void => { this.freshFrame = true; this.session.connectionRestored(Date.now()); };
+  readonly onConnectionRestored = (): void => {
+    this.freshFrame = true;
+    // A completed reward must resolve before disconnect finalization can discard its event.
+    this.dives.restoreConnection(this.session, this.ads?.view.rewardPending || this.ads?.view.busy || this.needsAdRecovery);
+  };
 
   onDestroy(): void {
     if (this.dives && this.session && !this.leavingForHarbor) this.saveProgress();
@@ -131,7 +142,7 @@ export class DiveController extends Component {
   }
 
   private readonly onHide = (): void => { this.clearInput(); this.session.hide(); this.saveProgress(); };
-  private readonly onShow = (): void => { this.freshFrame = true; this.session.checkConnectionTimeout(Date.now()); this.session.show(); };
+  private readonly onShow = (): void => { this.freshFrame = true; if (!this.needsAdRecovery && !this.ads?.view.rewardPending && !this.ads?.view.busy) this.session.checkConnectionTimeout(Date.now()); this.session.show(); };
   private readonly onBrowserFocus = (): void => { if (!document.hidden) this.onShow(); };
   private clearInput(): void {
     this.keys.clear(); this.pointer = undefined; this.stick = { x: 0, y: 0 }; this.session?.setInput(0, 0);
@@ -169,7 +180,11 @@ export class DiveController extends Component {
 
   private handleAction(action: HudAction): void {
     const s = this.session;
+    if (action === 'primary' && this.ads.view.rewardPending && !s.pause.has('background') && !s.pause.has('reconnect')) { void this.ads.retry(); return; }
     if (s.pause.has('ad') || s.pause.has('background') || s.pause.has('reconnect')) return;
+    if (action === 'sonar' && s.state === 'Running' && !s.pause.paused) { this.notice = ''; void this.ads.watch('sonar'); return; }
+    if (action === 'oxygen' && s.state === 'Running' && !s.pause.paused) { this.notice = ''; void this.ads.watch('oxygen'); return; }
+    if (action === 'dismissOxygen') { this.ads.dismissOxygen(); this.saveProgress(); return; }
     if (action === 'pause' && s.state === 'Running' && !s.pause.paused) { this.clearInput(); s.pause.add('modal'); }
     else if (action === 'return' && s.state === 'Running' && !s.pause.paused) s.requestReturn();
     else if (action === 'primary') {
@@ -182,8 +197,7 @@ export class DiveController extends Component {
         return;
       }
       if (s.state === 'RescuePending' && !s.pause.paused) {
-        this.notice = '救援服务待接入，舱内收获保持冻结。\n可等待救援或放弃返航。';
-        this.node.emit('rescue-request', s.deathSnapshot);
+        this.notice = ''; void this.ads.watch('rescue');
       } else if (s.state === 'Running' && s.pause.has('modal')) s.pause.remove('modal');
     } else if (action === 'secondary') {
       if (s.state === 'RescuePending' && !s.pause.paused) s.declineRescue();

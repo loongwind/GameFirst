@@ -23,7 +23,10 @@ export interface FloatingText extends Body { value: number; expiresTick: number 
 export interface Effect extends Body { endX: number; endY: number; expiresTick: number; kind: WeaponKind }
 export interface Player { x: number; y: number; previousX: number; previousY: number; radius: number; hp: number; speed: number }
 export interface Capacities { enemies: number; projectiles: number; loot: number; texts: number; effects: number }
+export interface TerrainCircle { x: number; y: number; radius: number }
 export interface BattleOptions {
+  obstacles?: readonly TerrainCircle[];
+  dangerZones?: readonly TerrainCircle[];
   /** Returns the amount accepted by the hold; overflow stays in the world. */
   collectLoot?: (value: number) => number;
   onKill?: (enemy: Readonly<Enemy>) => number | undefined;

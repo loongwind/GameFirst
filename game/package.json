@@ -17,6 +17,7 @@
     "typecheck:battle": "tsc --noEmit -p tsconfig.battle.json",
     "test:battle:web": "node --test tests/battle-browser.mjs",
     "test:dive:web": "node --test tests/dive.smoke.mjs",
+    "test:sonar:web": "node --test tests/sonar-ads.smoke.mjs",
     "test:economy:web": "node --test tests/economy.smoke.mjs",
     "typecheck:services": "tsc --noEmit -p tsconfig.services.json",
     "battle:serve": "node tools/battle-fixture-server.mjs",

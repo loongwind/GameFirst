@@ -42,6 +42,7 @@ function transitionFixture(loadScene) {
   const { LocalSaveService } = load(resolve(scripts, 'services/local/SaveService.ts'));
   const { LocalDiveService } = load(resolve(scripts, 'services/local/LocalDiveService.ts'));
   const { DiveController } = load(resolve(scripts, 'services/DiveController.ts'));
+  const { DiveAdModel } = load(resolve(scripts, 'services/local/DiveAdModel.ts'));
   const data = new Map();
   const economy = new EconomyService(new LocalSaveService({
     getItem: key => data.get(key) ?? null,
@@ -55,7 +56,7 @@ function transitionFixture(loadScene) {
   dives.settle(session);
   assert.equal(session.state, 'Settled');
   const controller = new DiveController();
-  Object.assign(controller, { economy, dives, session });
+  Object.assign(controller, { economy, dives, session, ads: new DiveAdModel(economy, dives, session) });
   return { controller, economy };
 }
 

@@ -4,3 +4,4 @@ export * from './EconomyService';
 export * from './model';
 export * from './AdService';
 export * from './LocalDiveService';
+export * from './DiveAdModel';
