@@ -16,6 +16,8 @@ export interface DeviceInfo {
   readonly windowWidth: number;
   readonly windowHeight: number;
   readonly pixelRatio: number;
+  /** Native menu button bounds, in window logical pixels. */
+  readonly capsule?: { readonly bottom: number };
   readonly safeArea: { readonly left: number; readonly top: number; readonly width: number; readonly height: number };
 }
 

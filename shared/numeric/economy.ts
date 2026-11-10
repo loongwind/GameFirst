@@ -22,10 +22,19 @@ export function addMoney(a: Amount, b: Amount): Amount { const n = (amount(a) + 
 export function subtractMoney(a: Amount, b: Amount): Amount {
   const n = amount(a) - amount(b); if (n < BigInt(0)) throw new RangeError('INSUFFICIENT_FUNDS'); return n.toString();
 }
+/** Cocos Babel targets rewrite ** to Math.pow, which cannot accept BigInt. */
+function exactPower(base: bigint, exponent: number): bigint {
+  let result = BigInt(1);
+  while (exponent > 0) {
+    if (exponent % 2 === 1) result *= base;
+    base *= base; exponent = Math.floor(exponent / 2);
+  }
+  return result;
+}
 export function upgradeCost(level: number, c: BalanceConfig = DEFAULT_BALANCE): Amount {
   integer(level, 0, c.attributes.maxLevel - 1);
-  const numerator = BigInt(c.attributes.baseCost) * BigInt(c.attributes.growthNumerator) ** BigInt(level);
-  const denominator = BigInt(c.attributes.growthDenominator) ** BigInt(level);
+  const numerator = BigInt(c.attributes.baseCost) * exactPower(BigInt(c.attributes.growthNumerator), level);
+  const denominator = exactPower(BigInt(c.attributes.growthDenominator), level);
   return ((numerator + denominator - BigInt(1)) / denominator).toString();
 }
 export function attributeValue(id: string, level: number, c = DEFAULT_BALANCE): number {

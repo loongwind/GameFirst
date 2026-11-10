@@ -19,7 +19,8 @@
     "test:dive:web": "node --test tests/dive.smoke.mjs",
     "test:economy:web": "node --test tests/economy.smoke.mjs",
     "typecheck:services": "tsc --noEmit -p tsconfig.services.json",
-    "battle:serve": "node tools/battle-fixture-server.mjs"
+    "battle:serve": "node tools/battle-fixture-server.mjs",
+    "test:harbor:web": "node --test tests/harbor.smoke.mjs"
   },
   "dependencies": { "@abyss-hunter/shared": "file:../shared" },
   "devDependencies": { "playwright": "1.56.1", "typescript": "5.9.3" }

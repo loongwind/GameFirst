@@ -1,0 +1,224 @@
+{
+  "source": "output/game-assets/v1/meta",
+  "textureBudgetBytes": 16777216,
+  "bundleBudgetBytes": 3145728,
+  "assets": [
+    {
+      "name": "bg_harbor_far.png",
+      "sourceSha256": "0bda50ebfd1c869428ad7f80d8ae800304920eebd0c63493e78787a6882d9cdc",
+      "width": 750,
+      "height": 1125,
+      "bytes": 906605
+    },
+    {
+      "name": "deco_harbor_left.png",
+      "sourceSha256": "813a542ec9f93daae5d811e3a3ce50dc17a79f825bc8e4644242ac423c1b06e2",
+      "width": 192,
+      "height": 768,
+      "bytes": 106349
+    },
+    {
+      "name": "deco_harbor_right.png",
+      "sourceSha256": "e0c43082e33b685bf5fab507b5ecea1df9c04c4a4f987a7e1a4bd44b8a596e7d",
+      "width": 192,
+      "height": 768,
+      "bytes": 134424
+    },
+    {
+      "name": "equip_arc.png",
+      "sourceSha256": "ef0449f74ee9c8f82e8e74c8fd3fd65e98149d6e18ca687494e8dabaf2b3de0c",
+      "width": 256,
+      "height": 256,
+      "bytes": 53492
+    },
+    {
+      "name": "equip_armor.png",
+      "sourceSha256": "4799b4446f30a3be9772278b382c4d87aaca0c4bcd1153cab6d43d81cdf8a602",
+      "width": 256,
+      "height": 256,
+      "bytes": 63872
+    },
+    {
+      "name": "equip_fin.png",
+      "sourceSha256": "d4296f8970bf09d5fb63cd5007ffc2d5d34fea760582f2c935ead33895813584",
+      "width": 256,
+      "height": 256,
+      "bytes": 38032
+    },
+    {
+      "name": "equip_magnet.png",
+      "sourceSha256": "8e03b757869411832a04b8e2b6abbc607240732d77dbe409094cceaa1df40454",
+      "width": 256,
+      "height": 256,
+      "bytes": 58069
+    },
+    {
+      "name": "equip_mine.png",
+      "sourceSha256": "e4b3317349ade4eb18c680365d4ef6d20f8777dcfd965842a61cd791bfe83f9d",
+      "width": 256,
+      "height": 256,
+      "bytes": 62151
+    },
+    {
+      "name": "equip_searchlight.png",
+      "sourceSha256": "555c084df1b8ba744ec261f2d7b286e89003ba7db20ec66310b8ae7dad39ffa0",
+      "width": 256,
+      "height": 256,
+      "bytes": 63586
+    },
+    {
+      "name": "equip_sonic.png",
+      "sourceSha256": "e441b07d5ac032efafee5cf0e7b24e48aaeab86ab707f28af8f3659f882001b2",
+      "width": 256,
+      "height": 256,
+      "bytes": 71506
+    },
+    {
+      "name": "equip_torpedo.png",
+      "sourceSha256": "d497a726555ba5c1e794266e14c949d0b5427d0611be8c10ee64b40863f523af",
+      "width": 256,
+      "height": 256,
+      "bytes": 59416
+    },
+    {
+      "name": "hero_h01_harbor.png",
+      "sourceSha256": "437325f7c4cec9f040f861331305fe077f92ef9dc60a8068c7c51a2b0bfe6b86",
+      "width": 512,
+      "height": 512,
+      "bytes": 245581
+    },
+    {
+      "name": "icon_archive.png",
+      "sourceSha256": "04557674ce7f8cf8c782a32ddf3f80b7f677a8192276a36942cba4c4adc13b82",
+      "width": 96,
+      "height": 96,
+      "bytes": 11652
+    },
+    {
+      "name": "icon_attack.png",
+      "sourceSha256": "834a849c8258c984de53aa502fda5f1e363285ffbc54d262aefc6f7cdf807593",
+      "width": 96,
+      "height": 96,
+      "bytes": 7512
+    },
+    {
+      "name": "icon_attack_speed.png",
+      "sourceSha256": "316387b7f1965508387617e087ce0a66a6925ec5b23bcec0626f63d9f9c6c56a",
+      "width": 96,
+      "height": 96,
+      "bytes": 8175
+    },
+    {
+      "name": "icon_blessing.png",
+      "sourceSha256": "d06485cfa4b87bf3b926792be8c49ce4d61eb3ce215137dee8742fbd891a533c",
+      "width": 96,
+      "height": 96,
+      "bytes": 9163
+    },
+    {
+      "name": "icon_close.png",
+      "sourceSha256": "eaa62fa8733b95040f17d5700c6b365f580e08b1cc92446611cdbebd293bbf7b",
+      "width": 96,
+      "height": 96,
+      "bytes": 11642
+    },
+    {
+      "name": "icon_core_cyan.png",
+      "sourceSha256": "89a1623d44aabe405706bd1584f30f091f00b8bf7546519e3157fa70a5a1c72c",
+      "width": 96,
+      "height": 96,
+      "bytes": 10769
+    },
+    {
+      "name": "icon_crystal.png",
+      "sourceSha256": "a7eefb620473bbf939935f0d33c2bbad97026fa97c67a93bcb805130c5667873",
+      "width": 96,
+      "height": 96,
+      "bytes": 5012
+    },
+    {
+      "name": "icon_equipment.png",
+      "sourceSha256": "e1baa3f2ea088ba6ff7a18b355f0e7aaa96b142f99b5e0cb478a9d350e04a433",
+      "width": 96,
+      "height": 96,
+      "bytes": 8410
+    },
+    {
+      "name": "icon_gift.png",
+      "sourceSha256": "41023c45b09d606df1db33699afa4a64f02d395764e8f07b648a2e77a94b58f4",
+      "width": 96,
+      "height": 96,
+      "bytes": 10977
+    },
+    {
+      "name": "icon_gold_chest.png",
+      "sourceSha256": "9b7e68c4ef147b820629b7ada3a0958bf70f7f5c0309ca4ba77d4123bca661fc",
+      "width": 96,
+      "height": 96,
+      "bytes": 11635
+    },
+    {
+      "name": "icon_locked.png",
+      "sourceSha256": "bc317fdf756c163de68ff1c60b57505a068d034f9520b5745f23ec52003eab2b",
+      "width": 96,
+      "height": 96,
+      "bytes": 8761
+    },
+    {
+      "name": "icon_marrow.png",
+      "sourceSha256": "86dbc553a7f360d618b1e55a96870ed289dc206af73d3eb87e777ef47d0af408",
+      "width": 96,
+      "height": 96,
+      "bytes": 9300
+    },
+    {
+      "name": "icon_move_speed.png",
+      "sourceSha256": "edffcdce32850afece0ecfe44e49f585293b061824dcdab62a525a20f2becd39",
+      "width": 96,
+      "height": 96,
+      "bytes": 9742
+    },
+    {
+      "name": "icon_pearl.png",
+      "sourceSha256": "d9250b07cd5bf79d40180de7c9b829c5862ca94cec8c617610b8ec0f93877c85",
+      "width": 96,
+      "height": 96,
+      "bytes": 10030
+    },
+    {
+      "name": "icon_silver_chest.png",
+      "sourceSha256": "2c3cbeea7c7cbdae3b6d37d86307edf8bbe24ed84dff17770d38f2dd0ba98a2b",
+      "width": 96,
+      "height": 96,
+      "bytes": 11593
+    },
+    {
+      "name": "icon_sonar.png",
+      "sourceSha256": "0b4fb2778034c4c137ed16bb1d0a0405fa64e27a018ad2bb756b7e7f9b5680a5",
+      "width": 96,
+      "height": 96,
+      "bytes": 8786
+    },
+    {
+      "name": "icon_supply.png",
+      "sourceSha256": "ae5c49408e710c06e88d22ec6e765e4729fac9dbe5a0ea69e1f0f6eb97fec8cd",
+      "width": 96,
+      "height": 96,
+      "bytes": 9211
+    },
+    {
+      "name": "icon_tech.png",
+      "sourceSha256": "93d62f5f3392807611d992ab87b1bb6f1d09cff4922c525519e03574e956e2d8",
+      "width": 96,
+      "height": 96,
+      "bytes": 7432
+    },
+    {
+      "name": "icon_upgrade.png",
+      "sourceSha256": "965b13947dab152915ff6652d42d847413f7d20c435b24d53f8f44bbf8e3ed55",
+      "width": 96,
+      "height": 96,
+      "bytes": 11441
+    }
+  ]
+}

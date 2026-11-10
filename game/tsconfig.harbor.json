@@ -1,0 +1,1 @@
+{"compilerOptions":{"target":"ES2020","module":"CommonJS","moduleResolution":"Node","lib":["ES2020"],"types":[],"strict":true,"skipLibCheck":true,"outDir":".artifacts/harbor","rootDir":"."},"include":["assets/scripts/meta/**/*.ts","assets/scripts/ui/harborLayout.ts"]}

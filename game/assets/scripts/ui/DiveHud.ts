@@ -110,7 +110,7 @@ export class DiveHud {
     } else if (s.state === 'PendingSettlement' || s.state === 'Settled') {
       title = s.state === 'Settled' ? '结算已确认' : '已返航 · 待结算';
       body = notice || `荧晶 ${Math.floor(s.cargo.crystal)}    珍珠 ${s.cargo.pearl}\n深海髓 ${s.cargo.marrow}    渊核 ${s.cargo.core}\n${s.state === 'Settled' ? '收获已入账，进度已保存。' : '货物已冻结，等待保存确认。'}`;
-      primary = s.state === 'Settled' ? '已安全入账' : '货物安全保留'; secondary = s.state === 'Settled' ? '' : '等待保存确认';
+      primary = s.state === 'Settled' ? '返回母港' : '货物安全保留'; secondary = s.state === 'Settled' ? '' : '等待保存确认';
     } else if (s.state === 'Returning') { title = '正在返航'; body = '正在冻结本局收获…'; primary = '返航中'; secondary = ''; }
     else if (session.pause.has('background')) { title = '已冻结现场'; body = '回到前台后倒计时恢复。'; primary = '等待回到前台'; secondary = ''; }
     else if (session.pause.has('ad')) { title = '等待补给'; body = '战斗与氧气已冻结。'; primary = '等待广告结束'; secondary = ''; }
@@ -123,7 +123,7 @@ export class DiveHud {
     if (secondary) this.box(g, l.secondary, ink, 9);
     this.labels.get('secondary')!.node.active = !!secondary;
     const blocked = session.pause.has('ad') || session.pause.has('background') || session.pause.has('reconnect');
-    const actionable = !blocked && (s.state === 'RescuePending' || (s.state === 'Running' && session.pause.has('modal')));
+    const actionable = !blocked && (s.state === 'Settled' || s.state === 'RescuePending' || (s.state === 'Running' && session.pause.has('modal')));
     this.buttons.get('primary')!.interactable = actionable;
     this.buttons.get('secondary')!.interactable = actionable && !!secondary;
   }

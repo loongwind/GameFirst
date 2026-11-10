@@ -1,4 +1,4 @@
-import { _decorator, Component, EventKeyboard, EventTouch, Game, game, input, Input, KeyCode, Node, UITransform, Vec3 } from 'cc';
+import { _decorator, Component, EventKeyboard, EventTouch, Game, game, input, Input, KeyCode, Node, UITransform, Vec3, director } from 'cc';
 import { WECHAT } from 'cc/env';
 import { DiveSession } from '../battle/DiveSession';
 import { joystickVector } from '../battle/input';
@@ -32,6 +32,7 @@ export class DiveController extends Component {
   private nextSaveAt = 0;
   private nextSettlementAttempt = 0;
   private needsAdRecovery = false;
+  private leavingForHarbor = false;
 
   onLoad(): void {
     this.platform = createPlatformAdapter(WECHAT ? 'wechat' : 'browser');
@@ -114,7 +115,7 @@ export class DiveController extends Component {
   readonly onConnectionRestored = (): void => { this.freshFrame = true; this.session.connectionRestored(Date.now()); };
 
   onDestroy(): void {
-    if (this.dives && this.session) this.saveProgress();
+    if (this.dives && this.session && !this.leavingForHarbor) this.saveProgress();
     this.subscriptions.forEach(off => off());
     game.off(Game.EVENT_HIDE, this.onHide); game.off(Game.EVENT_SHOW, this.onShow);
     input.off(Input.EventType.KEY_DOWN, this.keyDown, this); input.off(Input.EventType.KEY_UP, this.keyUp, this);
@@ -136,6 +137,7 @@ export class DiveController extends Component {
     this.keys.clear(); this.pointer = undefined; this.stick = { x: 0, y: 0 }; this.session?.setInput(0, 0);
   }
   private saveProgress(): void {
+    if (this.leavingForHarbor) return;
     this.nextSaveAt = Date.now() + 15_000;
     try {
       if (this.session.state === 'RescuePending') this.economy.dispatch({ type: 'telemetry.record', opId: `death:${this.session.deathEventId}`,
@@ -171,6 +173,14 @@ export class DiveController extends Component {
     if (action === 'pause' && s.state === 'Running' && !s.pause.paused) { this.clearInput(); s.pause.add('modal'); }
     else if (action === 'return' && s.state === 'Running' && !s.pause.paused) s.requestReturn();
     else if (action === 'primary') {
+      if (s.state === 'Settled') {
+        try {
+          this.economy.checkpoint(null); this.leavingForHarbor = true;
+          const started = director.loadScene('Harbor', error => { if (error) { this.leavingForHarbor = false; this.notice = '母港暂未就绪，请重试。'; this.saveProgress(); } });
+          if (!started) { this.leavingForHarbor = false; this.notice = '母港正在加载，请稍后重试。'; this.saveProgress(); }
+        } catch { this.notice = '本地保存未确认，请重试返回母港。'; }
+        return;
+      }
       if (s.state === 'RescuePending' && !s.pause.paused) {
         this.notice = '救援服务待接入，舱内收获保持冻结。\n可等待救援或放弃返航。';
         this.node.emit('rescue-request', s.deathSnapshot);
