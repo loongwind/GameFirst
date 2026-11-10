@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>P1-02 战斗算法验证</title>
+<style>
+  * { box-sizing: border-box; } body { margin: 0; color: #d8f3ef; background: #06141d; font: 14px system-ui, sans-serif; }
+  main { max-width: 760px; margin: 16px auto; padding: 0 12px; } h1 { font-size: 20px; }
+  form { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+  input, select, button { font: inherit; padding: 5px; } input[type=number] { width: 90px; }
+  canvas { display: block; width: 100%; background: #081f2c; border: 1px solid #255062; touch-action: none; }
+  #metrics { white-space: pre-wrap; font: 12px ui-monospace, monospace; min-height: 50px; }
+  p { color: #a2b8c0; line-height: 1.6; }
+</style>
+<main>
+  <h1>潜渊猎手 · 战斗算法验证</h1>
+  <form>
+    <label>怪物 <select name="enemies"><option>40</option><option selected>80</option></select></label>
+    <label>Seed <input name="seed" type="number" value="7"></label>
+    <label><input name="stress" type="checkbox" value="1" checked>持续满载 200 弹 / 100 掉落</label>
+    <button>重新运行</button>
+  </form>
+  <canvas width="720" height="680" aria-label="战斗与虚拟摇杆"></canvas>
+  <p>左下拖动摇杆，或用方向键 / WASD 移动。青环：声波；黄色：鱼雷；紫线：链电；橙圈：浮雷。满载模式逐帧补充所有对象，用于压力测试；取消后观察四武器正常战斗。此页为开发夹具，参数不代表正式平衡。</p>
+  <output id="metrics"></output>
+</main>
+<script type="module" src="/tests/fixtures/battle-fixture.js"></script>
+</html>

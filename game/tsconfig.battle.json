@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "target": "ES2020", "module": "CommonJS", "lib": ["ES2020"], "types": [],
+    "strict": true, "skipLibCheck": true, "outDir": ".artifacts/battle",
+    "rootDir": "assets/scripts/battle"
+  },
+  "include": ["assets/scripts/battle/**/*.ts"]
+}

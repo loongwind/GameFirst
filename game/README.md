@@ -3,6 +3,11 @@
 P1-01 工程骨架：Boot 初始化真实浏览器适配层后保持空场景；Dive / Harbor
 只保留 Canvas 与 Camera。后续玩法在这些场景与模块上实现。
 
+P1-02 已加入纯数据战斗核心及独立浏览器验证页，入口为
+`assets/scripts/battle/index.ts`。使用契约、压测复现与性能记录见
+[battle-verification.md](docs/battle-verification.md)。运行 `npm run battle:serve`
+可查看四武器、摇杆及持续 80/200/100 满载夹具；此页不进入正式发布包。
+
 ## 环境与复现
 
 - Cocos Creator **3.8.8**，完整 editor/engine 指纹见 `editor-version.json`。
