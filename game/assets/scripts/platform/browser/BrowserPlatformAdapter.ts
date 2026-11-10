@@ -1,4 +1,6 @@
 import type { DeviceInfo, PlatformAdapter, PlatformStorage, Unsubscribe } from '../PlatformAdapter';
+import type { DepthPosterData, PosterImage } from '../PlatformAdapter';
+import { renderDepthPoster } from './DepthPoster';
 
 /** Real browser platform, not a reward/storage simulator. */
 export class BrowserPlatformAdapter implements PlatformAdapter {
@@ -28,6 +30,19 @@ export class BrowserPlatformAdapter implements PlatformAdapter {
   onShow(listener: () => void): Unsubscribe {
     this.showListeners.add(listener);
     return () => { this.showListeners.delete(listener); };
+  }
+
+  createDepthPoster(record: DepthPosterData): PosterImage { return renderDepthPoster(this.host.document, record); }
+  async saveDepthPoster(record: DepthPosterData): Promise<{ filename: string }> {
+    if (this.disposed) throw new Error('PLATFORM_DISPOSED');
+    const poster = this.createDepthPoster(record);
+    const binary = this.host.atob(poster.dataUrl.split(',')[1]);
+    const bytes = Uint8Array.from(binary, char => char.charCodeAt(0));
+    const url = URL.createObjectURL(new Blob([bytes], { type: 'image/png' }));
+    const link = this.host.document.createElement('a'); link.download = poster.filename; link.href = url;
+    try { this.host.document.body.appendChild(link); link.click(); }
+    finally { link.remove(); this.host.setTimeout(() => URL.revokeObjectURL(url), 1000); }
+    return { filename: poster.filename };
   }
 
   onHide(listener: () => void): Unsubscribe {

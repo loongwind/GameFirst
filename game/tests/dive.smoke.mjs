@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
-import { withBrowser } from './browser-helpers.mjs';
+import { withBrowser, enterBuiltScene } from './browser-helpers.mjs';
 
 const target = process.env.WEB_TARGET || 'web-debug';
 const root = fileURLToPath(new URL(`../build/${target}`, import.meta.url));
@@ -16,7 +16,7 @@ test(`${target}: real Cocos Dive renders HUD, accepts touches and preserves over
     const boot = page.waitForEvent('console', { predicate: e => e.text() === '[Boot] ready (browser); protocol=1', timeout: 30_000 });
     await page.goto(url); await boot;
     console.info('Dive acceptance: Boot ready');
-    await page.evaluate(async () => { const { director } = await System.import('cc'); await new Promise((resolve, reject) => director.loadScene('Dive', error => error ? reject(error) : resolve())); });
+    await enterBuiltScene(page, 'Dive');
     assert.equal(await page.evaluate(async () => { const { director } = await System.import('cc'); return !!director.getScene().getChildByName('Canvas').getComponent('DiveController')?.session; }), true);
     console.info('Dive acceptance: scene loaded');
     await mkdir(artifacts, { recursive: true });

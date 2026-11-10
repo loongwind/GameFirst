@@ -6,3 +6,4 @@ export * from './AdService';
 export * from './LocalDiveService';
 export * from './DiveAdModel';
 export * from './CombatLoadout';
+export * from './Objectives';

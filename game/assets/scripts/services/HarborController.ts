@@ -66,7 +66,7 @@ export class HarborController extends Component {
       this.loading?.dispose(); this.loading = undefined;
       this.view = new HarborView(this.node, this.model, this.frames, this.font, () => {
         director.loadScene('Dive', error => { if (error && !this.dead) { this.model.notice = '潜航资源未就绪，请稍后重试。'; this.view?.open('supply'); } });
-      });
+      }, { create: record => this.platform.createDepthPoster(record), save: record => this.platform.saveDepthPoster(record) });
       this.update();
     } catch (error) {
       if (!this.dead) {

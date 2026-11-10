@@ -27,7 +27,9 @@ test('rescue-pending checkpoint reopens into the same death choice; decline pres
   assert.equal(next.dives.settle(restored), true); assert.equal(restored.state, 'Settled');
   assert.deepEqual(next.economy.snapshot.wallet, { crystal: '0', pearl: '2', marrow: '3', core: '1' });
   const again = env(storage); const reopened = again.dives.open('next');
-  again.dives.settle(restored); assert.equal(again.economy.snapshot.wallet.pearl, '2'); assert.notEqual(reopened.diveId, 'death-save');
+  again.dives.settle(restored); assert.equal(again.economy.snapshot.wallet.pearl, '2'); assert.equal(reopened.diveId, 'death-save');
+  assert.equal(reopened.state, 'Settled');
+  again.economy.checkpoint(null); assert.notEqual(again.dives.open('next').diveId, 'death-save');
 });
 test('settlement failure cannot confirm; crash after payout before ack reuses persisted receipt', () => {
   const { storage, dives, economy } = env(); const s = dives.open('atomic', { battle: { spawn: false } });

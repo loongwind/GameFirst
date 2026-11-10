@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { withBrowser } from './browser-helpers.mjs';
+import { withBrowser, enterBuiltScene } from './browser-helpers.mjs';
 
 const target = process.env.WEB_TARGET || 'web-debug';
 if (!['web-debug', 'web-release'].includes(target)) throw new Error('Invalid WEB_TARGET');
@@ -24,6 +24,7 @@ test(`${target}: Boot starts in the browser, renders frames, and loads Dive/Harb
     });
     await page.goto(url);
     await ready;
+    await enterBuiltScene(page, 'Dive');
     const state = await page.evaluate(async () => {
       const { director, Director } = await System.import('cc');
       await new Promise(resolve => {
@@ -38,14 +39,14 @@ test(`${target}: Boot starts in the browser, renders frames, and loads Dive/Harb
       });
       return { scene: director.getScene().name, frames: director.getTotalFrames(), canvasWidth: document.querySelector('canvas').width, canvasHeight: document.querySelector('canvas').height };
     });
-    assert.equal(state.scene, 'Boot');
+    assert.equal(state.scene, 'Dive');
     assert.ok(state.frames > 5);
     assert.ok(state.canvasWidth > 0 && state.canvasHeight > 0);
     assert.ok(logs.some(line => line === '[Boot] ready (browser); protocol=1'), `Boot init missing: ${logs}`);
     await mkdir(artifacts, { recursive: true });
     await page.screenshot({ path: path.join(artifacts, `boot-${target}.png`) });
     const scenes = [];
-    for (const scene of ['Dive', 'Harbor', 'Boot']) {
+    for (const scene of ['Harbor', 'Dive']) {
       const loaded = await page.evaluate(async name => {
         const { director } = await System.import('cc');
         return new Promise((resolve, reject) => director.loadScene(name, error => {

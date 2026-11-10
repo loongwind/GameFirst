@@ -4,6 +4,8 @@ import { hudLayout } from './hudLayout';
 import type { HudInsets, HudLayout, HudRect } from './hudLayout';
 import type { DiveAdView } from '../services/local/DiveAdModel';
 import { SeaWorldView } from './SeaWorldView';
+import type { LocalState } from '../services/local/model';
+import { objectiveTasks, tutorialHint } from '../services/local/Objectives';
 
 const ink = new Color(7, 25, 35), panel = new Color(15, 43, 54), line = new Color(43, 82, 90);
 const mint = new Color(105, 233, 198), cream = new Color(233, 240, 218), muted = new Color(126, 165, 169);
@@ -26,6 +28,7 @@ export class DiveHud {
   private width = 0;
   private height = 0;
   private insetsKey = '';
+  private depositStarted = 0;
 
   constructor(parent: Node, private readonly action: (action: HudAction) => void) {
     this.sea = new SeaWorldView(parent);
@@ -57,6 +60,7 @@ export class DiveHud {
     this.label('layer', '透光层', l.left + 20, l.joystick.y - 44, 220, 20, 11, muted);
     this.label('hint', '向下探索 · 留意氧气与舱容', l.left + 20, l.joystick.y - 25, 280, 20, 11, muted);
     this.label('feedback', '', l.left + 20, l.joystick.y - 84, 285, 38, 12, amber);
+    this.label('guidance', '', l.left + 30, l.top + 240, 271 - l.left - l.right, 100, 12, cream);
     for (let d = 0; d <= 2000; d += 500) this.label(`mark-${d}`, String(d), 300 - l.right, l.rail.y + d / 2400 * l.rail.height - 5, 35, 18, 9, muted);
     this.button('pause', l.pause, '暂停', this.root);
     this.button('return', l.return, '安全返航 ↑', this.root);
@@ -82,7 +86,7 @@ export class DiveHud {
     this.overlay.active = false;
   }
 
-  render(session: DiveSession, notice = '', ads?: DiveAdView): void {
+  render(session: DiveSession, notice = '', ads?: DiveAdView, state?: LocalState): void {
     const s = session.snapshot, l = this.layout, g = this.chrome;
     this.sea.render(session);
     this.drawWorld(session);
@@ -109,6 +113,12 @@ export class DiveHud {
     this.set('sonar', seconds ? `声呐 ${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')} · ${session.battle.movementMode === 'manual' ? '手动接管' : seconds <= 60 ? '可刷新' : '自动移动'}` : '声呐协击 · 观看开启15分钟');
     this.buttons.get('sonar')!.interactable = s.state === 'Running' && !session.pause.paused && !!ads?.sonarRefreshable;
     this.oxygenCard.active = !!ads?.oxygenPrompt && s.state === 'Running' && !session.pause.paused;
+    const tutorial = state ? tutorialHint(state, s.activeSeconds) : '';
+    const tasks = state ? objectiveTasks(state) : [], task = tasks.find(t => t.kind === 'first-day');
+    const guidance = state && s.state === 'Running' && !this.oxygenCard.active && !session.pause.paused ?
+      tutorial || (task ? `${task.title}  ${task.progress}/${task.target}\n${task.ready ? '返港领取任务奖励 · +20XP' : `每 500m 打卡 · 当前纪录 ${state.objectives.record?.depth ?? 0}m`}` : '') : '';
+    if (guidance) this.box(g, { x: l.left + 18, y: l.top + 234, width: 295 - l.left - l.right, height: 85 }, new Color(5, 27, 40, 225), 10);
+    this.set('guidance', guidance);
     this.set('oxygenBody', `观看后立即回满 · 今日剩余 ${ads?.oxygenRemaining ?? 0}/3\n可关闭提示，摇杆与返航始终可用。`);
     this.buttons.get('oxygen')!.interactable = (ads?.oxygenRemaining ?? 0) > 0;
     this.set('feedback', s.state === 'Running' && !session.pause.paused ? notice : '');
@@ -123,7 +133,14 @@ export class DiveHud {
     g.strokeColor = line; g.lineWidth = 2; g.circle(cx - 187.5, l.height / 2 - cy, 54); g.stroke();
     g.circle(cx - 187.5, l.height / 2 - cy, 32); g.stroke();
     this.dot(g, cx, cy - 22, 3, mint);
-    this.drawModal(session, notice, ads);
+    let settlementNotice = notice;
+    const first = state?.objectives.tutorial.diveId === session.diveId && state.objectives.tutorial.rewarded && state.events.some(e => e.name === 'deposit_done' && e.properties.dive_id === session.diveId && e.properties.tutorial_reward);
+    if (s.state === 'Settled' && first) {
+      if (!this.depositStarted) this.depositStarted = Date.now();
+      const value = Math.min(500, Math.floor(500 * (Date.now() - this.depositStarted) / 700));
+      settlementNotice = notice || `首次入账  +${value} 荧晶\n教学统一奖励 500，替代本局荧晶拾取。\n返回母港强化舱容或氧效，再次出发。`;
+    }
+    this.drawModal(session, settlementNotice, ads);
   }
 
   destroy(): void { this.sea.destroy(); if (isValid(this.root, true)) this.root.destroy(); }

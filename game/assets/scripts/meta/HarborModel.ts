@@ -3,6 +3,7 @@ import type { Equipment } from '@abyss-hunter/shared';
 import type { Action, LocalState, CommandResult, AdSlot, AdContext } from '../services/local/model';
 import type { AdOutcome, AdRequest } from '../services/local/AdService';
 import { businessDay } from '../services/local/EconomyService';
+import { objectiveTasks } from '../services/local/Objectives';
 
 export type Phase = 'loading' | 'empty' | 'error' | 'normal';
 export type HarborCommand = Action extends infer A ? A extends Action ? Omit<A, 'opId'> : never : never;
@@ -59,8 +60,8 @@ export class HarborModel {
     if (s.playerLevel < DEFAULT_BALANCE.ads.unlockLevel || (slot === 'silver' || slot === 'gold') && s.playerLevel < DEFAULT_BALANCE.equipment.unlockLevel) return 0;
     return Math.max(0, DEFAULT_BALANCE.ads.slots[slot] - (s.daily[businessDay(this.now())]?.[slot] ?? 0));
   }
-  /** Optional ads, archive and paid upgrades never create task dots. P1 has no daily task authority. */
-  redDots(): string[] { return []; }
+  /** Only earned, unclaimed task rewards create a dot. */
+  redDots(): string[] { return objectiveTasks(this.snapshot).some(t => t.ready) ? ['tasks'] : []; }
   buffSeconds(kind: 'blessing' | 'sonar'): number {
     const s = this.snapshot, expiresAt = kind === 'sonar' ? s.buffs.sonarUntil : s.buffs.blessing?.expiresAt ?? 0;
     return Math.max(0, Math.ceil((expiresAt - this.now()) / 1000));
@@ -89,7 +90,7 @@ export class HarborModel {
       this.notice = this.adPending ? '装备已合成，请返回补给重试原奖励，无需再次观看。' : result.itemIds ? `已入库 ${result.itemIds.length} 件装备，余额已确认。` : '操作已确认，进度已保存。';
     } catch (error) {
       // Definite validation rejections did not commit. Ambiguous storage/network failures retain opId.
-      if (error instanceof Error && /^(INSUFFICIENT_FUNDS|LEVEL_LOCKED|INVENTORY_FULL|PREREQUISITE|INVALID_TECH|INSUFFICIENT_TICKETS|ITEM_NOT_FOUND|INVALID_SLOT)$/.test(error.message)) this.pending = undefined;
+      if (error instanceof Error && /^(INSUFFICIENT_FUNDS|LEVEL_LOCKED|INVENTORY_FULL|PREREQUISITE|INVALID_TECH|INSUFFICIENT_TICKETS|ITEM_NOT_FOUND|INVALID_SLOT|TASK_INELIGIBLE|ACTIVE_DIVE)$/.test(error.message)) this.pending = undefined;
       this.phase = 'error'; this.notice = message(error);
     }
     finally { this.busy = false; this.emit(); }

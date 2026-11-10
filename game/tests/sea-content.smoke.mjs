@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { mkdir, writeFile, readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
-import { withBrowser } from './browser-helpers.mjs';
+import { withBrowser, enterBuiltScene } from './browser-helpers.mjs';
 
 const target = process.env.WEB_TARGET || 'web-debug';
 const root = fileURLToPath(new URL(`../build/${target}`, import.meta.url));
@@ -10,10 +10,9 @@ const artifacts = fileURLToPath(new URL('../.artifacts/sea-content/', import.met
 const manifest = JSON.parse(await readFile(new URL('../sea-assets.json', import.meta.url), 'utf8'));
 async function boot(page, url) {
   const ready = page.waitForEvent('console', { predicate: m => m.text().startsWith('[Boot] ready'), timeout: 30000 });
-  await page.goto(url); await ready;
+  await page.goto(url); await ready; await enterBuiltScene(page, 'Dive');
   await page.evaluate(async () => {
     window.cc = await System.import('cc');
-    await new Promise((resolve, reject) => window.cc.director.loadScene('Dive', e => e ? reject(e) : resolve()));
     window.c = window.cc.director.getScene().getChildByName('Canvas').getComponent('DiveController');
   });
   await seaReady(page);
@@ -168,13 +167,16 @@ test(`${target}: harbor fast farm, unload, real upgrades/tech/equipment then des
       if (result.progress.defeatedBosses.length === 4 && result.depth === 2400) break;
       if (chunk === 119) assert.fail(`did not complete depth loop: ${JSON.stringify(result)}`);
     }
-    const before = await page.evaluate(() => { window.c.dives.save(window.c.session); return { snapshot: window.c.session.snapshot, progress: window.c.session.content, tick: window.c.session.battle.tick }; });
+    const before = await page.evaluate(() => { window.c.dives.save(window.c.session); return { snapshot: window.c.session.snapshot, progress: window.c.session.content, tick: window.c.session.battle.tick, objectives: window.c.economy.snapshot.objectives }; });
     assert.equal(before.progress.defeatedBosses.length, 4); assert.equal(before.snapshot.cargo.pearl, 8); assert.equal(before.snapshot.cargo.core >= 4, true);
+    assert.deepEqual(before.objectives.milestones, [500, 1000, 1500, 2000]);
+    assert.equal(before.objectives.record.depth, 2400);
+    assert.equal(before.objectives.bossKills, 4);
     const reloaded = page.waitForEvent('console', { predicate: m => m.text().startsWith('[Boot] ready'), timeout: 30000 });
-    await page.reload(); await reloaded;
+    await page.reload(); await reloaded; await enterBuiltScene(page, 'Dive');
     // Boot opens normally after refresh; restore the same active dive through the production service.
     await page.evaluate(async () => {
-      window.cc = await System.import('cc'); await new Promise((resolve, reject) => window.cc.director.loadScene('Dive', e => e ? reject(e) : resolve()));
+      window.cc = await System.import('cc');
       window.c = window.cc.director.getScene().getChildByName('Canvas').getComponent('DiveController'); window.c.enabled = false;
     });
     await seaReady(page);

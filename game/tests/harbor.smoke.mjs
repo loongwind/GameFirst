@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
-import { withBrowser } from './browser-helpers.mjs';
+import { withBrowser, enterBuiltScene } from './browser-helpers.mjs';
 const target = process.env.WEB_TARGET || 'web-debug';
 const root = fileURLToPath(new URL(`../build/${target}`, import.meta.url));
 const artifacts = fileURLToPath(new URL('../.artifacts/harbor-ui/', import.meta.url));
@@ -23,8 +23,7 @@ test(`${target}: real Cocos harbor panels, safe areas, commands, virtual invento
     };
     await page.goto(url); await boot;
     await page.evaluate(async () => { window.acceptCc = await System.import('cc'); });
-    await page.waitForFunction(() => { const find = n => n.name === 'EnterHarbor' || n.children.some(find); return find(window.acceptCc.director.getScene()); });
-    await click('EnterHarbor');
+    await enterBuiltScene(page, 'Harbor');
     await page.waitForFunction(() => window.acceptCc.director.getScene().name === 'Harbor');
     await page.evaluate(async () => { const { director } = await System.import('cc'); window.harborController = director.getScene().getChildByName('Canvas').getComponent('HarborController'); });
     await page.waitForFunction(() => !!window.harborController.view, null, { timeout: 30000 });

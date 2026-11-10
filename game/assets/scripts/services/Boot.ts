@@ -4,6 +4,8 @@ import { WECHAT } from 'cc/env';
 import { PROTOCOL_VERSION } from '@abyss-hunter/shared';
 import { createPlatformAdapter } from '../platform/createPlatformAdapter';
 import type { PlatformAdapter } from '../platform/PlatformAdapter';
+import { EconomyService } from './local/EconomyService';
+import { LocalSaveService } from './local/SaveService';
 
 const { ccclass } = _decorator;
 
@@ -19,6 +21,11 @@ export class Boot extends Component {
   }
 
   start(): void {
+    const economy = new EconomyService(new LocalSaveService(this.platform!.storage));
+    const state = economy.snapshot;
+    if (state.activeDive || state.objectives.tutorial.active && state.objectives.tutorial.step < 5) {
+      director.loadScene('Dive'); return;
+    }
     const canvas = this.node.getChildByName('Canvas')!;
     const root = new UiScope(canvas, new Map()).node('StartTerminal');
     const size = canvas.getComponent(UITransform)!.contentSize;

@@ -6,8 +6,11 @@ import type { HarborCommand } from '../meta/HarborModel';
 import { harborLayout } from './harborLayout';
 import type { HarborInsets, Rect } from './harborLayout';
 import { UiScope, VirtualRows, C } from './HarborKit';
-export type Panel = 'upgrade' | 'tech' | 'equipment' | 'supply' | 'archive';
-const TITLES: Record<Panel, string> = { upgrade: '机体强化', tech: '潜航科技', equipment: '挂载装备', supply: '远航补给', archive: '探索档案' };
+import { objectiveTasks, tutorialHint } from '../services/local/Objectives';
+import { depthPosterView } from './DepthPosterView';
+import type { PosterPort } from './DepthPosterView';
+export type Panel = 'upgrade' | 'tech' | 'equipment' | 'supply' | 'archive' | 'tasks' | 'poster';
+const TITLES: Record<Panel, string> = { upgrade: '机体强化', tech: '潜航科技', equipment: '挂载装备', supply: '远航补给', archive: '探索档案', tasks: '潜航目标', poster: '新的深度纪录' };
 const EQUIP_ICON: Record<string, string> = { light: 'equip_searchlight' };
 const r = (x: number, y: number, width: number, height: number): Rect => ({ x, y, width, height });
 /** Scene-native UI. Base navigation survives overlay close; each overlay has its own subscription scope. */
@@ -29,8 +32,9 @@ export class HarborView {
   private signature = '';
   private lists: VirtualRows[] = [];
   private timers: Label[] = [];
+  private shownRecord = 0;
   constructor(private readonly parent: Node, readonly model: HarborModel, private readonly frames: ReadonlyMap<string, SpriteFrame>, private readonly font: BitmapFont | undefined,
-    private readonly launch: () => void) {
+    private readonly launch: () => void, private readonly posterPort?: PosterPort) {
     this.root = new Node('HarborRoot'); this.root.layer = parent.layer; parent.addChild(this.root); this.root.addComponent(UITransform).setAnchorPoint(0, 1);
     this.offBase = model.subscribe(() => { this.panelDirty = true; });
   }
@@ -46,9 +50,17 @@ export class HarborView {
   update(): void {
     if (this.panelDirty) { this.panelDirty = false; this.buildBase(); this.drawPanel(); }
     this.timers.forEach((label, i) => { const seconds = this.model.buffSeconds(i === 0 ? 'blessing' : 'sonar'); label.string = seconds ? `生效中 ${Math.floor(seconds / 60)}分${seconds % 60}秒` : '当前未激活'; });
+    const p = this.model.snapshot.objectives;
+    if (!this.panel && !this.model.hasPending && p.record && p.record.depth > Math.max(p.posterSeen, this.shownRecord)) {
+      this.shownRecord = p.record.depth; this.open('poster');
+    }
   }
   open(panel: Panel, supplyFocus = 0): void { this.supplyFocus = supplyFocus; this.panel = panel; this.mergeConfirm = false; this.drawPanel(); }
-  close(): void { this.overlay?.dispose(); this.overlay = undefined; this.lists = []; this.timers = []; this.panel = undefined; }
+  close(): void {
+    const depth = this.panel === 'poster' ? this.model.snapshot.objectives.record?.depth : undefined;
+    this.overlay?.dispose(); this.overlay = undefined; this.lists = []; this.timers = []; this.panel = undefined;
+    if (depth) void this.model.execute({ type: 'poster.dismiss', depth });
+  }
   destroy(): void { this.close(); this.offBase?.(); this.base?.dispose(); this.root.destroy(); }
   private scope(name: string): UiScope {
     const n = new Node(name); n.layer = this.parent.layer; this.root.addChild(n); n.addComponent(UITransform).setAnchorPoint(0, 1);
@@ -86,7 +98,14 @@ export class HarborView {
     const heroY = Math.max(l.top + 186, l.navY - 352);
     s.icon('hero_h01_harbor', 72, heroY, 230, 230);
     s.text('SubDisplay', 'H-01  ·  潮汐号', 104, Math.min(heroY + 222, l.navY - 123), 175, 28, 17, C.text);
-    s.text('TaskStrip', state.activeDive ? '潜航现场已保存 · 继续原航程' : '自动攻击已就绪 · 随时出发', l.left + 12, l.navY - 113, 280, 24, 12, C.text);
+    const tasks = objectiveTasks(state), task = tasks.find(t => t.ready) ?? tasks.find(t => t.kind === 'rotation');
+    s.button('TaskStrip', r(l.left, l.navY - 124, 375 - l.left - l.right - 72, 44), task ? `${task.ready ? '● 可领取' : '目标'} ${task.title} ${task.progress}/${task.target}` : '潜航目标 · 查看首日进度', () => this.open('tasks'));
+    const hint = tutorialHint(state);
+    if (hint) {
+      const guide = s.box('HarborTutorial', r(l.left, l.top + 190, 375 - l.left - l.right, 115));
+      s.text('TutorialHint', hint, 12, 4, 309 - l.left - l.right, 54, 13, C.mint, guide);
+      s.button('tutorial-next', r(12, 61, 351 - l.left - l.right, 44), state.objectives.tutorial.upgraded ? '再次出发 · 自由探索' : '强化推荐 · 舱容 / 氧效', () => this.model.snapshot.objectives.tutorial.upgraded ? this.launch() : this.open('upgrade'), !this.model.hasPending && !this.model.busy, guide, true);
+    }
     s.button('LaunchButton', l.targets.launch, state.activeDive ? '继续潜航   ↓' : '出发 · 探索透光层   ↓', () => { if (!this.model.busy && !this.model.hasPending) this.launch(); }, !this.model.busy && !this.model.hasPending, undefined, true);
     if (this.overlay) this.overlay.root.setSiblingIndex(this.root.children.length - 1);
   }
@@ -117,8 +136,14 @@ export class HarborView {
     else if (this.panel === 'tech') this.tech(body, p.width, p.height);
     else if (this.panel === 'equipment') this.equipment(body, p.width, p.height);
     else if (this.panel === 'supply') this.supply(body, p.width, p.height);
-    else this.fourState(body, 'empty', 'P1 档案尚未开放\n图鉴 / 共生体 / 好友榜 / 海报\n继续下潜，期待下一次发现。', 120, p.height - 200);
-    if (this.model.notice && this.panel !== 'equipment') body.text('Notice', this.model.notice, 16, statusY, p.width - 32, 44, 11, C.mint);
+    else if (this.panel === 'tasks') this.tasks(body, p.width, p.height);
+    else if (this.panel === 'poster' && state.objectives.record && this.posterPort) depthPosterView(body, p.width, p.height, state.objectives.record, this.posterPort);
+    else {
+      body.text('ArchiveRecord', `最深纪录 ${state.objectives.record?.depth ?? 0}m\n打卡 ${state.objectives.milestones.join(' / ') || '尚未到达 500m'}\n完整首日航程 ${state.objectives.completedDives.length}/3`, 20, 100, p.width - 40, 100, 15, C.mint);
+      body.button('open-poster', r(16, 220, p.width - 32, 48), '查看深度海报', () => this.open('poster'), !!state.objectives.record);
+      body.button('open-tasks', r(16, 280, p.width - 32, 48), '查看潜航目标', () => this.open('tasks'));
+    }
+    if (this.model.notice && !['equipment', 'tasks', 'poster'].includes(this.panel)) body.text('Notice', this.model.notice, 16, statusY, p.width - 32, 44, 11, C.mint);
   }
   private fourState(s: UiScope, phase: 'loading' | 'empty' | 'error', text: string, y: number, height: number): void {
     const title = phase === 'loading' ? '正在连接潜航终端…' : phase === 'error' ? '暂未确认' : '等待新的发现';
@@ -131,6 +156,7 @@ export class HarborView {
   }
   private upgrade(s: UiScope, width: number, height: number): void {
     const rows = this.model.attributes();
+    if (this.model.snapshot.objectives.tutorial.active && this.model.snapshot.objectives.tutorial.step === 5) rows.sort((a, b) => Number(!['cargo', 'oxygen'].includes(a.id)) - Number(!['cargo', 'oxygen'].includes(b.id)));
     this.list(s, 'UpgradeRows', r(12, 88, width - 24, height - 148), rows.length, 86, (row, i) => {
       const a = rows[i]; row.box('UpgradeRow', r(0, 0, width - 24, 80));
       row.text('Attribute', `${a.title}  Lv.${a.level}`, 12, 5, 205, 24, 15);
@@ -138,6 +164,18 @@ export class HarborView {
       row.text('EstimatedCost', a.maxed ? '已达上限' : `预估 ${a.cost.crystal} 荧晶${a.cost.core !== '0' ? ` + ${a.cost.core} 渊核` : ''}`, 12, 53, 200, 21, 11, C.amber);
       row.button(`upgrade-${a.id}`, r(width - 116, 17, 80, 48), '强化', () => this.command({ type: 'attribute.upgrade', attribute: a.id }), !a.maxed);
     });
+  }
+  private tasks(s: UiScope, width: number, height: number): void {
+    const rows = objectiveTasks(this.model.snapshot);
+    this.list(s, 'ObjectiveRows', r(12, 88, width - 24, Math.max(70, height - 226)), rows.length, 116, (row, i) => {
+      const task = rows[i];
+      row.text(`task-${task.kind}`, `${task.title}\n${task.progress} / ${task.target} · 成功领奖 +20XP`, 6, 0, width - 36, 55, 14, task.ready ? C.mint : C.text);
+      row.button(`claim-${task.kind}`, r(6, 59, width - 36, 44), task.claimed ? '已领取' : task.ready ? '领取奖励' : '继续探索', () => this.command({ type: 'task.claim', taskId: task.id }), task.ready && !this.model.busy && !this.model.hasPending);
+    });
+    s.text('FirstDayRule', '击杀后主动返航并结算计为一潜；救援继续原局。', 18, height - 132, width - 36, 42, 11, C.muted);
+    s.button('replay-tutorial', r(18, height - 86, width - 36, 48), '重放首潜教学 · 首次奖励仅一次', () => {
+      void this.model.execute({ type: 'tutorial.replay' }).then(() => { if (!this.model.hasPending && this.model.phase === 'normal') this.launch(); });
+    }, !this.model.busy && !this.model.hasPending && !this.model.snapshot.activeDive);
   }
   private tech(s: UiScope, width: number, height: number): void {
     DEFAULT_BALANCE.tech.trees.forEach((tree, i) => s.button(`tree-${tree}`, r(12 + i * (width - 24) / 5, 87, (width - 24) / 5 - 3, 44), TREE_NAMES[tree], () => { this.tree = tree; this.drawPanel(); }, true, undefined, tree === this.tree));

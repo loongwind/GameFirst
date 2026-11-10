@@ -2,6 +2,8 @@ import { DEFAULT_BALANCE, amount, integer, levelForXp, validateEquipment } from 
 import type { Equipment, Wallet, Box } from '@abyss-hunter/shared';
 import { EVENT_NAMES } from './TelemetryBus';
 import type { LocalEvent, EventName } from './TelemetryBus';
+import { initialObjectives, validateObjectives } from './Objectives';
+import type { Objectives } from './Objectives';
 
 export type AdSlot = 'gift' | 'blessing' | 'sonar' | 'silver' | 'gold' | 'rescue' | 'oxygen';
 export interface AdContext { eventId?: string; diveId?: string; choice?: string }
@@ -14,6 +16,7 @@ export interface LocalSettlement {
   activeSeconds: number; depth: number;
 }
 export interface LocalState {
+  objectives: Objectives;
   configVersion: string; revision: number; wallet: Wallet; totalXp: number; playerLevel: number;
   attributes: Record<string, number>; tech: string[]; inventory: Equipment[]; tickets: number; goldPity: number;
   receipts: Record<string, { fingerprint: string; result: CommandResult }>;
@@ -36,6 +39,8 @@ export type Action = { opId: string } & (
   { type: 'ad.prepare'; slot: AdSlot; context?: AdContext } |
   { type: 'ad.complete' | 'ad.claim' | 'ad.cancel'; token: string } |
   { type: 'task.claim'; taskId: string } |
+  { type: 'tutorial.replay' } |
+  { type: 'poster.dismiss'; depth: number } |
   { type: 'telemetry.record'; name: EventName; properties: LocalEvent['properties'] }
 );
 export const own = (value: object, key: string): boolean => Object.prototype.hasOwnProperty.call(value, key);
@@ -46,7 +51,7 @@ export function identifier(value: string): void {
 export function initialState(): LocalState {
   return { configVersion: DEFAULT_BALANCE.configVersion, revision: 0, wallet: { crystal: '0', pearl: '0', marrow: '0', core: '0' }, totalXp: 0, playerLevel: 1,
     attributes: Object.fromEntries(DEFAULT_BALANCE.attributes.ids.map(id => [id, 0])), tech: [], inventory: [], tickets: 0, goldPity: 0,
-    receipts: {}, settlements: {}, activeDive: null, daily: {}, intents: {}, pendingAd: null, consumedEvents: [], buffs: { blessing: null, sonarUntil: 0 }, events: [] };
+    receipts: {}, settlements: {}, activeDive: null, daily: {}, intents: {}, pendingAd: null, consumedEvents: [], buffs: { blessing: null, sonarUntil: 0 }, events: [], objectives: initialObjectives() };
 }
 export function validateLocalState(input: unknown): asserts input is LocalState {
   const s = input as LocalState;
@@ -66,4 +71,7 @@ export function validateLocalState(input: unknown): asserts input is LocalState 
   integer(s.buffs.sonarUntil);
   if (s.buffs.blessing) { identifier(s.buffs.blessing.choice); integer(s.buffs.blessing.expiresAt); }
   for (const e of s.events) if (!e || !EVENT_NAMES.includes(e.name) || !e.id || !Number.isFinite(e.at) || !e.properties) throw new RangeError('Invalid telemetry');
+  // Migration follows the original checksum check, preserving older two-slot saves.
+  if (!own(s, 'objectives')) s.objectives = initialObjectives(Object.keys(s.settlements).length > 0);
+  validateObjectives(s.objectives);
 }

@@ -1,5 +1,7 @@
 /** Platform-free contract. Browser APIs and wx belong in implementations only. */
 export type Unsubscribe = () => void;
+export interface DepthPosterData { depth: number; diveId: string; encounters: readonly string[] }
+export interface PosterImage { dataUrl: string; filename: string }
 
 export interface PlatformStorage {
   /** Missing keys return null. Permission/quota failures must propagate. */
@@ -29,6 +31,9 @@ export interface PlatformAdapter {
   onShow(listener: () => void): Unsubscribe;
   onHide(listener: () => void): Unsubscribe;
   getDeviceInfo(): DeviceInfo;
+  createDepthPoster(record: DepthPosterData): PosterImage;
+  /** Resolves after handing the local PNG to the platform download/save mechanism. */
+  saveDepthPoster(record: DepthPosterData): Promise<{ filename: string }>;
   /** Owner releases browser/native event listeners on teardown. */
   dispose(): void;
 }

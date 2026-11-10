@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
-import { withBrowser } from './browser-helpers.mjs';
+import { withBrowser, enterBuiltScene } from './browser-helpers.mjs';
 const target = process.env.WEB_TARGET || 'web-debug';
 const root = fileURLToPath(new URL(`../build/${target}`, import.meta.url));
 const artifacts = new URL('../.artifacts/economy/', import.meta.url);
@@ -13,7 +13,7 @@ test(`${target}: actual Cocos death checkpoint, browser refresh and settlement r
     const enter = async () => {
       const boot = page.waitForEvent('console', { predicate: e => e.text() === '[Boot] ready (browser); protocol=1', timeout: 30000 });
       await page.goto(url); await boot;
-      await page.evaluate(async () => { const { director } = await System.import('cc'); await new Promise((resolve, reject) => director.loadScene('Dive', error => error ? reject(error) : resolve())); });
+      await enterBuiltScene(page, 'Dive');
       await page.evaluate(async () => { const { director } = await System.import('cc'); window.economyReadyController = director.getScene().getChildByName('Canvas').getComponent('DiveController'); });
       await page.waitForFunction(() => window.economyReadyController.hud.sea.status === 'ready' && !window.economyReadyController.session.pause.paused);
     };
@@ -43,7 +43,8 @@ test(`${target}: actual Cocos death checkpoint, browser refresh and settlement r
     await mkdir(artifacts, { recursive: true });
     await page.screenshot({ path: fileURLToPath(new URL(`settled-${target}.png`, artifacts)) });
     await enter(); restored = await read(); assert.deepEqual(restored.state.wallet, settled.state.wallet);
-    assert.notEqual(restored.session.diveId, death.session.diveId);
+    assert.equal(restored.session.diveId, death.session.diveId);
+    assert.equal(restored.session.state, 'Settled');
     await page.evaluate(async ({ pending }) => { const { director } = await System.import('cc'); const c = director.getScene().getChildByName('Canvas').getComponent('DiveController');
       c.economy.dispatch({ type: 'dive.settle', opId: `settle:${pending.diveId}`, settlement: pending });
     }, { pending: settled.pending });

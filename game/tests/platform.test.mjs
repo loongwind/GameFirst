@@ -5,6 +5,26 @@ import { withBrowser } from './browser-helpers.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 
+test('local depth poster draws a 750x1100 PNG and saves it through the browser platform without network', async () => {
+  await withBrowser(root, async page => {
+    const result = await page.evaluate(async () => {
+      const { BrowserPlatformAdapter } = await import('/assets/scripts/platform/browser/BrowserPlatformAdapter.ts');
+      const { drawDepthPoster } = await import('/assets/scripts/platform/browser/DepthPoster.ts');
+      const canvas = drawDepthPoster(document, { depth: 1523, diveId: 'poster', encounters: ['enemy_normal_01_moon_jelly', 'enemy_elite_04_royal_jelly'] });
+      const ctx = canvas.getContext('2d');
+      const pixels = [ctx.getImageData(375, 50, 1, 1).data[0], ctx.getImageData(375, 1000, 1, 1).data[0]];
+      let clicked = false;
+      const oldClick = HTMLAnchorElement.prototype.click;
+      HTMLAnchorElement.prototype.click = function () { clicked = this.download === 'abyss-depth-1523.png' && this.href.startsWith('blob:'); };
+      try { const a = new BrowserPlatformAdapter(); const saved = await a.saveDepthPoster({ depth: 1523, diveId: 'poster', encounters: ['enemy_normal_01_moon_jelly'] }); a.dispose(); return { width: canvas.width, height: canvas.height, png: canvas.toDataURL().startsWith('data:image/png'), clicked, saved, pixels }; }
+      finally { HTMLAnchorElement.prototype.click = oldClick; }
+    });
+    assert.equal(result.width, 750); assert.equal(result.height, 1100); assert.equal(result.png, true);
+    assert.equal(result.clicked, true); assert.equal(result.saved.filename, 'abyss-depth-1523.png');
+    assert.notEqual(result.pixels[0], result.pixels[1]);
+  });
+});
+
 test('storage survives reload, namespaces keys, and preserves unrelated data', async () => {
   await withBrowser(root, async page => {
     await page.evaluate(async () => {

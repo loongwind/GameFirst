@@ -11,14 +11,19 @@ export class LocalDiveService {
   constructor(private readonly economy: EconomyService, private readonly now: () => number = Date.now) {}
   open(diveId: string, options: Omit<DiveOptions, 'diveId'> = {}): DiveSession {
     const saved = this.economy.snapshot.activeDive as SavedDive | null;
-    if (saved && saved.session.state !== 'Settled') {
+    if (saved) {
       const session = DiveSession.restore(saved.session); this.startedAt = saved.startedAt;
+      this.recordStart(session);
       // Reconcile completed/claimed ads before timeout finalization can destroy the original choice.
       return session;
     }
     const session = new DiveSession({ ...options, diveId }); this.startedAt = this.now(); this.save(session);
-    this.economy.dispatch({ type: 'telemetry.record', opId: `start:${diveId}`, name: 'dive_start', properties: { sea_layer: 0, cargo_free: session.cargoCapacity, oxygen_max: session.oxygenCapacity, power: 20 } });
+    this.recordStart(session);
     return session;
+  }
+  private recordStart(session: DiveSession): void {
+    if (Object.prototype.hasOwnProperty.call(this.economy.snapshot.receipts, `start:${session.diveId}`)) return;
+    this.economy.dispatch({ type: 'telemetry.record', opId: `start:${session.diveId}`, name: 'dive_start', properties: { dive_id: session.diveId, sea_layer: 0, cargo_free: session.cargoCapacity, oxygen_max: session.oxygenCapacity, power: 20 } });
   }
   save(session: DiveSession): void {
     this.economy.checkpoint({ savedAt: this.now(), startedAt: this.startedAt, session: session.checkpoint() } satisfies SavedDive);

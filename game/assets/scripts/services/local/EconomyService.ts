@@ -5,12 +5,13 @@ import { TelemetryBus } from './TelemetryBus';
 import type { EventName, LocalEvent, TelemetryBatch } from './TelemetryBus';
 import { copy, own, identifier, initialState, validateLocalState } from './model';
 import type { Action, LocalState, CommandResult, AdSlot, AdContext, AdIntent } from './model';
+import { FIRST_TUTORIAL_REWARD, objectiveTasks, observeObjectives, tutorialStep } from './Objectives';
+import type { DiveCheckpoint } from '../../battle/DiveSession';
 
 export interface EconomyOptions {
   now?: () => number; random?: () => number;
   /** Local-only eligibility hooks. P3 replaces dispatch with remote authoritative commands. */
   adEligible?: (slot: AdSlot, context: AdContext) => boolean;
-  taskEligible?: (taskId: string) => boolean;
 }
 export interface CommandDispatcher { dispatch(action: Action): CommandResult }
 export function businessDay(now: number): string {
@@ -93,19 +94,27 @@ export class EconomyService implements CommandDispatcher {
         if (own(next.settlements, s.diveId)) {
           if (next.settlements[s.diveId] !== settlementSignature) throw new Error('DIVE_SETTLEMENT_CONFLICT'); result.duplicate = true; break;
         }
+        const p = next.objectives, t = p.tutorial, accepted = p.dives[s.diveId];
+        const tutorialDeposit = t.active && t.diveId === s.diveId && t.step === 4 && s.reason === 'return';
+        const tutorialReward = tutorialDeposit && !t.rewarded && !next.consumedEvents.includes(FIRST_TUTORIAL_REWARD);
         for (const currency of ['crystal', 'pearl', 'marrow', 'core'] as const) {
-          integer(s.cargo[currency]); credit(currency, String(s.reason === 'death' && currency === 'crystal' ? 0 : s.cargo[currency]));
+          integer(s.cargo[currency]); credit(currency, String(currency === 'crystal' ? tutorialReward ? 500 : s.reason === 'death' ? 0 : s.cargo[currency] : s.cargo[currency]));
         }
+        if (tutorialReward) { t.rewarded = true; next.consumedEvents.push(FIRST_TUTORIAL_REWARD); }
+        if (tutorialDeposit) tutorialStep(p, 5, emit);
+        if (accepted && accepted.kills > 0 && accepted.seconds > 0 && s.reason === 'return' && businessDay(now) === p.firstDay && !p.completedDives.includes(s.diveId)) p.completedDives.push(s.diveId);
         xp(s.xp ?? 0); next.settlements[s.diveId] = settlementSignature;
-        emit('deposit_done', { amount: s.reason === 'death' ? '0' : String(s.cargo.crystal), is_first: Object.keys(next.settlements).length === 1 });
-        emit('dive_end', { end_reason: s.reason === 'return' ? 'deposit' : s.reason, max_depth: s.depth, cargo_amount: s.reason === 'death' ? 0 : s.cargo.crystal, duration_s: s.activeSeconds });
+        emit('deposit_done', { dive_id: s.diveId, amount: tutorialReward ? '500' : s.reason === 'death' ? '0' : String(s.cargo.crystal), tutorial_reward: tutorialReward, is_first: Object.keys(next.settlements).length === 1 });
+        emit('dive_end', { dive_id: s.diveId, end_reason: s.reason === 'return' ? 'deposit' : s.reason, max_depth: accepted?.depth ?? s.depth, cargo_amount: s.reason === 'death' ? 0 : s.cargo.crystal, duration_s: s.activeSeconds });
         break;
       }
       case 'attribute.upgrade': {
         if (!DEFAULT_BALANCE.attributes.ids.includes(action.attribute)) throw new Error('INVALID_ATTRIBUTE');
         const level = next.attributes[action.attribute]; spend('crystal', upgradeCost(level));
         if ((level + 1) % DEFAULT_BALANCE.attributes.coreMilestone === 0) spend('core', String(DEFAULT_BALANCE.attributes.coreCost));
-        next.attributes[action.attribute]++; break;
+        next.attributes[action.attribute]++;
+        if (next.objectives.tutorial.step === 5 && ['cargo', 'oxygen'].includes(action.attribute)) next.objectives.tutorial.upgraded = true;
+        break;
       }
       case 'tech.unlock': {
         const node = DEFAULT_BALANCE.tech.nodes.find(n => n.id === action.nodeId);
@@ -194,8 +203,21 @@ export class EconomyService implements CommandDispatcher {
       case 'task.claim': {
         identifier(action.taskId);
         const key = `task:${action.taskId}`;
-        if (next.consumedEvents.includes(key) || !this.options.taskEligible?.(action.taskId)) throw new Error('TASK_INELIGIBLE');
-        xp(DEFAULT_BALANCE.progression.taskXp); next.consumedEvents.push(key); break;
+        if (next.consumedEvents.includes(key)) { result.duplicate = true; break; }
+        const task = objectiveTasks(next).find(t => t.id === action.taskId);
+        if (!task?.ready) throw new Error('TASK_INELIGIBLE');
+        xp(DEFAULT_BALANCE.progression.taskXp); next.consumedEvents.push(key); next.objectives.claimed.push(action.taskId);
+        if (task?.kind === 'rotation') next.objectives.rotation++;
+        break;
+      }
+      case 'tutorial.replay': {
+        if (next.activeDive || next.pendingAd) throw new Error('ACTIVE_DIVE');
+        const t = next.objectives.tutorial;
+        t.active = true; t.run++; t.step = 0; t.diveId = null; t.upgraded = false; break;
+      }
+      case 'poster.dismiss': {
+        integer(action.depth, 0, next.objectives.record?.depth ?? 0);
+        next.objectives.posterSeen = Math.max(next.objectives.posterSeen, action.depth); break;
       }
       case 'telemetry.record': emit(action.name, copy(action.properties)); break;
       default: throw new Error('UNKNOWN_COMMAND');
@@ -204,7 +226,15 @@ export class EconomyService implements CommandDispatcher {
     this.commit(next); this.telemetry.publish(events); return result;
   }
   /** Lifecycle/checkpoint persistence is separate from asset commands and cannot mint assets. */
-  checkpoint(activeDive: unknown | null): void { this.reload(); const next = copy(this.state); next.activeDive = copy(activeDive); this.commit(next); }
+  checkpoint(activeDive: unknown | null): void {
+    this.reload(); const next = copy(this.state), now = this.now(), events: LocalEvent[] = [];
+    const saved = activeDive as { session?: DiveCheckpoint } | null;
+    if (saved?.session) observeObjectives(next.objectives, saved.session, businessDay(now), (name, properties) => {
+      const event = { id: `checkpoint:${this.sequence + 1}:${events.length}`, name, at: now, properties };
+      events.push(event); next.events.push(event);
+    });
+    next.activeDive = copy(activeDive); this.commit(next); this.telemetry.publish(events);
+  }
   telemetryBatch(limit = 100): TelemetryBatch { return TelemetryBus.batch(this.state.events, limit); }
   ackTelemetry(ids: readonly string[]): void {
     this.reload(); const next = copy(this.state); next.events = next.events.filter(e => !ids.includes(e.id)); this.commit(next);

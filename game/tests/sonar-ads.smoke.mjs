@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
-import { withBrowser } from './browser-helpers.mjs';
+import { withBrowser, enterBuiltScene } from './browser-helpers.mjs';
 const target = process.env.WEB_TARGET || 'web-debug';
 const root = fileURLToPath(new URL(`../build/${target}`, import.meta.url));
 const artifacts = fileURLToPath(new URL('../.artifacts/sonar-ads/', import.meta.url));
@@ -33,7 +33,7 @@ test(`${target}: actual Cocos sonar, oxygen/rescue buttons, pause overlaps and h
     };
     const shot = async name => page.screenshot({ path: `${artifacts}/${name}-${target}.png` });
     const read = () => page.evaluate(() => { const c = window.c; return { ...c.session.snapshot, x: c.session.battle.player.x, y: c.session.battle.player.y, tick: c.session.battle.tick, mode: c.session.battle.movementMode, ads: c.ads.view, notice: c.ads.notice, stateSave: c.economy.snapshot, shows: window.testDriver.shows }; });
-    await click('EnterHarbor');
+    await enterBuiltScene(page, 'Harbor');
     await page.waitForFunction(() => window.cc.director.getScene()?.name === 'Harbor');
     await page.evaluate(() => { window.h = window.cc.director.getScene().getChildByName('Canvas').getComponent('HarborController'); });
     await page.waitForFunction(() => !!window.h.view);
@@ -92,9 +92,7 @@ test(`${target}: actual Cocos sonar, oxygen/rescue buttons, pause overlaps and h
     // Refresh preserves the closed prompt and exact active dive; restore uses the normal countdown.
     const diveId = s.diveId;
     const reboot = page.waitForEvent('console', { predicate: m => m.text().startsWith('[Boot] ready'), timeout: 30000 });
-    await page.reload(); await reboot; await page.evaluate(async () => { window.cc = await System.import('cc'); }); await click('EnterHarbor'); await page.waitForFunction(() => window.cc.director.getScene()?.name === 'Harbor');
-    await page.evaluate(async () => { window.cc = await System.import('cc'); window.h = window.cc.director.getScene().getChildByName('Canvas').getComponent('HarborController'); });
-    await page.waitForFunction(() => !!window.h.view); await click('LaunchButton'); await page.waitForFunction(() => window.cc.director.getScene()?.name === 'Dive');
+    await page.reload(); await reboot; await enterBuiltScene(page, 'Dive');
     await page.evaluate(() => {
       window.c = window.cc.director.getScene().getChildByName('Canvas').getComponent('DiveController');
       window.testDriver = { isMock: true, shows: 0, outcome: 'completed', async load() {}, async show() { this.shows++; return this.outcome; } }; window.c.configureAds(window.testDriver);

@@ -18,6 +18,12 @@ P1-04 已接入本地经济、双槽存档与潜航检查点；卸货持久化�
 广告状态机、开发 Mock、每日额度和埋点接口见
 [economy-verification.md](docs/economy-verification.md)。
 
+P1-08 已接入首潜六步教学、重放、三潜目标、轮换任务与本地深度海报。
+新存档从 Boot 直接进入教学潜航，教学局使用独立刷怪节奏，战斗数值沿用正常成长配置。
+教学固定首次奖励替代该局荧晶拾取，任务资格来自检查点与最终结算。
+运行 `npm run test:tutorial:web` 验证实际构建，规则和计时证据见
+`../docs/潜渊猎手-P1-08验收记录.md`。
+
 ## 环境与复现
 
 - Cocos Creator **3.8.8**，完整 editor/engine 指纹见 `editor-version.json`。

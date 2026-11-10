@@ -14,6 +14,7 @@ import { AdService } from './local/AdService';
 import type { AdDriver } from './local/AdService';
 import { DiveAdModel } from './local/DiveAdModel';
 import { combatLoadout } from './local/CombatLoadout';
+import { tutorialLoadout } from './local/Objectives';
 
 const { ccclass } = _decorator;
 
@@ -43,7 +44,7 @@ export class DiveController extends Component {
       adEligible: (slot, context) => this.dives.adEligible(this.session, slot, context),
     });
     this.dives = new LocalDiveService(this.economy);
-    const loadout = combatLoadout(this.economy.snapshot);
+    const loadout = tutorialLoadout(this.economy.snapshot, combatLoadout(this.economy.snapshot));
     this.session = this.dives.open(`dive-${Date.now()}-${Math.random().toString(36).slice(2)}`, {
       ...loadout,
       battle: { ...loadout.battle, obstacles: [{ x: 70, y: 180, radius: 34 }, { x: -75, y: 380, radius: 46 }], dangerZones: [{ x: 135, y: 400, radius: 60 }] },
@@ -103,7 +104,7 @@ export class DiveController extends Component {
       catch { this.notice = '存档未确认，收获保持冻结，正在重试保存。'; }
     }
     if (this.savedState !== this.session.state || Date.now() >= this.nextSaveAt) this.saveProgress();
-    this.hud.render(this.session, this.notice || this.ads.notice, this.ads.view);
+    this.hud.render(this.session, this.notice || this.ads.notice, this.ads.view, this.economy.snapshot);
   }
 
   // Service integration points: a real ad/reward service owns authorization and payout.
@@ -150,7 +151,7 @@ export class DiveController extends Component {
   }
   private saveProgress(): void {
     if (this.leavingForHarbor) return;
-    this.nextSaveAt = Date.now() + 15_000;
+    this.nextSaveAt = Date.now() + (this.economy.snapshot.objectives.tutorial.active ? 1000 : 5000);
     try {
       if (this.session.state === 'RescuePending') this.economy.dispatch({ type: 'telemetry.record', opId: `death:${this.session.deathEventId}`,
         name: 'death_occurred', properties: { depth_band: Math.floor(this.session.depth / DEFAULT_BALANCE.drops.depthBand), cargo_lost: 0, rescued: false } });

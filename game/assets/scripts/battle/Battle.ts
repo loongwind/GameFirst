@@ -9,6 +9,7 @@ import { BOSS_ENCOUNTERS, ENEMY_CATALOG, WORLD_BOUNDS, enemyByKey, enemyStrength
 import type { ContentProgress, SeaLayer } from './SeaContent';
 
 export interface BattleCheckpoint {
+  encounters?: string[];
   tick: number; player: Player; stats: Battle['stats']; random: number; nextSpawnTick: number;
   options: Pick<BattleOptions, 'spawn' | 'spawnIntervalTicks' | 'weapons' | 'capacities' | 'obstacles' | 'dangerZones' | 'content' | 'playerSpeed' | 'pickupRadius'>;
   content?: { defeatedBosses: string[]; openRifts: SeaLayer[] };
@@ -16,6 +17,7 @@ export interface BattleCheckpoint {
 }
 
 export class Battle {
+  private readonly encounters = new Set<string>();
   readonly contentEnabled: boolean;
   private readonly defeatedBosses = new Set<string>();
   private readonly openRifts = new Set<SeaLayer>();
@@ -44,7 +46,7 @@ export class Battle {
   readonly effects: Pool<Effect>;
   readonly weapons: WeaponState[];
   readonly player: Player = { x: 0, y: 0, previousX: 0, previousY: 0, radius: 12, hp: 200, speed: 120 };
-  readonly stats = { hits: 0, kills: 0, lootCollected: 0, deferredSpawns: 0, deferredShots: 0, targetUpdates: 0, farDecisions: 0, droppedSteps: 0, mergedLoot: 0, mergedTexts: 0 };
+  readonly stats = { hits: 0, kills: 0, lootCollected: 0, deferredSpawns: 0, deferredShots: 0, targetUpdates: 0, farDecisions: 0, droppedSteps: 0, mergedLoot: 0, mergedTexts: 0, manualDistance: 0, maxDepth: 0 };
   tick = 0;
   private accumulator = 0;
   private paused = false;
@@ -143,6 +145,7 @@ export class Battle {
     e.assetKey = identity?.assetKey ?? ''; e.name = identity?.name ?? ''; e.layer = identity?.layer ?? layerAtDepth(spawnDepth);
     e.speed = spec.speed ?? 30; e.radius = spec.radius ?? (kind === 'boss' ? 40 : kind === 'elite' ? 18 : 10); e.lootValue = spec.lootValue ?? 10;
     e.kind = kind;
+    if (identity) this.encounters.add(identity.assetKey);
     return e;
   }
 
@@ -152,6 +155,8 @@ export class Battle {
     if (this.contentEnabled) this.contentSystem();
     this.spawnSystem();
     this.movementSystem();
+    this.stats.maxDepth = Math.max(this.stats.maxDepth, this.player.y);
+    if (this.manual) this.stats.manualDistance += Math.hypot(this.player.x - this.player.previousX, this.player.y - this.player.previousY);
     this.grid.rebuild(this.enemies.values(), true);
     this.targetingSystem();
     this.weaponSystem();
@@ -170,7 +175,7 @@ export class Battle {
   randomSample(): number { return this.random.next(); }
   checkpoint(): BattleCheckpoint {
     const result: BattleCheckpoint = { tick: this.tick, player: { ...this.player }, stats: { ...this.stats }, random: this.random.checkpoint(), nextSpawnTick: this.nextSpawnTick,
-      content: { defeatedBosses: Array.from(this.defeatedBosses), openRifts: Array.from(this.openRifts) },
+      encounters: Array.from(this.encounters), content: { defeatedBosses: Array.from(this.defeatedBosses), openRifts: Array.from(this.openRifts) },
       options: { content: this.contentEnabled, playerSpeed: this.player.speed, pickupRadius: this.pickupRadius, spawn: this.autoSpawn, spawnIntervalTicks: this.spawnInterval, weapons: this.weapons.map(w => ({ ...w.spec })), obstacles: this.obstacles, dangerZones: this.dangerZones,
         capacities: { enemies: this.enemies.capacity, projectiles: this.projectiles.capacity, loot: this.loot.capacity, texts: this.texts.capacity, effects: this.effects.capacity } },
       weapons: this.weapons.map(w => ({ ...w, spec: { ...w.spec } })),
@@ -190,6 +195,8 @@ export class Battle {
     });
     this.loot.restore(saved.pools.loot); this.texts.restore(saved.pools.texts); this.effects.restore(saved.pools.effects);
     this.defeatedBosses.clear(); this.openRifts.clear();
+    this.encounters.clear();
+    for (const key of saved.encounters ?? []) { if (!enemyByKey(key)) throw new RangeError('Invalid encounter'); this.encounters.add(key); }
     for (const key of saved.content?.defeatedBosses ?? []) {
       if (!BOSS_ENCOUNTERS.some(b => b.assetKey === key)) throw new RangeError('Invalid defeated boss');
       this.defeatedBosses.add(key);
