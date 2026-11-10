@@ -1105,7 +1105,7 @@
     "depthBand": 100,
     "maxDepth": 2400,
     "baseCrystal": 10,
-    "growth": 1.18,
+    "growth": 1.25,
     "variance": 0.3,
     "eliteMarrow": 1,
     "eliteCoreChance": 0.1,

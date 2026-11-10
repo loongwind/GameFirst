@@ -93,12 +93,24 @@ test(`${target}: natural economy progression reaches all three sea layers withou
         let usedRescue = 0, usedOxygen = 0;
         const steer = () => {
           const b = s.battle, p = b.player, gate = s.content.gateDepth ?? 2400;
-          const target = Math.min(gate, 2400);
-          const enemies = [...b.enemies.values()].map(e => ({ e, d: Math.hypot(e.x - p.x, e.y - p.y) })).sort((a, b) => a.d - b.d);
-          const nearest = enemies[0];
-          let x = 0, y = p.y < target ? 60 : -60;
-          if (nearest && nearest.d < 110) { x = p.x - nearest.e.x; y = p.y - nearest.e.y + (p.y < target ? 30 : -30); }
-          if (p.x > 300) x = -120; if (p.x < -300) x = 120;
+          // Repulsion keeps every chaser out of contact range; weapons out-range all of them.
+          let fx = 0, fy = 0;
+          for (const e of b.enemies.values()) {
+            const dx = p.x - e.x, dy = p.y - e.y, d = Math.hypot(dx, dy) || 1;
+            const threat = e.kind === 'boss' ? 250 : e.kind === 'elite' ? 130 : 80;
+            if (d < threat) { fx += dx / d * (threat - d); fy += dy / d * (threat - d); }
+          }
+          let x = fx, y = fy;
+          if (Math.hypot(fx, fy) < 40) {
+            // Free to move: work down toward the next gate (or circle at the gate line while
+            // the guardian blocks it), keeping a lane so the kite never corners.
+            if (p.y < gate - 30) { y = 100; x = p.x > 220 ? -60 : p.x < -220 ? 60 : 0; }
+            else { x = p.x >= 0 ? 100 : -100; y = 0; }
+            if (s.snapshot.cargo.crystal < s.snapshot.cargoCapacity) {
+              const loot = [...b.loot.values()].sort((a, b2) => Math.hypot(a.x - p.x, a.y - p.y) - Math.hypot(b2.x - p.x, b2.y - p.y))[0];
+              if (loot && Math.hypot(loot.x - p.x, loot.y - p.y) < 200) { x = loot.x - p.x; y = loot.y - p.y; }
+            }
+          }
           const norm = Math.hypot(x, y) || 1;
           return { x: x / norm * 200, y: y / norm * 200 };
         };
@@ -110,7 +122,7 @@ test(`${target}: natural economy progression reaches all three sea layers withou
           if (s.state !== 'Running') break;
           if (s.oxygen / s.oxygenCapacity < .15 && c.ads.view.oxygenPrompt && c.ads.view.oxygenRemaining > 0) {
             await c.ads.watch('oxygen'); usedOxygen++;
-          } else if (s.oxygen / s.oxygenCapacity < .22 || s.snapshot.cargo.crystal >= s.snapshot.cargoCapacity || s.snapshot.activeSeconds > 540) {
+          } else if (s.oxygen / s.oxygenCapacity < .3 || s.snapshot.cargo.crystal >= s.snapshot.cargoCapacity || s.snapshot.activeSeconds > 540) {
             s.requestReturn();
           }
           if (s.state !== 'Running') break;
@@ -125,6 +137,9 @@ test(`${target}: natural economy progression reaches all three sea layers withou
         if (s.state === 'Returning') s.arriveHarbor();
         let settled = false;
         if (s.state === 'PendingSettlement') { try { c.dives.settle(s); settled = true; } catch { settled = false; } }
+        // The disabled controller never painted the dive; draw the settled overlay so the
+        // real primary-touch button actually receives the click.
+        c.hud.render(s, '', c.ads.view, c.economy.snapshot);
         const wallet = c.economy.snapshot.wallet;
         return { finished, wallet, settled, usedRescue, usedOxygen, reason: s.settlement?.reason,
           pearlGain: (BigInt(wallet.pearl) - startPearls).toString() };
@@ -156,11 +171,11 @@ test(`${target}: natural economy progression reaches all three sea layers withou
 
 /** Spend through the exact dispatch actions the harbor UI buttons emit. */
 async function spend(page, dive) {
-  await page.evaluate(async (techNodes, dive) => {
+  await page.evaluate(async ({ techNodes, dive }) => {
     const h = window.h;
     const crystal = () => BigInt(h.economy.snapshot.wallet.crystal);
-    // Attack first (damage gates every depth band), then HP, then utility; each line keeps its reserve share.
-    for (const [attribute, share] of [['attack', 65], ['hp', 35], ['moveSpeed', 20], ['oxygen', 20], ['attackSpeed', 20]]) {
+    // Attack first (damage gates every depth band), then oxygen time, fire rate, HP; each line keeps its reserve share.
+    for (const [attribute, share] of [['attack', 60], ['oxygen', 30], ['attackSpeed', 30], ['hp', 30], ['moveSpeed', 15], ['cargo', 15]]) {
       for (let guard = 0; guard < 200; guard++) {
         const level = h.economy.snapshot.attributes[attribute], price = BigInt(Math.ceil(80 * Math.pow(1.16, level)));
         if (price > crystal() * BigInt(share) / 100n) break;
@@ -193,5 +208,5 @@ async function spend(page, dive) {
         used.add(best.id);
       } catch {}
     }
-  }, balance.tech.nodes, dive);
+  }, { techNodes: balance.tech.nodes, dive });
 }
