@@ -4,6 +4,7 @@ import type { BattleOptions } from './model';
 import { PauseManager } from './PauseManager';
 import { DEFAULT_BALANCE, monsterDrop, integer } from '@abyss-hunter/shared';
 import type { BattleCheckpoint } from './Battle';
+import type { ContentProgress, SeaLayer } from './SeaContent';
 
 export type DiveState = 'Running' | 'RescuePending' | 'Returning' | 'PendingSettlement' | 'Settled';
 export type Material = 'crystal' | 'pearl' | 'marrow' | 'core';
@@ -84,8 +85,8 @@ export class DiveSession {
     }
     nonnegative(this.depthIncrement);
     this.oxygen = this.oxygenCapacity;
-    this.battle = new Battle({ ...options.battle, collectLoot: value => this.collect('crystal', value), onKill: enemy => {
-      const drop = monsterDrop(enemy.kind, Math.min(this.depth, DEFAULT_BALANCE.drops.maxDepth), [this.battle.randomSample(), this.battle.randomSample()]);
+    this.battle = new Battle({ ...options.battle, content: options.battle?.content ?? options.battle?.spawn !== false, collectLoot: value => this.collect('crystal', value), onKill: enemy => {
+      const drop = monsterDrop(enemy.kind, Math.min(enemy.spawnDepth, DEFAULT_BALANCE.drops.maxDepth), [this.battle.randomSample(), this.battle.randomSample()]);
       this.xp += DEFAULT_BALANCE.progression.killXp[enemy.kind];
       for (const kind of ['pearl', 'marrow', 'core'] as const) this.collect(kind, drop[kind]);
       return Math.round(drop.crystal * this.benefits.yield);
@@ -95,6 +96,7 @@ export class DiveSession {
   }
 
   get state(): DiveState { return this.currentState; }
+  get content(): ContentProgress & { readonly layer: SeaLayer } { return Object.freeze({ ...this.battle.contentProgress, layer: this.battle.activeContentLayer }); }
   get oxygenCapacity(): number { return this.baseOxygenCapacity * this.benefits.oxygen; }
   get cargoCapacity(): number { return Math.floor(this.baseCargoCapacity * this.benefits.cargo); }
   get depth(): number { return Math.max(0, this.battle.player.y); }
@@ -233,7 +235,7 @@ export class DiveSession {
   }
   static restore(saved: DiveCheckpoint): DiveSession {
     if (!saved || saved.version !== 1 || !['Running', 'RescuePending', 'Returning', 'PendingSettlement', 'Settled'].includes(saved.state)) throw new RangeError('Invalid dive checkpoint');
-    const session = new DiveSession({ ...saved.options, battle: saved.battle.options });
+    const session = new DiveSession({ ...saved.options, battle: { ...saved.battle.options, content: saved.battle.options.content ?? false } });
     session.setBenefits(saved.benefits);
     for (const kind of ['crystal', 'pearl', 'marrow', 'core'] as const) integer(saved.cargo[kind]);
     for (const n of [saved.oxygen, saved.activeSeconds, saved.countdown]) nonnegative(n);

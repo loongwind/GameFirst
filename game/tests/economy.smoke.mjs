@@ -14,6 +14,8 @@ test(`${target}: actual Cocos death checkpoint, browser refresh and settlement r
       const boot = page.waitForEvent('console', { predicate: e => e.text() === '[Boot] ready (browser); protocol=1', timeout: 30000 });
       await page.goto(url); await boot;
       await page.evaluate(async () => { const { director } = await System.import('cc'); await new Promise((resolve, reject) => director.loadScene('Dive', error => error ? reject(error) : resolve())); });
+      await page.evaluate(async () => { const { director } = await System.import('cc'); window.economyReadyController = director.getScene().getChildByName('Canvas').getComponent('DiveController'); });
+      await page.waitForFunction(() => window.economyReadyController.hud.sea.status === 'ready' && !window.economyReadyController.session.pause.paused);
     };
     const read = () => page.evaluate(async () => {
       const { director } = await System.import('cc'), c = director.getScene().getChildByName('Canvas').getComponent('DiveController');
@@ -26,7 +28,7 @@ test(`${target}: actual Cocos death checkpoint, browser refresh and settlement r
       c.session.battle.player.hp = 0; c.session.advance(0);
       window.dispatchEvent(new PageTransitionEvent('pagehide'));
     });
-    const death = await read(); assert.equal(death.session.state, 'RescuePending');
+    const death = await read(); assert.equal(death.session.state, 'RescuePending', JSON.stringify(death.session));
     await enter(); let restored = await read();
     assert.equal(restored.session.diveId, death.session.diveId); assert.equal(restored.session.state, 'RescuePending');
     assert.deepEqual(restored.session.cargo, { crystal: 77, pearl: 2, marrow: 3, core: 1 });

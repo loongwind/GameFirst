@@ -1,4 +1,4 @@
-export type PauseReason = 'modal' | 'ad' | 'background' | 'reconnect' | 'countdown';
+export type PauseReason = 'modal' | 'ad' | 'background' | 'reconnect' | 'countdown' | 'assets';
 
 /** Removing one owner never resumes another owner's pause. */
 export class PauseManager {

@@ -10,7 +10,7 @@ const artifacts = fileURLToPath(new URL('../.artifacts/sonar-ads/', import.meta.
 test(`${target}: actual Cocos sonar, oxygen/rescue buttons, pause overlaps and harbor loop`, { timeout: 120000 }, async () => {
   await withBrowser(root, async (page, _browser, url) => {
     const errors = [], evidence = [];
-    page.on('pageerror', e => errors.push(e.message)); page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
+    page.on('pageerror', e => { errors.push(e.message); console.error(e.message); }); page.on('console', m => { if (m.type() === 'error') { errors.push(m.text()); console.error(m.text()); } });
     const boot = page.waitForEvent('console', { predicate: m => m.text().startsWith('[Boot] ready'), timeout: 30000 });
     await page.goto(url); await boot; await mkdir(artifacts, { recursive: true });
     await page.evaluate(async () => {
@@ -34,7 +34,7 @@ test(`${target}: actual Cocos sonar, oxygen/rescue buttons, pause overlaps and h
     const shot = async name => page.screenshot({ path: `${artifacts}/${name}-${target}.png` });
     const read = () => page.evaluate(() => { const c = window.c; return { ...c.session.snapshot, x: c.session.battle.player.x, y: c.session.battle.player.y, tick: c.session.battle.tick, mode: c.session.battle.movementMode, ads: c.ads.view, notice: c.ads.notice, stateSave: c.economy.snapshot, shows: window.testDriver.shows }; });
     await click('EnterHarbor');
-    await page.waitForFunction(() => window.cc.director.getScene().name === 'Harbor');
+    await page.waitForFunction(() => window.cc.director.getScene()?.name === 'Harbor');
     await page.evaluate(() => { window.h = window.cc.director.getScene().getChildByName('Canvas').getComponent('HarborController'); });
     await page.waitForFunction(() => !!window.h.view);
     await page.evaluate(() => {
@@ -45,8 +45,9 @@ test(`${target}: actual Cocos sonar, oxygen/rescue buttons, pause overlaps and h
     const expiry = await page.evaluate(() => window.h.economy.snapshot.buffs.sonarUntil);
     assert.ok(expiry > Date.now() + 890000); await shot('harbor-sonar');
     await click('close'); await click('LaunchButton');
-    await page.waitForFunction(() => window.cc.director.getScene().name === 'Dive');
+    await page.waitForFunction(() => window.cc.director.getScene()?.name === 'Dive');
     await page.evaluate(() => { window.c = window.cc.director.getScene().getChildByName('Canvas').getComponent('DiveController'); window.c.configureAds(window.testDriver); });
+    await page.waitForFunction(() => window.c.hud.sea.status === 'ready' && !window.c.session.pause.has('assets'));
     const initial = await read(); await page.waitForTimeout(250); let s = await read(); assert.ok(s.y !== initial.y || s.x !== initial.x); assert.equal(s.ads.sonarSeconds > 0, true);
     await page.evaluate(() => { const b = window.c.session.battle; b.enemies.clear(); b.loot.clear(); b.player.x = 0; b.player.y = 180; b.addLoot(160, 180, 10); });
     await page.waitForTimeout(650); s = await read(); assert.ok(Math.hypot(s.x - 70, s.y - 180) >= 46); await shot('obstacle-steering');
@@ -91,9 +92,9 @@ test(`${target}: actual Cocos sonar, oxygen/rescue buttons, pause overlaps and h
     // Refresh preserves the closed prompt and exact active dive; restore uses the normal countdown.
     const diveId = s.diveId;
     const reboot = page.waitForEvent('console', { predicate: m => m.text().startsWith('[Boot] ready'), timeout: 30000 });
-    await page.reload(); await reboot; await page.evaluate(async () => { window.cc = await System.import('cc'); }); await click('EnterHarbor'); await page.waitForFunction(() => window.cc.director.getScene().name === 'Harbor');
+    await page.reload(); await reboot; await page.evaluate(async () => { window.cc = await System.import('cc'); }); await click('EnterHarbor'); await page.waitForFunction(() => window.cc.director.getScene()?.name === 'Harbor');
     await page.evaluate(async () => { window.cc = await System.import('cc'); window.h = window.cc.director.getScene().getChildByName('Canvas').getComponent('HarborController'); });
-    await page.waitForFunction(() => !!window.h.view); await click('LaunchButton'); await page.waitForFunction(() => window.cc.director.getScene().name === 'Dive');
+    await page.waitForFunction(() => !!window.h.view); await click('LaunchButton'); await page.waitForFunction(() => window.cc.director.getScene()?.name === 'Dive');
     await page.evaluate(() => {
       window.c = window.cc.director.getScene().getChildByName('Canvas').getComponent('DiveController');
       window.testDriver = { isMock: true, shows: 0, outcome: 'completed', async load() {}, async show() { this.shows++; return this.outcome; } }; window.c.configureAds(window.testDriver);
@@ -109,7 +110,7 @@ test(`${target}: actual Cocos sonar, oxygen/rescue buttons, pause overlaps and h
     await page.evaluate(() => { window.c.session.battle.player.hp = 0; }); await page.waitForTimeout(80); await shot('rescue-limit');
     await click('secondary-touch'); await page.waitForFunction(() => window.c.session.state === 'Settled');
     s = await read(); assert.equal(s.cargo.crystal, 0); assert.equal(s.cargo.pearl, 2); evidence.push({ scenario: 'three rescue/oxygen rewards and decline', result: s });
-    await click('primary-touch'); await page.waitForFunction(() => window.cc.director.getScene().name === 'Harbor');
+    await click('primary-touch'); await page.waitForFunction(() => window.cc.director.getScene()?.name === 'Harbor');
     await page.evaluate(() => { window.h = window.cc.director.getScene().getChildByName('Canvas').getComponent('HarborController'); }); await page.waitForFunction(() => !!window.h.view);
     assert.equal(await page.evaluate(() => window.h.economy.snapshot.activeDive), null); await shot('return-harbor');
     assert.deepEqual(errors, []); await writeFile(`${artifacts}/result-${target}.json`, JSON.stringify({ evidence, errors }, null, 2));

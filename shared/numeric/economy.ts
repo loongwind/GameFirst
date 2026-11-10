@@ -87,7 +87,7 @@ export function rollBox(box: Box, pity: number, samples: readonly [number, numbe
 export function monsterDrop(kind: MonsterKind, depth: number, samples: readonly [number, number], c = DEFAULT_BALANCE): Record<Currency, number> {
   if (!Number.isFinite(depth) || depth < 0 || depth > c.drops.maxDepth || !(kind in c.progression.killXp)) throw new RangeError('Invalid monster drop');
   samples.forEach(randomUnit);
-  const base = c.drops.baseCrystal * c.drops.growth ** Math.floor(depth / c.drops.depthBand);
+  const base = c.drops.baseCrystal * c.drops.growth ** Math.min(Math.ceil(c.drops.maxDepth / c.drops.depthBand) - 1, Math.floor(depth / c.drops.depthBand));
   return { crystal: Math.round(base * (1 - c.drops.variance + 2 * c.drops.variance * samples[0])), pearl: kind === 'boss' ? c.drops.bossPearl : 0,
     marrow: kind === 'elite' ? c.drops.eliteMarrow : 0,
     core: kind === 'boss' ? c.drops.bossCore : kind === 'elite' && samples[1] < c.drops.eliteCoreChance ? 1 : 0 };

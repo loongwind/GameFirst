@@ -37,7 +37,7 @@ export function validateBalanceConfig(input: unknown): BalanceConfig {
   unique(c.attributes.ids); unique(c.equipment.templates); unique(c.tech.trees); unique(c.tech.nodes.map(n => n.id));
   if (c.attributes.growthNumerator < c.attributes.growthDenominator) throw new RangeError('Decreasing price');
   if (c.boxes.gold.pity < 1) throw new RangeError('Gold pity must permit a counter');
-  const maxDrop = Math.round(c.drops.baseCrystal * c.drops.growth ** Math.floor(c.drops.maxDepth / c.drops.depthBand) * (1 + c.drops.variance));
+  const maxDrop = Math.round(c.drops.baseCrystal * c.drops.growth ** (Math.ceil(c.drops.maxDepth / c.drops.depthBand) - 1) * (1 + c.drops.variance));
   if (!Number.isSafeInteger(maxDrop)) throw new RangeError('Drop curve exceeds exact integer range');
   for (const box of Object.values(c.boxes)) {
     if (box.weights.reduce((a, b) => a + b, 0) !== 100 || box.weights.slice(box.pityMinQuality, 5).reduce((a, b) => a + b, 0) <= 0) throw new RangeError('Invalid box weights');

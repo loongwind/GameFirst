@@ -1,7 +1,9 @@
 import type { Pooled } from './pool';
+import type { SeaLayer } from './SeaContent';
 
 export interface Body extends Pooled { x: number; y: number; previousX: number; previousY: number; radius: number }
 export interface Enemy extends Body {
+  assetKey: string; name: string; layer: SeaLayer; maxHp: number; attack: number; spawnDepth: number;
   hp: number; speed: number; vx: number; vy: number; lootValue: number; nextContactTick: number;
   kind: 'normal' | 'elite' | 'boss';
 }
@@ -30,6 +32,7 @@ export interface BattleOptions {
   /** Returns the amount accepted by the hold; overflow stays in the world. */
   collectLoot?: (value: number) => number;
   onKill?: (enemy: Readonly<Enemy>) => number | undefined;
+  content?: boolean; playerSpeed?: number; pickupRadius?: number;
   seed?: number; spawn?: boolean; spawnIntervalTicks?: number; weapons?: WeaponInput[]; capacities?: Partial<Capacities>;
 }
 export const STEP_SECONDS = 1 / 30;

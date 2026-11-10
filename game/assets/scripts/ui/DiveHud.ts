@@ -1,8 +1,9 @@
-import { BlockInputEvents, Button, Color, Graphics, Label, Layers, Node, UITransform } from 'cc';
+import { BlockInputEvents, Button, Color, Graphics, Label, Layers, Node, UITransform, isValid } from 'cc';
 import type { DiveSession } from '../battle/DiveSession';
 import { hudLayout } from './hudLayout';
 import type { HudInsets, HudLayout, HudRect } from './hudLayout';
 import type { DiveAdView } from '../services/local/DiveAdModel';
+import { SeaWorldView } from './SeaWorldView';
 
 const ink = new Color(7, 25, 35), panel = new Color(15, 43, 54), line = new Color(43, 82, 90);
 const mint = new Color(105, 233, 198), cream = new Color(233, 240, 218), muted = new Color(126, 165, 169);
@@ -13,6 +14,7 @@ export type HudAction = 'pause' | 'return' | 'primary' | 'secondary' | 'sonar' |
 /** Cocos presentation only: reads a session, emits commands through callbacks. */
 export class DiveHud {
   readonly root: Node;
+  readonly sea: SeaWorldView;
   layout!: HudLayout;
   private world!: Graphics;
   private chrome!: Graphics;
@@ -26,8 +28,12 @@ export class DiveHud {
   private insetsKey = '';
 
   constructor(parent: Node, private readonly action: (action: HudAction) => void) {
+    this.sea = new SeaWorldView(parent);
     this.root = this.node('DiveHUD', parent);
   }
+
+  prepare(session: DiveSession): void { this.sea.prepare(session); }
+  retryAssets(): void { this.sea.retry(); }
 
   resize(width: number, height: number, insets: HudInsets): void {
     const key = JSON.stringify(insets);
@@ -38,6 +44,7 @@ export class DiveHud {
     const l = this.layout = hudLayout(width, height, insets);
     this.root.setScale(l.scale, l.scale, 1);
     this.root.getComponent(UITransform)!.setContentSize(375, l.height);
+    this.sea.resize(width, l.height);
     this.world = this.node('Ocean', this.root).addComponent(Graphics);
     this.chrome = this.node('Instruments', this.root).addComponent(Graphics);
     this.label('title', '潜 渊 猎 手', l.left + 18, l.top + 14, 190, 24, 19, cream);
@@ -77,8 +84,12 @@ export class DiveHud {
 
   render(session: DiveSession, notice = '', ads?: DiveAdView): void {
     const s = session.snapshot, l = this.layout, g = this.chrome;
+    this.sea.render(session);
     this.drawWorld(session);
     g.clear();
+    this.box(g, { x: l.left + 10, y: l.top + 7, width: 305 - l.left - l.right, height: 51 }, new Color(5, 27, 40, 210), 10);
+    this.box(g, l.status, new Color(5, 27, 40, 190), 7);
+    this.box(g, { x: l.left + 12, y: l.joystick.y - 49, width: 298 - l.left - l.right, height: 46 }, new Color(5, 27, 40, 210), 7);
     this.box(g, l.oxygen, panel, 9); this.box(g, l.cargo, panel, 7);
     const oxygenColor = s.oxygen / s.oxygenCapacity < 0.15 ? danger : mint;
     this.box(g, { x: l.oxygen.x + 12, y: l.oxygen.y + 29, width: l.oxygen.width - 24, height: 4 }, line, 2);
@@ -88,7 +99,10 @@ export class DiveHud {
     this.set('cargo', `收集舱   ${Math.floor(s.cargo.crystal)} / ${s.cargoCapacity} 荧晶`);
     this.set('hp', `生命  ${Math.ceil(s.hp)} / ${s.maxHp}`);
     this.set('depth', `${Math.floor(s.depth)} m ↓`);
-    this.set('layer', s.depth < 800 ? '01 / 透光层' : s.depth < 1600 ? '02 / 暮光层' : '03 / 深渊层');
+    this.set('layer', this.sea.activeLayer === 'sunlight' ? '01 / 日光层' : this.sea.activeLayer === 'twilight' ? '02 / 暮光层' : '03 / 深渊层');
+    const progress = session.content;
+    const boss = Array.from(session.battle.enemies.values()).find(enemy => enemy.kind === 'boss');
+    this.set('hint', boss ? `${boss.name} · ${Math.ceil(boss.hp)} / ${Math.ceil(boss.maxHp)}` : progress.gateDepth ? `前方 ${progress.gateDepth}m · 击败渊主点亮裂隙` : '深渊裂隙已点亮 · 本海域已贯通');
     this.set('status', s.oxygen <= 0 ? '氧气耗尽 · 正在失去生命，请尽快返航' : s.oxygen / s.oxygenCapacity < 0.15 ? '低氧警报 · 仍可行动，建议立即返航' : s.cargo.crystal >= s.cargoCapacity ? '收集舱已满 · 更多荧晶将留在海底' : '氧耗随深度上升 · 返航保住收获');
     for (const r of [l.pause, l.return, l.sonar]) this.box(g, r, panel, 10);
     const seconds = ads?.sonarSeconds ?? 0;
@@ -112,7 +126,7 @@ export class DiveHud {
     this.drawModal(session, notice, ads);
   }
 
-  destroy(): void { this.root.destroy(); }
+  destroy(): void { this.sea.destroy(); if (isValid(this.root, true)) this.root.destroy(); }
 
   private drawModal(session: DiveSession, notice: string, ads?: DiveAdView): void {
     const s = session.snapshot, l = this.layout;
@@ -138,6 +152,11 @@ export class DiveHud {
     else if (session.pause.has('countdown') && !session.pause.has('modal')) {
       title = String(s.countdown); body = '即将恢复潜航\n氧气与怪物仍然冻结。'; primary = '准备下潜'; secondary = '';
     }
+    if (session.pause.has('assets')) {
+      title = this.sea.status === 'error' ? '海域连接未完成' : '正在进入海域';
+      body = this.sea.status === 'error' ? '素材暂未加载成功。\n现场与收获已冻结，可重试。' : '正在准备场景与生物…\n氧气、战斗与收获保持冻结。';
+      primary = this.sea.status === 'error' ? '重新加载海域' : '正在加载…'; secondary = '';
+    }
     if (ads?.rewardPending) { title = '奖励确认中'; body = notice || '现场保持冻结，重试原奖励即可。\n无需再次观看视频。'; primary = '重试原奖励'; secondary = ''; }
     else if (ads?.busy) { title = '等待补给'; body = notice || '战斗与氧耗已冻结。'; primary = '正在加载或播放…'; secondary = ''; }
     this.set('modalTitle', title); this.set('modalBody', body); this.set('primary', primary); this.set('secondary', secondary);
@@ -146,22 +165,16 @@ export class DiveHud {
     this.labels.get('secondary')!.node.active = !!secondary;
     const blocked = session.pause.has('ad') || session.pause.has('background') || session.pause.has('reconnect');
     const actionable = !blocked && (s.state === 'Settled' || s.state === 'RescuePending' || (s.state === 'Running' && session.pause.has('modal')));
-    this.buttons.get('primary')!.interactable = ads?.rewardPending ? !ads.busy && !session.pause.has('background') && !session.pause.has('reconnect') : actionable && !(s.state === 'RescuePending' && (ads?.rescueRemaining ?? 3) === 0);
+    this.buttons.get('primary')!.interactable = ads?.rewardPending ? !ads.busy && !session.pause.has('background') && !session.pause.has('reconnect') : session.pause.has('assets') ? !blocked && this.sea.status === 'error' : actionable && !(s.state === 'RescuePending' && (ads?.rescueRemaining ?? 3) === 0);
     this.buttons.get('secondary')!.interactable = actionable && !!secondary && !ads?.rewardPending;
   }
 
   private drawWorld(session: DiveSession): void {
     const g = this.world, l = this.layout, b = session.battle; g.clear();
-    this.box(g, { x: 0, y: 0, width: 375, height: l.height }, ink, 0);
     const cy = Math.max(300, l.height * 0.48);
-    g.strokeColor = new Color(16, 47, 59); g.lineWidth = 1;
-    for (let y = 190 - b.player.y % 60; y < l.height - 160; y += 60) {
-      g.moveTo(-187.5, l.height / 2 - y); g.lineTo(187.5, l.height / 2 - y); g.stroke();
-    }
     const point = (item: { x: number; y: number }) => ({ x: 180 + item.x - b.player.x, y: cy + item.y - b.player.y });
     for (const zone of b.dangerZones) { const p = point(zone); this.dot(g, p.x, p.y, zone.radius, new Color(90, 43, 56, 120)); }
     for (const o of b.obstacles) { const p = point(o); this.dot(g, p.x, p.y, o.radius, new Color(34, 62, 72)); }
-    for (const e of b.enemies.values()) { const p = point(e); this.dot(g, p.x, p.y, e.radius, new Color(194, 93, 125)); }
     for (const e of b.loot.values()) { const p = point(e); this.dot(g, p.x, p.y, 3, mint); }
     for (const e of b.projectiles.values()) {
       const p = point(e);
@@ -172,9 +185,16 @@ export class DiveHud {
       const p = point(e), end = point({ x: e.endX, y: e.endY }); g.strokeColor = mint;
       g.moveTo(p.x - 187.5, l.height / 2 - p.y); g.lineTo(end.x - 187.5, l.height / 2 - end.y); g.stroke();
     }
-    g.strokeColor = new Color(45, 101, 106); g.lineWidth = 1;
-    for (const radius of [42, 70]) { g.circle(-7.5, l.height / 2 - cy, radius); g.stroke(); }
-    this.dot(g, 180, cy, 12, mint); this.dot(g, 180, cy - 3, 7, cream);
+    const gate = session.content.gateDepth;
+    if (gate !== undefined && Math.abs(gate - session.depth) < 240) {
+      const y = l.height / 2 - cy - gate + session.depth;
+      g.strokeColor = amber; g.lineWidth = 2; g.moveTo(-145, y); g.lineTo(110, y); g.stroke();
+    }
+    if (session.content.openRifts.length) {
+      g.strokeColor = mint; g.lineWidth = 2;
+      const previous = session.depth < 1600 ? 800 : 1600, distance = previous - session.depth;
+      if (Math.abs(distance) < 240) { g.ellipse(-7.5, l.height / 2 - cy - distance, 32, 8); g.stroke(); }
+    }
   }
 
   private node(name: string, parent: Node): Node {

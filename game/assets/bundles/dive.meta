@@ -1,0 +1,15 @@
+{
+  "ver": "1.2.0",
+  "importer": "directory",
+  "imported": true,
+  "uuid": "3b760d23-0683-59aa-9695-042664b541bf",
+  "files": [],
+  "subMetas": {},
+  "userData": {
+    "isBundle": true,
+    "bundleName": "dive",
+    "priority": 1,
+    "compressionType": {},
+    "isRemoteBundle": {}
+  }
+}

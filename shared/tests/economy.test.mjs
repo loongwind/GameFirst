@@ -62,3 +62,9 @@ test('normal drop curve is bounded at PRD ±30%, deep drops grow, and elites gua
   assert.equal(monsterDrop('boss', 0, [0.5, 0.5]).core, 1);
   assert.throws(() => monsterDrop('normal', Infinity, [0, 0]));
 });
+
+test('2400m final depth stays in the twenty-fourth reward band', async () => {
+  const { monsterDrop } = await api();
+  assert.equal(monsterDrop('normal', 2400, [0.5, 0.5]).crystal, 450);
+  assert.equal(monsterDrop('normal', 2399, [0.5, 0.5]).crystal, 450);
+});

@@ -6,13 +6,14 @@ import { createPlatformAdapter } from '../platform/createPlatformAdapter';
 import type { PlatformAdapter, Unsubscribe } from '../platform/PlatformAdapter';
 import { DiveHud } from '../ui/DiveHud';
 import type { HudAction } from '../ui/DiveHud';
-import { DEFAULT_BALANCE, attributeValue } from '@abyss-hunter/shared';
+import { DEFAULT_BALANCE } from '@abyss-hunter/shared';
 import { EconomyService } from './local/EconomyService';
 import { LocalSaveService } from './local/SaveService';
 import { LocalDiveService } from './local/LocalDiveService';
 import { AdService } from './local/AdService';
 import type { AdDriver } from './local/AdService';
 import { DiveAdModel } from './local/DiveAdModel';
+import { combatLoadout } from './local/CombatLoadout';
 
 const { ccclass } = _decorator;
 
@@ -42,11 +43,10 @@ export class DiveController extends Component {
       adEligible: (slot, context) => this.dives.adEligible(this.session, slot, context),
     });
     this.dives = new LocalDiveService(this.economy);
-    const state = this.economy.snapshot, attrs = state.attributes;
+    const loadout = combatLoadout(this.economy.snapshot);
     this.session = this.dives.open(`dive-${Date.now()}-${Math.random().toString(36).slice(2)}`, {
-      maxHp: attributeValue('hp', attrs.hp), cargoCapacity: Math.floor(attributeValue('cargo', attrs.cargo)),
-      oxygenCapacity: DEFAULT_BALANCE.attributes.baseValues[5], oxygenBaseRate: 1 / (1 + DEFAULT_BALANCE.attributes.gainPerLevel[5] * attrs.oxygen),
-      battle: { obstacles: [{ x: 70, y: 180, radius: 34 }, { x: -75, y: 380, radius: 46 }], dangerZones: [{ x: 135, y: 400, radius: 60 }] },
+      ...loadout,
+      battle: { ...loadout.battle, obstacles: [{ x: 70, y: 180, radius: 34 }, { x: -75, y: 380, radius: 46 }], dangerZones: [{ x: 135, y: 400, radius: 60 }] },
     });
     if (this.economy.saveStatus === 'recovered') this.notice = '已恢复上一份有效存档。';
     if (!WECHAT && navigator.onLine && this.session.pause.has('reconnect')) this.dives.restoreConnection(this.session);
@@ -71,6 +71,7 @@ export class DiveController extends Component {
 
   update(seconds: number): void {
     this.session.setBenefits(this.economy.activeBenefits());
+    this.hud.prepare(this.session);
     const size = this.node.getComponent(UITransform)!.contentSize, device = this.platform.getDeviceInfo();
     const ratio = size.width / device.windowWidth;
     this.hud.resize(size.width, size.height, {
@@ -180,6 +181,7 @@ export class DiveController extends Component {
 
   private handleAction(action: HudAction): void {
     const s = this.session;
+    if (action === 'primary' && s.pause.has('assets') && !s.pause.has('background') && !s.pause.has('reconnect')) { this.hud.retryAssets(); return; }
     if (action === 'primary' && this.ads.view.rewardPending && !s.pause.has('background') && !s.pause.has('reconnect')) { void this.ads.retry(); return; }
     if (s.pause.has('ad') || s.pause.has('background') || s.pause.has('reconnect')) return;
     if (action === 'sonar' && s.state === 'Running' && !s.pause.paused) { this.notice = ''; void this.ads.watch('sonar'); return; }

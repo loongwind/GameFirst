@@ -1,0 +1,2224 @@
+{
+  "version": 1,
+  "sourceIndex": "output/game-assets/v1/asset-index-final.csv",
+  "sourceIndexSha256": "dd5d58f08c24a1ee575bc2718fc030cb6c2f2832cba871b24e4baaf0454e81ed",
+  "sourceRigs": "output/game-assets/v1/boss-rigs-r9.json",
+  "sourceRigsSha256": "3361bb0795029740b11ae48830ea9814663940f82b0a5a660108b034e8dbc468",
+  "animationFps": 6,
+  "maxTextureEdge": 2048,
+  "bundles": {
+    "sunlight": {
+      "pngBytes": 1583962,
+      "rgbaBytes": 7356312,
+      "downloadBudgetBytes": 2097152,
+      "textureBudgetBytes": 12582912
+    },
+    "twilight": {
+      "pngBytes": 1506174,
+      "rgbaBytes": 7356312,
+      "downloadBudgetBytes": 4194304,
+      "textureBudgetBytes": 12582912
+    },
+    "abyss": {
+      "pngBytes": 1521388,
+      "rgbaBytes": 8503192,
+      "downloadBudgetBytes": 4194304,
+      "textureBudgetBytes": 12582912
+    },
+    "dive": {
+      "pngBytes": 39838,
+      "rgbaBytes": 147456,
+      "downloadBudgetBytes": 1048576,
+      "textureBudgetBytes": 1048576
+    }
+  },
+  "identities": {
+    "enemy_normal_01_moon_jelly": {
+      "layer": "sunlight",
+      "kind": "normal",
+      "idle": "enemy_normal_01_moon_jelly",
+      "swim": "enemy_normal_01_moon_jelly_swim"
+    },
+    "enemy_normal_02_lantern_angler": {
+      "layer": "sunlight",
+      "kind": "normal",
+      "idle": "enemy_normal_02_lantern_angler",
+      "swim": "enemy_normal_02_lantern_angler_swim"
+    },
+    "enemy_normal_03_electric_eel": {
+      "layer": "sunlight",
+      "kind": "normal",
+      "idle": "enemy_normal_03_electric_eel",
+      "swim": "enemy_normal_03_electric_eel_swim"
+    },
+    "enemy_normal_04_needlefish": {
+      "layer": "sunlight",
+      "kind": "normal",
+      "idle": "enemy_normal_04_needlefish",
+      "swim": "enemy_normal_04_needlefish_swim"
+    },
+    "enemy_normal_05_hermit_crab": {
+      "layer": "sunlight",
+      "kind": "normal",
+      "idle": "enemy_normal_05_hermit_crab",
+      "swim": "enemy_normal_05_hermit_crab_swim"
+    },
+    "enemy_normal_06_glass_shrimp": {
+      "layer": "sunlight",
+      "kind": "normal",
+      "idle": "enemy_normal_06_glass_shrimp",
+      "swim": "enemy_normal_06_glass_shrimp_swim"
+    },
+    "enemy_normal_07_moon_snail": {
+      "layer": "sunlight",
+      "kind": "normal",
+      "idle": "enemy_normal_07_moon_snail",
+      "swim": "enemy_normal_07_moon_snail_swim"
+    },
+    "enemy_normal_08_comb_jelly": {
+      "layer": "sunlight",
+      "kind": "normal",
+      "idle": "enemy_normal_08_comb_jelly",
+      "swim": "enemy_normal_08_comb_jelly_swim"
+    },
+    "enemy_normal_09_ribbon_eel": {
+      "layer": "twilight",
+      "kind": "normal",
+      "idle": "enemy_normal_09_ribbon_eel",
+      "swim": "enemy_normal_09_ribbon_eel_swim"
+    },
+    "enemy_normal_10_umbrella_octopus": {
+      "layer": "twilight",
+      "kind": "normal",
+      "idle": "enemy_normal_10_umbrella_octopus",
+      "swim": "enemy_normal_10_umbrella_octopus_swim"
+    },
+    "enemy_normal_11_hatchetfish": {
+      "layer": "twilight",
+      "kind": "normal",
+      "idle": "enemy_normal_11_hatchetfish",
+      "swim": "enemy_normal_11_hatchetfish_swim"
+    },
+    "enemy_normal_12_lantern_shrimp": {
+      "layer": "twilight",
+      "kind": "normal",
+      "idle": "enemy_normal_12_lantern_shrimp",
+      "swim": "enemy_normal_12_lantern_shrimp_swim"
+    },
+    "enemy_normal_13_crystal_crab": {
+      "layer": "twilight",
+      "kind": "normal",
+      "idle": "enemy_normal_13_crystal_crab",
+      "swim": "enemy_normal_13_crystal_crab_swim"
+    },
+    "enemy_normal_14_blue_ring_squid": {
+      "layer": "twilight",
+      "kind": "normal",
+      "idle": "enemy_normal_14_blue_ring_squid",
+      "swim": "enemy_normal_14_blue_ring_squid_swim"
+    },
+    "enemy_normal_15_ghost_jelly": {
+      "layer": "twilight",
+      "kind": "normal",
+      "idle": "enemy_normal_15_ghost_jelly",
+      "swim": "enemy_normal_15_ghost_jelly_swim"
+    },
+    "enemy_normal_16_violet_fish": {
+      "layer": "twilight",
+      "kind": "normal",
+      "idle": "enemy_normal_16_violet_fish",
+      "swim": "enemy_normal_16_violet_fish_swim"
+    },
+    "enemy_normal_17_firefly_squid": {
+      "layer": "abyss",
+      "kind": "normal",
+      "idle": "enemy_normal_17_firefly_squid",
+      "swim": "enemy_normal_17_firefly_squid_swim"
+    },
+    "enemy_normal_18_abyss_angler": {
+      "layer": "abyss",
+      "kind": "normal",
+      "idle": "enemy_normal_18_abyss_angler",
+      "swim": "enemy_normal_18_abyss_angler_swim"
+    },
+    "enemy_normal_19_tube_worm": {
+      "layer": "abyss",
+      "kind": "normal",
+      "idle": "enemy_normal_19_tube_worm",
+      "swim": "enemy_normal_19_tube_worm_swim"
+    },
+    "enemy_normal_20_armored_isopod": {
+      "layer": "abyss",
+      "kind": "normal",
+      "idle": "enemy_normal_20_armored_isopod",
+      "swim": "enemy_normal_20_armored_isopod_swim"
+    },
+    "enemy_normal_21_siphonophore": {
+      "layer": "abyss",
+      "kind": "normal",
+      "idle": "enemy_normal_21_siphonophore",
+      "swim": "enemy_normal_21_siphonophore_swim"
+    },
+    "enemy_normal_22_sea_spider": {
+      "layer": "abyss",
+      "kind": "normal",
+      "idle": "enemy_normal_22_sea_spider",
+      "swim": "enemy_normal_22_sea_spider_swim"
+    },
+    "enemy_normal_23_deep_starfish": {
+      "layer": "abyss",
+      "kind": "normal",
+      "idle": "enemy_normal_23_deep_starfish",
+      "swim": "enemy_normal_23_deep_starfish_swim"
+    },
+    "enemy_normal_24_glass_sponge": {
+      "layer": "abyss",
+      "kind": "normal",
+      "idle": "enemy_normal_24_glass_sponge",
+      "swim": "enemy_normal_24_glass_sponge_swim"
+    },
+    "enemy_elite_01_storm_eel": {
+      "layer": "sunlight",
+      "kind": "elite",
+      "idle": "enemy_elite_01_storm_eel",
+      "swim": "enemy_elite_01_storm_eel_swim"
+    },
+    "enemy_elite_02_iron_hermit": {
+      "layer": "sunlight",
+      "kind": "elite",
+      "idle": "enemy_elite_02_iron_hermit",
+      "swim": "enemy_elite_02_iron_hermit_swim"
+    },
+    "enemy_elite_03_spear_guard": {
+      "layer": "sunlight",
+      "kind": "elite",
+      "idle": "enemy_elite_03_spear_guard",
+      "swim": "enemy_elite_03_spear_guard_swim"
+    },
+    "enemy_elite_04_royal_jelly": {
+      "layer": "twilight",
+      "kind": "elite",
+      "idle": "enemy_elite_04_royal_jelly",
+      "swim": "enemy_elite_04_royal_jelly_swim"
+    },
+    "enemy_elite_05_crystal_octopus": {
+      "layer": "twilight",
+      "kind": "elite",
+      "idle": "enemy_elite_05_crystal_octopus",
+      "swim": "enemy_elite_05_crystal_octopus_swim"
+    },
+    "enemy_elite_06_mirror_ray": {
+      "layer": "twilight",
+      "kind": "elite",
+      "idle": "enemy_elite_06_mirror_ray",
+      "swim": "enemy_elite_06_mirror_ray_swim"
+    },
+    "enemy_elite_07_abyss_stalker": {
+      "layer": "abyss",
+      "kind": "elite",
+      "idle": "enemy_elite_07_abyss_stalker",
+      "swim": "enemy_elite_07_abyss_stalker_swim"
+    },
+    "enemy_elite_08_violet_nautilus": {
+      "layer": "abyss",
+      "kind": "elite",
+      "idle": "enemy_elite_08_violet_nautilus",
+      "swim": "enemy_elite_08_violet_nautilus_swim"
+    },
+    "enemy_boss_01_angler_king": {
+      "layer": "sunlight",
+      "kind": "boss",
+      "idle": "enemy_boss_01_angler_king",
+      "part": "enemy_boss_01_angler_king_tentacle"
+    },
+    "enemy_boss_02_tentacle_warden": {
+      "layer": "twilight",
+      "kind": "boss",
+      "idle": "enemy_boss_02_tentacle_warden",
+      "part": "enemy_boss_02_tentacle_warden_tentacle"
+    },
+    "enemy_boss_03_giant_squid": {
+      "layer": "abyss",
+      "kind": "boss",
+      "idle": "enemy_boss_03_giant_squid",
+      "part": "enemy_boss_03_giant_squid_tentacle"
+    },
+    "enemy_boss_04_abyss_whale": {
+      "layer": "abyss",
+      "kind": "boss",
+      "idle": "enemy_boss_04_abyss_whale",
+      "part": "enemy_boss_04_abyss_whale_tentacle"
+    }
+  },
+  "assets": [
+    {
+      "key": "bg_sunlight",
+      "bundle": "sunlight",
+      "kind": "scene-far",
+      "sourcePath": "output/game-assets/v1/sunlight/bg_sunlight_far.png",
+      "sourceSha256": "0ec6efb39fa15f6bebc995ad789097995faf9622dc0f1585528dcd633e7c88f0",
+      "importPath": "game/assets/bundles/sunlight/content/bg_sunlight_far.png",
+      "importSha256": "dd7dda00104d70e54fc714dc07e881f024c46671c79e0ece2f99571692f543d8",
+      "loadPath": "content/bg_sunlight_far",
+      "width": 750,
+      "height": 1125,
+      "bytes": 752815
+    },
+    {
+      "key": "reef_sunlight_left",
+      "bundle": "sunlight",
+      "kind": "scene-edge",
+      "sourcePath": "output/game-assets/v1/sunlight/deco_sunlight_left.png",
+      "sourceSha256": "62a2cb5d36b14cd479b7754655b10396aa0fc9bc7f7e09bb9870a1d3504df6b5",
+      "importPath": "game/assets/bundles/sunlight/content/deco_sunlight_left.png",
+      "importSha256": "c8cd0db1da050e7bfbaaef8e304512e56f5457c7465e6ac78dd121453b6c8d4e",
+      "loadPath": "content/deco_sunlight_left",
+      "width": 192,
+      "height": 768,
+      "bytes": 84765
+    },
+    {
+      "key": "reef_sunlight_right",
+      "bundle": "sunlight",
+      "kind": "scene-edge",
+      "sourcePath": "output/game-assets/v1/sunlight/deco_sunlight_right.png",
+      "sourceSha256": "30dd576b994ee2af6bcba5263008e03426ee6651688c51414a6679d42ad3c9c1",
+      "importPath": "game/assets/bundles/sunlight/content/deco_sunlight_right.png",
+      "importSha256": "b77e550cc482b4cd063fbd6d839cf19e5b19f42ca8598d3c6e5073b05986332a",
+      "loadPath": "content/deco_sunlight_right",
+      "width": 192,
+      "height": 768,
+      "bytes": 127460
+    },
+    {
+      "key": "flora_sunlight",
+      "bundle": "sunlight",
+      "kind": "scene-flora",
+      "sourcePath": "output/game-assets/v1/sunlight/deco_sunlight_flora.png",
+      "sourceSha256": "22434f2b16f2ea7b98a87149178a837320423ab3da7cd6d2fddbc2f18c0c773c",
+      "importPath": "game/assets/bundles/sunlight/content/deco_sunlight_flora.png",
+      "importSha256": "fc8e900db42baad7e4c702ec13905ad0d5dbe58a9f14c835b7f111b25108e5ad",
+      "loadPath": "content/deco_sunlight_flora",
+      "width": 256,
+      "height": 256,
+      "bytes": 68687
+    },
+    {
+      "key": "bg_twilight",
+      "bundle": "twilight",
+      "kind": "scene-far",
+      "sourcePath": "output/game-assets/v1/twilight/bg_twilight_far.png",
+      "sourceSha256": "fe816bd120fa46c5d8e31c40e6d7b90a67aa74b62f8575ca64b01326cc2bfaee",
+      "importPath": "game/assets/bundles/twilight/content/bg_twilight_far.png",
+      "importSha256": "01c511a46d31ca61faaafc8b876dbc2962bace377872d329c85984ed0d9dcabc",
+      "loadPath": "content/bg_twilight_far",
+      "width": 750,
+      "height": 1125,
+      "bytes": 663771
+    },
+    {
+      "key": "reef_twilight_left",
+      "bundle": "twilight",
+      "kind": "scene-edge",
+      "sourcePath": "output/game-assets/v1/twilight/deco_twilight_left.png",
+      "sourceSha256": "1ab3878edc82dfa76f59150f9a2e0bc6926afec9cdaf4c55d095bbeba242e33f",
+      "importPath": "game/assets/bundles/twilight/content/deco_twilight_left.png",
+      "importSha256": "b6163d35aae57942646860edf159d82fad38e4d52f8d88345aebe17296523401",
+      "loadPath": "content/deco_twilight_left",
+      "width": 192,
+      "height": 768,
+      "bytes": 79042
+    },
+    {
+      "key": "reef_twilight_right",
+      "bundle": "twilight",
+      "kind": "scene-edge",
+      "sourcePath": "output/game-assets/v1/twilight/deco_twilight_right.png",
+      "sourceSha256": "601f5d1c6b40ea803ca570b43b237edf2737189e98173ebf0ff1aaf09682141a",
+      "importPath": "game/assets/bundles/twilight/content/deco_twilight_right.png",
+      "importSha256": "bae68e9980d1560bdeaadb3d0a9f6908058d576a6e7ef3616f7123cbaf2bc447",
+      "loadPath": "content/deco_twilight_right",
+      "width": 192,
+      "height": 768,
+      "bytes": 94089
+    },
+    {
+      "key": "flora_twilight",
+      "bundle": "twilight",
+      "kind": "scene-flora",
+      "sourcePath": "output/game-assets/v1/twilight/deco_twilight_flora.png",
+      "sourceSha256": "76fede04b909b93a7a95c68efcf0535add6c2465a887dc2ee889b48131d011e1",
+      "importPath": "game/assets/bundles/twilight/content/deco_twilight_flora.png",
+      "importSha256": "3db3eeba94014105bd3a2ec6553be8b36be7b742adf77c3128672b690a2893dd",
+      "loadPath": "content/deco_twilight_flora",
+      "width": 256,
+      "height": 256,
+      "bytes": 48583
+    },
+    {
+      "key": "bg_abyss",
+      "bundle": "abyss",
+      "kind": "scene-far",
+      "sourcePath": "output/game-assets/v1/abyss/bg_abyss_far.png",
+      "sourceSha256": "e8abefb41f4a71ce2d886100752e13a2236457526804c7ad13f10a364c7aaeb1",
+      "importPath": "game/assets/bundles/abyss/content/bg_abyss_far.png",
+      "importSha256": "cd8e7bb325d34238f5c1b7fc666d0bd144f7ff326d9de037404d9c42612c00f5",
+      "loadPath": "content/bg_abyss_far",
+      "width": 750,
+      "height": 1125,
+      "bytes": 647714
+    },
+    {
+      "key": "reef_abyss_left",
+      "bundle": "abyss",
+      "kind": "scene-edge",
+      "sourcePath": "output/game-assets/v1/abyss/deco_abyss_left.png",
+      "sourceSha256": "2c3bad2d715362d60e1a1fe9159d902424a2917c97676c5c690d990edc46c1f3",
+      "importPath": "game/assets/bundles/abyss/content/deco_abyss_left.png",
+      "importSha256": "908058d4079580f5c46254456adb74b9f0f35e917171f28d432a9b9a26bdf42e",
+      "loadPath": "content/deco_abyss_left",
+      "width": 192,
+      "height": 768,
+      "bytes": 99237
+    },
+    {
+      "key": "reef_abyss_right",
+      "bundle": "abyss",
+      "kind": "scene-edge",
+      "sourcePath": "output/game-assets/v1/abyss/deco_abyss_right.png",
+      "sourceSha256": "359eaa3e50563e1cb9b564c3a26effd10d28c27b34c58a89631c1ea19b18068d",
+      "importPath": "game/assets/bundles/abyss/content/deco_abyss_right.png",
+      "importSha256": "30fade6bf10938d30cbf5d0385fb5718cf0524dec6563762ab2a44c084ca100e",
+      "loadPath": "content/deco_abyss_right",
+      "width": 192,
+      "height": 768,
+      "bytes": 87760
+    },
+    {
+      "key": "flora_abyss",
+      "bundle": "abyss",
+      "kind": "scene-flora",
+      "sourcePath": "output/game-assets/v1/abyss/deco_abyss_flora.png",
+      "sourceSha256": "6ff7cfff96616807926cb80d8722ec072b9fa47f87abb5b7b2308e1a257525c0",
+      "importPath": "game/assets/bundles/abyss/content/deco_abyss_flora.png",
+      "importSha256": "a8df5196e04afa52ec09d808a4688c8e2b76b286c56b22115a69f729b5f0bb8a",
+      "loadPath": "content/deco_abyss_flora",
+      "width": 256,
+      "height": 256,
+      "bytes": 52094
+    },
+    {
+      "key": "hero_ship",
+      "bundle": "dive",
+      "kind": "player",
+      "sourcePath": "output/game-assets/v1/main/hero_h01_idle.png",
+      "sourceSha256": "1415609a65de0d5217f43286ba7a29dd81c79483023f0a0155b8060a88ee68a2",
+      "importPath": "game/assets/bundles/dive/content/hero_h01_idle.png",
+      "importSha256": "d4f0fdb5741ae16188f4f3418642e7897ba08b833873c8070056e047fc216ac3",
+      "loadPath": "content/hero_h01_idle",
+      "width": 192,
+      "height": 192,
+      "bytes": 39838
+    },
+    {
+      "key": "enemy_normal_01_moon_jelly",
+      "bundle": "sunlight",
+      "kind": "normal-idle",
+      "sourcePath": "output/game-assets/v1/sunlight/enemy_normal_01_moon_jelly_idle.png",
+      "sourceSha256": "f86c219ebcffc867199079d6409a2182c6a2d4a832742d0435f06806be3f2877",
+      "importPath": "game/assets/bundles/sunlight/content/enemy_normal_01_moon_jelly_idle.png",
+      "importSha256": "220470ec1d2df290dbeafcf1ae384e1f53fbdd26a5cb07bc501488dfb8799b14",
+      "loadPath": "content/enemy_normal_01_moon_jelly_idle",
+      "width": 64,
+      "height": 64,
+      "bytes": 3419
+    },
+    {
+      "key": "enemy_normal_01_moon_jelly_swim",
+      "bundle": "sunlight",
+      "kind": "normal-swim",
+      "sourcePath": "output/game-assets/v1/sunlight/enemy_normal_01_moon_jelly_swim.png",
+      "sourceSha256": "c4feded80cf326502a7d3748a904690c69989f8cf24f2974a6f4808a72a4d5b9",
+      "importPath": "game/assets/bundles/sunlight/content/enemy_normal_01_moon_jelly_swim.png",
+      "importSha256": "05ea462bb61ce46db7aa4f1f3fd68ca8dc32d2c04d034c7521752b51715c53a9",
+      "loadPath": "content/enemy_normal_01_moon_jelly_swim",
+      "width": 256,
+      "height": 64,
+      "bytes": 14484,
+      "fps": 6,
+      "frames": [
+        [
+          0,
+          0,
+          64,
+          64
+        ],
+        [
+          64,
+          0,
+          64,
+          64
+        ],
+        [
+          128,
+          0,
+          64,
+          64
+        ],
+        [
+          192,
+          0,
+          64,
+          64
+        ]
+      ]
+    },
+    {
+      "key": "enemy_normal_02_lantern_angler",
+      "bundle": "sunlight",
+      "kind": "normal-idle",
+      "sourcePath": "output/game-assets/v1/sunlight/enemy_normal_02_lantern_angler_idle.png",
+      "sourceSha256": "53676d82061570e5e49040b3cfb2e0c05d79e28eb434c4ebc0fc090197ea58ae",
+      "importPath": "game/assets/bundles/sunlight/content/enemy_normal_02_lantern_angler_idle.png",
+      "importSha256": "37f814dfa06885722bbccc5a4a91e6bc2626cd69a26c8f37bc9f69ebc2baea95",
+      "loadPath": "content/enemy_normal_02_lantern_angler_idle",
+      "width": 64,
+      "height": 64,
+      "bytes": 3674
+    },
+    {
+      "key": "enemy_normal_02_lantern_angler_swim",
+      "bundle": "sunlight",
+      "kind": "normal-swim",
+      "sourcePath": "output/game-assets/v1/sunlight/enemy_normal_02_lantern_angler_swim.png",
+      "sourceSha256": "c0dda4e99bbd214a2475b01a653dbb052d4423de41a82dcb53b12018cf5de535",
+      "importPath": "game/assets/bundles/sunlight/content/enemy_normal_02_lantern_angler_swim.png",
+      "importSha256": "b822f63e07a5094d3b83f31986777c9fdb72ed92506b218b361881faacc9ddaa",
+      "loadPath": "content/enemy_normal_02_lantern_angler_swim",
+      "width": 256,
+      "height": 64,
+      "bytes": 13391,
+      "fps": 6,
+      "frames": [
+        [
+          0,
+          0,
+          64,
+          64
+        ],
+        [
+          64,
+          0,
+          64,
+          64
+        ],
+        [
+          128,
+          0,
+          64,
+          64
+        ],
+        [
+          192,
+          0,
+          64,
+          64
+        ]
+      ]
+    },
+    {
+      "key": "enemy_normal_03_electric_eel",
+      "bundle": "sunlight",
+      "kind": "normal-idle",
+      "sourcePath": "output/game-assets/v1/sunlight/enemy_normal_03_electric_eel_idle.png",
+      "sourceSha256": "1b0ba5e522bf06da5416813fb1303f1fb06d7df28088c918bc11a3777f2d98f6",
+      "importPath": "game/assets/bundles/sunlight/content/enemy_normal_03_electric_eel_idle.png",
+      "importSha256": "9d9556c7294c4bc8f469ef39bc0c74301f7f6f176ed0d22f2b59b5a1898cad19",
+      "loadPath": "content/enemy_normal_03_electric_eel_idle",
+      "width": 64,
+      "height": 64,
+      "bytes": 2152
+    },
+    {
+      "key": "enemy_normal_03_electric_eel_swim",
+      "bundle": "sunlight",
+      "kind": "normal-swim",
+      "sourcePath": "output/game-assets/v1/sunlight/enemy_normal_03_electric_eel_swim.png",
+      "sourceSha256": "fd100dbd0063e41a79f016b2addb391bf0df2c9c205be3d0c1ee31612b8e680c",
+      "importPath": "game/assets/bundles/sunlight/content/enemy_normal_03_electric_eel_swim.png",
+      "importSha256": "40a04deee8b93f487229651e8ad050a1b0798fa7264a96eb1bd1a1bf40da81d6",
+      "loadPath": "content/enemy_normal_03_electric_eel_swim",
+      "width": 256,
+      "height": 64,
+      "bytes": 7927,
+      "fps": 6,
+      "frames": [
+        [
+          0,
+          0,
+          64,
+          64
+        ],
+        [
+          64,
+          0,
+          64,
+          64
+        ],
+        [
+          128,
+          0,
+          64,
+          64
+        ],
+        [
+          192,
+          0,
+          64,
+          64
+        ]
+      ]
+    },
+    {
+      "key": "enemy_normal_04_needlefish",
+      "bundle": "sunlight",
+      "kind": "normal-idle",
+      "sourcePath": "output/game-assets/v1/sunlight/enemy_normal_04_needlefish_idle.png",
+      "sourceSha256": "72bdb2bcebe47c78b0db4905d9c370a8f428865a59a5016961a3e838015e797a",
+      "importPath": "game/assets/bundles/sunlight/content/enemy_normal_04_needlefish_idle.png",
+      "importSha256": "49735ea72eb2af8e91e67f43c0714d07e76b4964e30505da4911e0fc253da6c2",
+      "loadPath": "content/enemy_normal_04_needlefish_idle",
+      "width": 64,
+      "height": 64,
+      "bytes": 1578
+    },
+    {
+      "key": "enemy_normal_04_needlefish_swim",
+      "bundle": "sunlight",
+      "kind": "normal-swim",
+      "sourcePath": "output/game-assets/v1/sunlight/enemy_normal_04_needlefish_swim.png",
+      "sourceSha256": "5a12b36c70934e22bfe900d10bb2acec1f507b9f25985642896f26409524c569",
+      "importPath": "game/assets/bundles/sunlight/content/enemy_normal_04_needlefish_swim.png",
+      "importSha256": "c2b7ee5f01b23c6b3b092c90d5f9bb72c8a5aef789cf97133f0d876c04d63ef6",
+      "loadPath": "content/enemy_normal_04_needlefish_swim",
+      "width": 256,
+      "height": 64,
+      "bytes": 6266,
+      "fps": 6,
+      "frames": [
+        [
+          0,
+          0,
+          64,
+          64
+        ],
+        [
+          64,
+          0,
+          64,
+          64
+        ],
+        [
+          128,
+          0,
+          64,
+          64
+        ],
+        [
+          192,
+          0,
+          64,
+          64
+        ]
+      ]
+    },
+    {
+      "key": "enemy_normal_05_hermit_crab",
+      "bundle": "sunlight",
+      "kind": "normal-idle",
+      "sourcePath": "output/game-assets/v1/sunlight/enemy_normal_05_hermit_crab_idle.png",
+      "sourceSha256": "7651b72b5cf6ff1ef9b04e1fed157c5130235d0d691e0e50a81012ca6cbaf523",
+      "importPath": "game/assets/bundles/sunlight/content/enemy_normal_05_hermit_crab_idle.png",
+      "importSha256": "17437f9687f07321bd8a66755dca896eb6edc422c920ac6c44b7b591fa47ba80",
+      "loadPath": "content/enemy_normal_05_hermit_crab_idle",
+      "width": 64,
+      "height": 64,
+      "bytes": 4844
+    },
+    {
+      "key": "enemy_normal_05_hermit_crab_swim",
+      "bundle": "sunlight",
+      "kind": "normal-swim",
+      "sourcePath": "output/game-assets/v1/sunlight/enemy_normal_05_hermit_crab_swim.png",
+      "sourceSha256": "b474f73dd20006ca1057d205dbfa17da938690a5a0f9070c7b30ddf55c0ebe7f",
+      "importPath": "game/assets/bundles/sunlight/content/enemy_normal_05_hermit_crab_swim.png",
+      "importSha256": "58e93570ef8b6ddf14865922d6612dd6cfcef4984824adb07aca5de78620ace0",
+      "loadPath": "content/enemy_normal_05_hermit_crab_swim",
+      "width": 256,
+      "height": 64,
+      "bytes": 19093,
+      "fps": 6,
+      "frames": [
+        [
+          0,
+          0,
+          64,
+          64
+        ],
+        [
+          64,
+          0,
+          64,
+          64
+        ],
+        [
+          128,
+          0,
+          64,
+          64
+        ],
+        [
+          192,
+          0,
+          64,
+          64
+        ]
+      ]
+    },
+    {
+      "key": "enemy_normal_06_glass_shrimp",
+      "bundle": "sunlight",
+      "kind": "normal-idle",
+      "sourcePath": "output/game-assets/v1/sunlight/enemy_normal_06_glass_shrimp_idle.png",
+      "sourceSha256": "eddcf847862e8360da5d93c20df7417c77f4fc2551a8a40cbe44195050740579",
+      "importPath": "game/assets/bundles/sunlight/content/enemy_normal_06_glass_shrimp_idle.png",
+      "importSha256": "c0d7d945f21a7dc875a0ad321ee35037ac09faa93a566b9333b15dc951f1174a",
+      "loadPath": "content/enemy_normal_06_glass_shrimp_idle",
+      "width": 64,
+      "height": 64,
+      "bytes": 3176
+    },
+    {
+      "key": "enemy_normal_06_glass_shrimp_swim",
+      "bundle": "sunlight",
+      "kind": "normal-swim",
+      "sourcePath": "output/game-assets/v1/sunlight/enemy_normal_06_glass_shrimp_swim.png",
+      "sourceSha256": "6821eb285ce19f75c65120d586c7be3216657f90c9c91eb529f0eae35de35846",
+      "importPath": "game/assets/bundles/sunlight/content/enemy_normal_06_glass_shrimp_swim.png",
+      "importSha256": "d18f77e52484baf3f67cb595e69e1c8631864e51d75ee965185b3d7f94e4ec86",
+      "loadPath": "content/enemy_normal_06_glass_shrimp_swim",
+      "width": 256,
+      "height": 64,
+      "bytes": 13789,
+      "fps": 6,
+      "frames": [
+        [
+          0,
+          0,
+          64,
+          64
+        ],
+        [
+          64,
+          0,
+          64,
+          64
+        ],
+        [
+          128,
+          0,
+          64,
+          64
+        ],
+        [
+          192,
+          0,
+          64,
+          64
+        ]
+      ]
+    },
+    {
+      "key": "enemy_normal_07_moon_snail",
+      "bundle": "sunlight",
+      "kind": "normal-idle",
+      "sourcePath": "output/game-assets/v1/sunlight/enemy_normal_07_moon_snail_idle.png",
+      "sourceSha256": "33a3d205b7d2f18183e0840029123e5f4b62dc4d41ac94bed18d7895ab34b162",
+      "importPath": "game/assets/bundles/sunlight/content/enemy_normal_07_moon_snail_idle.png",
+      "importSha256": "c6a72609d67f0e2ca7a30145c4d52d2f3d662b96babe76bf7abeb07d8e1b246a",
+      "loadPath": "content/enemy_normal_07_moon_snail_idle",
+      "width": 64,
+      "height": 64,
+      "bytes": 4366
+    },
+    {
+      "key": "enemy_normal_07_moon_snail_swim",
+      "bundle": "sunlight",
+      "kind": "normal-swim",
+      "sourcePath": "output/game-assets/v1/sunlight/enemy_normal_07_moon_snail_swim.png",
+      "sourceSha256": "6b8584daac1495e922ef27cc6ee6051e3dd0678be7c4f9d6ce00ade0e119bd89",
+      "importPath": "game/assets/bundles/sunlight/content/enemy_normal_07_moon_snail_swim.png",
+      "importSha256": "c43b27d4fa064a2f6aaee3e49a331b357c657f0182f1a3f4ea314a475d91b43b",
+      "loadPath": "content/enemy_normal_07_moon_snail_swim",
+      "width": 256,
+      "height": 64,
+      "bytes": 17683,
+      "fps": 6,
+      "frames": [
+        [
+          0,
+          0,
+          64,
+          64
+        ],
+        [
+          64,
+          0,
+          64,
+          64
+        ],
+        [
+          128,
+          0,
+          64,
+          64
+        ],
+        [
+          192,
+          0,
+          64,
+          64
+        ]
+      ]
+    },
+    {
+      "key": "enemy_normal_08_comb_jelly",
+      "bundle": "sunlight",
+      "kind": "normal-idle",
+      "sourcePath": "output/game-assets/v1/sunlight/enemy_normal_08_comb_jelly_idle.png",
+      "sourceSha256": "fc2c3f64d402244e0f68cc88a72fdbdccf88256ceb8f56e20859a60ee107be50",
+      "importPath": "game/assets/bundles/sunlight/content/enemy_normal_08_comb_jelly_idle.png",
+      "importSha256": "7c8f4218972dd1891883050b9e93d9a3aac34990ed3dd8660ae779eabdc41ea3",
+      "loadPath": "content/enemy_normal_08_comb_jelly_idle",
+      "width": 64,
+      "height": 64,
+      "bytes": 4542
+    },
+    {
+      "key": "enemy_normal_08_comb_jelly_swim",
+      "bundle": "sunlight",
+      "kind": "normal-swim",
+      "sourcePath": "output/game-assets/v1/sunlight/enemy_normal_08_comb_jelly_swim.png",
+      "sourceSha256": "9000ce0ba7ecf22b5a4fc0f5f7e57228423540c5558bc8bb9164d4744fa358f3",
+      "importPath": "game/assets/bundles/sunlight/content/enemy_normal_08_comb_jelly_swim.png",
+      "importSha256": "c09d1e86183abf9a671e437828bde749ae464c47f4ed0e119d751664601adce6",
+      "loadPath": "content/enemy_normal_08_comb_jelly_swim",
+      "width": 256,
+      "height": 64,
+      "bytes": 18691,
+      "fps": 6,
+      "frames": [
+        [
+          0,
+          0,
+          64,
+          64
+        ],
+        [
+          64,
+          0,
+          64,
+          64
+        ],
+        [
+          128,
+          0,
+          64,
+          64
+        ],
+        [
+          192,
+          0,
+          64,
+          64
+        ]
+      ]
+    },
+    {
+      "key": "enemy_normal_09_ribbon_eel",
+      "bundle": "twilight",
+      "kind": "normal-idle",
+      "sourcePath": "output/game-assets/v1/twilight/enemy_normal_09_ribbon_eel_idle.png",
+      "sourceSha256": "f10c60936fb739593cfe9bad887919d926534765760682e75e789f2cc2da96e5",
+      "importPath": "game/assets/bundles/twilight/content/enemy_normal_09_ribbon_eel_idle.png",
+      "importSha256": "750f3ab1e7b8b8880cb78a0ddc6108d30f5dd6e24de588103676fa2bd90f4194",
+      "loadPath": "content/enemy_normal_09_ribbon_eel_idle",
+      "width": 64,
+      "height": 64,
+      "bytes": 1792
+    },
+    {
+      "key": "enemy_normal_09_ribbon_eel_swim",
+      "bundle": "twilight",
+      "kind": "normal-swim",
+      "sourcePath": "output/game-assets/v1/twilight/enemy_normal_09_ribbon_eel_swim.png",
+      "sourceSha256": "0e408ab78f8483db81f5bb25bfe937045ccc0b421c14c3c51088302e8e69f8d2",
+      "importPath": "game/assets/bundles/twilight/content/enemy_normal_09_ribbon_eel_swim.png",
+      "importSha256": "0b0510262f11c504d12d5c44924c1c8e6c95df7badf0bf2c34048d2c7aa55f92",
+      "loadPath": "content/enemy_normal_09_ribbon_eel_swim",
+      "width": 256,
+      "height": 64,
+      "bytes": 6717,
+      "fps": 6,
+      "frames": [
+        [
+          0,
+          0,
+          64,
+          64
+        ],
+        [
+          64,
+          0,
+          64,
+          64
+        ],
+        [
+          128,
+          0,
+          64,
+          64
+        ],
+        [
+          192,
+          0,
+          64,
+          64
+        ]
+      ]
+    },
+    {
+      "key": "enemy_normal_10_umbrella_octopus",
+      "bundle": "twilight",
+      "kind": "normal-idle",
+      "sourcePath": "output/game-assets/v1/twilight/enemy_normal_10_umbrella_octopus_idle.png",
+      "sourceSha256": "7fb658e83495f18365e1a8cd07b3c0775817de6dd9335309c3878cf268abc51b",
+      "importPath": "game/assets/bundles/twilight/content/enemy_normal_10_umbrella_octopus_idle.png",
+      "importSha256": "88a9caa0478e5622f47107f4704ef9f50f54c18612cfe5510334e343aafe5079",
+      "loadPath": "content/enemy_normal_10_umbrella_octopus_idle",
+      "width": 64,
+      "height": 64,
+      "bytes": 5500
+    },
+    {
+      "key": "enemy_normal_10_umbrella_octopus_swim",
+      "bundle": "twilight",
+      "kind": "normal-swim",
+      "sourcePath": "output/game-assets/v1/twilight/enemy_normal_10_umbrella_octopus_swim.png",
+      "sourceSha256": "0173fc583e49dc9d75ec1828feb0bb8b7a4c88779cfdcac7989a15d17f91ffcd",
+      "importPath": "game/assets/bundles/twilight/content/enemy_normal_10_umbrella_octopus_swim.png",
+      "importSha256": "39e4105e11c7182e1dd73fdc125ce47987314eaa20331ed3c6211d9a6311e75d",
+      "loadPath": "content/enemy_normal_10_umbrella_octopus_swim",
+      "width": 256,
+      "height": 64,
+      "bytes": 22045,
+      "fps": 6,
+      "frames": [
+        [
+          0,
+          0,
+          64,
+          64
+        ],
+        [
+          64,
+          0,
+          64,
+          64
+        ],
+        [
+          128,
+          0,
+          64,
+          64
+        ],
+        [
+          192,
+          0,
+          64,
+          64
+        ]
+      ]
+    },
+    {
+      "key": "enemy_normal_11_hatchetfish",
+      "bundle": "twilight",
+      "kind": "normal-idle",
+      "sourcePath": "output/game-assets/v1/twilight/enemy_normal_11_hatchetfish_idle.png",
+      "sourceSha256": "36571d46cf2ea3eb5b22f76500a15350cd73f56f5228c2a0401f71257252d8e4",
+      "importPath": "game/assets/bundles/twilight/content/enemy_normal_11_hatchetfish_idle.png",
+      "importSha256": "ba43b34484bd610cf2771cb3e9872f0d492325eba34e6c28df9ae46a8c67684d",
+      "loadPath": "content/enemy_normal_11_hatchetfish_idle",
+      "width": 64,
+      "height": 64,
+      "bytes": 2769
+    },
+    {
+      "key": "enemy_normal_11_hatchetfish_swim",
+      "bundle": "twilight",
+      "kind": "normal-swim",
+      "sourcePath": "output/game-assets/v1/twilight/enemy_normal_11_hatchetfish_swim.png",
+      "sourceSha256": "57a936e050d907683ca96b2f3b772b1f5054581811bc2189d99961346567fcea",
+      "importPath": "game/assets/bundles/twilight/content/enemy_normal_11_hatchetfish_swim.png",
+      "importSha256": "93dabcb7d4167fd15bdf379218b92547db5a7f33a8426a7ed495f7a7134ec905",
+      "loadPath": "content/enemy_normal_11_hatchetfish_swim",
+      "width": 256,
+      "height": 64,
+      "bytes": 10901,
+      "fps": 6,
+      "frames": [
+        [
+          0,
+          0,
+          64,
+          64
+        ],
+        [
+          64,
+          0,
+          64,
+          64
+        ],
+        [
+          128,
+          0,
+          64,
+          64
+        ],
+        [
+          192,
+          0,
+          64,
+          64
+        ]
+      ]
+    },
+    {
+      "key": "enemy_normal_12_lantern_shrimp",
+      "bundle": "twilight",
+      "kind": "normal-idle",
+      "sourcePath": "output/game-assets/v1/twilight/enemy_normal_12_lantern_shrimp_idle.png",
+      "sourceSha256": "2b33fadf72f7ed451e091002a6f74cdc80534d395a84f6a6ddfef3c0aee0d429",
+      "importPath": "game/assets/bundles/twilight/content/enemy_normal_12_lantern_shrimp_idle.png",
+      "importSha256": "0880f950c79d7688e31402be9f03fdaa71a14bb79639dfc3cf2b3ef1d9dad2b5",
+      "loadPath": "content/enemy_normal_12_lantern_shrimp_idle",
+      "width": 64,
+      "height": 64,
+      "bytes": 3015
+    },
+    {
+      "key": "enemy_normal_12_lantern_shrimp_swim",
+      "bundle": "twilight",
+      "kind": "normal-swim",
+      "sourcePath": "output/game-assets/v1/twilight/enemy_normal_12_lantern_shrimp_swim.png",
+      "sourceSha256": "08244fa4e19a08ef7129503f93312a84b9fc2e28ea9ded45916b3ecb1a46e1d3",
+      "importPath": "game/assets/bundles/twilight/content/enemy_normal_12_lantern_shrimp_swim.png",
+      "importSha256": "7b37e236260ea489eaec3bc75949932bf48fd1dad796dc1f809c1a59c9ce76ed",
+      "loadPath": "content/enemy_normal_12_lantern_shrimp_swim",
+      "width": 256,
+      "height": 64,
+      "bytes": 11784,
+      "fps": 6,
+      "frames": [
+        [
+          0,
+          0,
+          64,
+          64
+        ],
+        [
+          64,
+          0,
+          64,
+          64
+        ],
+        [
+          128,
+          0,
+          64,
+          64
+        ],
+        [
+          192,
+          0,
+          64,
+          64
+        ]
+      ]
+    },
+    {
+      "key": "enemy_normal_13_crystal_crab",
+      "bundle": "twilight",
+      "kind": "normal-idle",
+      "sourcePath": "output/game-assets/v1/twilight/enemy_normal_13_crystal_crab_idle.png",
+      "sourceSha256": "447b0b644b36ac44a2c173b74a206f7aaee6855e38af593409ff2d9f7769b26f",
+      "importPath": "game/assets/bundles/twilight/content/enemy_normal_13_crystal_crab_idle.png",
+      "importSha256": "028c7695c2d4e0ae291d4b52d8dd69374ac60bbf4eb9974b6f19cf25da6b9f97",
+      "loadPath": "content/enemy_normal_13_crystal_crab_idle",
+      "width": 64,
+      "height": 64,
+      "bytes": 5506
+    },
+    {
+      "key": "enemy_normal_13_crystal_crab_swim",
+      "bundle": "twilight",
+      "kind": "normal-swim",
+      "sourcePath": "output/game-assets/v1/twilight/enemy_normal_13_crystal_crab_swim.png",
+      "sourceSha256": "f7e68b1d1956032d998a83c322d260a5522cd7301a05ef91a819653cea677c49",
+      "importPath": "game/assets/bundles/twilight/content/enemy_normal_13_crystal_crab_swim.png",
+      "importSha256": "c891544ddb0363b801e874d55fc3fc0a0cfa6753540a189cb26170df70315ffe",
+      "loadPath": "content/enemy_normal_13_crystal_crab_swim",
+      "width": 256,
+      "height": 64,
+      "bytes": 20724,
+      "fps": 6,
+      "frames": [
+        [
+          0,
+          0,
+          64,
+          64
+        ],
+        [
+          64,
+          0,
+          64,
+          64
+        ],
+        [
+          128,
+          0,
+          64,
+          64
+        ],
+        [
+          192,
+          0,
+          64,
+          64
+        ]
+      ]
+    },
+    {
+      "key": "enemy_normal_14_blue_ring_squid",
+      "bundle": "twilight",
+      "kind": "normal-idle",
+      "sourcePath": "output/game-assets/v1/twilight/enemy_normal_14_blue_ring_squid_idle.png",
+      "sourceSha256": "735233aeba0d6dd9751f33152d6666c25b89e04c7b9505134aaa35133431385b",
+      "importPath": "game/assets/bundles/twilight/content/enemy_normal_14_blue_ring_squid_idle.png",
+      "importSha256": "88512a1b8699b1e9b38e1a809b01af70c3e7d5dcb1d5ddc492401f72a82a7958",
+      "loadPath": "content/enemy_normal_14_blue_ring_squid_idle",
+      "width": 64,
+      "height": 64,
+      "bytes": 4524
+    },
+    {
+      "key": "enemy_normal_14_blue_ring_squid_swim",
+      "bundle": "twilight",
+      "kind": "normal-swim",
+      "sourcePath": "output/game-assets/v1/twilight/enemy_normal_14_blue_ring_squid_swim.png",
+      "sourceSha256": "cd87ab5774caaa6e428fef20617a24da59ff967da870bfe23093ce6d6d12e282",
+      "importPath": "game/assets/bundles/twilight/content/enemy_normal_14_blue_ring_squid_swim.png",
+      "importSha256": "0459ef99078a3bc04fbf68a02e73db1b0be8495d9d3bcab5a508b00159256609",
+      "loadPath": "content/enemy_normal_14_blue_ring_squid_swim",
+      "width": 256,
+      "height": 64,
+      "bytes": 18204,
+      "fps": 6,
+      "frames": [
+        [
+          0,
+          0,
+          64,
+          64
+        ],
+        [
+          64,
+          0,
+          64,
+          64
+        ],
+        [
+          128,
+          0,
+          64,
+          64
+        ],
+        [
+          192,
+          0,
+          64,
+          64
+        ]
+      ]
+    },
+    {
+      "key": "enemy_normal_15_ghost_jelly",
+      "bundle": "twilight",
+      "kind": "normal-idle",
+      "sourcePath": "output/game-assets/v1/twilight/enemy_normal_15_ghost_jelly_idle.png",
+      "sourceSha256": "bc5fff7adb31f6933b2f5a3faa7dffa3480956a5700cf060fcc2a82c5a93f407",
+      "importPath": "game/assets/bundles/twilight/content/enemy_normal_15_ghost_jelly_idle.png",
+      "importSha256": "8465cd38d14067eb9c882fee9298a1efeb98ae2cceffaf871e008fca38d6a5b3",
+      "loadPath": "content/enemy_normal_15_ghost_jelly_idle",
+      "width": 64,
+      "height": 64,
+      "bytes": 4217
+    },
+    {
+      "key": "enemy_normal_15_ghost_jelly_swim",
+      "bundle": "twilight",
+      "kind": "normal-swim",
+      "sourcePath": "output/game-assets/v1/twilight/enemy_normal_15_ghost_jelly_swim.png",
+      "sourceSha256": "ddf8ed33f99f9bebf6cd9ec70d792de7278cd0748d2e82f2fe5d25ee7ade00d0",
+      "importPath": "game/assets/bundles/twilight/content/enemy_normal_15_ghost_jelly_swim.png",
+      "importSha256": "863d2b2591a885ebeaabe480c844362027a8d63ba819e3a1b260fff2af8e3822",
+      "loadPath": "content/enemy_normal_15_ghost_jelly_swim",
+      "width": 256,
+      "height": 64,
+      "bytes": 16194,
+      "fps": 6,
+      "frames": [
+        [
+          0,
+          0,
+          64,
+          64
+        ],
+        [
+          64,
+          0,
+          64,
+          64
+        ],
+        [
+          128,
+          0,
+          64,
+          64
+        ],
+        [
+          192,
+          0,
+          64,
+          64
+        ]
+      ]
+    },
+    {
+      "key": "enemy_normal_16_violet_fish",
+      "bundle": "twilight",
+      "kind": "normal-idle",
+      "sourcePath": "output/game-assets/v1/twilight/enemy_normal_16_violet_fish_idle.png",
+      "sourceSha256": "4d6acac07bec536602c3eb4976ebf9a4862070c9e8866d801a9bc2e3f0420094",
+      "importPath": "game/assets/bundles/twilight/content/enemy_normal_16_violet_fish_idle.png",
+      "importSha256": "b6d2f2f42188ea35d28329dfcb9b761f3d8f80ab7badfe727f334249cf5845a2",
+      "loadPath": "content/enemy_normal_16_violet_fish_idle",
+      "width": 64,
+      "height": 64,
+      "bytes": 3031
+    },
+    {
+      "key": "enemy_normal_16_violet_fish_swim",
+      "bundle": "twilight",
+      "kind": "normal-swim",
+      "sourcePath": "output/game-assets/v1/twilight/enemy_normal_16_violet_fish_swim.png",
+      "sourceSha256": "9da7da09403496926be215ae864394dba19e52e236443e708c03e811353f767d",
+      "importPath": "game/assets/bundles/twilight/content/enemy_normal_16_violet_fish_swim.png",
+      "importSha256": "e0977ebaf62a84b25dd9f2e17095988c6479b86f20e088bb1dcc25ae30fde055",
+      "loadPath": "content/enemy_normal_16_violet_fish_swim",
+      "width": 256,
+      "height": 64,
+      "bytes": 11555,
+      "fps": 6,
+      "frames": [
+        [
+          0,
+          0,
+          64,
+          64
+        ],
+        [
+          64,
+          0,
+          64,
+          64
+        ],
+        [
+          128,
+          0,
+          64,
+          64
+        ],
+        [
+          192,
+          0,
+          64,
+          64
+        ]
+      ]
+    },
+    {
+      "key": "enemy_normal_17_firefly_squid",
+      "bundle": "abyss",
+      "kind": "normal-idle",
+      "sourcePath": "output/game-assets/v1/abyss/enemy_normal_17_firefly_squid_idle.png",
+      "sourceSha256": "2cd9b1ee255b5fe2488738e4a66aa2b837aa6630106df6289599cc8da7d28698",
+      "importPath": "game/assets/bundles/abyss/content/enemy_normal_17_firefly_squid_idle.png",
+      "importSha256": "15992fc87b712b8fe415873695f7cb6ba33f8c68a42fed54e11a22309c4a7b47",
+      "loadPath": "content/enemy_normal_17_firefly_squid_idle",
+      "width": 64,
+      "height": 64,
+      "bytes": 2929
+    },
+    {
+      "key": "enemy_normal_17_firefly_squid_swim",
+      "bundle": "abyss",
+      "kind": "normal-swim",
+      "sourcePath": "output/game-assets/v1/abyss/enemy_normal_17_firefly_squid_swim.png",
+      "sourceSha256": "5dcda5e3ecc30dc16919eb324780824c721a4e3807ddbe4b0b038c7d1eab5d51",
+      "importPath": "game/assets/bundles/abyss/content/enemy_normal_17_firefly_squid_swim.png",
+      "importSha256": "34f6fd2c619bf98eb5a6ade34c33456e02bb09442a6b19591fac7b9e9b95a888",
+      "loadPath": "content/enemy_normal_17_firefly_squid_swim",
+      "width": 256,
+      "height": 64,
+      "bytes": 11189,
+      "fps": 6,
+      "frames": [
+        [
+          0,
+          0,
+          64,
+          64
+        ],
+        [
+          64,
+          0,
+          64,
+          64
+        ],
+        [
+          128,
+          0,
+          64,
+          64
+        ],
+        [
+          192,
+          0,
+          64,
+          64
+        ]
+      ]
+    },
+    {
+      "key": "enemy_normal_18_abyss_angler",
+      "bundle": "abyss",
+      "kind": "normal-idle",
+      "sourcePath": "output/game-assets/v1/abyss/enemy_normal_18_abyss_angler_idle.png",
+      "sourceSha256": "5ad4c95bb2a37ee4742764aef87327c08b346b6804c140e89ae12629d8fe2ff6",
+      "importPath": "game/assets/bundles/abyss/content/enemy_normal_18_abyss_angler_idle.png",
+      "importSha256": "4428178196e516ec30181c8f1d9043b781033504975b2add7920dfa09096ab53",
+      "loadPath": "content/enemy_normal_18_abyss_angler_idle",
+      "width": 64,
+      "height": 64,
+      "bytes": 4348
+    },
+    {
+      "key": "enemy_normal_18_abyss_angler_swim",
+      "bundle": "abyss",
+      "kind": "normal-swim",
+      "sourcePath": "output/game-assets/v1/abyss/enemy_normal_18_abyss_angler_swim.png",
+      "sourceSha256": "dbd27b2f57f95d4f83d07b2beebe8bb7f1445118411d45c458ad91e751603a8a",
+      "importPath": "game/assets/bundles/abyss/content/enemy_normal_18_abyss_angler_swim.png",
+      "importSha256": "c4fb12a1cf1a118ecec903e98969ba6f38fd84b55bafeececba3f3efcb6cc5dd",
+      "loadPath": "content/enemy_normal_18_abyss_angler_swim",
+      "width": 256,
+      "height": 64,
+      "bytes": 16724,
+      "fps": 6,
+      "frames": [
+        [
+          0,
+          0,
+          64,
+          64
+        ],
+        [
+          64,
+          0,
+          64,
+          64
+        ],
+        [
+          128,
+          0,
+          64,
+          64
+        ],
+        [
+          192,
+          0,
+          64,
+          64
+        ]
+      ]
+    },
+    {
+      "key": "enemy_normal_19_tube_worm",
+      "bundle": "abyss",
+      "kind": "normal-idle",
+      "sourcePath": "output/game-assets/v1/abyss/enemy_normal_19_tube_worm_idle.png",
+      "sourceSha256": "00b154ab64e4f659c41ede4939dc28cca0c18046393706e3cd3e63e5b9d26704",
+      "importPath": "game/assets/bundles/abyss/content/enemy_normal_19_tube_worm_idle.png",
+      "importSha256": "b4381ef7bbe980d262251d4eea43ea6f42fcfb697f5f60397ea3938cf49bfb7f",
+      "loadPath": "content/enemy_normal_19_tube_worm_idle",
+      "width": 64,
+      "height": 64,
+      "bytes": 4966
+    },
+    {
+      "key": "enemy_normal_19_tube_worm_swim",
+      "bundle": "abyss",
+      "kind": "normal-swim",
+      "sourcePath": "output/game-assets/v1/abyss/enemy_normal_19_tube_worm_swim.png",
+      "sourceSha256": "988054aa134f05f453fa8739e7e2a574d52b3b9bc05bb61693c5a18d3099246a",
+      "importPath": "game/assets/bundles/abyss/content/enemy_normal_19_tube_worm_swim.png",
+      "importSha256": "6b1a49cc327e91f53856d8c6f61b3416ec723668c843e81eb13447c0533314f2",
+      "loadPath": "content/enemy_normal_19_tube_worm_swim",
+      "width": 256,
+      "height": 64,
+      "bytes": 18641,
+      "fps": 6,
+      "frames": [
+        [
+          0,
+          0,
+          64,
+          64
+        ],
+        [
+          64,
+          0,
+          64,
+          64
+        ],
+        [
+          128,
+          0,
+          64,
+          64
+        ],
+        [
+          192,
+          0,
+          64,
+          64
+        ]
+      ]
+    },
+    {
+      "key": "enemy_normal_20_armored_isopod",
+      "bundle": "abyss",
+      "kind": "normal-idle",
+      "sourcePath": "output/game-assets/v1/abyss/enemy_normal_20_armored_isopod_idle.png",
+      "sourceSha256": "c79921487ca66dbac3538006a049356a255aee660ebfe29b305ef360617ec759",
+      "importPath": "game/assets/bundles/abyss/content/enemy_normal_20_armored_isopod_idle.png",
+      "importSha256": "c9ece0b8218127805d5655ef1ba16143472e4d39f336f45afc29b8e544c1ff6b",
+      "loadPath": "content/enemy_normal_20_armored_isopod_idle",
+      "width": 64,
+      "height": 64,
+      "bytes": 2555
+    },
+    {
+      "key": "enemy_normal_20_armored_isopod_swim",
+      "bundle": "abyss",
+      "kind": "normal-swim",
+      "sourcePath": "output/game-assets/v1/abyss/enemy_normal_20_armored_isopod_swim.png",
+      "sourceSha256": "c7ebcdd4190ef42c3dc2dccbb4f53ed59236583c57ff732edbfd3e422baedc8f",
+      "importPath": "game/assets/bundles/abyss/content/enemy_normal_20_armored_isopod_swim.png",
+      "importSha256": "bcb7059ea653b5891fa2fa6a440e68d2efc0fb5df490360f0921b659e4ec2a09",
+      "loadPath": "content/enemy_normal_20_armored_isopod_swim",
+      "width": 256,
+      "height": 64,
+      "bytes": 10380,
+      "fps": 6,
+      "frames": [
+        [
+          0,
+          0,
+          64,
+          64
+        ],
+        [
+          64,
+          0,
+          64,
+          64
+        ],
+        [
+          128,
+          0,
+          64,
+          64
+        ],
+        [
+          192,
+          0,
+          64,
+          64
+        ]
+      ]
+    },
+    {
+      "key": "enemy_normal_21_siphonophore",
+      "bundle": "abyss",
+      "kind": "normal-idle",
+      "sourcePath": "output/game-assets/v1/abyss/enemy_normal_21_siphonophore_idle.png",
+      "sourceSha256": "ee66ba8788d27bcd379e2975924b22185b84f1ad68a1447239151f67069d8d84",
+      "importPath": "game/assets/bundles/abyss/content/enemy_normal_21_siphonophore_idle.png",
+      "importSha256": "3138f94519612fded375d7802f9aa388580c32defa82084b475632014e466652",
+      "loadPath": "content/enemy_normal_21_siphonophore_idle",
+      "width": 64,
+      "height": 64,
+      "bytes": 2999
+    },
+    {
+      "key": "enemy_normal_21_siphonophore_swim",
+      "bundle": "abyss",
+      "kind": "normal-swim",
+      "sourcePath": "output/game-assets/v1/abyss/enemy_normal_21_siphonophore_swim.png",
+      "sourceSha256": "5c99bda9257610603e3225d3256002e1d3e62a84424d7008d1eb2c6892cd1a28",
+      "importPath": "game/assets/bundles/abyss/content/enemy_normal_21_siphonophore_swim.png",
+      "importSha256": "c2273d99feb1899003e5137f84811267179aedd8372274142bde69db7caa0a90",
+      "loadPath": "content/enemy_normal_21_siphonophore_swim",
+      "width": 256,
+      "height": 64,
+      "bytes": 10401,
+      "fps": 6,
+      "frames": [
+        [
+          0,
+          0,
+          64,
+          64
+        ],
+        [
+          64,
+          0,
+          64,
+          64
+        ],
+        [
+          128,
+          0,
+          64,
+          64
+        ],
+        [
+          192,
+          0,
+          64,
+          64
+        ]
+      ]
+    },
+    {
+      "key": "enemy_normal_22_sea_spider",
+      "bundle": "abyss",
+      "kind": "normal-idle",
+      "sourcePath": "output/game-assets/v1/abyss/enemy_normal_22_sea_spider_idle.png",
+      "sourceSha256": "f69ebea025cab8a163ead07f58e8b4c9667942a93dfe8c670740119650378e22",
+      "importPath": "game/assets/bundles/abyss/content/enemy_normal_22_sea_spider_idle.png",
+      "importSha256": "6e54ae6b6676503ed8fde8dc4883e30b494c4c78acf0d9846859e6bd23fa8271",
+      "loadPath": "content/enemy_normal_22_sea_spider_idle",
+      "width": 64,
+      "height": 64,
+      "bytes": 4540
+    },
+    {
+      "key": "enemy_normal_22_sea_spider_swim",
+      "bundle": "abyss",
+      "kind": "normal-swim",
+      "sourcePath": "output/game-assets/v1/abyss/enemy_normal_22_sea_spider_swim.png",
+      "sourceSha256": "9343238f5da18e94c8e7c34764402b767a19341418ef990bd89e02008ce48aaf",
+      "importPath": "game/assets/bundles/abyss/content/enemy_normal_22_sea_spider_swim.png",
+      "importSha256": "3df82a124b483ec67dd06f23de6bd77129a2685b5293ed326ac7e0ae79dae1ab",
+      "loadPath": "content/enemy_normal_22_sea_spider_swim",
+      "width": 256,
+      "height": 64,
+      "bytes": 17491,
+      "fps": 6,
+      "frames": [
+        [
+          0,
+          0,
+          64,
+          64
+        ],
+        [
+          64,
+          0,
+          64,
+          64
+        ],
+        [
+          128,
+          0,
+          64,
+          64
+        ],
+        [
+          192,
+          0,
+          64,
+          64
+        ]
+      ]
+    },
+    {
+      "key": "enemy_normal_23_deep_starfish",
+      "bundle": "abyss",
+      "kind": "normal-idle",
+      "sourcePath": "output/game-assets/v1/abyss/enemy_normal_23_deep_starfish_idle.png",
+      "sourceSha256": "e825f38beef519a59ea4390d7bf6bd1a358cd4501340cfd313d4c0ea87e32804",
+      "importPath": "game/assets/bundles/abyss/content/enemy_normal_23_deep_starfish_idle.png",
+      "importSha256": "3acc16310c7e3bb16d6b2db88ba8e28ff8b094cd9d875ea79526977f1c3801a5",
+      "loadPath": "content/enemy_normal_23_deep_starfish_idle",
+      "width": 64,
+      "height": 64,
+      "bytes": 4510
+    },
+    {
+      "key": "enemy_normal_23_deep_starfish_swim",
+      "bundle": "abyss",
+      "kind": "normal-swim",
+      "sourcePath": "output/game-assets/v1/abyss/enemy_normal_23_deep_starfish_swim.png",
+      "sourceSha256": "0fc06792d83120527df9ae16c71b1f19ffa99138b9252b7bf85e258a2bd80ae9",
+      "importPath": "game/assets/bundles/abyss/content/enemy_normal_23_deep_starfish_swim.png",
+      "importSha256": "250fa0dcfc33506d371bd0735b62af3090d531ef57b6c2faa1a635d279008c39",
+      "loadPath": "content/enemy_normal_23_deep_starfish_swim",
+      "width": 256,
+      "height": 64,
+      "bytes": 17886,
+      "fps": 6,
+      "frames": [
+        [
+          0,
+          0,
+          64,
+          64
+        ],
+        [
+          64,
+          0,
+          64,
+          64
+        ],
+        [
+          128,
+          0,
+          64,
+          64
+        ],
+        [
+          192,
+          0,
+          64,
+          64
+        ]
+      ]
+    },
+    {
+      "key": "enemy_normal_24_glass_sponge",
+      "bundle": "abyss",
+      "kind": "normal-idle",
+      "sourcePath": "output/game-assets/v1/abyss/enemy_normal_24_glass_sponge_idle.png",
+      "sourceSha256": "81664100bc2bb38e4f01a94aff14e55662af093c76b4dd2293444314e92f8131",
+      "importPath": "game/assets/bundles/abyss/content/enemy_normal_24_glass_sponge_idle.png",
+      "importSha256": "ed3a41c2b5ee2f44134c8b05f07b1b14ad576eb5000af5c7968ec23da3ea4121",
+      "loadPath": "content/enemy_normal_24_glass_sponge_idle",
+      "width": 64,
+      "height": 64,
+      "bytes": 3811
+    },
+    {
+      "key": "enemy_normal_24_glass_sponge_swim",
+      "bundle": "abyss",
+      "kind": "normal-swim",
+      "sourcePath": "output/game-assets/v1/abyss/enemy_normal_24_glass_sponge_swim.png",
+      "sourceSha256": "c413f4262ff80a43a4eeb714d01e0336ca487dab28db3e30257ce7b98c8ffad4",
+      "importPath": "game/assets/bundles/abyss/content/enemy_normal_24_glass_sponge_swim.png",
+      "importSha256": "a30d98f990328812c10c730ca39c0b5e3d905fe363d5ba01f1545acc81012de3",
+      "loadPath": "content/enemy_normal_24_glass_sponge_swim",
+      "width": 256,
+      "height": 64,
+      "bytes": 13984,
+      "fps": 6,
+      "frames": [
+        [
+          0,
+          0,
+          64,
+          64
+        ],
+        [
+          64,
+          0,
+          64,
+          64
+        ],
+        [
+          128,
+          0,
+          64,
+          64
+        ],
+        [
+          192,
+          0,
+          64,
+          64
+        ]
+      ]
+    },
+    {
+      "key": "enemy_elite_01_storm_eel",
+      "bundle": "sunlight",
+      "kind": "elite-idle",
+      "sourcePath": "output/game-assets/v1/sunlight/enemy_elite_01_storm_eel_idle.png",
+      "sourceSha256": "b1f1a708aa41e6bd7ebbf0b874a9c69d71e85e2d8b96b6763cc56089cc763b4e",
+      "importPath": "game/assets/bundles/sunlight/content/enemy_elite_01_storm_eel_idle.png",
+      "importSha256": "9aa105c9af8d799e2a36afe21288202b7bd359a82e7ca8c8c962313866ce6818",
+      "loadPath": "content/enemy_elite_01_storm_eel_idle",
+      "width": 96,
+      "height": 96,
+      "bytes": 7600
+    },
+    {
+      "key": "enemy_elite_01_storm_eel_swim",
+      "bundle": "sunlight",
+      "kind": "elite-swim",
+      "sourcePath": "output/game-assets/v1/sunlight/enemy_elite_01_storm_eel_swim.png",
+      "sourceSha256": "274c2b25ea2531b552f9c775aa0fdad8b7ddc3e937118da551a3f7e03c23bae9",
+      "importPath": "game/assets/bundles/sunlight/content/enemy_elite_01_storm_eel_swim.png",
+      "importSha256": "f9baf1821be56026a929220d80ff541ecf277441ab7a4b9bd8282fd9feba0931",
+      "loadPath": "content/enemy_elite_01_storm_eel_swim",
+      "width": 384,
+      "height": 96,
+      "bytes": 30328,
+      "fps": 6,
+      "frames": [
+        [
+          0,
+          0,
+          96,
+          96
+        ],
+        [
+          96,
+          0,
+          96,
+          96
+        ],
+        [
+          192,
+          0,
+          96,
+          96
+        ],
+        [
+          288,
+          0,
+          96,
+          96
+        ]
+      ]
+    },
+    {
+      "key": "enemy_elite_02_iron_hermit",
+      "bundle": "sunlight",
+      "kind": "elite-idle",
+      "sourcePath": "output/game-assets/v1/sunlight/enemy_elite_02_iron_hermit_idle.png",
+      "sourceSha256": "3c168c916fd8b69747262c02c786fe37616634ce9937636a7448c85af1ee8a38",
+      "importPath": "game/assets/bundles/sunlight/content/enemy_elite_02_iron_hermit_idle.png",
+      "importSha256": "8d706f3967f203386168281f201283434577126f0ae1d950a6c2a502f4416b51",
+      "loadPath": "content/enemy_elite_02_iron_hermit_idle",
+      "width": 96,
+      "height": 96,
+      "bytes": 11198
+    },
+    {
+      "key": "enemy_elite_02_iron_hermit_swim",
+      "bundle": "sunlight",
+      "kind": "elite-swim",
+      "sourcePath": "output/game-assets/v1/sunlight/enemy_elite_02_iron_hermit_swim.png",
+      "sourceSha256": "cbb5ec018a7ae870431ed078975f3318b1793b26f08a5a057b687ecd518f523f",
+      "importPath": "game/assets/bundles/sunlight/content/enemy_elite_02_iron_hermit_swim.png",
+      "importSha256": "bea2529e4cfdbba0e0f2e60fe9244dd263ad241829dd89450fb517c6b42b1092",
+      "loadPath": "content/enemy_elite_02_iron_hermit_swim",
+      "width": 384,
+      "height": 96,
+      "bytes": 43881,
+      "fps": 6,
+      "frames": [
+        [
+          0,
+          0,
+          96,
+          96
+        ],
+        [
+          96,
+          0,
+          96,
+          96
+        ],
+        [
+          192,
+          0,
+          96,
+          96
+        ],
+        [
+          288,
+          0,
+          96,
+          96
+        ]
+      ]
+    },
+    {
+      "key": "enemy_elite_03_spear_guard",
+      "bundle": "sunlight",
+      "kind": "elite-idle",
+      "sourcePath": "output/game-assets/v1/sunlight/enemy_elite_03_spear_guard_idle.png",
+      "sourceSha256": "f55442b14dbea8f4bbce5dcd1ebd6f00687142b66811e0730a914e35247d7ba4",
+      "importPath": "game/assets/bundles/sunlight/content/enemy_elite_03_spear_guard_idle.png",
+      "importSha256": "2a190d385177f88af94338086dedad43731fac0ff3cff42cd5b3cb7b3f3dfa02",
+      "loadPath": "content/enemy_elite_03_spear_guard_idle",
+      "width": 96,
+      "height": 96,
+      "bytes": 4677
+    },
+    {
+      "key": "enemy_elite_03_spear_guard_swim",
+      "bundle": "sunlight",
+      "kind": "elite-swim",
+      "sourcePath": "output/game-assets/v1/sunlight/enemy_elite_03_spear_guard_swim.png",
+      "sourceSha256": "19a046d37ebc87ee77d9f94d43fa6ebca7deaf0efe23380a4d8f93379d1dd776",
+      "importPath": "game/assets/bundles/sunlight/content/enemy_elite_03_spear_guard_swim.png",
+      "importSha256": "6f22d8d7ce419218405464a8ad91552bb62572d0e9674fb0337d0d970b4890a6",
+      "loadPath": "content/enemy_elite_03_spear_guard_swim",
+      "width": 384,
+      "height": 96,
+      "bytes": 18369,
+      "fps": 6,
+      "frames": [
+        [
+          0,
+          0,
+          96,
+          96
+        ],
+        [
+          96,
+          0,
+          96,
+          96
+        ],
+        [
+          192,
+          0,
+          96,
+          96
+        ],
+        [
+          288,
+          0,
+          96,
+          96
+        ]
+      ]
+    },
+    {
+      "key": "enemy_elite_04_royal_jelly",
+      "bundle": "twilight",
+      "kind": "elite-idle",
+      "sourcePath": "output/game-assets/v1/twilight/enemy_elite_04_royal_jelly_idle.png",
+      "sourceSha256": "6d742c394e5d9128484a5e16df2700006444eda81d1b47a70ad4bfcc33d0980b",
+      "importPath": "game/assets/bundles/twilight/content/enemy_elite_04_royal_jelly_idle.png",
+      "importSha256": "f17a564e9de6784dfe27208b3b5343c38ca6fa52cdc5f62fc94b17cafba9fcce",
+      "loadPath": "content/enemy_elite_04_royal_jelly_idle",
+      "width": 96,
+      "height": 96,
+      "bytes": 12004
+    },
+    {
+      "key": "enemy_elite_04_royal_jelly_swim",
+      "bundle": "twilight",
+      "kind": "elite-swim",
+      "sourcePath": "output/game-assets/v1/twilight/enemy_elite_04_royal_jelly_swim.png",
+      "sourceSha256": "44a059a83b42f052810de37a22eb1c3c85af1645227658a6a793a880ae147344",
+      "importPath": "game/assets/bundles/twilight/content/enemy_elite_04_royal_jelly_swim.png",
+      "importSha256": "d715e9420f935fdfd5c72501f55db6470b8c76e38bcfd8329db690ccc8656416",
+      "loadPath": "content/enemy_elite_04_royal_jelly_swim",
+      "width": 384,
+      "height": 96,
+      "bytes": 46085,
+      "fps": 6,
+      "frames": [
+        [
+          0,
+          0,
+          96,
+          96
+        ],
+        [
+          96,
+          0,
+          96,
+          96
+        ],
+        [
+          192,
+          0,
+          96,
+          96
+        ],
+        [
+          288,
+          0,
+          96,
+          96
+        ]
+      ]
+    },
+    {
+      "key": "enemy_elite_05_crystal_octopus",
+      "bundle": "twilight",
+      "kind": "elite-idle",
+      "sourcePath": "output/game-assets/v1/twilight/enemy_elite_05_crystal_octopus_idle.png",
+      "sourceSha256": "0c9068e8decc8af124fac5f286618c830791a889deae1608ee7c8f19050cc38d",
+      "importPath": "game/assets/bundles/twilight/content/enemy_elite_05_crystal_octopus_idle.png",
+      "importSha256": "cbe1a230069aa11a962324669fc30c031e77546b44323c1fe32184cd946d3479",
+      "loadPath": "content/enemy_elite_05_crystal_octopus_idle",
+      "width": 96,
+      "height": 96,
+      "bytes": 11564
+    },
+    {
+      "key": "enemy_elite_05_crystal_octopus_swim",
+      "bundle": "twilight",
+      "kind": "elite-swim",
+      "sourcePath": "output/game-assets/v1/twilight/enemy_elite_05_crystal_octopus_swim.png",
+      "sourceSha256": "dc5877389be8197b27956dddff171cdd9994875cd3c729fc1e7544b7e6331187",
+      "importPath": "game/assets/bundles/twilight/content/enemy_elite_05_crystal_octopus_swim.png",
+      "importSha256": "003348c0a3e1cdf965e39bf52bb68f07ad9b2d12e248e67a37c092605026c40d",
+      "loadPath": "content/enemy_elite_05_crystal_octopus_swim",
+      "width": 384,
+      "height": 96,
+      "bytes": 46398,
+      "fps": 6,
+      "frames": [
+        [
+          0,
+          0,
+          96,
+          96
+        ],
+        [
+          96,
+          0,
+          96,
+          96
+        ],
+        [
+          192,
+          0,
+          96,
+          96
+        ],
+        [
+          288,
+          0,
+          96,
+          96
+        ]
+      ]
+    },
+    {
+      "key": "enemy_elite_06_mirror_ray",
+      "bundle": "twilight",
+      "kind": "elite-idle",
+      "sourcePath": "output/game-assets/v1/twilight/enemy_elite_06_mirror_ray_idle.png",
+      "sourceSha256": "bb8a144574ca0d805acc3bb769d4e0209115d9c7c220eb84ce9661a937b11873",
+      "importPath": "game/assets/bundles/twilight/content/enemy_elite_06_mirror_ray_idle.png",
+      "importSha256": "ff3239dacb7741bc98c29d022b888c0d149d0a200b0db1ba281fd374693696da",
+      "loadPath": "content/enemy_elite_06_mirror_ray_idle",
+      "width": 96,
+      "height": 96,
+      "bytes": 8535
+    },
+    {
+      "key": "enemy_elite_06_mirror_ray_swim",
+      "bundle": "twilight",
+      "kind": "elite-swim",
+      "sourcePath": "output/game-assets/v1/twilight/enemy_elite_06_mirror_ray_swim.png",
+      "sourceSha256": "6fd768be48e075776a88cdc5a381cb4e21ace83780c1791ac445793f6a835732",
+      "importPath": "game/assets/bundles/twilight/content/enemy_elite_06_mirror_ray_swim.png",
+      "importSha256": "fc4fa631f9e6d60af2d7838d41ea60c6c29dc732beeeed3f483fb803d36b11a0",
+      "loadPath": "content/enemy_elite_06_mirror_ray_swim",
+      "width": 384,
+      "height": 96,
+      "bytes": 34497,
+      "fps": 6,
+      "frames": [
+        [
+          0,
+          0,
+          96,
+          96
+        ],
+        [
+          96,
+          0,
+          96,
+          96
+        ],
+        [
+          192,
+          0,
+          96,
+          96
+        ],
+        [
+          288,
+          0,
+          96,
+          96
+        ]
+      ]
+    },
+    {
+      "key": "enemy_elite_07_abyss_stalker",
+      "bundle": "abyss",
+      "kind": "elite-idle",
+      "sourcePath": "output/game-assets/v1/abyss/enemy_elite_07_abyss_stalker_idle.png",
+      "sourceSha256": "e40b4404b3519c0fee4d4881ca44c584ee22107efe091498137f674df1a527f5",
+      "importPath": "game/assets/bundles/abyss/content/enemy_elite_07_abyss_stalker_idle.png",
+      "importSha256": "80fef40a4a94c4ebda5155fab648d2dd647630bcf6160436b00d26f696e4cd5d",
+      "loadPath": "content/enemy_elite_07_abyss_stalker_idle",
+      "width": 96,
+      "height": 96,
+      "bytes": 5488
+    },
+    {
+      "key": "enemy_elite_07_abyss_stalker_swim",
+      "bundle": "abyss",
+      "kind": "elite-swim",
+      "sourcePath": "output/game-assets/v1/abyss/enemy_elite_07_abyss_stalker_swim.png",
+      "sourceSha256": "c0a301e822a37eaba5789d9b5c1505f550df24d298cf3eee0bdf209ff585b74d",
+      "importPath": "game/assets/bundles/abyss/content/enemy_elite_07_abyss_stalker_swim.png",
+      "importSha256": "48cd7523bbc2df49667ef0ea04f196830c4e871a934d4d548284316f8aa6dadf",
+      "loadPath": "content/enemy_elite_07_abyss_stalker_swim",
+      "width": 384,
+      "height": 96,
+      "bytes": 21826,
+      "fps": 6,
+      "frames": [
+        [
+          0,
+          0,
+          96,
+          96
+        ],
+        [
+          96,
+          0,
+          96,
+          96
+        ],
+        [
+          192,
+          0,
+          96,
+          96
+        ],
+        [
+          288,
+          0,
+          96,
+          96
+        ]
+      ]
+    },
+    {
+      "key": "enemy_elite_08_violet_nautilus",
+      "bundle": "abyss",
+      "kind": "elite-idle",
+      "sourcePath": "output/game-assets/v1/abyss/enemy_elite_08_violet_nautilus_idle.png",
+      "sourceSha256": "27d4e77084f2933dd1703b1cec38081d7e474f9278470e722f006ef3648246f1",
+      "importPath": "game/assets/bundles/abyss/content/enemy_elite_08_violet_nautilus_idle.png",
+      "importSha256": "2a9672ca2f72cffe99dda3880c642fa077dc6f4fe161ee391e3e44efb664ae28",
+      "loadPath": "content/enemy_elite_08_violet_nautilus_idle",
+      "width": 96,
+      "height": 96,
+      "bytes": 11580
+    },
+    {
+      "key": "enemy_elite_08_violet_nautilus_swim",
+      "bundle": "abyss",
+      "kind": "elite-swim",
+      "sourcePath": "output/game-assets/v1/abyss/enemy_elite_08_violet_nautilus_swim.png",
+      "sourceSha256": "f4d3edc2b06ab760ce1a551249c5844b9ab23b6e65941f0261fa6182c5594c92",
+      "importPath": "game/assets/bundles/abyss/content/enemy_elite_08_violet_nautilus_swim.png",
+      "importSha256": "5272b566cb42c461f5bb27079c1ca9efc64ea53d13ff7351a27866e9a0d23a62",
+      "loadPath": "content/enemy_elite_08_violet_nautilus_swim",
+      "width": 384,
+      "height": 96,
+      "bytes": 45531,
+      "fps": 6,
+      "frames": [
+        [
+          0,
+          0,
+          96,
+          96
+        ],
+        [
+          96,
+          0,
+          96,
+          96
+        ],
+        [
+          192,
+          0,
+          96,
+          96
+        ],
+        [
+          288,
+          0,
+          96,
+          96
+        ]
+      ]
+    },
+    {
+      "key": "enemy_boss_01_angler_king",
+      "bundle": "sunlight",
+      "kind": "boss-body",
+      "sourcePath": "output/game-assets/v1/sunlight/enemy_boss_01_angler_king_idle.png",
+      "sourceSha256": "397b08ab712194f5959edd2033905f756fcab9f760334129e001ee0b394d2a6c",
+      "importPath": "game/assets/bundles/sunlight/content/enemy_boss_01_angler_king_idle.png",
+      "importSha256": "564df82b28e69275e39c1ad88cf91c6fe904bab28051f84ab1a139ec86cd9881",
+      "loadPath": "content/enemy_boss_01_angler_king_idle",
+      "width": 480,
+      "height": 480,
+      "bytes": 195737
+    },
+    {
+      "key": "enemy_boss_01_angler_king_tentacle",
+      "bundle": "sunlight",
+      "kind": "boss-part",
+      "sourcePath": "output/game-assets/v1/sunlight/enemy_boss_01_angler_king_fin.png",
+      "sourceSha256": "4f92adb3d74b36f8a6e90ef74ab51e99df8f7f216fe9b0d6837c1ad702bf28b3",
+      "importPath": "game/assets/bundles/sunlight/content/enemy_boss_01_angler_king_fin.png",
+      "importSha256": "fbdf0de2a5254369ba9b30d7e674860b60ebaf47ebdc3f9dbb954486dc1e1998",
+      "loadPath": "content/enemy_boss_01_angler_king_fin",
+      "width": 320,
+      "height": 320,
+      "bytes": 99370
+    },
+    {
+      "key": "enemy_boss_02_tentacle_warden",
+      "bundle": "twilight",
+      "kind": "boss-body",
+      "sourcePath": "output/game-assets/v1/twilight/enemy_boss_02_tentacle_warden_idle.png",
+      "sourceSha256": "b280df257a5a63126b137a2505ba22ebc2de9bab05bba8966192d370dd5517be",
+      "importPath": "game/assets/bundles/twilight/content/enemy_boss_02_tentacle_warden_idle.png",
+      "importSha256": "4c13c8dfa54f72539a7accef94f26f766baeec9acc83f2637a8782af87a1abf5",
+      "loadPath": "content/enemy_boss_02_tentacle_warden_idle",
+      "width": 480,
+      "height": 480,
+      "bytes": 260343
+    },
+    {
+      "key": "enemy_boss_02_tentacle_warden_tentacle",
+      "bundle": "twilight",
+      "kind": "boss-part",
+      "sourcePath": "output/game-assets/v1/twilight/enemy_boss_02_tentacle_warden_fin.png",
+      "sourceSha256": "3da41d9f19c714f3b09a56c2117d451819c58b886ff9305347d207272ec3bb0d",
+      "importPath": "game/assets/bundles/twilight/content/enemy_boss_02_tentacle_warden_fin.png",
+      "importSha256": "31b5d5f90eb8c3aab9a31cb8ad258d240269a11b0167db9a94df2d7e939028b0",
+      "loadPath": "content/enemy_boss_02_tentacle_warden_fin",
+      "width": 320,
+      "height": 320,
+      "bytes": 52785
+    },
+    {
+      "key": "enemy_boss_03_giant_squid",
+      "bundle": "abyss",
+      "kind": "boss-body",
+      "sourcePath": "output/game-assets/v1/abyss/enemy_boss_03_giant_squid_idle.png",
+      "sourceSha256": "064c332410c0804fa916a66d814ba281d12ab00ae37a59c7389525c0164456b4",
+      "importPath": "game/assets/bundles/abyss/content/enemy_boss_03_giant_squid_idle.png",
+      "importSha256": "c8208f54936c896ce236aa4585289f3248e79e66a12692921ea3f6129e6ea5f3",
+      "loadPath": "content/enemy_boss_03_giant_squid_idle",
+      "width": 480,
+      "height": 480,
+      "bytes": 186955
+    },
+    {
+      "key": "enemy_boss_03_giant_squid_tentacle",
+      "bundle": "abyss",
+      "kind": "boss-part",
+      "sourcePath": "output/game-assets/v1/abyss/enemy_boss_03_giant_squid_fin.png",
+      "sourceSha256": "5e9c7170b3084fd639121fa01258463410db53c92edee401a732638863ce7d8e",
+      "importPath": "game/assets/bundles/abyss/content/enemy_boss_03_giant_squid_fin.png",
+      "importSha256": "8b4e2b8c9d969615881e82a92ae336e142d8131dc3a8adb567587c7343d1f522",
+      "loadPath": "content/enemy_boss_03_giant_squid_fin",
+      "width": 320,
+      "height": 320,
+      "bytes": 38691
+    },
+    {
+      "key": "enemy_boss_04_abyss_whale",
+      "bundle": "abyss",
+      "kind": "boss-body",
+      "sourcePath": "output/game-assets/v1/abyss/enemy_boss_04_abyss_whale_idle.png",
+      "sourceSha256": "93e763f5bba732c6ae461aa6d754077df4c37c8ee6a790d2f50fe6979d2aee31",
+      "importPath": "game/assets/bundles/abyss/content/enemy_boss_04_abyss_whale_idle.png",
+      "importSha256": "5ddbebb296dbbd40a083c35cc087a093de57fa74d753679f3711eab80a326f6c",
+      "loadPath": "content/enemy_boss_04_abyss_whale_idle",
+      "width": 480,
+      "height": 480,
+      "bytes": 122118
+    },
+    {
+      "key": "enemy_boss_04_abyss_whale_tentacle",
+      "bundle": "abyss",
+      "kind": "boss-part",
+      "sourcePath": "output/game-assets/v1/abyss/enemy_boss_04_abyss_whale_fin.png",
+      "sourceSha256": "9f5a0993c38c8c97208575f4f7e7a4d322a00737998389e8df73a44bdab6047a",
+      "importPath": "game/assets/bundles/abyss/content/enemy_boss_04_abyss_whale_fin.png",
+      "importSha256": "47840224e55dd425222c57209ca2996ace6ef67fbaaa73801eaa18adcfbf9f00",
+      "loadPath": "content/enemy_boss_04_abyss_whale_fin",
+      "width": 320,
+      "height": 320,
+      "bytes": 55040
+    }
+  ]
+}
