@@ -343,7 +343,10 @@ export class Battle {
     }
     for (const e of this.grid.query(this.player.x - this.player.radius, this.player.y - this.player.radius, this.player.x + this.player.radius, this.player.y + this.player.radius)) {
       if (e.active && this.tick >= e.nextContactTick && circlesOverlap(this.player.x, this.player.y, this.player.radius, e.x, e.y, e.radius)) {
-        this.player.hp = Math.max(0, this.player.hp - e.attack); e.nextContactTick = this.tick + 30;
+        // Contact i-frames 1s→1.5s (LOO-58): sustained add pressure dealt ~4-6 hp/s to a
+        // 200-280 HP pool in 60-dive trajectories, ending dives before the oxygen economy
+        // could ever engage; 45 ticks halves sustained contact DPS and gives evasion real value.
+        this.player.hp = Math.max(0, this.player.hp - e.attack); e.nextContactTick = this.tick + 45;
       }
     }
   }

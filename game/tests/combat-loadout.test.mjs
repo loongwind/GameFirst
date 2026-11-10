@@ -1,9 +1,12 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { loadServices, memoryStorage } from './services-loader.mjs';
+import { DEFAULT_BALANCE } from '../../shared/dist/index.js';
 import { loadBattle } from './battle-loader.mjs';
 
 const api = loadServices(), { Battle, DiveSession, WEAPON_DEFAULTS } = loadBattle();
+// Cargo assertions derive from the balance table so tuning edits stay single-source.
+const CARGO_BASE = DEFAULT_BALANCE.attributes.baseValues[4];
 const close = (actual, expected) => assert.ok(Math.abs(actual - expected) < 1e-8, `${actual} != ${expected}`);
 const gear = (template, slot, extra = {}) => ({ id: `gear-${template}`, template, slot, quality: 0, level: 1,
   equipped: true, locked: false, invested: { marrow: '0', tickets: 0 }, ...extra });
@@ -27,8 +30,8 @@ test('all six attributes reach real HP, cargo, oxygen efficiency, damage, cooldo
   const state = api.initialState();
   Object.assign(state.attributes, { hp: 10, attack: 10, attackSpeed: 100, moveSpeed: 100, cargo: 10, oxygen: 100 });
   const s = session(state);
-  assert.equal(s.maxHp, 300); assert.equal(s.snapshot.hp, 300); assert.equal(s.cargoCapacity, 750);
-  assert.equal(s.oxygenCapacity, 120); assert.equal(s.collect('crystal', 1000), 750);
+  assert.equal(s.maxHp, 300); assert.equal(s.snapshot.hp, 300); assert.equal(s.cargoCapacity, Math.floor(CARGO_BASE * 1.5));
+  assert.equal(s.oxygenCapacity, 120); assert.equal(s.collect('crystal', 1000), Math.min(1000, Math.floor(CARGO_BASE * 1.5)));
   s.setInput(1, 0);
   for (let i = 0; i < 30; i++) s.advance(1 / 30);
   close(s.battle.player.x, 240); close(s.snapshot.oxygen, 119.5);
@@ -43,7 +46,7 @@ test('all five tech trees affect runtime and duplicate ids cannot multiply the s
   const state = api.initialState();
   state.tech = ['attack.20', 'survival.20', 'oxygen.20', 'cargo.20', 'special.20', 'attack.20'];
   const s = session(state);
-  close(s.maxHp, 240); assert.equal(s.cargoCapacity, 600);
+  close(s.maxHp, 240); assert.equal(s.cargoCapacity, Math.floor(CARGO_BASE * 1.2));
   close(hitDamage(state).damage, 24);
   for (let i = 0; i < 30; i++) s.advance(1 / 30);
   close(s.snapshot.oxygen, 120 - 1 / 1.2);

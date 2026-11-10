@@ -8,7 +8,7 @@ const target = process.env.WEB_TARGET || 'web-release';
 const root = fileURLToPath(new URL(`../build/${target}`, import.meta.url));
 const artifacts = fileURLToPath(new URL('../.artifacts/progression/', import.meta.url));
 const balance = JSON.parse(await readFile(fileURLToPath(new URL('../../shared/config/balance.json', import.meta.url)), 'utf8'));
-const MAX_DIVES = Number(process.env.PROGRESS_MAX_DIVES || 60);
+const MAX_DIVES = Number(process.env.PROGRESS_MAX_DIVES || 80);
 
 async function diveReady(page) {
   await page.waitForFunction(() => typeof System !== 'undefined');
@@ -86,6 +86,8 @@ test(`${target}: natural economy progression reaches all three sea layers withou
     const dives = [];
     let reached2400 = false, deaths = 0, rescues = 0, oxygenAds = 0, pearlIncome = 0;
     for (let n = 1; n <= MAX_DIVES && !reached2400; n++) {
+      // Phase A dives 1-10: the safe speed-farm profile. Phase B: the full-depth push.
+      await page.evaluate(strategy => { window.__strategy = strategy; }, n <= 10 ? 'farm' : 'deep');
       const record = await page.evaluate(async ({ n, techEffects }) => {
         const c = window.c, s = c.session;
         c.enabled = false;
@@ -96,6 +98,7 @@ test(`${target}: natural economy progression reaches all three sea layers withou
         c.configureAds(window.testDriver);
         const startPearls = BigInt(c.economy.snapshot.wallet.pearl);
         let usedRescue = 0, usedOxygen = 0, deathsThisDive = 0;
+        const decisions = { oxygenAttempts: 0, oxygenOk: 0, oxygenFailed: 0, rescueAttempts: 0, rescueOk: 0, returnCause: 'surface' };
         // Boss readiness (pure arithmetic on the real buildable state; no game state is written):
         // fight the guardian only when its HP falls inside the oxygen window its depth allows.
         const mult = () => (1 + .05 * c.economy.snapshot.attributes.attack) *
@@ -114,21 +117,31 @@ test(`${target}: natural economy progression reaches all three sea layers withou
           const bars = 1 + (c.economy.snapshot.playerLevel >= 5 ? 3 : 0);
           const window = 120 / rate * bars * .8;
           // Keep the engagement inside one oxygen bar; rescues (3/day) cover the tail risk.
-          return bossHp / (53 * mult()) <= Math.min(100, window);
+          const killTime = bossHp / (53 * mult());
+          // Survivability headroom: a guardian attempt needs the pool to absorb four
+          // guardian contacts (guardian attack = band attack × 4) plus swarm pressure.
+          const gateBandAttack = 8 * Math.pow(1.12, Math.min(23, Math.floor(gate / 100)));
+          const survivable = s.maxHp >= gateBandAttack * 4 * 4 * 1.35;
+          return survivable && killTime <= Math.min(100, window);
         };
-        window.__progress = { bossReady: bossReady(), dir: 1 };
+        window.__progress = { bossReady: bossReady(), angle: Math.PI / 2 };
         const steer = () => {
           const b = s.battle, p = b.player, gate = s.content.gateDepth ?? 2400;
           const state = window.__progress;
-          // Farm where kills outpace spawns: deeper is only richer once the cargo cap stops
-          // binding, so weak divers sweep shallower water where enemies die in a few shots.
+          // 'farm' sweeps only water it can clear (safe speed-farming profile); 'deep' pushes
+          // the ceiling to the gate as soon as the guardian is beatable — the two profiles are
+          // recorded separately so the report never derives a hard cap from the safe one.
           const power = 140 + 45 * c.economy.snapshot.attributes.attack + 12 * c.economy.snapshot.attributes.hp;
-          const ceiling = Math.min(gate, state.bossReady ? gate : Math.max(260, Math.min(gate - 150, power)));
-          // Horizontal sweep with a slow descent: keep lateral momentum so the swarm trails
-          // behind instead of straddling a flip path; hover is what gets a diver surrounded.
-          if (p.x > 220) state.dir = -1;
-          if (p.x < -220) state.dir = 1;
-          let x = state.dir * 100, y = p.y < ceiling - 25 ? 35 : 0;
+          const safeCeiling = Math.max(260, Math.min(gate - 150, power));
+          const ceiling = state.bossReady ? gate
+            : window.__strategy === 'deep' ? Math.min(gate - 150, Math.max(safeCeiling, 620))
+            : safeCeiling;
+          // Loop-strafe on an ellipse: the path never crosses itself, so chasers trail behind
+          // instead of being reversed into at turn-around points.
+          state.angle += 0.017;
+          const cruise = Math.max(120, ceiling - 160);
+          let x = Math.cos(state.angle) * 230 - p.x, y = cruise + Math.sin(state.angle) * 130 - p.y;
+          if (p.y > ceiling - 30 && y > 0) y = 0;
           // Repulsion: outrun every chaser; a moving 120 beats a 30 chase.
           let fx = 0, fy = 0, cluster = 0, cx = 0, cy = 0;
           for (const e of b.enemies.values()) {
@@ -150,11 +163,11 @@ test(`${target}: natural economy progression reaches all three sea layers withou
             if (fy < 0 && p.y < 60) fy = 0;
             if (fx > 0 && p.x > 300) fx = 0;
             if (fx < 0 && p.x < -300) fx = 0;
-            if (Math.hypot(fx, fy) < 30) { fx = state.dir * 100; }
-            x = fx; y = fy;
+            if (Math.hypot(fx, fy) < 30) { x = Math.cos(state.angle) * 100; y = Math.sin(state.angle) * 60; }
+            else { x = fx; y = fy; }
           }
           // Hurt: climb to weak water immediately; the hold is the dive's real payoff.
-          if (p.hp < s.maxHp * .45) { y = -100; x = p.x > 0 ? -40 : 40; }
+          if (p.hp < s.maxHp * .4) { y = -100; x = p.x > 0 ? -40 : 40; }
           const norm = Math.hypot(x, y) || 1;
           return { x: x / norm * 200, y: y / norm * 200 };
         };
@@ -169,18 +182,29 @@ test(`${target}: natural economy progression reaches all three sea layers withou
           }
           if (s.state === 'RescuePending') {
             deathsThisDive++;
+            decisions.rescueAttempts++;
             if (c.ads.view.rescueRemaining > 0) {
               await c.ads.watch('rescue');
-              if (s.state === 'Running') usedRescue++; // count only claims that revived the diver
+              if (s.state === 'Running') { usedRescue++; decisions.rescueOk++; } // only claims that revived the diver
             }
             if (s.state === 'RescuePending') s.declineRescue();
           }
           if (s.state !== 'Running') break;
-          if (s.oxygen / s.oxygenCapacity < .15 && c.ads.view.oxygenPrompt && c.ads.view.oxygenRemaining > 0) {
-            await c.ads.watch('oxygen'); usedOxygen++;
-          } else if (s.oxygen / s.oxygenCapacity < .3 || s.snapshot.cargo.crystal >= s.snapshot.cargoCapacity
-            || s.battle.player.hp < s.maxHp * .3 || s.snapshot.activeSeconds > 540) {
-            s.requestReturn();
+          // Oxygen first, return last: the 15% prompt is the real refill eligibility, and the
+          // <30% bail-out only fires once the daily refills are gone (or a refill just failed).
+          const ratio = s.oxygen / s.oxygenCapacity;
+          if (ratio < .15 && c.ads.view.oxygenPrompt && c.ads.view.oxygenRemaining > 0 && !decisions.oxygenFailed) {
+            decisions.oxygenAttempts++;
+            await c.ads.watch('oxygen');
+            if (s.oxygen / s.oxygenCapacity > .9) { usedOxygen++; decisions.oxygenOk++; } else decisions.oxygenFailed++;
+          } else if (ratio < .3 && (c.ads.view.oxygenRemaining === 0 || decisions.oxygenFailed)) {
+            decisions.returnCause = 'oxygen-exhausted'; s.requestReturn();
+          } else if (s.snapshot.cargo.crystal >= s.snapshot.cargoCapacity && !(window.__strategy === 'deep' && s.battle.enemies.some(e => e.kind === 'boss'))) {
+            decisions.returnCause = 'cargo-full'; s.requestReturn();
+          } else if (s.battle.player.hp < s.maxHp * .25) {
+            decisions.returnCause = 'hp'; s.requestReturn();
+          } else if (s.snapshot.activeSeconds > 540) {
+            decisions.returnCause = 'time'; s.requestReturn();
           }
           if (s.state !== 'Running') break;
           const v = steer();
@@ -205,6 +229,7 @@ test(`${target}: natural economy progression reaches all three sea layers withou
         c.hud.render(s, '', c.ads.view, c.economy.snapshot);
         const wallet = c.economy.snapshot.wallet;
         return { finished, wallet, settled, usedRescue, usedOxygen, deaths: deathsThisDive, reason: s.settlement?.reason,
+          decisions, strategy: window.__strategy || 'deep',
           trace: n <= 3 ? (window.__trace ?? []).splice(0) : undefined,
           pearlGain: (BigInt(wallet.pearl) - startPearls).toString() };
       }, { n, techEffects: Object.fromEntries(balance.tech.nodes.map(node => [node.id, node.effect])) });

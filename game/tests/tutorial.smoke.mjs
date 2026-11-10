@@ -95,7 +95,7 @@ test(`${target}: fresh save real-time six-step loop, refresh, replay, three fina
     await click(page, 'close'); await click(page, 'tutorial-next'); await diveReady(page);
     const elapsed = (Date.now()-started)/1000;
     const second = await page.evaluate(() => ({ tutorial:window.c.economy.snapshot.objectives.tutorial, cargo:window.c.session.cargoCapacity, wallet:window.c.economy.snapshot.wallet.crystal }));
-    assert.equal(second.tutorial.completed, true); assert.equal(second.cargo, 525); assert.equal(second.wallet, '420'); assert.ok(elapsed < 180, `activation ${elapsed}s`);
+    assert.equal(second.tutorial.completed, true); assert.equal(second.cargo, 2100); assert.equal(second.wallet, '420'); assert.ok(elapsed < 180, `activation ${elapsed}s`);
     // Subsequent regressions use the production fixed clock; this part is not real-time timing evidence.
     for (let trip = 2; trip <= 3; trip++) {
       await page.evaluate(() => { window.c.enabled = false; });

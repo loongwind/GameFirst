@@ -80,6 +80,10 @@ export function combatLoadout(state: LocalState): Omit<DiveOptions, 'diveId'> {
       weapons,
       // 飘字30组 per the active-object spec; the battle default (64) stays for the stress fixture.
       capacities: { texts: 30 },
+      // Encounter cadence 15→24 ticks (2.0→1.25/s): measured weapon clear rate is 1.0–1.5/s,
+      // so 2.0/s spawns outpace any clear rate and the swarm only grows (LOO-58 60-dive data).
+      // Keeps kills ≥ spawns so player skill decides swarm pressure — P2-02 recalibrates.
+      spawnIntervalTicks: 24,
       playerSpeed: attributeValue('moveSpeed', attrs.moveSpeed) * COMBAT_GROWTH.worldUnitsPerMetre * (1 + fin),
       pickupRadius: COMBAT_GROWTH.collectionReach * (tech.special + magnet),
     },

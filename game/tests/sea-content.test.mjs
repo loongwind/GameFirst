@@ -27,11 +27,12 @@ test('content spawn uses depth-band strength and per-enemy contact attack; final
   const s = make({ battle: { weapons: [] } });
   s.battle.player.y = 200; step(s);
   let e = values(s.battle.enemies).find(e => e.kind === 'normal');
-  assert.ok(e?.assetKey); assert.ok(Math.abs(e.maxHp - 69.62) < 1e-8);
-  assert.ok(Math.abs(e.attack - 10.7648) < 1e-8); assert.equal(e.spawnDepth, 200);
+  assert.ok(e?.assetKey); const bandAttack = 8 * Math.pow(api.ENEMY_TUNING.attackGrowth, 2); // band-2 contact, table-derived
+  assert.ok(Math.abs(e.maxHp - 69.62) < 1e-8);
+  assert.ok(Math.abs(e.attack - bandAttack) < 1e-8); assert.equal(e.spawnDepth, 200);
   e.x = s.battle.player.x; e.y = s.depth; e.speed = 0;
   const hp = s.battle.player.hp; step(s);
-  assert.ok(Math.abs(s.battle.player.hp - (hp - 10.7648)) < 1e-8);
+  assert.ok(Math.abs(s.battle.player.hp - (hp - bandAttack)) < 1e-8);
   const b = new api.Battle({ content: true, weapons: [] });
   const final = b.spawnEnemy({ x: 0, y: 2400, assetKey: 'enemy_normal_24_glass_sponge' });
   assert.ok(Math.abs(final.maxHp - 2250.3816215908837) < 1e-6);

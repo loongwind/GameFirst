@@ -1,9 +1,13 @@
 /** Runtime identities from asset-index-final.csv; no engine or asset loader dependency. */
 export type SeaLayer = 'sunlight' | 'twilight' | 'abyss';
 export type EnemyKind = 'normal' | 'elite' | 'boss';
-/** Combat tuning table, alongside the identity and encounter configuration. */
+/** Combat tuning table, alongside the identity and encounter configuration.
+ *  attackGrowth 1.16→1.12 (LOO-58): band-6+ contact damage (8×1.16^6≈19.5/hit) outpaced the
+ *  5%/level player HP curve, melting any 200–280 HP pool in ~30s of additive contacts; at 1.12
+ *  the same band deals ≈16/hit (−19%) and band-10 ≈−28%, restoring evasion headroom for both
+ *  manual and assisted play. P2-02 recalibrates the full curve. */
 export const ENEMY_TUNING = Object.freeze({
-  bandMetres: 100, bands: 24, baseHp: 50, hpGrowth: 1.18, baseAttack: 8, attackGrowth: 1.16,
+  bandMetres: 100, bands: 24, baseHp: 50, hpGrowth: 1.18, baseAttack: 8, attackGrowth: 1.12,
   multipliers: Object.freeze({ normal: { hp: 1, attack: 1 }, elite: { hp: 8, attack: 2.5 }, boss: { hp: 40, attack: 4 } }),
 });
 export const SEA_LAYERS = Object.freeze([
