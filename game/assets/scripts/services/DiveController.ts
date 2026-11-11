@@ -82,7 +82,7 @@ export class DiveController extends Component {
       bottom: Math.max(0, device.windowHeight - device.safeArea.top - device.safeArea.height) * ratio,
       left: device.safeArea.left * ratio,
       right: Math.max(0, device.windowWidth - device.safeArea.left - device.safeArea.width) * ratio,
-    });
+    }, { width: device.windowWidth, height: device.windowHeight });
     if (this.inputLayout !== this.hud.layout) { this.clearInput(); this.inputLayout = this.hud.layout; }
     if (this.needsAdRecovery && Date.now() >= this.nextSettlementAttempt) {
       this.nextSettlementAttempt = Date.now() + 1000;

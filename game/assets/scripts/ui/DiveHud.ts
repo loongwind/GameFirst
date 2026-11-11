@@ -1,12 +1,14 @@
 import { BlockInputEvents, Button, Color, Graphics, Label, Layers, Node, UITransform, isValid } from 'cc';
 import type { DiveSession } from '../battle/DiveSession';
 import { hudLayout } from './hudLayout';
-import type { HudInsets, HudLayout, HudRect } from './hudLayout';
+import type { HudInsets, HudLayout, HudRect, HudViewport } from './hudLayout';
 import type { DiveAdView } from '../services/local/DiveAdModel';
 import { SeaWorldView } from './SeaWorldView';
 import type { LocalState } from '../services/local/model';
 import { objectiveTasks, tutorialHint } from '../services/local/Objectives';
 import { WorldProjection } from './WorldProjection';
+import { reefRockHull } from './ReefRock';
+import type { RockPoint } from './ReefRock';
 
 const ink = new Color(7, 25, 35), panel = new Color(15, 43, 54), line = new Color(43, 82, 90);
 const mint = new Color(105, 233, 198), cream = new Color(233, 240, 218), muted = new Color(126, 165, 169);
@@ -38,6 +40,7 @@ export class DiveHud {
   private currentSession?: DiveSession;
   private hintKey = '';
   private hintUntil = 0;
+  private readonly rockHulls = new WeakMap<object, RockPoint[]>();
 
   constructor(parent: Node, private readonly action: (action: HudAction) => void, readonly lowEnd = false) {
     this.sea = new SeaWorldView(parent, lowEnd);
@@ -59,13 +62,13 @@ export class DiveHud {
     return rects.some(r => x >= r.x && x <= r.x+r.width && y >= r.y && y <= r.y+r.height);
   }
 
-  resize(width: number, height: number, insets: HudInsets): void {
-    const key = JSON.stringify(insets);
+  resize(width: number, height: number, insets: HudInsets, viewport: HudViewport = { width, height }): void {
+    const key = JSON.stringify({insets,viewport});
     if (this.width === width && this.height === height && this.insetsKey === key) return;
     this.width = width; this.height = height; this.insetsKey = key;
     for (const child of [...this.root.children]) child.destroy();
     this.root.removeAllChildren(); this.labels.clear(); this.buttons.clear();
-    const l = this.layout = hudLayout(width, height, insets);
+    const l = this.layout = hudLayout(width, height, insets, viewport);
     this.root.setScale(l.scale, l.scale, 1);
     this.root.getComponent(UITransform)!.setContentSize(375, l.height);
     this.sea.resize(width, l.height);
@@ -87,8 +90,9 @@ export class DiveHud {
     this.box(cardGraphics, l.oxygenAd, new Color(32, 83, 80), 8);
     this.box(cardGraphics, l.oxygenDismiss, ink, 8);
     this.label('oxygenBody', '', l.oxygenCard.x + 12, l.oxygenCard.y + 8, l.oxygenCard.width-24, 32, 12, cream, this.oxygenCard);
-    this.button('oxygen', l.oxygenAd, '观看 · 氧气回满', this.oxygenCard);
-    this.button('dismissOxygen', l.oxygenDismiss, '坚持上浮 · 关闭', this.oxygenCard);
+    this.labels.get('oxygenBody')!.node.active = !l.compact;
+    this.button('oxygen', l.oxygenAd, l.compact ? '补氧' : '观看 · 氧气回满', this.oxygenCard);
+    this.button('dismissOxygen', l.oxygenDismiss, l.compact ? '关闭' : '坚持上浮 · 关闭', this.oxygenCard);
     if (!this.lowEnd) for (let i = 0; i < TEXT_POOL; i++) {
       this.label(`dmg-${i}`, '', 0, 0, 80, 20, 12, mint);
       const transform = this.labels.get(`dmg-${i}`)!.node.getComponent(UITransform)!;
@@ -99,8 +103,10 @@ export class DiveHud {
     this.overlay.getComponent(UITransform)!.setContentSize(375, l.height);
     this.overlay.addComponent(BlockInputEvents);
     this.modalGraphics = this.overlay.addComponent(Graphics);
-    this.label('modalTitle', '', l.modal.x + 20, l.modal.y + 19, l.modal.width - 40, 32, 22, cream, this.overlay);
-    this.label('modalBody', '', l.modal.x + 20, l.modal.y + 61, l.modal.width - 40, 90, 13, muted, this.overlay);
+    this.label('modalTitle', '', l.modal.x + 20, l.modal.y + (l.compact?6:19), l.modal.width - 40, l.compact?23:32, l.compact?Math.min(18,22/l.cssScale):22, cream, this.overlay);
+    const bodyY = l.modal.y+(l.compact?32:61);
+    this.label('modalBody', '', l.modal.x + 20, bodyY, l.modal.width - 40, Math.min(90,l.primary.y-bodyY-6), l.compact?Math.min(13,12/l.cssScale):13, muted, this.overlay);
+    if(l.compact)this.labels.get('modalBody')!.lineHeight=17/l.cssScale;
     this.button('primary', l.primary, '', this.overlay);
     this.button('secondary', l.secondary, '', this.overlay);
     this.overlay.active = false;
@@ -137,9 +143,9 @@ export class DiveHud {
     this.oxygenCard.active = !!ads?.oxygenPrompt && s.state === 'Running' && !session.pause.paused;
     const tutorial = state ? tutorialHint(state, s.activeSeconds) : '';
     const tasks = state ? objectiveTasks(state) : [], task = tasks.find(t => t.kind === 'first-day');
-    const hint = tutorial ? tutorial + (s.activeSeconds < 6 ? '\n岩礁阻挡通路 · 红色斜纹危险区会伤害你' : '') : s.activeSeconds < 6 ? '拖动空白处游动 · 自动攻击\n岩礁阻挡通路 · 红色斜纹危险区会伤害你' : task?.ready ? '任务已完成 · 返港领取奖励' : '';
+    const hint = tutorial ? tutorial + (s.activeSeconds < 6 ? '\n岩礁阻挡通路，靠近时绕行' : '') : s.activeSeconds < 6 ? '拖动空白处游动 · 自动攻击\n岩礁阻挡通路，靠近时绕行' : task?.ready ? '任务已完成 · 返港领取奖励' : '';
     if (hint !== this.hintKey) { this.hintKey = hint; this.hintUntil = s.activeSeconds + 7; }
-    const guidance = s.state === 'Running' && !status && !this.oxygenCard.active && !session.pause.paused && s.activeSeconds < this.hintUntil ? hint : '';
+    const guidance = !l.compact && s.state === 'Running' && !status && !this.oxygenCard.active && !session.pause.paused && s.activeSeconds < this.hintUntil ? hint : '';
     if (guidance) this.box(g, { x:l.left+10, y:l.top+94, width:355-l.left-l.right, height:44 }, new Color(5,27,40,165), 8);
     this.set('guidance', guidance);
     this.set('oxygenBody', `应急供氧 · 今日剩余 ${ads?.oxygenRemaining ?? 0}/3\n空白处仍可拖动，返航始终可用`);
@@ -177,7 +183,7 @@ export class DiveHud {
     const g = this.modalGraphics; g.clear();
     this.box(g, { x: 0, y: 0, width: 375, height: l.height }, new Color(2, 13, 21, 215), 0);
     this.box(g, l.modal, panel, 16);
-    this.box(g, { x: l.modal.x + 20, y: l.modal.y + 7, width: 36, height: 3 }, mint, 1);
+    if(!l.compact)this.box(g, { x: l.modal.x + 20, y: l.modal.y + 7, width: 36, height: 3 }, mint, 1);
     let title = '潜航已暂停', body = '战斗与氧气已冻结。\n准备好后继续探索。', primary = '继续潜航', secondary = '安全返航';
     if (s.state === 'RescuePending') {
       title = '等待救援';
@@ -214,28 +220,32 @@ export class DiveHud {
   private drawWorld(session: DiveSession): void {
     const g = this.world, l = this.layout, b = session.battle; g.clear();
     const point = (item: { x: number; y: number }) => this.projection.point(item.x,item.y);
-    for (const zone of b.dangerZones) {
-      const p=point(zone), x=p.x-187.5, y=l.height/2-p.y, r=zone.radius;
-      this.dot(g,p.x,p.y,r,new Color(123,34,49,55));
-      g.strokeColor=new Color(255,117,118,200); g.lineWidth=1.5; g.circle(x,y,r); g.stroke();
-      // Parallel hazard hatching stays inside the real circular damage footprint.
-      g.strokeColor=new Color(255,117,118,100);
-      for (let offset=-r+8;offset<r;offset+=14) {
-        const half=Math.sqrt(r*r-offset*offset), d=Math.SQRT1_2;
-        g.moveTo(x+(offset-half)*d,y+(offset+half)*d); g.lineTo(x+(offset+half)*d,y+(offset-half)*d);
-      }
-      g.stroke(); this.segment(g,p.x,p.y-9,p.x,p.y+3,danger,3); this.dot(g,p.x,p.y+10,2,danger);
-    }
+    // dangerZones are internal sonar-avoidance metadata, not player damage areas.
     for (const o of b.obstacles) {
-      const p=point(o), r=o.radius, x=p.x-187.5, y=l.height/2-p.y;
-      // 32 boundary facets approximate the unchanged solid circle to <0.3px at r=46.
-      g.fillColor=new Color(46,76,81); g.strokeColor=new Color(126,170,157); g.lineWidth=1.5;
-      for(let i=0;i<32;i++){ const a=i*Math.PI/16; const px=x+Math.cos(a)*r,py=y+Math.sin(a)*r; if(!i)g.moveTo(px,py);else g.lineTo(px,py); }
-      g.close(); g.fill(); g.stroke();
-      g.fillColor=new Color(71,105,105); g.moveTo(x-r*.8,y+r*.35); g.lineTo(x-r*.2,y+r*.8); g.lineTo(x+r*.5,y+r*.5); g.lineTo(x+r*.15,y-r*.25); g.close();g.fill();
-      g.strokeColor=new Color(28,53,62);g.lineWidth=2;
-      g.moveTo(x-r*.4,y-r*.55);g.lineTo(x+r*.15,y-r*.25);g.lineTo(x+r*.65,y-r*.5);g.stroke();
-      this.segment(g,p.x-r*.38,p.y-r*.25,p.x-r*.2,p.y-r*.65,mint,2);
+      const p=point(o),r=o.radius,x=p.x-187.5,y=l.height/2-p.y;
+      let hull=this.rockHulls.get(o);
+      if(!hull){hull=reefRockHull(r,o.x<0?.34:-.22);this.rockHulls.set(o,hull);}
+      const face=(indices:number[],color:Color,center?:RockPoint)=>{
+        g.fillColor=color;
+        const first=hull![indices[0]];g.moveTo(x+first.x,y+first.y);
+        for(let i=1;i<indices.length;i++){const v=hull![indices[i]];g.lineTo(x+v.x,y+v.y);}
+        if(center)g.lineTo(x+center.x,y+center.y);g.close();g.fill();
+      };
+      // Broad top plane, stepped side planes and sediment bands read as a solid boulder.
+      face([0,1,2,3,4,5,6],new Color(57,70,76));
+      face([0,1,2,3],new Color(133,151,137),{x:-r*.12,y:r*.14});
+      face([3,4,5],new Color(77,94,91),{x:-r*.12,y:r*.14});
+      face([5,6,0],new Color(31,48,59),{x:r*.22,y:-r*.18});
+      g.strokeColor=new Color(172,182,153);g.lineWidth=2;
+      g.moveTo(x+hull[1].x,y+hull[1].y);g.lineTo(x+hull[2].x,y+hull[2].y);g.lineTo(x+hull[3].x,y+hull[3].y);g.stroke();
+      for(let i=0;i<3;i++){
+        const yy=y-r*(.08+i*.22);
+        g.strokeColor=new Color(124,139,122,160);g.lineWidth=1.5;
+        g.moveTo(x-r*.65,yy);g.lineTo(x-r*.25,yy-r*.12);g.lineTo(x+r*.1,yy-r*.08);g.stroke();
+      }
+      // Sparse mineral chips are fixed details on both quality tiers, not particles.
+      g.fillColor=new Color(179,171,133);
+      g.rect(x-r*.42,y+r*.42,r*.13,r*.06);g.rect(x+r*.12,y+r*.56,r*.09,r*.05);g.fill();
     }
     for (const e of b.loot.values()) { const p=this.projection.sample(e); this.dot(g,p.x,p.y,3,mint); }
     for (const e of b.projectiles.values()) {
@@ -319,7 +329,8 @@ export class DiveHud {
     this.buttons.set(name, button);
     n.on(Button.EventType.CLICK, () => this.action(name));
     // Label coordinates are root-relative; the touch node remains its own hit box.
-    this.label(name, text, r.x + 8, r.y + 15, r.width - 16, 25, 13, cream, parent);
+    const height=Math.min(25,r.height-4),font=this.layout.compact?Math.min(13,13/this.layout.cssScale):13;
+    this.label(name, text, r.x + 8, r.y + (r.height-height)/2, r.width - 16, height, font, cream, parent);
   }
   private set(name: string, value: string): void {
     const label = this.labels.get(name)!;

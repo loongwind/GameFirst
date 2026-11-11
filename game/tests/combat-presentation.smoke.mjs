@@ -6,7 +6,7 @@ import { withBrowser } from './browser-helpers.mjs';
 
 const target=process.env.WEB_TARGET||'web-release';
 const artifacts=fileURLToPath(new URL('../.artifacts/combat-presentation/',import.meta.url));
-for(const tier of ['high','low'])test(`${target}: ${tier} four-weapon presentation retains danger and creates no projectile nodes`,{timeout:60000},async()=>{
+for(const tier of ['high','low'])test(`${target}: ${tier} four-weapon presentation and solid terrain create no projectile nodes`,{timeout:60000},async()=>{
   await mkdir(artifacts,{recursive:true});
   await withBrowser(fileURLToPath(new URL(`../build/${target}`,import.meta.url)),async(page,browser,url)=>{
     const errors=[];page.on('pageerror',e=>errors.push(e.message));

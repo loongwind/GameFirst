@@ -28,9 +28,10 @@ test('phone HUD reserves at most 20% of safe height and keeps emergency actions 
   const js = ts.transpileModule(source, { compilerOptions: { module:ts.ModuleKind.ES2020 } }).outputText;
   const { hudLayout } = await import(`data:text/javascript;base64,${Buffer.from(js).toString('base64')}`);
   for (const [w,h,top,bottom] of [[375,667,0,0], [390,844,0,0], [320,640,44,34]]) {
-    const l = hudLayout(w,h,{top,bottom});
-    assert.ok(l.status.y+l.status.height-l.top <= (h-top-bottom)/l.scale*.2, 'normal HUD fits safe-height budget');
+    const cssScale=w/375;
+    const l = hudLayout(375,h/cssScale,{top:top/cssScale,bottom:bottom/cssScale},{width:w,height:h});
+    assert.ok(l.status.y+l.status.height-l.top <= (h-top-bottom)/cssScale*.2, 'normal HUD fits safe-height budget');
     assert.ok(l.oxygenCard.y > l.height*.6, 'low oxygen card stays below main combat area');
-    for (const key of ['sonar','pause','return','oxygenAd','oxygenDismiss']) assert.ok(l[key].height*l.scale >= 44, key);
+    for (const key of ['sonar','pause','return','oxygenAd','oxygenDismiss','primary','secondary']) assert.ok(l[key].height*cssScale >= 44-1e-8, key);
   }
 });

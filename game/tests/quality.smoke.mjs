@@ -61,7 +61,7 @@ test(`${target}: high tier renders marine snow and floating damage texts`, { tim
   });
 });
 
-test(`${target}: low tier drops snow, texts and glow rings, keeps collision and danger layers`, { timeout: 120000 }, async () => {
+test(`${target}: low tier drops decoration, keeps solid terrain and internal sonar avoidance data`, { timeout: 120000 }, async () => {
   await mkdir(artifacts, { recursive: true });
   await withBrowser(root, async (page, _b, url) => {
     const errors = []; page.on('pageerror', e => errors.push(e.message));
@@ -80,7 +80,7 @@ test(`${target}: low tier drops snow, texts and glow rings, keeps collision and 
     });
     assert.equal(state.snow, false, 'marine snow must be absent on low tier');
     assert.equal(state.labelNames, 0, 'damage labels must not be created on low tier');
-    assert.ok(state.dangerZones > 0 && state.obstacles > 0, 'collision and danger zones stay configured');
+    assert.ok(state.dangerZones > 0 && state.obstacles > 0, 'solid terrain and internal AI avoidance stay configured');
     await page.screenshot({ path: `${artifacts}/low-${target}.png` });
     assert.deepEqual(errors, []);
     await writeFile(`${artifacts}/low-${target}.json`, JSON.stringify({ quality, engaged, state, errors }, null, 2));
