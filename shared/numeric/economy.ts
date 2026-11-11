@@ -75,6 +75,19 @@ export function synthesize(items: readonly Equipment[], mainId: string, outputId
 export function randomUnit(n: number): number {
   if (!Number.isFinite(n) || n < 0 || n >= 1) throw new RangeError('Invalid random sample'); return n;
 }
+/** Rotation window index of the gift showcase; windows are fixed-length slices of absolute time. */
+export function giftWindow(now: number, c: BalanceConfig = DEFAULT_BALANCE): number {
+  integer(now); if (c.ads.giftRotationMs < 1) throw new RangeError('Invalid gift rotation'); return Math.floor(now / c.ads.giftRotationMs);
+}
+/** Deterministic showcase pick for one (day, window): the UI preview and the actual payout stay identical without extra state. */
+export function giftOffer(day: string, window: number, c: BalanceConfig = DEFAULT_BALANCE): { currency: Currency; amount: Amount } {
+  if (!day) throw new RangeError('Invalid gift day'); integer(window);
+  const rewards = c.ads.giftRewards; if (!rewards.length) throw new RangeError('Empty gift rewards');
+  let hash = 2166136261; const key = `${day}:${window}`;
+  for (let i = 0; i < key.length; i++) { hash ^= key.charCodeAt(i); hash = Math.imul(hash, 16777619); }
+  // The generated table widens currency to string; schema validation guarantees the four-currency enum.
+  return { ...rewards[(hash >>> 0) % rewards.length] } as { currency: Currency; amount: Amount };
+}
 export function rollBox(box: Box, pity: number, samples: readonly [number, number], c = DEFAULT_BALANCE): { quality: number; template: string; pity: number } {
   const table = c.boxes[box]; if (!table) throw new RangeError('Unknown box');
   integer(pity, 0, c.boxes.gold.pity - 1); samples.forEach(randomUnit);

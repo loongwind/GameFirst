@@ -55,7 +55,13 @@ export class DiveAdModel {
       const context = slot === 'rescue' || slot === 'oxygen' ? { diveId: this.session.diveId, eventId: slot === 'rescue' ? this.session.deathEventId : this.session.oxygenEventId } : undefined;
       const result: AdOutcome = slot ? await this.service.watch({ opId: `${this.prefix}-${++this.sequence}`, slot, context }) : await this.service.retryClaim();
       this.rewardPending = result.status === 'pending';
-      this.notice = this.rewardPending ? '奖励确认中，请重试领取，无需再次观看。' : result.status === 'skipped' ? '未完整观看，本次不发奖。可继续原选择。' : '补给已确认。';
+      if (this.rewardPending) this.notice = '奖励确认中，请重试领取，无需再次观看。';
+      else if (result.status === 'skipped') this.notice = '未完整观看，本次不发奖。可继续原选择。';
+      else {
+        const reward = result.result?.reward;
+        this.notice = reward?.kind === 'effect' ? (reward.effect === 'oxygen' ? '氧气已回满，继续潜航。' : '救援成功，耐压已恢复 50%。')
+          : reward?.kind === 'buff' ? `声呐协击已激活 ${Math.round(reward.durationMs / 60000)} 分钟。` : '补给已确认。';
+      }
     } catch (error) {
       const code = error instanceof Error ? error.message : '';
       if (code === 'AD_CLAIM_PENDING') this.rewardPending = true;

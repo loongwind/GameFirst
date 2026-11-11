@@ -1,6 +1,6 @@
-import { DEFAULT_BALANCE, upgradeCost, attributeValue, synthesize } from '@abyss-hunter/shared';
+import { DEFAULT_BALANCE, upgradeCost, attributeValue, synthesize, giftWindow, giftOffer } from '@abyss-hunter/shared';
 import type { Equipment } from '@abyss-hunter/shared';
-import type { Action, LocalState, CommandResult, AdSlot, AdContext } from '../services/local/model';
+import type { Action, LocalState, CommandResult, AdReward, AdSlot, AdContext } from '../services/local/model';
 import type { AdOutcome, AdRequest } from '../services/local/AdService';
 import { businessDay } from '../services/local/EconomyService';
 import { objectiveTasks } from '../services/local/Objectives';
@@ -13,6 +13,21 @@ export const ATTRIBUTE_NAMES: Record<string, string> = { hp: '耐压装甲', att
 export const TREE_NAMES: Record<string, string> = { attack: '攻击', survival: '生存', oxygen: '氧气', cargo: '舱容', special: '特殊' };
 export const EQUIPMENT_NAMES: Record<string, string> = { sonic: '声波炮', torpedo: '鱼雷', arc: '电弧', mine: '水雷', light: '探照灯', fin: '推进鳍', armor: '护甲', magnet: '磁吸器' };
 export const QUALITY_NAMES = ['残破', '标准', '精良', '史诗', '传说'];
+export const CURRENCY_NAMES: Record<string, string> = { crystal: '荧晶', pearl: '珍珠', marrow: '深海髓', core: '渊核' };
+const BLESSING_LABELS: Record<string, string> = { yield: '收益', oxygen: '氧气', cargo: '舱容' };
+/** One line per granted ad reward; rewards are economy-owned facts, this is wording only. */
+export function adRewardText(reward?: AdReward): string {
+  if (!reward) return '补给已确认';
+  if (reward.kind === 'currency') return `${CURRENCY_NAMES[reward.currency] ?? reward.currency} ×${reward.amount}`;
+  if (reward.kind === 'equipment') return `${EQUIPMENT_NAMES[reward.template] ?? reward.template} · ${QUALITY_NAMES[reward.quality]} Lv.${reward.level}`;
+  if (reward.kind === 'ticket') return '升级券 ×1';
+  if (reward.kind === 'effect') return reward.effect === 'rescue' ? '救援成功 · 耐压恢复 50%' : '氧气已回满';
+  const minutes = Math.round(reward.durationMs / 60000);
+  if (reward.buff === 'sonar') return `声呐协击 · ${minutes}分钟`;
+  const index = DEFAULT_BALANCE.ads.blessingChoices.indexOf(reward.choice ?? '');
+  const percent = index >= 0 ? Math.round((DEFAULT_BALANCE.ads.blessingMultipliers[index] - 1) * 100) : 0;
+  return `远航祝福 · ${BLESSING_LABELS[reward.choice ?? ''] ?? '增益'} +${percent}%（${minutes}分钟）`;
+}
 export function message(error: unknown): string {
   const code = error instanceof Error ? error.message : String(error);
   const known: Record<string, string> = { INSUFFICIENT_FUNDS: '余额不足，先下潜收集并卸货。', LEVEL_LOCKED: '等级尚未开放。', INVENTORY_FULL: '收纳舱已满，先合成装备。', AD_LOAD_FAILED: '视频加载失败，请稍后重试。', AD_DRIVER_UNAVAILABLE: '广告服务暂未就绪，请稍后再试。', AD_DAILY_LIMIT: '今日次数已用完。', SONAR_ACTIVE: '协击仍在生效，到期前一分钟可续期。', PREREQUISITE: '请先解锁前置节点。', INSUFFICIENT_TICKETS: '升级券不足。', ACTIVE_DIVE: '请先返回潜航现场并完成卸货。' };
@@ -21,6 +36,7 @@ export function message(error: unknown): string {
 /** Presentation only: previews reuse shared algorithms; every mutation goes through the port. */
 export class HarborModel {
   phase: Phase = 'normal'; notice = ''; busy = false;
+  rewardToast: { title: string; body: string; positive: boolean } | null = null;
   private listeners = new Set<() => void>();
   private pending: Action | undefined;
   private adPending = false;
@@ -66,6 +82,12 @@ export class HarborModel {
     const s = this.snapshot, expiresAt = kind === 'sonar' ? s.buffs.sonarUntil : s.buffs.blessing?.expiresAt ?? 0;
     return Math.max(0, Math.ceil((expiresAt - this.now()) / 1000));
   }
+  /** Current rotating gift showcase and seconds until it flips; derived, never stored. */
+  giftPreview(): { currency: string; amount: string; refreshIn: number } {
+    const now = this.now(), window = giftWindow(now);
+    return { ...giftOffer(businessDay(now), window), refreshIn: Math.max(0, Math.ceil(((window + 1) * DEFAULT_BALANCE.ads.giftRotationMs - now) / 1000)) };
+  }
+  dismissToast(): void { if (!this.rewardToast) return; this.rewardToast = null; this.emit(); }
   async execute(command: HarborCommand): Promise<void> {
     if (this.busy) throw new Error('BUSY');
     if (this.pending || this.adPending && command.type !== 'equipment.synthesize') { this.notice = '请先重试待确认操作。'; this.emit(); return; }
@@ -110,7 +132,14 @@ export class HarborModel {
       if (!this.ads) throw new Error('AD_DRIVER_UNAVAILABLE');
       const result = request ? await this.ads.watch(request) : await this.ads.retryClaim();
       this.adPending = result.status === 'pending'; this.phase = this.adPending ? 'error' : 'normal';
-      this.notice = this.adPending ? '奖励待确认，请重试领取，无需再次观看。' : result.status === 'skipped' ? '未完整观看，本次不发放奖励。' : '补给已确认。';
+      if (this.adPending) this.notice = '奖励待确认，请重试领取，无需再次观看。';
+      else if (result.status === 'skipped') {
+        this.notice = '未完整观看，本次不发放奖励。';
+        this.rewardToast = { title: '未获得奖励', body: '视频未完整观看，本次没有发放任何奖励。', positive: false };
+      } else {
+        const text = adRewardText(result.result?.reward);
+        this.notice = `奖励已入账：${text}`; this.rewardToast = { title: '获得奖励', body: text, positive: true };
+      }
     } catch (error) { this.phase = 'error'; this.notice = message(error); }
     finally { this.busy = false; this.emit(); }
   }

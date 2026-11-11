@@ -38,7 +38,11 @@ async function show(page, button, { skip = false, shot } = {}) {
   await page.locator('.preview-ad-overlay').waitFor({ state: 'detached', timeout: 10000 });
   await page.waitForFunction(() => !(window.h?.model?.busy || window.c?.ads?.view.busy));
   await page.waitForTimeout(150);
-  return box;
+  // The reward toast is part of the observable outcome; capture it, then clear it for the next interaction.
+  const toast = await page.evaluate(() => window.h?.model?.rewardToast ? JSON.parse(JSON.stringify(window.h.model.rewardToast)) : null);
+  await page.evaluate(() => { if (window.h?.model?.rewardToast) window.h.model.dismissToast(); });
+  await page.waitForTimeout(50);
+  return { box, toast };
 }
 const count = (page, slot) => page.evaluate(slot => window.h.model.adRemaining(slot), slot);
 
@@ -57,24 +61,33 @@ for (const [width, height] of [[320,640],[375,667],[390,844]]) {
       assert.equal(await page.locator('#preview-ad-badge').innerText(), '演示版 · 模拟广告');
       await supply(page,0);
       const original = await page.evaluate(() => JSON.stringify(window.h.economy.snapshot.wallet));
-      await show(page, 'ad-gift', {skip:true, shot:`${width}-skip`});
+      const skipped = await show(page, 'ad-gift', { skip: true, shot: `${width}-skip` });
       assert.equal(await count(page,'gift'),5);
+      assert.deepEqual(skipped.toast, { title: '未获得奖励', body: '视频未完整观看，本次没有发放任何奖励。', positive: false }, 'skips need an explicit no-reward signal');
       assert.equal(await page.evaluate(() => JSON.stringify(window.h.economy.snapshot.wallet)), original);
-      evidence.push({slot:'gift',box:await show(page,'ad-gift',{shot:`${width}-countdown`})});
+      const gift = await show(page, 'ad-gift', { shot: `${width}-countdown` });
+      evidence.push({ slot: 'gift', box: gift.box, toast: gift.toast });
       assert.equal(await count(page,'gift'),4);
+      assert.equal(gift.toast?.positive, true, `completed gift must toast its reward: ${JSON.stringify(gift.toast)}`);
+      assert.match(gift.toast?.body ?? '', /^(荧晶|珍珠|深海髓|渊核) ×\d+$/, `gift toast names the currency and amount: ${JSON.stringify(gift.toast)}`);
+      assert.match(await page.evaluate(() => window.h.model.notice), /奖励已入账/);
       const wallet = await page.evaluate(() => JSON.stringify(window.h.economy.snapshot.wallet));
       await page.waitForTimeout(300); assert.equal(await page.evaluate(() => JSON.stringify(window.h.economy.snapshot.wallet)), wallet);
       await page.reload(); await harbor(page); assert.equal(await count(page,'gift'),4);
       for (const [slot,index,button] of [['blessing',1,'blessing-yield'],['sonar',2,'ad-sonar'],['silver',3,'ad-silver'],['gold',4,'ad-gold']]) {
         await supply(page,index);
         const before = await count(page,slot), inventory = await page.evaluate(() => window.h.economy.snapshot.inventory.length + window.h.economy.snapshot.tickets);
-        evidence.push({slot,box:await show(page,button)});
+        const shown = await show(page,button);
+        evidence.push({slot,box:shown.box,toast:shown.toast});
         assert.equal(await count(page,slot),before-1);
+        assert.equal(shown.toast?.positive, true, `${slot} completion must toast its reward: ${JSON.stringify(shown.toast)}`);
         if (slot==='silver'||slot==='gold') {
+          assert.match(shown.toast?.body ?? '', /(· .*Lv\.|升级券)/, `box toast names the pull: ${JSON.stringify(shown.toast)}`);
           const reward=await page.evaluate(()=>({inventory:window.h.economy.snapshot.inventory,tickets:window.h.economy.snapshot.tickets,intents:window.h.economy.snapshot.intents,notice:window.h.model.notice}));
           assert.equal(reward.inventory.length+reward.tickets,inventory+1,JSON.stringify({slot,before:inventory,reward}));
         }
-        if (slot==='sonar') assert.ok(await page.evaluate(() => window.h.model.buffSeconds('sonar') > 890));
+        if (slot==='blessing') assert.match(shown.toast?.body ?? '', /远航祝福 · (收益|氧气|舱容) \+\d+%/);
+        if (slot==='sonar') { assert.match(shown.toast?.body ?? '', /声呐协击 · 15分钟/); assert.ok(await page.evaluate(() => window.h.model.buffSeconds('sonar') > 890)); }
       }
       // Exhaustion and all blessing choices on the main viewport. Only the wall clock is varied.
       if (width===375) {
@@ -128,6 +141,63 @@ for (const [width, height] of [[320,640],[375,667],[390,844]]) {
     },{width,height});
   });
 }
+
+test('gift showcase displays the rotating reward, pays exactly that reward and confirms via toast', { timeout: 120000 }, async () => {
+  await withBrowser(root, async (page) => {
+    const errors = [];
+    page.on('pageerror', e => errors.push(e.message));
+    await harbor(page);
+    await page.evaluate(() => {
+      window.h.economy.dispatch({ type: 'dive.settle', opId: 'showcase-xp', settlement: { diveId: 'showcase-xp', reason: 'return', cargo: { crystal: 0, pearl: 0, marrow: 0, core: 0 }, xp: 10000, activeSeconds: 0, depth: 0 } });
+      window.h.view.update();
+    });
+    await supply(page, 0);
+    // Pin both clocks so a rotation boundary cannot flip mid-assertion.
+    await page.evaluate(() => { window.showClock = Date.now(); window.h.economy.now = () => window.showClock; window.h.model.now = () => window.showClock; });
+    const label = node => page.evaluate(name => {
+      const find = n => n.name === name ? n : n.children.map(find).find(Boolean);
+      const n = find(window.cc.director.getScene().getChildByName('Canvas'));
+      return n?.getComponent(window.cc.Label)?.string ?? null;
+    }, node);
+    const offer1 = await page.evaluate(() => window.h.model.giftPreview());
+    assert.match(await label('GiftOffer'), new RegExp(`当前馈赠：(荧晶|珍珠|深海髓|渊核) ×${offer1.amount}`));
+    assert.match(await label('GiftRefresh'), new RegExp(`^${offer1.refreshIn}秒后刷新 · 完整观看后入账$`));
+    // Advance into the next rotation window: the card must present a different reward.
+    let offer2 = offer1;
+    for (let i = 0; i < 6 && offer2.currency === offer1.currency && offer2.amount === offer1.amount; i++) {
+      await page.evaluate(() => { window.showClock += 60000; window.h.view.update(); });
+      offer2 = await page.evaluate(() => window.h.model.giftPreview());
+    }
+    assert.notDeepEqual([offer1.currency, offer1.amount], [offer2.currency, offer2.amount], 'rotation must reach the next reward');
+    assert.match(await label('GiftOffer'), new RegExp(`当前馈赠：(荧晶|珍珠|深海髓|渊核) ×${offer2.amount}`));
+    const walletBefore = await page.evaluate(currency => window.h.economy.snapshot.wallet[currency], offer2.currency);
+    await click(page, 'ad-gift');
+    await page.locator('#preview-ad-skip').waitFor();
+    await page.locator('.preview-ad-overlay').waitFor({ state: 'detached', timeout: 10000 });
+    await page.waitForFunction(() => !window.h.model.busy);
+    const names = { crystal: '荧晶', pearl: '珍珠', marrow: '深海髓', core: '渊核' };
+    const toast = await page.evaluate(() => window.h.model.rewardToast && JSON.parse(JSON.stringify(window.h.model.rewardToast)));
+    assert.deepEqual(toast, { title: '获得奖励', body: `${names[offer2.currency]} ×${offer2.amount}`, positive: true }, 'payout must equal the displayed offer');
+    assert.equal(await page.evaluate(currency => window.h.economy.snapshot.wallet[currency], offer2.currency), (BigInt(walletBefore) + BigInt(offer2.amount)).toString());
+    assert.equal(await count(page, 'gift'), 4);
+    // The toast is a real dismissible card with a ≥44px confirm button.
+    await page.screenshot({ path: `${artifacts}/reward-toast.png` });
+    await click(page, 'toast-confirm');
+    await page.waitForFunction(() => window.h.model.rewardToast === null);
+    assert.equal(await page.evaluate(() => document.querySelector('.preview-ad-overlay')), null);
+    // An incomplete view states plainly that nothing was granted.
+    await click(page, 'ad-gift');
+    await page.locator('#preview-ad-skip').waitFor();
+    await page.locator('#preview-ad-skip').click();
+    await page.locator('.preview-ad-overlay').waitFor({ state: 'detached', timeout: 10000 });
+    await page.waitForFunction(() => !window.h.model.busy);
+    assert.deepEqual(await page.evaluate(() => window.h.model.rewardToast && JSON.parse(JSON.stringify(window.h.model.rewardToast))),
+      { title: '未获得奖励', body: '视频未完整观看，本次没有发放任何奖励。', positive: false });
+    assert.equal(await count(page, 'gift'), 4, 'a skipped video never consumes quota');
+    await page.evaluate(() => { window.h.model.dismissToast(); window.h.economy.now = Date.now; window.h.model.now = Date.now; });
+    assert.deepEqual(errors, []);
+  });
+});
 
 test('preview load failure clears overlay, cancels reservation and keeps reward/counter unchanged', {timeout:60000}, async()=>{
   await withBrowser(root,async(page,_b,url)=>{

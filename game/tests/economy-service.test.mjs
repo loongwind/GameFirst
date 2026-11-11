@@ -96,3 +96,16 @@ test('ticket box outcomes enter the item ledger and can pay one real equipment u
   assert.equal(s.snapshot.tickets, 0); assert.equal(s.snapshot.wallet.marrow, '100');
   assert.equal(s.snapshot.inventory[0].invested.tickets, 1); assert.equal(s.snapshot.inventory[0].level, 2);
 });
+
+test('gift showcase pays the prepare-window offer even when the claim lands in a later rotation window', async () => {
+  const { giftOffer, giftWindow } = await import('@abyss-hunter/shared');
+  let now = 3_600_000; const s = make(memoryStorage(), { now: () => now, random: () => 0.99 }); settle(s);
+  const token = s.dispatch({ type: 'ad.prepare', opId: 'show.prepare', slot: 'gift' }).token;
+  const shown = { kind: 'currency', ...giftOffer(api.businessDay(now), giftWindow(now)) };
+  const before = s.snapshot.wallet[shown.currency];
+  now += 4 * 60_000 + 1; // two rotation windows pass while the video plays
+  s.dispatch({ type: 'ad.complete', opId: 'show.complete', token });
+  const claimed = s.dispatch({ type: 'ad.claim', opId: 'show.claim', token });
+  assert.deepEqual(claimed.reward, shown, 'claim must not re-roll into the later window');
+  assert.equal(BigInt(s.snapshot.wallet[shown.currency]) - BigInt(before), BigInt(shown.amount));
+});

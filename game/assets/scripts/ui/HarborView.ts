@@ -1,7 +1,7 @@
 import { Node, UITransform, SpriteFrame, BitmapFont, Widget, BlockInputEvents, Label, Color, Graphics, Mask, ScrollView } from 'cc';
 import { DEFAULT_BALANCE, equipmentUpgradeCost } from '@abyss-hunter/shared';
 import type { Equipment } from '@abyss-hunter/shared';
-import { HarborModel, TREE_NAMES, EQUIPMENT_NAMES, QUALITY_NAMES } from '../meta/HarborModel';
+import { HarborModel, TREE_NAMES, EQUIPMENT_NAMES, QUALITY_NAMES, CURRENCY_NAMES } from '../meta/HarborModel';
 import type { HarborCommand } from '../meta/HarborModel';
 import { harborLayout } from './harborLayout';
 import type { HarborInsets, Rect } from './harborLayout';
@@ -20,6 +20,7 @@ export class HarborView {
   panel?: Panel;
   private base?: UiScope;
   private overlay?: UiScope;
+  private toast?: UiScope;
   private offBase?: () => void;
   private panelDirty = false;
   private tree = 'attack';
@@ -37,7 +38,11 @@ export class HarborView {
   constructor(private readonly parent: Node, readonly model: HarborModel, private readonly frames: ReadonlyMap<string, SpriteFrame>, private readonly font: BitmapFont | undefined,
     private readonly launch: () => void, private readonly posterPort?: PosterPort) {
     this.root = new Node('HarborRoot'); this.root.layer = parent.layer; parent.addChild(this.root); this.root.addComponent(UITransform).setAnchorPoint(0, 1);
-    this.offBase = model.subscribe(() => { this.panelDirty = true; });
+    this.offBase = model.subscribe(() => {
+      this.panelDirty = true;
+      // Dismissal must free input this frame; waiting for the next update() would swallow a fast follow-up tap.
+      if (!model.rewardToast && this.toast) { this.toast.dispose(); this.toast = undefined; }
+    });
   }
   get liveRows(): number { return this.lists.reduce((sum, list) => sum + list.liveRows, 0); }
   resize(width: number, height: number, insets: HarborInsets, viewport = { width, height }): void {
@@ -50,7 +55,18 @@ export class HarborView {
   }
   update(): void {
     if (this.panelDirty) { this.panelDirty = false; this.buildBase(); this.drawPanel(); }
-    this.timers.forEach((label, i) => { const seconds = this.model.buffSeconds(i === 0 ? 'blessing' : 'sonar'); label.string = seconds ? `生效中 ${Math.floor(seconds / 60)}分${seconds % 60}秒` : '当前未激活'; });
+    for (const i of [0, 1]) {
+      const label = this.timers[i]; if (!label) continue;
+      const seconds = this.model.buffSeconds(i === 0 ? 'blessing' : 'sonar');
+      label.string = seconds ? `生效中 ${Math.floor(seconds / 60)}分${seconds % 60}秒` : '当前未激活';
+    }
+    if (this.timers[2] || this.timers[3]) {
+      const offer = this.model.giftPreview();
+      if (this.timers[2]) this.timers[2].string = `当前馈赠：${CURRENCY_NAMES[offer.currency] ?? offer.currency} ×${offer.amount}`;
+      if (this.timers[3]) this.timers[3].string = `${offer.refreshIn}秒后刷新 · 完整观看后入账`;
+    }
+    if (this.model.rewardToast && !this.toast) this.drawToast(this.model.rewardToast);
+    else if (!this.model.rewardToast && this.toast) { this.toast.dispose(); this.toast = undefined; }
     const p = this.model.snapshot.objectives;
     if (!this.panel && !this.model.hasPending && p.record && p.record.depth > Math.max(p.posterSeen, this.shownRecord)) {
       this.shownRecord = p.record.depth; this.open('poster');
@@ -62,7 +78,20 @@ export class HarborView {
     this.overlay?.dispose(); this.overlay = undefined; this.lists = []; this.timers = []; this.panel = undefined;
     if (depth) void this.model.execute({ type: 'poster.dismiss', depth });
   }
-  destroy(): void { this.close(); this.offBase?.(); this.base?.dispose(); this.root.destroy(); }
+  destroy(): void { this.close(); this.toast?.dispose(); this.toast = undefined; this.offBase?.(); this.base?.dispose(); this.root.destroy(); }
+  /** Modal reward confirmation above every panel; the model owns its lifetime, the view only mirrors it. */
+  private drawToast(toast: { title: string; body: string; positive: boolean }): void {
+    const s = this.toast = this.scope('RewardToast'), l = this.layout;
+    s.root.getComponent(UITransform)!.setContentSize(375, l.height);
+    s.root.addComponent(BlockInputEvents);
+    s.box('ToastScrim', r(0, 0, 375, l.height), undefined, new Color(2, 13, 21, 165));
+    const width = 288, height = 190, x = Math.round((375 - width) / 2), y = Math.round(l.height / 2 - height / 2);
+    s.box('ToastCard', r(x, y, width, height));
+    s.text('ToastTitle', toast.title, x, y + 24, width, 30, 20, toast.positive ? C.mint : C.amber);
+    const label = s.text('ToastBody', toast.body, x + 18, y + 64, width - 36, 56, 14, C.text);
+    label.horizontalAlign = Label.HorizontalAlign.CENTER;
+    s.button('toast-confirm', r(x + 52, y + height - 60, width - 104, 44), '收下了', () => this.model.dismissToast(), true, undefined, true);
+  }
   private scope(name: string): UiScope {
     const n = new Node(name); n.layer = this.parent.layer; this.root.addChild(n); n.addComponent(UITransform).setAnchorPoint(0, 1);
     return new UiScope(n, this.frames, this.font, this.layout.touch);
@@ -119,6 +148,7 @@ export class HarborView {
     }
     s.button('LaunchButton', l.targets.launch, state.activeDive ? '↓   继续潜航' : '↓   下潜  ·  探索透光层', () => { if (!this.model.busy && !this.model.hasPending) this.launch(); }, !this.model.busy && !this.model.hasPending, undefined, true);
     if (this.overlay) this.overlay.root.setSiblingIndex(this.root.children.length - 1);
+    if (this.toast) this.toast.root.setSiblingIndex(this.root.children.length - 1);
   }
   private drawPanel(): void {
     this.overlay?.dispose(); this.overlay = undefined; this.lists = []; this.timers = [];
@@ -173,6 +203,7 @@ export class HarborView {
       body.button('open-tasks', r(16, 280, p.width - 32, 48), '查看潜航目标', () => this.open('tasks'));
     }
     if (this.model.notice && !['equipment', 'tasks', 'poster'].includes(this.panel)) body.text('Notice', this.model.notice, 16, statusY, p.width - 32, 44, 11, C.mint);
+    if (this.toast) this.toast.root.setSiblingIndex(this.root.children.length - 1);
   }
   private fourState(s: UiScope, phase: 'loading' | 'empty' | 'error', text: string, y: number, height: number): void {
     const title = phase === 'loading' ? '正在连接潜航终端…' : phase === 'error' ? '暂未确认' : '等待新的发现';
@@ -313,8 +344,12 @@ export class HarborView {
         row.button(`draw10-${kind}`, r(105, 134, 89, 48), '珍珠十连', () => this.command({ type: 'box.draw', box: kind, count: 10 }), unlocked && state.inventory.length + 10 <= DEFAULT_BALANCE.equipment.inventoryLimit);
         row.button(`ad-${kind}`, r(200, 134, w - 210, 48), '视频单抽', () => { void this.model.watch(kind); }, unlocked && !lowLevel && this.model.adRemaining(kind) > 0 && state.inventory.length < DEFAULT_BALANCE.equipment.inventoryLimit);
       } else {
-        row.text('GiftHint', '可获得荧晶、珍珠、深海髓或渊核。\n完整观看并确认后入账。', 12, 73, w - 24, 44, 12, C.muted);
-        row.button('ad-gift', r(12, 132, w - 24, 48), '观看视频 · 获取馈赠', () => { void this.model.watch('gift'); }, !lowLevel && this.model.adRemaining(kind) > 0);
+        // The showcase pays exactly what is displayed here; labels refresh every frame from the model clock.
+        const offer = row.text('GiftOffer', '', 12, 69, w - 24, 26, 14, C.mint);
+        const refresh = row.text('GiftRefresh', '', 12, 99, w - 24, 20, 11, C.muted);
+        this.timers[2] = offer; this.timers[3] = refresh;
+        row.own(() => { if (this.timers[2] === offer) delete this.timers[2]; if (this.timers[3] === refresh) delete this.timers[3]; });
+        row.button('ad-gift', r(12, 132, w - 24, 48), '观看视频 · 领取当前馈赠', () => { void this.model.watch('gift'); }, !lowLevel && this.model.adRemaining(kind) > 0);
       }
     });
     this.lists[this.lists.length - 1]?.scrollTo(this.supplyFocus);

@@ -3,6 +3,7 @@ import { test } from 'node:test';
 import { createRequire } from 'node:module';
 import { loadServices, memoryStorage } from './services-loader.mjs';
 const api = loadServices();
+const { giftOffer, giftWindow } = await import('@abyss-hunter/shared');
 function setup(options = {}) {
   assert.equal(typeof api.AdService, 'function');
   const { MockAdService } = createRequire(import.meta.url)('../.artifacts/services/development/MockAdService.js');
@@ -15,17 +16,24 @@ function setup(options = {}) {
 }
 test('production ad state machine grants once after complete and enforces all seven real daily limits', async () => {
   const { ads, economy, clock, states } = setup();
+  const grants = [], walletBefore = { ...economy.snapshot.wallet };
   for (const [slot, limit] of Object.entries({ gift: 5, blessing: 2, sonar: 6, silver: 3, gold: 2, rescue: 3, oxygen: 3 })) {
     for (let i = 0; i < limit; i++) {
       if (slot === 'sonar') clock.now += 14 * 60000;
-      await ads.watch({ opId: `${slot}-${i}`, slot, context: { choice: 'yield', eventId: `${slot}-event-${i}`, diveId: 'dive-ad' } });
+      const outcome = await ads.watch({ opId: `${slot}-${i}`, slot, context: { choice: 'yield', eventId: `${slot}-event-${i}`, diveId: 'dive-ad' } });
+      if (slot === 'gift') grants.push(outcome.result?.reward);
     }
     const before = economy.snapshot;
     await assert.rejects(() => ads.watch({ opId: `${slot}-over`, slot, context: { choice: 'yield', eventId: `${slot}-over`, diveId: 'dive-ad' } }), /AD_DAILY_LIMIT/);
     assert.deepEqual(economy.snapshot, before);
   }
   assert.deepEqual(states.slice(0, 5), ['Loading', 'Ready', 'Showing', 'Completed', 'Idle']);
-  assert.equal(economy.snapshot.wallet.crystal, '500'); assert.equal(economy.snapshot.daily['2026-11-11'].gold, 2);
+  // The gift showcase is deterministic per prepare-time window, so every payout matches the displayed offer.
+  const fixtureMs = Date.parse('2026-11-10T15:59:59Z');
+  const showcase = { kind: 'currency', ...giftOffer(api.businessDay(fixtureMs), giftWindow(fixtureMs)) };
+  assert.deepEqual(grants, Array.from({ length: 5 }, () => showcase));
+  assert.equal(BigInt(economy.snapshot.wallet[showcase.currency]) - BigInt(walletBefore[showcase.currency]), BigInt(showcase.amount) * 5n);
+  assert.equal(economy.snapshot.daily['2026-11-11'].gold, 2);
 });
 test('skip and two failed loads grant nothing, release reservation, and preserve wallet/pity', async () => {
   const { ads, economy, states } = setup();
@@ -54,11 +62,16 @@ test('ad and pearl golden draws share pity across reload and daily rollover', as
 test('completed video write failure holds pending intent and original token can recover without replay', async () => {
   let storage;
   const e = setup({ hooks: { onAdStarted: () => { storage.fail = true; } } }); storage = e.storage;
+  const walletBefore = { ...e.economy.snapshot.wallet };
   const result = await e.ads.watch({ opId: 'pending', slot: 'gift' }); assert.equal(result.status, 'pending');
   assert.equal(e.economy.snapshot.wallet.crystal, '0'); storage.fail = false;
-  await e.ads.retryClaim(); assert.equal(e.economy.snapshot.wallet.crystal, '100');
+  const claimed = await e.ads.retryClaim();
+  assert.equal(claimed.result?.reward?.kind, 'currency');
+  const rewardOf = () => BigInt(e.economy.snapshot.wallet[claimed.result.reward.currency]) - BigInt(walletBefore[claimed.result.reward.currency]);
+  assert.equal(rewardOf(), BigInt(claimed.result.reward.amount));
   assert.equal(e.economy.snapshot.daily['2026-11-10'].gift, 1);
-  await e.ads.retryClaim(); assert.equal(e.economy.snapshot.wallet.crystal, '100');
+  await e.ads.retryClaim();
+  assert.equal(rewardOf(), BigInt(claimed.result.reward.amount));
 });
 test('concurrent watch is rejected and successful rescue event cannot be used twice', async () => {
   const { ads, economy } = setup();
@@ -77,5 +90,7 @@ test('expired completed intent is released without a reward and no longer blocks
   const recovered = new e.MockAdService(e.economy);
   await assert.rejects(() => recovered.retryClaim(), /EXPIRED/);
   assert.equal(e.economy.snapshot.pendingAd, null); assert.equal(e.economy.snapshot.wallet.crystal, '0');
-  await recovered.watch({ opId: 'after-expiry', slot: 'gift' }); assert.equal(e.economy.snapshot.wallet.crystal, '100');
+  const after = await recovered.watch({ opId: 'after-expiry', slot: 'gift' });
+  assert.equal(after.result?.reward?.kind, 'currency');
+  assert.equal(e.economy.snapshot.wallet[after.result.reward.currency], after.result.reward.amount);
 });
