@@ -122,6 +122,9 @@ export class DiveSession {
 
   setInput(x: number, y: number, held = false): void { this.battle.setInput(x, y, held); }
 
+  /** Session owns the fixed-step clock; every world layer samples this same fraction. */
+  get renderAlpha(): number { return this.pause.paused || this.state !== 'Running' ? 1 : this.accumulator / STEP_SECONDS; }
+
   collect(kind: Material, amount: number): number {
     integer(amount);
     if (!(kind in this.cargo)) throw new RangeError('Unknown material');

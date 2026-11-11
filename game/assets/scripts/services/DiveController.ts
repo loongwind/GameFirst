@@ -30,6 +30,8 @@ export class DiveController extends Component {
   private readonly keys = new Set<number>();
   private pointer: number | undefined;
   private stick = { x: 0, y: 0 };
+  private origin = { x: 0, y: 0 };
+  private inputLayout?: object;
   private notice = '';
   private freshFrame = true;
   private savedState = '';
@@ -81,6 +83,7 @@ export class DiveController extends Component {
       left: device.safeArea.left * ratio,
       right: Math.max(0, device.windowWidth - device.safeArea.left - device.safeArea.width) * ratio,
     });
+    if (this.inputLayout !== this.hud.layout) { this.clearInput(); this.inputLayout = this.hud.layout; }
     if (this.needsAdRecovery && Date.now() >= this.nextSettlementAttempt) {
       this.nextSettlementAttempt = Date.now() + 1000;
       try { this.dives.reconcileAds(this.session); this.needsAdRecovery = false; this.notice = ''; }
@@ -148,6 +151,7 @@ export class DiveController extends Component {
   private readonly onBrowserFocus = (): void => { if (!document.hidden) this.onShow(); };
   private clearInput(): void {
     this.keys.clear(); this.pointer = undefined; this.stick = { x: 0, y: 0 }; this.session?.setInput(0, 0);
+    this.hud?.setJoystick();
   }
   private saveProgress(): void {
     if (this.leavingForHarbor) return;
@@ -169,18 +173,21 @@ export class DiveController extends Component {
   }
   private touchStart(event: EventTouch): void {
     if (this.session.state !== 'Running' || this.session.pause.paused || this.pointer !== undefined) return;
-    const p = this.touchPoint(event), r = this.hud.layout.joystick;
-    if (p.x < r.x || p.x > r.x + r.width || p.y < r.y || p.y > r.y + r.height) return;
-    this.pointer = event.getID() ?? undefined; this.touchMove(event);
+    const p = this.touchPoint(event);
+    if (this.hud.blocksMovement(p.x, p.y)) return;
+    this.pointer = event.getID() ?? undefined; this.origin = p;
+    this.touchMove(event);
   }
   private touchMove(event: EventTouch): void {
     if (event.getID() !== this.pointer) return;
-    const p = this.touchPoint(event), r = this.hud.layout.joystick;
-    this.stick = joystickVector(p.x - r.x - r.width / 2, p.y - r.y - r.height / 2, 50);
+    const p = this.touchPoint(event);
+    this.stick = joystickVector(p.x - this.origin.x, p.y - this.origin.y, 50);
+    this.hud.setJoystick(this.origin, p);
   }
   private touchEnd(event: EventTouch): void { if (event.getID() === this.pointer) this.clearInput(); }
 
   private handleAction(action: HudAction): void {
+    this.clearInput();
     const s = this.session;
     if (action === 'primary' && s.pause.has('assets') && !s.pause.has('background') && !s.pause.has('reconnect')) { this.hud.retryAssets(); return; }
     if (action === 'primary' && this.ads.view.rewardPending && !s.pause.has('background') && !s.pause.has('reconnect')) { void this.ads.retry(); return; }

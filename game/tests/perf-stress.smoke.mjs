@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
+import os from 'node:os';
 import { withBrowser } from './browser-helpers.mjs';
 
 const target = process.env.WEB_TARGET || 'web-release';
@@ -116,8 +117,16 @@ for (const tier of ['high', 'low']) test(`${target}: ${tier} tier real-scene str
     const result = await runStress(page);
     const frame = stats(result.frameMs), steps = stats(result.stepsMs);
     // Always record the raw sample first: a failed budget must still leave evidence behind.
-    const report = { tier, headless, viewport: page.viewportSize(), minima: result.minima, maxima: result.maxima,
-      kills: result.kills, hits: result.hits, droppedSteps: result.dropped, battleTick: result.tick, frameMs: frame, advanceMs: steps, errors };
+    const gpu = await page.evaluate(() => {
+      const gl=document.querySelector('canvas').getContext('webgl2') || document.querySelector('canvas').getContext('webgl');
+      const debug=gl?.getExtension('WEBGL_debug_renderer_info');
+      return debug ? gl.getParameter(debug.UNMASKED_RENDERER_WEBGL) : 'unavailable';
+    });
+    const report = { tier, headless, timestamp:new Date().toISOString(),
+      environment:{ browser:_b.version(), node:process.version, platform:os.platform(), release:os.release(), cpu:os.cpus()[0].model, gpu },
+      viewport: page.viewportSize(), minima: result.minima, maxima: result.maxima,
+      kills: result.kills, hits: result.hits, droppedSteps: result.dropped, battleTick: result.tick, frameMs: frame, advanceMs: steps,
+      raw:{frameMs:result.frameMs,advanceMs:result.stepsMs}, errors };
     await page.screenshot({ path: `${artifacts}/stress-${tier}-${target}.png` });
     await writeFile(`${artifacts}/stress-${tier}-${target}.json`, JSON.stringify(report, null, 2));
     console.info(`${target} ${tier}: frame p50/p95/p99 ${frame.p50}/${frame.p95}/${frame.p99} ms, advance p95 ${steps.p95} ms, minima ${JSON.stringify(result.minima)}, maxima ${JSON.stringify(result.maxima)}, kills ${result.kills}, hits ${result.hits}`);

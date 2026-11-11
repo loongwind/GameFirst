@@ -56,7 +56,7 @@ test('legacy enemies render with genuine current-sea art without changing saved 
   const loaded = { frames: new Map(), sequences: new Map() };
   Object.assign(view, { current: 'twilight', sceneLayer: 'twilight', sceneArt: loaded, height: 812,
     actors: new Map(), prepare() {}, leases: { get: layer => layer === 'twilight' ? loaded : undefined },
-    player: { node: { setPosition() {} } },
+    player: { node: { setPosition() {}, setScale() {} } },
     actor(key) { return { key, node: { setPosition() {}, destroy() {} }, sprite: {}, parts: [] }; },
   });
   // Old saves have no content identity; normalization supplies an empty key and retains combat values.

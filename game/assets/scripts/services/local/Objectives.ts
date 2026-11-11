@@ -88,7 +88,7 @@ export function objectiveTasks(state: LocalState): ObjectiveTask[] {
 export function tutorialHint(state: LocalState, activeSeconds = 0): string {
   const t = state.objectives.tutorial;
   if (!t.active) return '';
-  return ['', '首潜 1/6 · 基础自动攻击常开，敌人正在靠近。', '首潜 2/6 · 拖动左下摇杆移动，靠近击落的荧晶拾取。',
+  return ['', '首潜 1/6 · 自动攻击已开启，拖动空白处游动。', '首潜 2/6 · 任意空白处拖动，靠近荧晶拾取。',
     activeSeconds < 45 ? '首潜 3/6 · 收集舱满后停止装载，返航才能入账。' : '首潜 3/6 · 氧气随深度消耗，耗尽会持续失去生命。',
     '首潜 4/6 · 点击安全返航，将本局收获带回母港。', t.upgraded ? '首潜 5/6 · 强化已确认，再次出发后自由探索。' : '首潜 5/6 · 用已入账荧晶强化一次舱容或氧效。',
     '首潜 6/6 · 自由探索，首日完成 3 次完整下潜。'][t.step] ?? '';

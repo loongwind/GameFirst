@@ -43,7 +43,8 @@ test(`${target}: real Cocos Dive renders HUD, accepts touches and preserves over
     await page.evaluate(() => { document.documentElement.style.removeProperty('--safe-top'); document.documentElement.style.removeProperty('--safe-bottom'); });
     await page.setViewportSize({ width: 375, height: 812 }); await page.waitForTimeout(300);
     const stick = (await read()).layout.joystick;
-    await page.mouse.move(stick.x + 56, stick.y + 90); await page.mouse.down(); await page.waitForTimeout(200); await page.mouse.up();
+    await page.mouse.move(stick.x + 56, stick.y + 56); await page.mouse.down();
+    await page.mouse.move(stick.x + 56, stick.y + 100); await page.waitForTimeout(200); await page.mouse.up();
     assert.ok((await read()).depth > 0, 'actual joystick touch must move the diver downward');
     // Click the actual Cocos pause touch target, then return through the modal.
     let s = await read(); const p = s.layout.pause;

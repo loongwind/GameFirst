@@ -42,12 +42,12 @@ test('completed video with failed save retries original token without showing ag
   assert.equal(s.pause.has('ad'), false); assert.ok(s.pause.has('background')); await ads.retry(); assert.equal(driver.shows, 1);
 });
 test('effect checkpoint failure after claim is retried, reload reconciles claimed rescue before decline', async () => {
-  const { s, ads, driver, storage, economy, dives } = setup(); s.collect('crystal', 70); s.battle.player.hp = 0; s.advance(0);
+  const { s, ads, driver, storage, economy, dives, clock } = setup(); s.collect('crystal', 70); s.battle.player.hp = 0; s.advance(0);
   const apply = dives.applyAdReward.bind(dives); let fail = true;
   dives.applyAdReward = (...args) => { if (fail) { storage.fail = true; try { apply(...args); } finally { storage.fail = false; } } else apply(...args); };
   await ads.watch('rescue'); assert.equal(ads.view.rewardPending, true); assert.equal(s.state, 'Running');
   fail = false; await ads.retry(); assert.equal(driver.shows, 1); assert.equal(ads.view.rewardPending, false);
-  const restoredDives = new api.LocalDiveService(economy); const restored = restoredDives.open('unused'); restoredDives.reconcileAds(restored);
+  const restoredDives = new api.LocalDiveService(economy, () => clock.now); const restored = restoredDives.open('unused'); restoredDives.reconcileAds(restored);
   assert.equal(restored.state, 'Running'); assert.equal(restored.snapshot.hp, 100); assert.equal(restored.snapshot.cargo.crystal, 70);
 });
 test('reconnect after 30s preserves completed reward choice until the original claim resolves', async () => {

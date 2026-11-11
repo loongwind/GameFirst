@@ -1,4 +1,4 @@
-import { readFileSync, mkdirSync, openSync, closeSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, openSync, closeSync, existsSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -40,4 +40,11 @@ if (result.error || result.status !== 36) {
 }
 const output = path.join(root, 'build', target, 'index.html');
 if (!existsSync(output)) throw new Error(`Creator returned 36 but no output: ${output}`);
+const revision = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' });
+const changes = spawnSync('git', ['status', '--porcelain', '--', 'assets', '../shared', 'build-templates', 'build-configs', 'tools/build-web.mjs', 'editor-version.json'], { cwd: root, encoding: 'utf8' });
+if (revision.status !== 0 || changes.status !== 0) throw new Error('Cannot identify build source');
+writeFileSync(path.join(root, 'build', target, 'playtest-version.json'), JSON.stringify({
+  revision: revision.stdout.trim(), sourceDirty: !!changes.stdout.trim(),
+  target, creator: expected.version, builtAt: new Date().toISOString(),
+}, null, 2) + '\n');
 console.info(`Build passed (Creator exit 36): build/${target}/index.html`);

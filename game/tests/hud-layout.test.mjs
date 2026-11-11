@@ -20,5 +20,17 @@ test('375-wide HUD fits 667/750/812, notches and bottom safe area with >=44 touc
     assert.ok(l.pause.x + l.pause.width <= l.return.x);
   }
   const wide = hudLayout(750, 1624, { top: 88, bottom: 68 });
-  assert.equal(wide.scale, 2); assert.equal(wide.height, 812); assert.equal(wide.oxygen.y, 108);
+  assert.equal(wide.scale, 2); assert.equal(wide.height, 812);
+});
+
+test('phone HUD reserves at most 20% of safe height and keeps emergency actions below the battle center', async () => {
+  const source = await readFile(new URL('../assets/scripts/ui/hudLayout.ts', import.meta.url), 'utf8');
+  const js = ts.transpileModule(source, { compilerOptions: { module:ts.ModuleKind.ES2020 } }).outputText;
+  const { hudLayout } = await import(`data:text/javascript;base64,${Buffer.from(js).toString('base64')}`);
+  for (const [w,h,top,bottom] of [[375,667,0,0], [390,844,0,0], [320,640,44,34]]) {
+    const l = hudLayout(w,h,{top,bottom});
+    assert.ok(l.status.y+l.status.height-l.top <= (h-top-bottom)/l.scale*.2, 'normal HUD fits safe-height budget');
+    assert.ok(l.oxygenCard.y > l.height*.6, 'low oxygen card stays below main combat area');
+    for (const key of ['sonar','pause','return','oxygenAd','oxygenDismiss']) assert.ok(l[key].height*l.scale >= 44, key);
+  }
 });

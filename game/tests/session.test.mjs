@@ -7,6 +7,17 @@ const make = (options = {}) => new DiveSession({ diveId: 'dive-52', battle: { sp
 const seconds = (s, n) => { for (let i = 0; i < n * 30; i++) s.advance(1 / 30); };
 const near = (a, b) => assert.ok(Math.abs(a - b) < 1e-7, `${a} != ${b}`);
 
+test('presentation interpolation follows the session clock and freezes at the actual position on pause', () => {
+  const s=make(); s.setInput(1,0,true); s.advance(1/20);
+  near(s.renderAlpha,.5);
+  near(s.battle.samplePlayer(s.renderAlpha).x,2);
+  s.advance(1/120); near(s.renderAlpha,.75);
+  near(s.battle.samplePlayer(s.renderAlpha).x,3);
+  s.pause.add('modal'); assert.equal(s.renderAlpha,1);
+  near(s.battle.samplePlayer(s.renderAlpha).x,4);
+  s.advance(10); assert.equal(s.renderAlpha,1);
+});
+
 test('pause reasons compose and duplicate ad close cannot resume a background/modal freeze', () => {
   const p = new PauseManager(); p.add('background'); p.add('ad'); p.add('modal');
   p.remove('ad'); p.remove('ad'); assert.equal(p.paused, true);

@@ -61,7 +61,9 @@ test(`${target}: fresh save real-time six-step loop, refresh, replay, three fina
     assert.equal(initial.wallet.crystal, '0');
     // Real elapsed game time, actual pointer input, untouched loadout/HP/enemy damage.
     await page.waitForTimeout(10500);
-    let point = await steer(page); await page.mouse.down();
+    const origin = await page.evaluate(() => { const l=window.c.hud.layout.joystick;return {x:l.x+56,y:l.y+56}; });
+    await page.mouse.move(origin.x,origin.y); await page.mouse.down();
+    let point = await steer(page);
     const timeline = [point];
     while (point.seconds < 32) { await page.waitForTimeout(350); point = await steer(page); }
     timeline.push(point); await page.mouse.up();
@@ -70,7 +72,8 @@ test(`${target}: fresh save real-time six-step loop, refresh, replay, three fina
     await page.reload(); await diveReady(page);
     assert.equal(await page.evaluate(() => window.c.session.diveId), before.id);
     await page.waitForFunction(() => !window.c.session.pause.paused);
-    await steer(page); await page.mouse.down();
+    const restoredOrigin=await page.evaluate(()=>{const l=window.c.hud.layout.joystick;return{x:l.x+56,y:l.y+56};});
+    await page.mouse.move(restoredOrigin.x,restoredOrigin.y);await page.mouse.down();await steer(page);
     do { await page.waitForTimeout(350); point = await steer(page); } while (point.seconds < 61 || point.step < 4);
     await page.mouse.up(); timeline.push(point);
     await page.screenshot({ path:`${artifacts}/return-guide-${target}.png` });

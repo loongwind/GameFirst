@@ -27,6 +27,7 @@
     "test:tutorial:web": "node --test tests/tutorial.smoke.mjs",
     "test:quality:web": "node --test tests/quality.smoke.mjs",
     "test:perf:web": "node --test tests/perf-stress.smoke.mjs",
+    "test:mobile:web": "node --test tests/mobile-controls.smoke.mjs",
     "test:progression:web": "node --test tests/progression.smoke.mjs",
     "dev:serve": "node tools/dev-serve.mjs",
     "test:dev-entry:web": "node --test tests/dev-entry.smoke.mjs"

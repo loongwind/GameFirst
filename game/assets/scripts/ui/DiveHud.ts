@@ -6,6 +6,7 @@ import type { DiveAdView } from '../services/local/DiveAdModel';
 import { SeaWorldView } from './SeaWorldView';
 import type { LocalState } from '../services/local/model';
 import { objectiveTasks, tutorialHint } from '../services/local/Objectives';
+import { WorldProjection } from './WorldProjection';
 
 const ink = new Color(7, 25, 35), panel = new Color(15, 43, 54), line = new Color(43, 82, 90);
 const mint = new Color(105, 233, 198), cream = new Color(233, 240, 218), muted = new Color(126, 165, 169);
@@ -20,6 +21,7 @@ const TEXT_POOL = 30;
 export class DiveHud {
   readonly root: Node;
   readonly sea: SeaWorldView;
+  readonly projection = new WorldProjection();
   layout!: HudLayout;
   private world!: Graphics;
   private chrome!: Graphics;
@@ -32,6 +34,10 @@ export class DiveHud {
   private height = 0;
   private insetsKey = '';
   private depositStarted = 0;
+  private joystick?: { origin: { x: number; y: number }; tip: { x: number; y: number } };
+  private currentSession?: DiveSession;
+  private hintKey = '';
+  private hintUntil = 0;
 
   constructor(parent: Node, private readonly action: (action: HudAction) => void, readonly lowEnd = false) {
     this.sea = new SeaWorldView(parent, lowEnd);
@@ -40,6 +46,18 @@ export class DiveHud {
 
   prepare(session: DiveSession): void { this.sea.prepare(session); }
   retryAssets(): void { this.sea.retry(); }
+
+  setJoystick(origin?: { x: number; y: number }, tip?: { x: number; y: number }): void {
+    this.joystick = origin && tip ? { origin, tip } : undefined;
+  }
+  /** Only actual visible controls and blocking overlays exclude a combat gesture. */
+  blocksMovement(x: number, y: number): boolean {
+    if (this.overlay?.active) return true;
+    const l = this.layout;
+    const rects = [l.pause, l.return, l.sonar];
+    if (this.oxygenCard?.active) rects.push(l.oxygenAd, l.oxygenDismiss);
+    return rects.some(r => x >= r.x && x <= r.x+r.width && y >= r.y && y <= r.y+r.height);
+  }
 
   resize(width: number, height: number, insets: HudInsets): void {
     const key = JSON.stringify(insets);
@@ -53,18 +71,13 @@ export class DiveHud {
     this.sea.resize(width, l.height);
     this.world = this.node('Ocean', this.root).addComponent(Graphics);
     this.chrome = this.node('Instruments', this.root).addComponent(Graphics);
-    this.label('title', '潜 渊 猎 手', l.left + 18, l.top + 14, 190, 24, 19, cream);
-    this.label('run', 'DIVE / 01', l.left + 18, l.top + 40, 120, 18, 10, muted);
-    this.label('hp', '', 160, l.top + 39, 151, 18, 11, mint);
-    this.label('oxygenGauge', '', l.oxygen.x + 12, l.oxygen.y + 6, l.oxygen.width - 24, 22, 13, cream);
-    this.label('cargo', '', l.cargo.x + 12, l.cargo.y + 3, l.cargo.width - 24, 20, 12, cream);
-    this.label('status', '', l.status.x + 4, l.status.y + 2, l.status.width - 8, 28, 12, amber);
-    this.label('depth', '', 258 - l.right, l.top + 176, 91, 22, 15, mint);
-    this.label('layer', '透光层', l.left + 20, l.joystick.y - 44, 220, 20, 11, muted);
-    this.label('hint', '向下探索 · 留意氧气与舱容', l.left + 20, l.joystick.y - 25, 280, 20, 11, muted);
-    this.label('feedback', '', l.left + 20, l.joystick.y - 84, 285, 38, 12, amber);
-    this.label('guidance', '', l.left + 30, l.top + 240, 271 - l.left - l.right, 100, 12, cream);
-    for (let d = 0; d <= 2000; d += 500) this.label(`mark-${d}`, String(d), 300 - l.right, l.rail.y + d / 2400 * l.rail.height - 5, 35, 18, 9, muted);
+    this.label('hp', '', 195 - l.right, l.top + 12, 158, 20, 12, cream);
+    this.label('oxygenGauge', '', l.oxygen.x, l.oxygen.y, l.oxygen.width, 20, 12, cream);
+    this.label('cargo', '', l.cargo.x, l.cargo.y, l.cargo.width, 20, 11, cream);
+    this.label('status', '', l.status.x + 4, l.status.y + 2, l.status.width - 8, 22, 11, amber);
+    this.label('depth', '', 255 - l.right, l.top + 40, 103, 22, 16, mint);
+    this.label('feedback', '', l.left + 18, l.height - 85, 339 - l.left - l.right, 24, 11, amber);
+    this.label('guidance', '', l.left + 18, l.top + 98, 339 - l.left - l.right, 38, 12, cream);
     this.button('pause', l.pause, '暂停', this.root);
     this.button('return', l.return, '安全返航 ↑', this.root);
     this.button('sonar', l.sonar, '', this.root);
@@ -73,11 +86,9 @@ export class DiveHud {
     this.box(cardGraphics, l.oxygenCard, panel, 12);
     this.box(cardGraphics, l.oxygenAd, new Color(32, 83, 80), 8);
     this.box(cardGraphics, l.oxygenDismiss, ink, 8);
-    this.label('oxygenTitle', '应急供氧', l.oxygenCard.x + 12, l.oxygenCard.y + 10, 265, 23, 17, cream, this.oxygenCard);
-    this.label('oxygenBody', '', l.oxygenCard.x + 12, l.oxygenCard.y + 38, 265, 34, 12, muted, this.oxygenCard);
+    this.label('oxygenBody', '', l.oxygenCard.x + 12, l.oxygenCard.y + 8, l.oxygenCard.width-24, 32, 12, cream, this.oxygenCard);
     this.button('oxygen', l.oxygenAd, '观看 · 氧气回满', this.oxygenCard);
     this.button('dismissOxygen', l.oxygenDismiss, '坚持上浮 · 关闭', this.oxygenCard);
-    this.label('stick', '下 潜', l.joystick.x + 24, l.joystick.y + 46, 80, 20, 11, muted);
     if (!this.lowEnd) for (let i = 0; i < TEXT_POOL; i++) {
       this.label(`dmg-${i}`, '', 0, 0, 80, 20, 12, mint);
       const transform = this.labels.get(`dmg-${i}`)!.node.getComponent(UITransform)!;
@@ -97,51 +108,56 @@ export class DiveHud {
 
   render(session: DiveSession, notice = '', ads?: DiveAdView, state?: LocalState): void {
     const s = session.snapshot, l = this.layout, g = this.chrome;
-    this.sea.render(session);
+    const b = session.battle;
+    if (this.currentSession !== session) { this.projection.x = b.player.x; this.projection.y = b.player.y; this.currentSession = session; }
+    this.projection.alpha = session.renderAlpha;
+    const player = b.samplePlayer(this.projection.alpha);
+    this.projection.follow(player.x, player.y, l.height);
+    this.sea.render(session, this.projection);
     this.drawWorld(session);
     g.clear();
-    this.box(g, { x: l.left + 10, y: l.top + 7, width: 305 - l.left - l.right, height: 51 }, new Color(5, 27, 40, 210), 10);
-    this.box(g, l.status, new Color(5, 27, 40, 190), 7);
-    this.box(g, { x: l.left + 12, y: l.joystick.y - 49, width: 298 - l.left - l.right, height: 46 }, new Color(5, 27, 40, 210), 7);
-    this.box(g, l.oxygen, panel, 9); this.box(g, l.cargo, panel, 7);
+    this.box(g, { x: l.left + 10, y: l.top + 6, width: 355 - l.left - l.right, height: 58 }, new Color(5, 27, 40, 182), 10);
     const oxygenColor = s.oxygen / s.oxygenCapacity < 0.15 ? danger : mint;
-    this.box(g, { x: l.oxygen.x + 12, y: l.oxygen.y + 29, width: l.oxygen.width - 24, height: 4 }, line, 2);
-    this.box(g, { x: l.oxygen.x + 12, y: l.oxygen.y + 29, width: (l.oxygen.width - 24) * s.oxygen / s.oxygenCapacity, height: 4 }, oxygenColor, 2);
-    this.box(g, { x: l.cargo.x, y: l.cargo.y + l.cargo.height - 3, width: l.cargo.width * Math.min(1, s.cargo.crystal / s.cargoCapacity), height: 3 }, amber, 0);
-    this.set('oxygenGauge', `O₂  氧气储量                         ${Math.ceil(s.oxygen / s.oxygenCapacity * 100)}%`);
-    this.set('cargo', `收集舱   ${Math.floor(s.cargo.crystal)} / ${s.cargoCapacity} 荧晶`);
-    this.set('hp', `生命  ${Math.ceil(s.hp)} / ${s.maxHp}`);
+    this.box(g, { x: l.oxygen.x, y: l.oxygen.y + 21, width: l.oxygen.width, height: 3 }, line, 1);
+    this.box(g, { x: l.oxygen.x, y: l.oxygen.y + 21, width: l.oxygen.width * s.oxygen / s.oxygenCapacity, height: 3 }, oxygenColor, 1);
+    this.box(g, { x: 195-l.right, y:l.top+33, width:158, height:3 }, line, 1);
+    this.box(g, { x: 195-l.right, y:l.top+33, width:158*Math.max(0,s.hp/s.maxHp), height:3 }, s.hp/s.maxHp < .3 ? danger : mint, 1);
+    this.set('oxygenGauge', `O₂  ${Math.ceil(s.oxygen / s.oxygenCapacity * 100)}%`);
+    this.set('cargo', `舱  ${Math.floor(s.cargo.crystal)} / ${s.cargoCapacity}`);
+    this.set('hp', `生命  ${Math.ceil(s.hp)}/${s.maxHp}`);
     this.set('depth', `${Math.floor(s.depth)} m ↓`);
-    this.set('layer', this.sea.activeLayer === 'sunlight' ? '01 / 日光层' : this.sea.activeLayer === 'twilight' ? '02 / 暮光层' : '03 / 深渊层');
-    const progress = session.content;
     const boss = Array.from(session.battle.enemies.values()).find(enemy => enemy.kind === 'boss');
-    this.set('hint', boss ? `${boss.name} · ${Math.ceil(boss.hp)} / ${Math.ceil(boss.maxHp)}` : progress.gateDepth ? `前方 ${progress.gateDepth}m · 击败渊主点亮裂隙` : '深渊裂隙已点亮 · 本海域已贯通');
-    this.set('status', s.oxygen <= 0 ? '氧气耗尽 · 正在失去生命，请尽快返航' : s.oxygen / s.oxygenCapacity < 0.15 ? '低氧警报 · 仍可行动，建议立即返航' : s.cargo.crystal >= s.cargoCapacity ? '收集舱已满 · 更多荧晶将留在海底' : '氧耗随深度上升 · 返航保住收获');
+    const status = s.oxygen <= 0 ? '氧气耗尽 · 正在失血，立即返航 ↑' : s.oxygen/s.oxygenCapacity < .15 ? '低氧警报 · 补给或安全返航 ↑' : s.cargo.crystal >= s.cargoCapacity ? '舱已满 · 返航保住收获 ↑' : boss ? `${boss.name} · ${Math.ceil(boss.hp)}/${Math.ceil(boss.maxHp)}` : '';
+    if (status) this.box(g, l.status, new Color(5,27,40,190), 7);
+    this.set('status', status);
     for (const r of [l.pause, l.return, l.sonar]) this.box(g, r, panel, 10);
     const seconds = ads?.sonarSeconds ?? 0;
-    this.set('sonar', seconds ? `声呐 ${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')} · ${session.battle.movementMode === 'manual' ? '手动接管' : seconds <= 60 ? '可刷新' : '自动移动'}` : '声呐协击 · 观看开启15分钟');
+    this.set('sonar', seconds ? `声呐 ${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')} ${b.movementMode === 'manual' ? '手动' : seconds <= 60 ? '刷新' : '自动'}` : '声呐 · 补给');
     this.buttons.get('sonar')!.interactable = s.state === 'Running' && !session.pause.paused && !!ads?.sonarRefreshable;
     this.oxygenCard.active = !!ads?.oxygenPrompt && s.state === 'Running' && !session.pause.paused;
     const tutorial = state ? tutorialHint(state, s.activeSeconds) : '';
     const tasks = state ? objectiveTasks(state) : [], task = tasks.find(t => t.kind === 'first-day');
-    const guidance = state && s.state === 'Running' && !this.oxygenCard.active && !session.pause.paused ?
-      tutorial || (task ? `${task.title}  ${task.progress}/${task.target}\n${task.ready ? '返港领取任务奖励 · +20XP' : `每 500m 打卡 · 当前纪录 ${state.objectives.record?.depth ?? 0}m`}` : '') : '';
-    if (guidance) this.box(g, { x: l.left + 18, y: l.top + 234, width: 295 - l.left - l.right, height: 85 }, new Color(5, 27, 40, 225), 10);
+    const hint = tutorial ? tutorial + (s.activeSeconds < 6 ? '\n岩礁阻挡通路 · 红色斜纹危险区会伤害你' : '') : s.activeSeconds < 6 ? '拖动空白处游动 · 自动攻击\n岩礁阻挡通路 · 红色斜纹危险区会伤害你' : task?.ready ? '任务已完成 · 返港领取奖励' : '';
+    if (hint !== this.hintKey) { this.hintKey = hint; this.hintUntil = s.activeSeconds + 7; }
+    const guidance = s.state === 'Running' && !status && !this.oxygenCard.active && !session.pause.paused && s.activeSeconds < this.hintUntil ? hint : '';
+    if (guidance) this.box(g, { x:l.left+10, y:l.top+94, width:355-l.left-l.right, height:44 }, new Color(5,27,40,165), 8);
     this.set('guidance', guidance);
-    this.set('oxygenBody', `观看后立即回满 · 今日剩余 ${ads?.oxygenRemaining ?? 0}/3\n可关闭提示，摇杆与返航始终可用。`);
+    this.set('oxygenBody', `应急供氧 · 今日剩余 ${ads?.oxygenRemaining ?? 0}/3\n空白处仍可拖动，返航始终可用`);
     this.buttons.get('oxygen')!.interactable = (ads?.oxygenRemaining ?? 0) > 0;
     this.set('feedback', s.state === 'Running' && !session.pause.paused ? notice : '');
     g.strokeColor = line; g.lineWidth = 1;
     g.moveTo(l.rail.x - 187.5, l.height / 2 - l.rail.y); g.lineTo(l.rail.x - 187.5, l.height / 2 - l.rail.y - l.rail.height); g.stroke();
-    for (let d = 0; d <= 2400; d += 100) {
+    for (let d = 0; d <= 2400; d += 400) {
       const y = l.height / 2 - l.rail.y - d / 2400 * l.rail.height;
-      g.moveTo(l.rail.x - 187.5, y); g.lineTo(l.rail.x - 187.5 + (d % 500 === 0 ? 13 : 5), y); g.stroke();
+      g.moveTo(l.rail.x - 187.5, y); g.lineTo(l.rail.x - 183.5, y); g.stroke();
     }
     this.dot(g, l.rail.x, l.rail.y + Math.min(1, s.depth / 2400) * l.rail.height, 4, mint);
-    const cx = l.joystick.x + 56, cy = l.joystick.y + 56;
-    g.strokeColor = line; g.lineWidth = 2; g.circle(cx - 187.5, l.height / 2 - cy, 54); g.stroke();
-    g.circle(cx - 187.5, l.height / 2 - cy, 32); g.stroke();
-    this.dot(g, cx, cy - 22, 3, mint);
+    if (this.joystick) {
+      const {origin,tip} = this.joystick, dx=tip.x-origin.x, dy=tip.y-origin.y, length=Math.hypot(dx,dy), k=length>50 ? 50/length : 1;
+      g.strokeColor = new Color(155,245,224,135); g.lineWidth=1.5;
+      g.circle(origin.x-187.5,l.height/2-origin.y,50); g.stroke();
+      this.dot(g,origin.x+dx*k,origin.y+dy*k,14,new Color(105,233,198,135));
+    }
     let settlementNotice = notice;
     const first = state?.objectives.tutorial.diveId === session.diveId && state.objectives.tutorial.rewarded && state.events.some(e => e.name === 'deposit_done' && e.properties.dive_id === session.diveId && e.properties.tutorial_reward);
     if (s.state === 'Settled' && first) {
@@ -197,36 +213,78 @@ export class DiveHud {
 
   private drawWorld(session: DiveSession): void {
     const g = this.world, l = this.layout, b = session.battle; g.clear();
-    const cy = Math.max(300, l.height * 0.48);
-    const point = (item: { x: number; y: number }) => ({ x: 180 + item.x - b.player.x, y: cy + item.y - b.player.y });
-    for (const zone of b.dangerZones) { const p = point(zone); this.dot(g, p.x, p.y, zone.radius, new Color(90, 43, 56, 120)); }
-    for (const o of b.obstacles) { const p = point(o); this.dot(g, p.x, p.y, o.radius, new Color(34, 62, 72)); }
-    for (const e of b.loot.values()) { const p = point(e); this.dot(g, p.x, p.y, 3, mint); }
+    const point = (item: { x: number; y: number }) => this.projection.point(item.x,item.y);
+    for (const zone of b.dangerZones) {
+      const p=point(zone), x=p.x-187.5, y=l.height/2-p.y, r=zone.radius;
+      this.dot(g,p.x,p.y,r,new Color(123,34,49,55));
+      g.strokeColor=new Color(255,117,118,200); g.lineWidth=1.5; g.circle(x,y,r); g.stroke();
+      // Parallel hazard hatching stays inside the real circular damage footprint.
+      g.strokeColor=new Color(255,117,118,100);
+      for (let offset=-r+8;offset<r;offset+=14) {
+        const half=Math.sqrt(r*r-offset*offset), d=Math.SQRT1_2;
+        g.moveTo(x+(offset-half)*d,y+(offset+half)*d); g.lineTo(x+(offset+half)*d,y+(offset-half)*d);
+      }
+      g.stroke(); this.segment(g,p.x,p.y-9,p.x,p.y+3,danger,3); this.dot(g,p.x,p.y+10,2,danger);
+    }
+    for (const o of b.obstacles) {
+      const p=point(o), r=o.radius, x=p.x-187.5, y=l.height/2-p.y;
+      // 32 boundary facets approximate the unchanged solid circle to <0.3px at r=46.
+      g.fillColor=new Color(46,76,81); g.strokeColor=new Color(126,170,157); g.lineWidth=1.5;
+      for(let i=0;i<32;i++){ const a=i*Math.PI/16; const px=x+Math.cos(a)*r,py=y+Math.sin(a)*r; if(!i)g.moveTo(px,py);else g.lineTo(px,py); }
+      g.close(); g.fill(); g.stroke();
+      g.fillColor=new Color(71,105,105); g.moveTo(x-r*.8,y+r*.35); g.lineTo(x-r*.2,y+r*.8); g.lineTo(x+r*.5,y+r*.5); g.lineTo(x+r*.15,y-r*.25); g.close();g.fill();
+      g.strokeColor=new Color(28,53,62);g.lineWidth=2;
+      g.moveTo(x-r*.4,y-r*.55);g.lineTo(x+r*.15,y-r*.25);g.lineTo(x+r*.65,y-r*.5);g.stroke();
+      this.segment(g,p.x-r*.38,p.y-r*.25,p.x-r*.2,p.y-r*.65,mint,2);
+    }
+    for (const e of b.loot.values()) { const p=this.projection.sample(e); this.dot(g,p.x,p.y,3,mint); }
     for (const e of b.projectiles.values()) {
-      const p = point(e);
-      if (e.kind === 'torpedo') this.dot(g, p.x, p.y, 3, cream);
-      else if (this.lowEnd) this.dot(g, p.x, p.y, 3, e.kind === 'mine' ? amber : mint);
-      else { g.strokeColor = e.kind === 'mine' ? amber : mint; g.circle(p.x - 187.5, l.height / 2 - p.y, e.radius); g.stroke(); }
+      const p=this.projection.sample(e);
+      if (e.kind==='torpedo') {
+        const speed=Math.hypot(e.vx,e.vy)||1, dx=e.vx/speed,dy=e.vy/speed;
+        if(!this.lowEnd) this.segment(g,p.x-dx*18,p.y-dy*18,p.x-dx*5,p.y-dy*5,new Color(105,233,198,100),2);
+        this.segment(g,p.x-dx*5,p.y-dy*5,p.x+dx*5,p.y+dy*5,cream,3);
+        this.segment(g,p.x-dx*3-dy*3,p.y-dy*3+dx*3,p.x-dx*5,p.y-dy*5,mint,1.5);
+        this.segment(g,p.x-dx*3+dy*3,p.y-dy*3-dx*3,p.x-dx*5,p.y-dy*5,mint,1.5);
+      } else if(e.kind==='mine') {
+        this.dot(g,p.x,p.y,6,amber);
+        for(let i=0;i<3;i++){const a=i*Math.PI*2/3;this.segment(g,p.x+Math.cos(a)*6,p.y+Math.sin(a)*6,p.x+Math.cos(a)*10,p.y+Math.sin(a)*10,amber,2);}
+      } else {
+        g.strokeColor=new Color(105,233,198,this.lowEnd?170:125);g.lineWidth=2;
+        g.circle(p.x-187.5,l.height/2-p.y,e.radius);g.stroke();
+        if(!this.lowEnd && e.radius>10){g.strokeColor=new Color(180,255,236,65);g.lineWidth=1;g.circle(p.x-187.5,l.height/2-p.y,e.radius-5);g.stroke();}
+      }
     }
-    if (!this.lowEnd) for (const e of b.effects.values()) {
-      const p = point(e), end = point({ x: e.endX, y: e.endY }); g.strokeColor = mint;
-      g.moveTo(p.x - 187.5, l.height / 2 - p.y); g.lineTo(end.x - 187.5, l.height / 2 - end.y); g.stroke();
+    for (const e of b.effects.values()) {
+      const p=point(e),end=point({x:e.endX,y:e.endY});
+      if(e.kind==='mine') { g.strokeColor=amber;g.lineWidth=2;g.circle(p.x-187.5,l.height/2-p.y,e.radius);g.stroke(); }
+      else if(e.kind==='arc') {
+        const mx=(p.x+end.x)/2,my=(p.y+end.y)/2;
+        this.segment(g,p.x,p.y,mx+4,my-4,new Color(165,203,255,190),this.lowEnd?1.5:2.5);
+        this.segment(g,mx+4,my-4,end.x,end.y,new Color(165,203,255,190),this.lowEnd?1.5:2.5);
+      }
     }
-    this.drawTexts(session, cy);
+    // Existing text pool is also a bounded impact source, including in low quality.
+    for(const t of b.texts.values()) if(t.expiresTick-b.tick>=15) {
+      const p=this.projection.sample(t), age=20-(t.expiresTick-b.tick), r=3+age;
+      this.segment(g,p.x-r,p.y,p.x+r,p.y,cream,1.5);
+      this.segment(g,p.x,p.y-r,p.x,p.y+r,amber,1.5);
+    }
+    this.drawTexts(session);
     const gate = session.content.gateDepth;
     if (gate !== undefined && Math.abs(gate - session.depth) < 240) {
-      const y = l.height / 2 - cy - gate + session.depth;
+      const y = l.height/2-point({x:0,y:gate}).y;
       g.strokeColor = amber; g.lineWidth = 2; g.moveTo(-145, y); g.lineTo(110, y); g.stroke();
     }
     if (session.content.openRifts.length) {
       g.strokeColor = mint; g.lineWidth = 2;
-      const previous = session.depth < 1600 ? 800 : 1600, distance = previous - session.depth;
-      if (Math.abs(distance) < 240) { g.ellipse(-7.5, l.height / 2 - cy - distance, 32, 8); g.stroke(); }
+      const previous = session.depth < 1600 ? 800 : 1600, distance = previous - session.depth, p=point({x:0,y:previous});
+      if (Math.abs(distance) < 240) { g.ellipse(p.x-187.5,l.height/2-p.y,32,8);g.stroke(); }
     }
   }
 
   /** Damage numbers ride the battle's own text pool; low-end devices skip them entirely. */
-  private drawTexts(session: DiveSession, cy: number): void {
+  private drawTexts(session: DiveSession): void {
     if (this.lowEnd) return;
     const b = session.battle, l = this.layout;
     let shown = 0;
@@ -234,7 +292,7 @@ export class DiveHud {
       if (shown >= TEXT_POOL) break;
       const label = this.labels.get(`dmg-${shown}`)!, node = label.node;
       node.active = true;
-      node.setPosition(-7.5 + t.x - b.player.x, l.height / 2 - cy - t.y + b.player.y);
+      const p=this.projection.sample(t); node.setPosition(p.x-187.5,l.height/2-p.y);
       const value = String(Math.round(t.value));
       if (label.string !== value) label.string = value;
       shown++;
@@ -276,5 +334,8 @@ export class DiveHud {
   }
   private dot(g: Graphics, x: number, y: number, radius: number, color: Color): void {
     g.fillColor = color; g.circle(x - 187.5, this.layout.height / 2 - y, radius); g.fill();
+  }
+  private segment(g: Graphics,x1:number,y1:number,x2:number,y2:number,color:Color,width:number): void {
+    g.strokeColor=color;g.lineWidth=width;g.moveTo(x1-187.5,this.layout.height/2-y1);g.lineTo(x2-187.5,this.layout.height/2-y2);g.stroke();
   }
 }
