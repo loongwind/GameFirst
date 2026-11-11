@@ -3,6 +3,7 @@ import { DEFAULT_BALANCE, equipmentUpgradeCost } from '@abyss-hunter/shared';
 import type { Equipment } from '@abyss-hunter/shared';
 import { HarborModel, TREE_NAMES, EQUIPMENT_NAMES, QUALITY_NAMES } from '../meta/HarborModel';
 import type { HarborCommand } from '../meta/HarborModel';
+import { attributePreview, comparisonLine, equipComparison, itemDetail, itemKeyStats, slotReadout, sourceLines, summaryLines } from '../meta/loadoutStats';
 import { harborLayout } from './harborLayout';
 import type { HarborInsets, Rect } from './harborLayout';
 import { UiScope, VirtualRows, C } from './HarborKit';
@@ -184,14 +185,19 @@ export class HarborView {
     this.lists.push(new VirtualRows(s, name, rect, count, height, draw));
   }
   private upgrade(s: UiScope, width: number, height: number): void {
-    const rows = this.model.attributes();
-    if (this.model.snapshot.objectives.tutorial.active && this.model.snapshot.objectives.tutorial.step === 5) rows.sort((a, b) => Number(!['cargo', 'oxygen'].includes(a.id)) - Number(!['cargo', 'oxygen'].includes(b.id)));
-    this.list(s, 'UpgradeRows', r(12, 88, width - 24, height - 148), rows.length, 86, (row, i) => {
-      const a = rows[i]; row.box('UpgradeRow', r(0, 0, width - 24, 80));
-      const icon:Record<string,string>={hp:'equip_armor',attack:'icon_attack',attackSpeed:'icon_attack_speed',speed:'icon_move_speed',cargo:'icon_supply',oxygen:'equip_searchlight'};
+    const rows = this.model.attributes(), state = this.model.snapshot;
+    if (state.objectives.tutorial.active && state.objectives.tutorial.step === 5) rows.sort((a, b) => Number(!['cargo', 'oxygen'].includes(a.id)) - Number(!['cargo', 'oxygen'].includes(b.id)));
+    // Current combat values stay outside the scroll area: they are the reference for every row below.
+    s.box('CombatSummary', r(12, 86, width - 24, 118));
+    s.text('CombatSummaryTitle', '当前战斗数值', 20, 90, 180, 18, 12, C.amber);
+    summaryLines(state).forEach((line, i) => s.text(`CombatSummary-${i}`, line, 18, 107 + i * 15, width - 36, 15, 10, i < 2 ? C.text : C.mint));
+    sourceLines(state).forEach((line, i) => s.text(`CombatSource-${i}`, line, 18, 168 + i * 14, width - 36, 14, 9, C.muted));
+    this.list(s, 'UpgradeRows', r(12, 210, width - 24, Math.max(86, height - 266)), rows.length, 86, (row, i) => {
+      const a = rows[i], preview = attributePreview(state, a.id); row.box('UpgradeRow', r(0, 0, width - 24, 80));
+      const icon:Record<string,string>={hp:'equip_armor',attack:'icon_attack',attackSpeed:'icon_attack_speed',moveSpeed:'icon_move_speed',cargo:'icon_supply',oxygen:'equip_searchlight'};
       row.icon(icon[a.id]??'icon_upgrade',8,6,26);
       row.text('Attribute', `${a.title}  Lv.${a.level}`, 40, 5, 163, 24, 15);
-      row.text('AttributeValues', `${Number(a.value.toFixed(2))} → ${Number(a.next.toFixed(2))}`, 12, 30, 170, 20, 12, C.mint);
+      row.text('AttributeValues', `${preview.label} ${preview.from} → ${preview.to}${preview.unit}${preview.unchanged ? '（本级不变）' : ''}`, 12, 30, 214, 20, 11, C.mint);
       row.text('EstimatedCost', a.maxed ? '已达上限' : `预估 ${a.cost.crystal} 荧晶${a.cost.core !== '0' ? ` + ${a.cost.core} 渊核` : ''}`, 12, 53, 200, 21, 11, C.amber);
       row.button(`upgrade-${a.id}`, r(width - 116, 17, 80, 48), '强化', () => this.command({ type: 'attribute.upgrade', attribute: a.id }), !a.maxed);
     });
@@ -241,36 +247,54 @@ export class HarborView {
       s.button('merge',r(14,height-56,width-28,44),'确认消耗所选三件 · 合成',merge,!!preview,undefined,true);
       return;
     }
+    const cardW = (width - 24) / 4 - 4;
     for (let i = 0; i < 4; i++) {
-      const item = inventory.find(e => (e as Equipment & { slot?: number }).slot === i && e.equipped), locked = i === 3 && state.playerLevel < DEFAULT_BALANCE.equipment.fourthSlotLevel;
-      s.button(`slot-${i}`, r(12 + i * (width - 24) / 4, 85, (width - 24) / 4 - 4, 48), locked ? `Lv.${DEFAULT_BALANCE.equipment.fourthSlotLevel} 锁定` : item ? EQUIPMENT_NAMES[item.template] : i < 2 ? `主武器 ${i + 1}` : `辅件 ${i - 1}`, () => { this.slot = i; this.drawPanel(); }, !locked, undefined, this.slot === i);
+      const locked = i === 3 && state.playerLevel < DEFAULT_BALANCE.equipment.fourthSlotLevel, card = slotReadout(state, i);
+      const n = s.button(`slot-${i}`, r(12 + i * (width - 24) / 4, 85, cardW, 62), '', () => { this.slot = i; this.drawPanel(); }, !locked, undefined, this.slot === i);
+      if (locked) {
+        const title = s.text(`slot-${i}-title`, `Lv.${DEFAULT_BALANCE.equipment.fourthSlotLevel} 锁定`, 0, 18, cardW, 22, 11, C.muted, n);
+        title.horizontalAlign = Label.HorizontalAlign.CENTER;
+      } else {
+        const title = s.text(`slot-${i}-title`, card.title, 0, 2, cardW, 20, 11, C.text, n); title.horizontalAlign = Label.HorizontalAlign.CENTER;
+        const line1 = s.text(`slot-${i}-line1`, card.line1, 0, 22, cardW, 18, 9, card.empty ? C.muted : C.mint, n); line1.horizontalAlign = Label.HorizontalAlign.CENTER;
+        if (card.line2) { const line2 = s.text(`slot-${i}-line2`, card.line2, 0, 40, cardW, 18, 9, C.muted, n); line2.horizontalAlign = Label.HorizontalAlign.CENTER; }
+      }
     }
-    if (!compact&&!inventory.some(i => i.id === this.focusedId)) s.text('SelectedSlot', `当前槽 ${this.slot + 1} · ${this.slot < 2 ? '仅主武器' : '仅辅件'} · 已选主件 ${this.mainId ? this.itemLabel(inventory.find(i => i.id === this.mainId)) : '无'}`, 14, 137, width - 28, 28, 11, C.muted);
+    if (!compact&&!inventory.some(i => i.id === this.focusedId)) s.text('SelectedSlot', `当前槽 ${this.slot + 1} · ${this.slot < 2 ? '仅主武器' : '仅辅件'} · 已选主件 ${this.mainId ? this.itemLabel(inventory.find(i => i.id === this.mainId)) : '无'}`, 14, 151, width - 28, 22, 10, C.muted);
     const focused = inventory.find(i => i.id === this.focusedId);
+    let listY = 172;
     if (focused) {
       const maxed = focused.level >= DEFAULT_BALANCE.equipment.maxLevels[focused.quality];
-      const cost = maxed ? '已满级' : equipmentUpgradeCost(focused);
-      s.text('EquipmentCost', `${this.itemLabel(focused)} → Lv.${maxed ? focused.level : focused.level + 1} · ${cost} 髓 / 1券（余${state.tickets}）`, 14, 137, width - 28, 28, 11, C.amber);
+      const cost = maxed ? '已满级' : `${equipmentUpgradeCost(focused)} 髓 / 1券`;
+      s.text('EquipmentCost', `${this.itemLabel(focused)} · ${cost}（余${state.tickets}券）`, 14, 151, width - 28, 18, 10, C.amber);
+      const detail = itemDetail(state, focused);
+      detail.lines.forEach((line, i) => s.text(`EquipmentDetail-${i}`, line, 14, 169 + i * 16, width - 28, 16, 10, i === 0 ? C.mint : C.muted));
+      const compare = equipComparison(state, focused.id, this.slot), compareText = comparisonLine(compare, this.slot);
+      const compareY = 169 + detail.lines.length * 16;
+      s.text('EquipmentCompare', compareText, 14, compareY, width - 28, 30, 10, compare.compatible ? C.amber : C.danger);
       const actions: [string, string, HarborCommand, boolean][] = [
-        ['equip', '装到当前槽', { type: 'equipment.equip', itemId: focused.id, slot: this.slot }, (this.slot < 2) === (DEFAULT_BALANCE.equipment.templates.indexOf(focused.template) < 4)],
+        ['equip', '装到该槽', { type: 'equipment.equip', itemId: focused.id, slot: this.slot }, (this.slot < 2) === (DEFAULT_BALANCE.equipment.templates.indexOf(focused.template) < 4)],
         ['level-marrow', '用髓升级', { type: 'equipment.upgrade', itemId: focused.id, payment: 'marrow' }, !maxed],
         ['level-ticket', '用券升级', { type: 'equipment.upgrade', itemId: focused.id, payment: 'ticket' }, !maxed && state.tickets > 0],
         ['lock', focused.locked ? '解除锁定' : '锁定', { type: 'equipment.lock', itemId: focused.id, locked: !focused.locked }, true],
       ];
-      actions.forEach(([key, title, command, enabled], i) => s.button(key, r(12 + i * (width - 24) / 4, 168, (width - 24) / 4 - 4, 44), title, () => this.command(command), enabled));
+      const actionsY = compareY + 34;
+      actions.forEach(([key, title, command, enabled], i) => s.button(key, r(12 + i * (width - 24) / 4, actionsY, (width - 24) / 4 - 4, 44), title, () => this.command(command), enabled));
+      listY = actionsY + 52;
     }
-    const listY = focused ? 220 : compact?143:169, footer = compact?70:110;
+    const footer = compact?70:110;
     if (!inventory.length) this.fourState(s, 'empty', '收纳舱暂无装备，前往补给打开珍珠箱。', listY, height - listY - 80);
-    else if(compact&&focused)s.button('back-inventory',r(14,220,width-28,44),'← 返回收纳舱',()=>{this.focusedId='';this.drawPanel();});
+    else if(compact&&focused)s.button('back-inventory',r(14,Math.min(listY,height-108),width-28,44),'← 返回收纳舱',()=>{this.focusedId='';this.drawPanel();});
     else this.list(s, 'VirtualInventory', r(12, listY, width - 24, Math.max(44, height - listY - footer)), inventory.length, 112, (row, index) => {
       const item = inventory[index], selected = item.id === this.focusedId;
       const n = row.button(`item-${item.id}`, r(0, 0, width - 24, 106), '', () => { this.focusedId = item.id; this.mergeConfirm = false; this.drawPanel(); }, true, undefined, selected);
       row.icon(EQUIP_ICON[item.template] ?? `equip_${item.template}`, 5, 8, 48, 48, n);
-      row.text('ItemName', this.itemLabel(item), 58, 3, width - 100, 24, 13, C.text, n);
-      row.text('ItemState', `${item.equipped ? '已装配' : item.locked ? '已锁定' : this.mainId === item.id ? '★ 主装备' : this.auxiliary.includes(item.id) ? '◆ 辅料' : '未装配'} · 升级投入 ${item.invested.marrow}髓 / ${item.invested.tickets}券`, 58, 26, width - 100, 20, 10, C.muted, n);
+      row.text('ItemName', this.itemLabel(item), 58, 3, width - 100, 22, 13, C.text, n);
+      row.text('ItemState', `${item.equipped ? '已装配' : item.locked ? '已锁定' : this.mainId === item.id ? '★ 主装备' : this.auxiliary.includes(item.id) ? '◆ 辅料' : '未装配'} · 升级投入 ${item.invested.marrow}髓 / ${item.invested.tickets}券`, 58, 24, width - 100, 18, 10, C.muted, n);
+      row.text('ItemStats', itemKeyStats(state, item), 58, 42, width - 100, 16, 10, C.mint, n);
       if (!item.equipped && !item.locked && item.quality < 4) {
-        row.button(`main-${item.id}`, r(58, 47, 92, 44), '选为主件', () => { this.mainId = item.id; this.auxiliary = []; this.mergeConfirm = false; this.drawPanel(); });
-        row.button(`aux-${item.id}`, r(157, 47, 92, 44), this.auxiliary.includes(item.id) ? '取消辅料' : '选为辅料', () => {
+        row.button(`main-${item.id}`, r(58, 58, 92, 44), '选为主件', () => { this.mainId = item.id; this.auxiliary = []; this.mergeConfirm = false; this.drawPanel(); });
+        row.button(`aux-${item.id}`, r(157, 58, 92, 44), this.auxiliary.includes(item.id) ? '取消辅料' : '选为辅料', () => {
           if (!this.mainId || this.mainId === item.id) return;
           if (this.auxiliary.includes(item.id)) this.auxiliary = this.auxiliary.filter(id => id !== item.id);
           else if (this.auxiliary.length < 2) this.auxiliary.push(item.id);

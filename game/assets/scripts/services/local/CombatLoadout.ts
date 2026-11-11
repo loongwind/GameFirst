@@ -16,11 +16,25 @@ export const COMBAT_GROWTH = Object.freeze({
 
 type EquippedItem = Equipment & { slot?: number };
 const isWeapon = (template: string): template is WeaponKind => Object.prototype.hasOwnProperty.call(WEAPON_DEFAULTS, template);
-const equipmentGain = (item: Equipment): number => COMBAT_GROWTH.equipmentBaseGain
+export const isWeaponTemplate = (template: string): template is WeaponKind => isWeapon(template);
+/** Slots 0/1 take weapons; slots 2/3 take auxiliary items. */
+export const slotAccepts = (template: string, slot: number): boolean => Number.isInteger(slot) && slot >= 0 && slot <= 3 && (isWeapon(template) ? slot < 2 : slot >= 2);
+/** Single source for equipment magnitude: base + quality + level. */
+export const equipmentGain = (item: Equipment): number => COMBAT_GROWTH.equipmentBaseGain
   + COMBAT_GROWTH.equipmentQualityGain * item.quality + COMBAT_GROWTH.equipmentLevelGain * (item.level - 1);
 
+export interface CombatProjection {
+  options: Omit<DiveOptions, 'diveId'>;
+  /** Resolved four-slot loadout, so presentation names exactly what combat uses. */
+  slots: ReadonlyArray<(Equipment & { slot?: number }) | undefined>;
+  /** Per-tree tech totals, so presentation never re-derives them. */
+  tech: Readonly<Record<'attack' | 'survival' | 'oxygen' | 'cargo' | 'special', number>>;
+  /** Auxiliary totals by template; magnet already includes its 1-unit base. */
+  aux: Readonly<Record<'armor' | 'fin' | 'light' | 'magnet', number>>;
+}
+
 /** Project once at departure. LocalDiveService.open restores a saved dive before using these options. */
-export function combatLoadout(state: LocalState): Omit<DiveOptions, 'diveId'> {
+export function combatProjection(state: LocalState): CombatProjection {
   const unlocked = new Set(state.tech);
   const tech = { attack: 0, survival: 0, oxygen: 0, cargo: 0, special: 0 };
   for (const node of DEFAULT_BALANCE.tech.nodes) if (unlocked.has(node.id)) tech[node.tree as keyof typeof tech] += node.effect;
@@ -71,7 +85,7 @@ export function combatLoadout(state: LocalState): Omit<DiveOptions, 'diveId'> {
         : base.lifetimeTicks,
     };
   });
-  return {
+  const options: Omit<DiveOptions, 'diveId'> = {
     maxHp: attributeValue('hp', attrs.hp) * (1 + tech.survival) * (1 + armor),
     cargoCapacity: Math.floor(attributeValue('cargo', attrs.cargo) * (1 + tech.cargo)),
     oxygenCapacity: DEFAULT_BALANCE.attributes.baseValues[5],
@@ -88,4 +102,10 @@ export function combatLoadout(state: LocalState): Omit<DiveOptions, 'diveId'> {
       pickupRadius: COMBAT_GROWTH.collectionReach * (tech.special + magnet),
     },
   };
+  return { options, slots, tech, aux: { armor, fin, light, magnet } };
+}
+
+/** Dive options only; presentation that also needs source totals uses combatProjection. */
+export function combatLoadout(state: LocalState): Omit<DiveOptions, 'diveId'> {
+  return combatProjection(state).options;
 }

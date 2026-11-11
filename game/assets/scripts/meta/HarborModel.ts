@@ -11,7 +11,7 @@ interface EconomyPort { readonly snapshot: LocalState; dispatch(action: Action):
 interface AdsPort { watch(request: AdRequest): Promise<AdOutcome>; retryClaim(): Promise<AdOutcome> }
 export const ATTRIBUTE_NAMES: Record<string, string> = { hp: '耐压装甲', attack: '攻击力', attackSpeed: '攻击速度', moveSpeed: '移动速度', cargo: '收集舱容量', oxygen: '氧气效率' };
 export const TREE_NAMES: Record<string, string> = { attack: '攻击', survival: '生存', oxygen: '氧气', cargo: '舱容', special: '特殊' };
-export const EQUIPMENT_NAMES: Record<string, string> = { sonic: '声波炮', torpedo: '鱼雷', arc: '电弧', mine: '水雷', light: '探照灯', fin: '推进鳍', armor: '护甲', magnet: '磁吸器' };
+export const EQUIPMENT_NAMES: Record<string, string> = { sonic: '声波炮', torpedo: '鱼雷巢', arc: '电弧链', mine: '诱饵浮雷', light: '探照灯', fin: '潜流鳍', armor: '装甲片', magnet: '磁吸器' };
 export const QUALITY_NAMES = ['残破', '标准', '精良', '史诗', '传说'];
 export function message(error: unknown): string {
   const code = error instanceof Error ? error.message : String(error);

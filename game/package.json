@@ -27,6 +27,7 @@
     "typecheck:services": "tsc --noEmit -p tsconfig.services.json",
     "battle:serve": "node tools/battle-fixture-server.mjs",
     "test:harbor:web": "node --test tests/harbor.smoke.mjs",
+    "test:stats:web": "node --test tests/stats-display.smoke.mjs",
     "test:sea:web": "node --test tests/sea-content.smoke.mjs",
     "test:tutorial:web": "node --test tests/tutorial.smoke.mjs",
     "test:quality:web": "node --test tests/quality.smoke.mjs",
