@@ -5,13 +5,13 @@ import { body, resetBody, SeededRandom, STEP_SECONDS, weaponSpec } from './model
 import { SonarSteering, canMove } from './SonarSteering';
 import type { TerrainCircle } from './model';
 import type { BattleOptions, Capacities, Effect, Enemy, FloatingText, Loot, Player, Projectile, WeaponKind, WeaponState } from './model';
-import { BOSS_ENCOUNTERS, ENEMY_CATALOG, WORLD_BOUNDS, enemyByKey, enemyStrength, layerAtDepth } from './SeaContent';
+import { BOSS_ENCOUNTERS, ENEMY_CATALOG, WORLD_BOUNDS, SUNLIGHT_TUNING, enemyByKey, enemyStrength, layerAtDepth } from './SeaContent';
 import type { ContentProgress, SeaLayer } from './SeaContent';
 
 export interface BattleCheckpoint {
   encounters?: string[];
   tick: number; player: Player; stats: Battle['stats']; random: number; nextSpawnTick: number;
-  options: Pick<BattleOptions, 'spawn' | 'spawnIntervalTicks' | 'weapons' | 'capacities' | 'obstacles' | 'dangerZones' | 'content' | 'playerSpeed' | 'pickupRadius'>;
+  options: Pick<BattleOptions, 'spawn' | 'spawnIntervalTicks' | 'sunlightSpawnIntervalTicks' | 'weapons' | 'capacities' | 'obstacles' | 'dangerZones' | 'content' | 'playerSpeed' | 'pickupRadius'>;
   content?: { defeatedBosses: string[]; openRifts: SeaLayer[] };
   weapons: WeaponState[]; pools: Record<'enemies' | 'projectiles' | 'loot' | 'texts' | 'effects', PoolCheckpoint>;
 }
@@ -59,6 +59,7 @@ export class Battle {
   private readonly collectLoot: (value: number) => number;
   private readonly onKill?: BattleOptions['onKill'];
   private readonly spawnInterval: number;
+  private readonly sunlightSpawnInterval: number;
   private readonly pendingHits: { id: number; damage: number }[] = [];
   private readonly pendingDrops: { x: number; y: number; value: number }[] = [];
 
@@ -77,6 +78,8 @@ export class Battle {
     this.collectLoot = options.collectLoot ?? (value => value);
     this.onKill = options.onKill;
     this.spawnInterval = options.spawnIntervalTicks ?? 15;
+    this.sunlightSpawnInterval = options.sunlightSpawnIntervalTicks ?? Math.round(this.spawnInterval * SUNLIGHT_TUNING.spawnIntervalMultiplier);
+    if (!Number.isSafeInteger(this.sunlightSpawnInterval) || this.sunlightSpawnInterval < 1) throw new RangeError('Invalid sunlight spawn interval');
     if (!Number.isSafeInteger(this.spawnInterval) || this.spawnInterval < 1) throw new RangeError('Invalid spawn interval');
     const caps: Capacities = { enemies: 80, projectiles: 200, loot: 100, texts: 64, effects: 64, ...options.capacities };
     this.enemies = new Pool<Enemy>(caps.enemies, () => ({ ...body(), assetKey: '', name: '', layer: 'sunlight', maxHp: 0, attack: 8, spawnDepth: 0, hp: 0, speed: 0, vx: 0, vy: 0, lootValue: 0, nextContactTick: 0, kind: 'normal' }), e => {
@@ -176,7 +179,7 @@ export class Battle {
   checkpoint(): BattleCheckpoint {
     const result: BattleCheckpoint = { tick: this.tick, player: { ...this.player }, stats: { ...this.stats }, random: this.random.checkpoint(), nextSpawnTick: this.nextSpawnTick,
       encounters: Array.from(this.encounters), content: { defeatedBosses: Array.from(this.defeatedBosses), openRifts: Array.from(this.openRifts) },
-      options: { content: this.contentEnabled, playerSpeed: this.player.speed, pickupRadius: this.pickupRadius, spawn: this.autoSpawn, spawnIntervalTicks: this.spawnInterval, weapons: this.weapons.map(w => ({ ...w.spec })), obstacles: this.obstacles, dangerZones: this.dangerZones,
+      options: { content: this.contentEnabled, playerSpeed: this.player.speed, pickupRadius: this.pickupRadius, spawn: this.autoSpawn, spawnIntervalTicks: this.spawnInterval, sunlightSpawnIntervalTicks: this.sunlightSpawnInterval, weapons: this.weapons.map(w => ({ ...w.spec })), obstacles: this.obstacles, dangerZones: this.dangerZones,
         capacities: { enemies: this.enemies.capacity, projectiles: this.projectiles.capacity, loot: this.loot.capacity, texts: this.texts.capacity, effects: this.effects.capacity } },
       weapons: this.weapons.map(w => ({ ...w, spec: { ...w.spec } })),
       pools: { enemies: this.enemies.checkpoint(), projectiles: this.projectiles.checkpoint(p => ({ ...p, hits: Array.from(p.hits) })),
@@ -216,10 +219,11 @@ export class Battle {
     if (this.enemies.size === this.enemies.capacity) { this.stats.deferredSpawns++; return; }
     const angle = this.random.next() * Math.PI * 2, distance = 300 + this.random.next() * 100;
     const layer = this.activeContentLayer;
-    const candidates = this.contentEnabled ? ENEMY_CATALOG.filter(e => e.layer === layer && e.kind === (this.tick > 1 && Math.floor(this.tick / this.spawnInterval) % 6 === 5 ? 'elite' : 'normal')) : [];
+    const interval = this.contentEnabled && layer === 'sunlight' ? this.sunlightSpawnInterval : this.spawnInterval;
+    const candidates = this.contentEnabled ? ENEMY_CATALOG.filter(e => e.layer === layer && e.kind === (this.tick > 1 && Math.floor(this.tick / interval) % 6 === 5 ? 'elite' : 'normal')) : [];
     const identity = candidates.length ? candidates[Math.floor(this.random.next() * candidates.length)] : undefined;
     this.spawnEnemy({ x: this.player.x + Math.cos(angle) * distance, y: this.player.y + Math.sin(angle) * distance, assetKey: identity?.assetKey, spawnDepth: this.player.y });
-    this.nextSpawnTick = this.tick + this.spawnInterval;
+    this.nextSpawnTick = this.tick + interval;
   }
 
   private movementSystem(): void {

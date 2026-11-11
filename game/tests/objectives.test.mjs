@@ -145,6 +145,7 @@ test('legacy checksum snapshots migrate without issuing another onboarding rewar
 test('teaching paces ordinary encounters without replacing HP, damage, growth or the later free-dive profile', () => {
   const e = make(), normal = api.combatLoadout(e.economy.snapshot), teaching = api.tutorialLoadout(e.economy.snapshot, normal);
   assert.equal(teaching.battle.spawnIntervalTicks, 90);
+  assert.equal(teaching.battle.sunlightSpawnIntervalTicks,90,'teaching keeps its established three-second cadence');
   assert.equal(teaching.maxHp, normal.maxHp); assert.deepEqual(teaching.battle.weapons, normal.battle.weapons);
   const state = e.economy.snapshot; state.objectives.tutorial.active = false;
   assert.deepEqual(api.tutorialLoadout(state, normal), normal);

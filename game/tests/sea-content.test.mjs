@@ -27,7 +27,7 @@ test('content spawn uses depth-band strength and per-enemy contact attack; final
   const s = make({ battle: { weapons: [] } });
   s.battle.player.y = 200; step(s);
   let e = values(s.battle.enemies).find(e => e.kind === 'normal');
-  assert.ok(e?.assetKey); const bandAttack = 8 * Math.pow(api.ENEMY_TUNING.attackGrowth, 2); // band-2 contact, table-derived
+  assert.ok(e?.assetKey); const bandAttack = 8 * Math.pow(api.ENEMY_TUNING.attackGrowth, 2) * api.SUNLIGHT_TUNING.attack; // band-2 contact, table-derived
   assert.ok(Math.abs(e.maxHp - 69.62) < 1e-8);
   assert.ok(Math.abs(e.attack - bandAttack) < 1e-8); assert.equal(e.spawnDepth, 200);
   e.x = s.battle.player.x; e.y = s.depth; e.speed = 0;
@@ -38,8 +38,8 @@ test('content spawn uses depth-band strength and per-enemy contact attack; final
   assert.ok(Math.abs(final.maxHp - 2250.3816215908837) < 1e-6);
   const elite = b.spawnEnemy({ x: 0, y: 0, assetKey: 'enemy_elite_01_storm_eel' });
   const boss = b.spawnEnemy({ x: 0, y: 0, assetKey: 'enemy_boss_01_angler_king' });
-  assert.equal(elite.maxHp, 400); assert.equal(elite.attack, 20);
-  assert.equal(boss.maxHp, 2000); assert.equal(boss.attack, 32);
+  assert.equal(elite.maxHp, 400 * api.SUNLIGHT_TUNING.eliteHp); assert.equal(elite.attack, 20 * api.SUNLIGHT_TUNING.attack);
+  assert.equal(boss.maxHp, 2000 * api.SUNLIGHT_TUNING.bossHp); assert.equal(boss.attack, 32 * api.SUNLIGHT_TUNING.bossAttack);
 });
 
 test('boss gates block descent, unlock once and preserve boss identity and rewards across restore', () => {

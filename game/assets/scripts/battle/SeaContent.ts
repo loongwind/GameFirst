@@ -10,6 +10,11 @@ export const ENEMY_TUNING = Object.freeze({
   bandMetres: 100, bands: 24, baseHp: 50, hpGrowth: 1.18, baseAttack: 8, attackGrowth: 1.12,
   multipliers: Object.freeze({ normal: { hp: 1, attack: 1 }, elite: { hp: 8, attack: 2.5 }, boss: { hp: 40, attack: 4 } }),
 });
+/** First-layer onboarding only. Later layers retain the original curves and oxygen. */
+export const SUNLIGHT_TUNING = Object.freeze({
+  maxDepth: 800, normalHp: 1, eliteHp: 0.8, bossHp: 0.4, bossAttack: 0.6,
+  attack: 0.15, spawnIntervalMultiplier: 8, oxygenRateMultiplier: 0.5,
+});
 export const SEA_LAYERS = Object.freeze([
   Object.freeze({ layer: 'sunlight' as const, name: '日光层', minDepth: 0, maxDepth: 800 }),
   Object.freeze({ layer: 'twilight' as const, name: '暮光层', minDepth: 800, maxDepth: 1600 }),
@@ -65,8 +70,10 @@ export function layerAtDepth(depth: number): SeaLayer {
 export function enemyStrength(kind: EnemyKind, depth: number): { maxHp: number; attack: number } {
   if (!Number.isFinite(depth) || depth < 0) throw new RangeError('Invalid enemy depth');
   const c = ENEMY_TUNING, exponent = Math.min(c.bands - 1, Math.floor(depth / c.bandMetres));
-  return { maxHp: c.baseHp * c.hpGrowth ** exponent * c.multipliers[kind].hp,
-    attack: c.baseAttack * c.attackGrowth ** exponent * c.multipliers[kind].attack };
+  const sunlight = depth < SUNLIGHT_TUNING.maxDepth;
+  const hpScale = sunlight ? kind === 'boss' ? SUNLIGHT_TUNING.bossHp : kind === 'elite' ? SUNLIGHT_TUNING.eliteHp : SUNLIGHT_TUNING.normalHp : 1;
+  return { maxHp: c.baseHp * c.hpGrowth ** exponent * c.multipliers[kind].hp * hpScale,
+    attack: c.baseAttack * c.attackGrowth ** exponent * c.multipliers[kind].attack * (sunlight ? kind === 'boss' ? SUNLIGHT_TUNING.bossAttack : SUNLIGHT_TUNING.attack : 1) };
 }
 export const BOSS_ENCOUNTERS = Object.freeze([
   { assetKey: 'enemy_boss_01_angler_king', depth: 800, layer: 'sunlight' as const, gate: true },

@@ -50,7 +50,8 @@ test('cost previews use shared formulas and synthesis requires explicit main and
   assert.throws(() => m.synthesis([item('a', 1, '0', 0), item('b', 8, '77', 2), item('c', 4, '21', 1)], ''), /main/i);
   const p = m.synthesis([item('a', 1, '0', 0), item('b', 8, '77', 2), item('c', 4, '21', 1)], 'a');
   assert.equal(p.item.level, 1); assert.deepEqual(p.refund, { marrow: '98', tickets: 3 });
-  assert.deepEqual(m.redDots(), []); assert.equal(m.adRemaining('gift'), 0);
+  assert.deepEqual(m.redDots(), []); assert.equal(m.adRemaining('gift'), 5, 'Lv.1 can experience preview supply; real driver still owns viewing');
+  assert.equal(m.adRemaining('silver'), 0, 'equipment remains level-gated');
   m.dispose();
 });
 test('failed async command keeps same opId, duplicate taps do not spend twice and unsubscribed panels receive nothing', async () => {

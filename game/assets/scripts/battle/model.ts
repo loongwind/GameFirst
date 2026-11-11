@@ -33,7 +33,7 @@ export interface BattleOptions {
   collectLoot?: (value: number) => number;
   onKill?: (enemy: Readonly<Enemy>) => number | undefined;
   content?: boolean; playerSpeed?: number; pickupRadius?: number;
-  seed?: number; spawn?: boolean; spawnIntervalTicks?: number; weapons?: WeaponInput[]; capacities?: Partial<Capacities>;
+  seed?: number; spawn?: boolean; spawnIntervalTicks?: number; sunlightSpawnIntervalTicks?: number; weapons?: WeaponInput[]; capacities?: Partial<Capacities>;
 }
 export const STEP_SECONDS = 1 / 30;
 export const WEAPON_DEFAULTS: Readonly<Record<WeaponKind, Readonly<WeaponSpec>>> = {

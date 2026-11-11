@@ -1,3 +1,4 @@
+import { SUNLIGHT_TUNING } from './SeaContent';
 import { Battle } from './Battle';
 import { STEP_SECONDS } from './model';
 import type { BattleOptions } from './model';
@@ -169,7 +170,8 @@ export class DiveSession {
       this.battle.step();
       if (this.depth > 0) this.hasSubmerged = true;
       this.activeSeconds += STEP_SECONDS;
-      const rate = this.baseRate * (1 + this.depthIncrement * Math.floor(this.depth / 500));
+      const rate = this.baseRate * (1 + this.depthIncrement * Math.floor(this.depth / 500))
+        * (this.battle.contentEnabled && this.battle.activeContentLayer === 'sunlight' ? SUNLIGHT_TUNING.oxygenRateMultiplier : 1);
       const drySeconds = Math.max(0, STEP_SECONDS - this.oxygen / rate);
       this.oxygen = Math.max(0, this.oxygen - rate * STEP_SECONDS);
       this.battle.player.hp = Math.max(0, this.battle.player.hp - this.maxHp * 0.02 * drySeconds);
@@ -256,7 +258,9 @@ export class DiveSession {
   }
   static restore(saved: DiveCheckpoint): DiveSession {
     if (!saved || saved.version !== 1 || !['Running', 'RescuePending', 'Returning', 'PendingSettlement', 'Settled'].includes(saved.state)) throw new RangeError('Invalid dive checkpoint');
-    const session = new DiveSession({ ...saved.options, battle: { ...saved.battle.options, content: saved.battle.options.content ?? false } });
+    const session = new DiveSession({ ...saved.options, battle: { ...saved.battle.options,
+      sunlightSpawnIntervalTicks: saved.battle.options.sunlightSpawnIntervalTicks ?? saved.battle.options.spawnIntervalTicks,
+      content: saved.battle.options.content ?? false } });
     session.setBenefits(saved.benefits);
     for (const kind of ['crystal', 'pearl', 'marrow', 'core'] as const) integer(saved.cargo[kind]);
     for (const n of [saved.oxygen, saved.activeSeconds, saved.countdown]) nonnegative(n);

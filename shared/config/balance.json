@@ -1114,7 +1114,7 @@
   },
   "ads": {
     "timezoneOffsetMinutes": 480,
-    "unlockLevel": 5,
+    "unlockLevel": 1,
     "showWindowMs": 600000,
     "claimWindowMs": 86400000,
     "maxRetries": 1,

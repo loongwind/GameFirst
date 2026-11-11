@@ -98,7 +98,7 @@ test(`${target}: actual Cocos sonar, oxygen/rescue buttons, pause overlaps and h
     await page.evaluate(() => {
       window.c = window.cc.director.getScene().getChildByName('Canvas').getComponent('DiveController');
       window.testDriver = { isMock: true, shows: 0, outcome: 'completed', async load() {}, async show() { this.shows++; return this.outcome; } }; window.c.configureAds(window.testDriver);
-    }); await page.waitForTimeout(3300);
+    }); await page.waitForFunction(() => !window.c.session.pause.paused);
     assert.equal((await read()).diveId, diveId); assert.equal((await read()).ads.oxygenPrompt, false);
     // Death freezes before choice; skip retains it, rescue keeps cargo and half HP, daily three is durable.
     await page.evaluate(() => { const s = window.c.session; s.cargo.crystal = 0; s.collect('crystal', 70); s.collect('pearl', 2); s.battle.player.hp = 0; window.testDriver.outcome = 'skipped'; }); await page.waitForTimeout(100);

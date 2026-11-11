@@ -7,7 +7,7 @@ import type { EventName, LocalEvent } from './TelemetryBus';
 export const FIRST_TUTORIAL_REWARD = 'tutorial:first-deposit:v1';
 /** The teaching encounter cadence is explicit; combat stats and rewards use the normal loadout. */
 export function tutorialLoadout(state: LocalState, normal: Omit<DiveOptions, 'diveId'>): Omit<DiveOptions, 'diveId'> {
-  return state.objectives.tutorial.active && state.objectives.tutorial.step < 5 ? { ...normal, battle: { ...normal.battle, spawnIntervalTicks: 90 } } : normal;
+  return state.objectives.tutorial.active && state.objectives.tutorial.step < 5 ? { ...normal, battle: { ...normal.battle, spawnIntervalTicks: 90, sunlightSpawnIntervalTicks: 90 } } : normal;
 }
 export interface DepthRecord { depth: number; diveId: string; encounters: string[] }
 export interface Objectives {
