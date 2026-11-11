@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { withBrowser, enterBuiltScene } from './browser-helpers.mjs';
-const root = fileURLToPath(new URL('../build/web-preview', import.meta.url));
+const root = process.env.PREVIEW_ROOT || fileURLToPath(new URL('../build/web-preview', import.meta.url));
 const artifacts = fileURLToPath(new URL('../.artifacts/loo-67/ads/', import.meta.url));
 
 async function click(page, name) {
@@ -67,10 +67,13 @@ for (const [width, height] of [[320,640],[375,667],[390,844]]) {
       await page.reload(); await harbor(page); assert.equal(await count(page,'gift'),4);
       for (const [slot,index,button] of [['blessing',1,'blessing-yield'],['sonar',2,'ad-sonar'],['silver',3,'ad-silver'],['gold',4,'ad-gold']]) {
         await supply(page,index);
-        const before = await count(page,slot), inventory = await page.evaluate(() => window.h.economy.snapshot.inventory.length);
+        const before = await count(page,slot), inventory = await page.evaluate(() => window.h.economy.snapshot.inventory.length + window.h.economy.snapshot.tickets);
         evidence.push({slot,box:await show(page,button)});
         assert.equal(await count(page,slot),before-1);
-        if (slot==='silver'||slot==='gold') assert.equal(await page.evaluate(() => window.h.economy.snapshot.inventory.length),inventory+1);
+        if (slot==='silver'||slot==='gold') {
+          const reward=await page.evaluate(()=>({inventory:window.h.economy.snapshot.inventory,tickets:window.h.economy.snapshot.tickets,intents:window.h.economy.snapshot.intents,notice:window.h.model.notice}));
+          assert.equal(reward.inventory.length+reward.tickets,inventory+1,JSON.stringify({slot,before:inventory,reward}));
+        }
         if (slot==='sonar') assert.ok(await page.evaluate(() => window.h.model.buffSeconds('sonar') > 890));
       }
       // Exhaustion and all blessing choices on the main viewport. Only the wall clock is varied.
@@ -136,5 +139,37 @@ test('preview load failure clears overlay, cancels reservation and keeps reward/
     assert.equal(await count(page,'gift'),5); assert.equal(await page.evaluate(()=>window.h.economy.snapshot.pendingAd),null);
     assert.equal(await page.evaluate(()=>JSON.stringify(window.h.economy.snapshot.wallet)),wallet);
     assert.match(await page.evaluate(()=>window.h.model.notice),/失败/);
+  });
+});
+
+for(const reason of ['scene','pagehide']) test(`loading cancellation ${reason} cannot reopen or reward an abandoned ad`,{timeout:60000},async()=>{
+  await withBrowser(root,async(page)=>{
+    await harbor(page);await supply(page,0);await click(page,'ad-gift');
+    await page.locator('.preview-ad-overlay').waitFor();
+    await page.evaluate(async reason=>{
+      window.abandoned=window.h.economy;
+      if(reason==='scene') await new Promise((resolve,reject)=>window.cc.director.loadScene('Dive',e=>e?reject(e):resolve()));
+      else window.dispatchEvent(new PageTransitionEvent('pagehide'));
+    },reason);
+    await page.waitForTimeout(1200);
+    assert.equal(await page.locator('.preview-ad-overlay').count(),0,'abandoned load must not reopen show');
+    assert.equal(await page.evaluate(()=>Object.values(window.abandoned.snapshot.daily).reduce((n,d)=>n+(d.gift||0),0)),0);
+    assert.equal(await page.evaluate(()=>window.abandoned.snapshot.pendingAd),null);
+  });
+});
+
+test('preview retries one load failure and holds its countdown while document is hidden', {timeout:60000},async()=>{
+  await withBrowser(root,async(page,_b,url)=>{
+    await page.goto(`${url}/?previewAdFailure=once`);await harbor(page);await supply(page,0);
+    await click(page,'ad-gift');await page.locator('#preview-ad-skip').waitFor();
+    // Browser visibility is simulated here; reward services and countdown timers are real.
+    await page.evaluate(()=>{window.previewHidden=true;Object.defineProperty(document,'hidden',{configurable:true,get:()=>window.previewHidden});});
+    await page.waitForTimeout(3300);
+    assert.equal(await page.locator('#preview-ad-skip').count(),1);
+    assert.equal(await count(page,'gift'),5);
+    await page.evaluate(()=>window.previewHidden=false);
+    await page.locator('.preview-ad-overlay').waitFor({state:'detached'});
+    await page.waitForFunction(()=>!window.h.model.busy);
+    assert.equal(await count(page,'gift'),4);
   });
 });

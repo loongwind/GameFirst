@@ -57,6 +57,7 @@ export async function withBrowser(root, run, { navigate = true, headless = true,
     await run(page, browser, url);
   } finally {
     await browser?.close();
+    server.closeAllConnections();
     await new Promise(resolve => server.close(resolve));
   }
 }

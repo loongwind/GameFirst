@@ -2,7 +2,7 @@
 (function () {
   'use strict';
   const wired = new WeakSet();
-  let cc, current, active, loadAttempts = 0;
+  let cc, current, active, loadAttempts = 0, pageActive = true;
   const failure = new URLSearchParams(location.search).get('previewAdFailure');
   function overlay(loading) {
     const element = document.createElement('section');
@@ -14,10 +14,13 @@
     document.body.appendChild(element);
     return element;
   }
-  function operation(loading) {
+  function operation(loading, owner) {
+    if (!pageActive || current !== owner || !owner?.node?.isValid) {
+      return loading ? Promise.reject(new Error('PREVIEW_AD_CANCELLED')) : Promise.resolve('skipped');
+    }
     if (active) return Promise.reject(new Error('PREVIEW_AD_BUSY'));
     return new Promise((resolve, reject) => {
-      const owner = current, element = overlay(loading), previousFocus = document.activeElement;
+      const element = overlay(loading), previousFocus = document.activeElement;
       let timer, last = performance.now(), elapsed = 0, done = false;
       const close = (result, error) => {
         if (done) return; done = true;
@@ -25,7 +28,7 @@
         if (previousFocus?.isConnected) previousFocus.focus?.();
         error ? reject(error) : resolve(result);
       };
-      active = { owner, close };
+      active = { owner, cancel: () => loading ? close(undefined, new Error('PREVIEW_AD_CANCELLED')) : close('skipped') };
       if (!loading) {
         const skip = document.createElement('button'); skip.textContent = '跳过 · 不领取奖励';
         skip.id = 'preview-ad-skip'; skip.onclick = () => close('skipped');
@@ -50,19 +53,19 @@
       }, 50);
     });
   }
-  const driver = { isMock: true, load: () => operation(true), show: () => operation(false) };
+  const driverFor = owner => ({ isMock: true, load: () => operation(true, owner), show: () => operation(false, owner) });
   async function tick() {
     try {
       if (!cc) { if (typeof System === 'undefined') return; cc = await System.import('cc'); }
       const canvas = cc.director.getScene()?.getChildByName('Canvas');
       current = canvas?.getComponent('DiveController') || canvas?.getComponent('HarborController');
-      if (active && active.owner !== current) active.close('skipped');
+      if (active && active.owner !== current) active.cancel();
       if (current?.configureAds && current.economy && !wired.has(current)) {
-        current.configureAds(driver); wired.add(current);
+        current.configureAds(driverFor(current)); wired.add(current);
       }
     } catch (error) { console.warn('[preview-ads] Waiting for scene:', error.message); }
   }
   const interval = setInterval(tick, 100); tick();
-  window.addEventListener('pagehide', () => { active?.close('skipped'); clearInterval(interval); });
+  window.addEventListener('pagehide', () => { pageActive = false; active?.cancel(); clearInterval(interval); });
   window.addEventListener('pageshow', event => { if (event.persisted) location.reload(); });
 })();
