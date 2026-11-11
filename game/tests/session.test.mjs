@@ -7,6 +7,46 @@ const make = (options = {}) => new DiveSession({ diveId: 'dive-52', battle: { sp
 const seconds = (s, n) => { for (let i = 0; i < n * 30; i++) s.advance(1 / 30); };
 const near = (a, b) => assert.ok(Math.abs(a - b) < 1e-7, `${a} != ${b}`);
 
+test('manual surfacing requires a submerged trip and continued upward intent after reaching zero', () => {
+  const s = make({ battle: { spawn: false, content: true, weapons: [] } });
+  s.setInput(0, -1, true); seconds(s, 1);
+  assert.equal(s.state, 'Running', 'birth at 0m does not return');
+  s.setInput(0, 1, true); seconds(s, .5);
+  assert.ok(s.depth > 0);
+  s.setInput(0, -1, true);
+  while (s.depth > 0) s.advance(1 / 30);
+  assert.equal(s.state, 'Running', 'arrival at the surface is not continued input');
+  s.setInput(0, 0); seconds(s, 1); assert.equal(s.state, 'Running');
+  s.setInput(0, -1, true); seconds(s, .4);
+  assert.equal(s.state, 'Returning');
+  assert.equal(s.arriveHarbor(), true); assert.equal(s.arriveHarbor(), false);
+  assert.equal(s.pendingSettlement.reason, 'return');
+});
+
+test('surfacing intent resets on modal/background/ad pauses and is never replayed by restored input', () => {
+  for (const reason of ['modal', 'background', 'ad']) {
+    const s = make({ battle: { spawn: false, content: true, weapons: [] } });
+    s.setInput(0, 1); seconds(s, .2); s.setInput(0, -1);
+    while (s.depth > 0) s.advance(1 / 30);
+    seconds(s, .2); s.pause.add(reason); s.setInput(0, -1, true); seconds(s, 2);
+    s.pause.remove(reason); seconds(s, 1); assert.equal(s.state, 'Running', reason);
+    s.setInput(0, -1); seconds(s, .2); assert.equal(s.state, 'Running', 'old hold debt cleared');
+    const restored = DiveSession.restore(s.checkpoint());
+    restored.advance(3); seconds(restored, 1); assert.equal(restored.state, 'Running');
+    restored.setInput(0, -1); seconds(restored, .4); assert.equal(restored.state, 'Returning');
+  }
+});
+
+test('legacy checkpoints infer a submerged trip from max depth; surfacing never overrides death', () => {
+  const s = make({ battle: { spawn: false, content: true, weapons: [] } });
+  s.setInput(0, 1); seconds(s, .2); s.setInput(0, -1);
+  while (s.depth > 0) s.advance(1 / 30);
+  const saved = s.checkpoint(); delete saved.hasSubmerged;
+  const restored = DiveSession.restore(saved); restored.advance(3);
+  restored.setInput(0, -1); seconds(restored, .4); assert.equal(restored.state, 'Returning');
+  s.battle.player.hp = 0; s.setInput(0, -1); s.advance(.1); assert.equal(s.state, 'RescuePending');
+});
+
 test('presentation interpolation follows the session clock and freezes at the actual position on pause', () => {
   const s=make(); s.setInput(1,0,true); s.advance(1/20);
   near(s.renderAlpha,.5);
