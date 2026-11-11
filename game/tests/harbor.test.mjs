@@ -101,6 +101,34 @@ test('reward confirmation retries the original AdService token without replay; b
   await m.watch('blessing', { choice: 'oxygen' }); const token = e.snapshot.pendingAd;
   assert.ok(token); assert.equal(m.rewardPending, true); await m.watch('blessing', { choice: 'oxygen' }); assert.equal(shows, 1);
   storage.fail = false; await m.retry(); assert.equal(m.hasPending, false); assert.equal(e.snapshot.intents[token].status, 'claimed'); assert.equal(shows, 1);
+  // A completed claim must surface what was granted; dismissal is explicit and listener-driven.
+  assert.deepEqual(m.rewardToast, { title: '获得奖励', body: '远航祝福 · 氧气 +20%（20分钟）', positive: true });
+  assert.match(m.notice, /奖励已入账：远航祝福/);
+  m.dismissToast(); assert.equal(m.rewardToast, null); m.dismissToast();
   assert.equal(m.buffSeconds('blessing'), 1200); now += 900000; assert.equal(m.buffSeconds('blessing'), 300); now += 301000; assert.equal(m.buffSeconds('blessing'), 0);
   assert.deepEqual(m.redDots(), []); m.dispose();
+});
+test('gift showcase preview rotates with the model clock and skipped videos show an explicit no-reward toast', async () => {
+  const { HarborModel } = harbor(), { EconomyService, LocalSaveService, AdService, businessDay } = loadServices();
+  const { DEFAULT_BALANCE, giftOffer, giftWindow } = await import('@abyss-hunter/shared');
+  const storage = memoryStorage(); let now = Date.parse('2026-11-10T03:00:00Z');
+  const e = new EconomyService(new LocalSaveService(storage), { now: () => now, random: () => 0 });
+  e.dispatch({ type: 'dive.settle', opId: 'seed-showcase', settlement: { diveId: 'seed-showcase', reason: 'return', cargo: { crystal: 0, pearl: 0, marrow: 0, core: 0 }, xp: 500, depth: 0, activeSeconds: 0 } });
+  const outcome = { value: 'completed' };
+  const ads = new AdService(e, { isMock: true, async load() {}, async show() { return outcome.value; } });
+  const m = new HarborModel(e, ads, () => now);
+  const preview = m.giftPreview();
+  assert.deepEqual({ currency: preview.currency, amount: preview.amount }, giftOffer(businessDay(now), giftWindow(now)));
+  assert.ok(preview.refreshIn > 0 && preview.refreshIn <= DEFAULT_BALANCE.ads.giftRotationMs / 1000);
+  now += (preview.refreshIn + 1) * 1000;
+  const next = m.giftPreview();
+  assert.notDeepEqual([next.currency, next.amount], [preview.currency, preview.amount], 'next window must present a different reward');
+  await m.watch('gift');
+  assert.equal(m.rewardToast?.positive, true);
+  assert.equal(m.rewardToast?.body, `${ { crystal: '荧晶', pearl: '珍珠', marrow: '深海髓', core: '渊核' }[next.currency] } ×${next.amount}`, 'payout must equal the displayed offer');
+  m.dismissToast();
+  outcome.value = 'skipped'; await m.watch('gift');
+  assert.deepEqual(m.rewardToast, { title: '未获得奖励', body: '视频未完整观看，本次没有发放任何奖励。', positive: false });
+  assert.match(m.notice, /不发放奖励/);
+  m.dismissToast(); m.dispose();
 });

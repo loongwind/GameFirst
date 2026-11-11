@@ -1,5 +1,5 @@
 import { DEFAULT_BALANCE, amount, integer, levelForXp, validateEquipment } from '@abyss-hunter/shared';
-import type { Equipment, Wallet, Box } from '@abyss-hunter/shared';
+import type { Equipment, Wallet, Box, Currency, Amount } from '@abyss-hunter/shared';
 import { EVENT_NAMES } from './TelemetryBus';
 import type { LocalEvent, EventName } from './TelemetryBus';
 import { initialObjectives, validateObjectives } from './Objectives';
@@ -26,7 +26,14 @@ export interface LocalState {
   buffs: { blessing: { choice: string; expiresAt: number } | null; sonarUntil: number };
   events: LocalEvent[];
 }
-export interface CommandResult { revision: number; itemIds?: string[]; token?: string; effect?: string; duplicate?: boolean }
+/** What one claimed ad granted, in presentation order; the economy owns the truth, UI only formats it. */
+export type AdReward =
+  | { kind: 'currency'; currency: Currency; amount: Amount }
+  | { kind: 'equipment'; template: string; quality: number; level: number }
+  | { kind: 'buff'; buff: 'blessing' | 'sonar'; choice?: string; durationMs: number }
+  | { kind: 'ticket' }
+  | { kind: 'effect'; effect: 'rescue' | 'oxygen' };
+export interface CommandResult { revision: number; itemIds?: string[]; token?: string; effect?: string; duplicate?: boolean; reward?: AdReward }
 export type Action = { opId: string } & (
   { type: 'dive.settle'; settlement: LocalSettlement } |
   { type: 'attribute.upgrade'; attribute: string } |

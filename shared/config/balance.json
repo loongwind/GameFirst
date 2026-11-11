@@ -1142,6 +1142,7 @@
       "rescue": 3,
       "oxygen": 3
     },
+    "giftRotationMs": 60000,
     "giftRewards": [
       {
         "currency": "crystal",

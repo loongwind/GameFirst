@@ -572,6 +572,11 @@
           ],
           "additionalProperties": false
         },
+        "giftRotationMs": {
+          "type": "integer",
+          "minimum": 1000,
+          "maximum": 3600000
+        },
         "giftRewards": {
           "type": "array",
           "items": {
@@ -616,6 +621,7 @@
         "lowOxygenRatio",
         "fallback",
         "slots",
+        "giftRotationMs",
         "giftRewards"
       ],
       "additionalProperties": false

@@ -1,4 +1,4 @@
-import { DEFAULT_BALANCE, addMoney, subtractMoney, amount, integer, levelForXp, xpThreshold, upgradeCost, equipmentUpgradeCost, synthesize, rollBox, randomUnit } from '@abyss-hunter/shared';
+import { DEFAULT_BALANCE, addMoney, subtractMoney, amount, integer, levelForXp, xpThreshold, upgradeCost, equipmentUpgradeCost, synthesize, rollBox, giftWindow, giftOffer } from '@abyss-hunter/shared';
 import type { Currency, Equipment, Box, Snapshot } from '@abyss-hunter/shared';
 import type { SaveService } from './SaveService';
 import { TelemetryBus } from './TelemetryBus';
@@ -189,12 +189,26 @@ export class EconomyService implements CommandDispatcher {
         const counters = next.daily[ad.day] ?? (next.daily[ad.day] = {});
         if ((counters[ad.slot] ?? 0) >= DEFAULT_BALANCE.ads.slots[ad.slot]) throw new Error('AD_DAILY_LIMIT');
         switch (ad.slot) {
-          case 'gift': { const rewards = DEFAULT_BALANCE.ads.giftRewards, gift = rewards[Math.floor(randomUnit(this.random()) * rewards.length)]; credit(gift.currency as Currency, gift.amount); break; }
-          case 'gold': case 'silver': result.itemIds = draw(ad.slot, 1); break;
-          case 'blessing': next.buffs.blessing = { choice: ad.choice!, expiresAt: now + DEFAULT_BALANCE.ads.blessingDurationMs }; break;
-          case 'sonar': next.buffs.sonarUntil = now + DEFAULT_BALANCE.ads.sonarDurationMs; break;
+          // The showcase pays exactly the offer displayed at prepare time, even across rotation windows.
+          case 'gift': {
+            const gift = giftOffer(ad.day, giftWindow(ad.issuedAt));
+            credit(gift.currency, gift.amount); result.reward = { kind: 'currency', ...gift }; break;
+          }
+          case 'gold': case 'silver': {
+            result.itemIds = draw(ad.slot, 1);
+            const won = next.inventory.find(i => result.itemIds?.includes(i.id));
+            result.reward = won ? { kind: 'equipment', template: won.template, quality: won.quality, level: won.level } : { kind: 'ticket' };
+            break;
+          }
+          case 'blessing':
+            next.buffs.blessing = { choice: ad.choice!, expiresAt: now + DEFAULT_BALANCE.ads.blessingDurationMs };
+            result.reward = { kind: 'buff', buff: 'blessing', choice: ad.choice!, durationMs: DEFAULT_BALANCE.ads.blessingDurationMs }; break;
+          case 'sonar':
+            next.buffs.sonarUntil = now + DEFAULT_BALANCE.ads.sonarDurationMs;
+            result.reward = { kind: 'buff', buff: 'sonar', durationMs: DEFAULT_BALANCE.ads.sonarDurationMs }; break;
           case 'rescue': case 'oxygen':
             next.consumedEvents.push(`${ad.slot}:${ad.eventId}`); result.effect = ad.slot;
+            result.reward = { kind: 'effect', effect: ad.slot };
             emit(ad.slot === 'rescue' ? 'rescue_ad_view' : 'oxygen_refill_ad', { daily_count: (counters[ad.slot] ?? 0) + 1 }); break;
         }
         counters[ad.slot] = (counters[ad.slot] ?? 0) + 1; ad.status = 'claimed'; next.pendingAd = null;
