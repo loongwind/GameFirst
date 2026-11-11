@@ -17,6 +17,9 @@ test('manual surfacing requires a submerged trip and continued upward intent aft
   while (s.depth > 0) s.advance(1 / 30);
   assert.equal(s.state, 'Running', 'arrival at the surface is not continued input');
   s.setInput(0, 0); seconds(s, 1); assert.equal(s.state, 'Running');
+  s.setBenefits({yield:1,oxygen:1,cargo:1,sonar:true});s.oxygen=12;seconds(s,1);
+  assert.equal(s.battle.movementMode,'sonar');assert.equal(s.state,'Running','automatic sonar ascent never counts as a manual surface command');
+  s.setBenefits({yield:1,oxygen:1,cargo:1});
   s.setInput(0, -1, true); seconds(s, .4);
   assert.equal(s.state, 'Returning');
   assert.equal(s.arriveHarbor(), true); assert.equal(s.arriveHarbor(), false);
