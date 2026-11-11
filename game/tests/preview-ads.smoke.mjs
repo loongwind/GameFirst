@@ -173,3 +173,24 @@ test('preview retries one load failure and holds its countdown while document is
     assert.equal(await count(page,'gift'),4);
   });
 });
+
+test('preview badge never covers key HUD labels across the three viewports', {timeout:60000},async()=>{
+  await withBrowser(root,async(page)=>{
+    await page.waitForFunction(()=>typeof System!=='undefined');
+    await page.evaluate(async()=>{window.cc=await System.import('cc');});
+    await page.waitForFunction(()=>{window.c=window.cc.director.getScene()?.getChildByName('Canvas')?.getComponent('DiveController');return window.c?.hud?.sea.status==='ready';});
+    for(const [width,height] of [[320,640],[375,667],[390,844]]){
+      await page.setViewportSize({width,height});await page.waitForTimeout(250);
+      const intersections=await page.evaluate(()=>{
+        const badge=document.getElementById('preview-ad-badge').getBoundingClientRect(),canvas=document.querySelector('canvas').getBoundingClientRect(),v=window.cc.view.getVisibleSize();
+        return ['hp','oxygenGauge','cargo','depth','status','guidance'].filter(key=>{
+          const label=window.c.hud.labels.get(key),b=label.node.getComponent(window.cc.UITransform).getBoundingBoxToWorld();
+          const left=canvas.x+b.x/v.width*canvas.width,right=left+b.width/v.width*canvas.width,top=canvas.y+(1-(b.y+b.height)/v.height)*canvas.height,bottom=top+b.height/v.height*canvas.height;
+          return badge.left<right&&badge.right>left&&badge.top<bottom&&badge.bottom>top;
+        });
+      });
+      assert.deepEqual(intersections,[],`${width}: badge covers HUD`);
+      await page.screenshot({path:`${artifacts}/badge-${width}.png`});
+    }
+  });
+});

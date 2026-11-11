@@ -1,4 +1,4 @@
-#preview-ad-badge{position:fixed;top:0;left:50%;transform:translateX(-50%);z-index:2147483646;pointer-events:none;padding:2px 10px;border-radius:0 0 8px 8px;background:#e4b561;color:#172b32;font:600 10px/14px system-ui,sans-serif;white-space:nowrap}
+#preview-ad-badge{position:fixed;top:0;left:0;z-index:2147483646;pointer-events:none;width:12px;padding:4px 0;border-radius:0 0 5px 0;background:#e4b561;color:#172b32;font:600 10px/12px system-ui,sans-serif;writing-mode:vertical-rl;text-orientation:upright;white-space:nowrap}
 .preview-ad-overlay{position:fixed;inset:0;z-index:2147483647;display:grid;place-items:center;padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom));box-sizing:border-box;background:rgba(3,15,24,.94);font:16px/1.6 system-ui,sans-serif;color:#edf8f6;touch-action:none;overscroll-behavior:contain}
 .preview-ad-card{width:min(100%,360px);box-sizing:border-box;padding:28px 24px;border:1px solid #507079;border-radius:18px;background:linear-gradient(160deg,#183f49,#0c242f);box-shadow:0 20px 80px #0008;text-align:center}
 .preview-ad-card h1{font-size:22px;margin:4px 0 20px;color:#e4b561}
