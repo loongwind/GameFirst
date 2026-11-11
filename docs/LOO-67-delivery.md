@@ -52,6 +52,8 @@
 
 验证平台为 macOS Chrome 浏览器；未验证人工试玩、iOS Safari、Android/微信真机。仓库没有 GitHub CLI 登录；推送/PR实际结果在最终评论说明，不将 compare 链接写成已创建 PR。
 
+一次固定时钟基线复跑在完成20局并输出JSON后，浏览器清理阶段挂起，已停止该测试子进程。逐局结算与错误数组已另行断言，指标与此前正常退出的同策略基线逐项一致；这次复跑不计为完整通过用例。候选固定时钟20局与全部发布验收命令均正常退出。
+
 ## 发布与回滚
 
 仅使用既有 Cloudflare Pages 项目 `abyss-hunter-playtest`，部署产物为 web-preview。web-release 是独立、无模拟广告的产物。Pages production 的 main 标签仅用于其部署入口，没有合并 Git main。
