@@ -9,7 +9,7 @@ test(`${target}: full-area floating touch, ownership, controls, camera, cancel a
     const context = await browser.newContext({ viewport: { width: 375, height: 667 }, hasTouch: true });
     const mobile = await context.newPage();
     try {
-      await mobile.goto(url); await mobile.waitForFunction(() => typeof System !== 'undefined');
+      await mobile.goto(process.env.MOBILE_URL||url); await mobile.waitForFunction(() => typeof System !== 'undefined');
       await mobile.evaluate(async () => { window.cc = await System.import('cc'); });
       await mobile.waitForFunction(() => {
         window.c = window.cc.director.getScene()?.getChildByName('Canvas')?.getComponent('DiveController');

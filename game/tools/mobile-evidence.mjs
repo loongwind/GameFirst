@@ -12,6 +12,8 @@ await withBrowser(fileURLToPath(new URL(`../build/${target}`, import.meta.url)),
   const mobile = await context.newPage();
   const url = process.env.MOBILE_URL || localUrl;
   const errors = []; mobile.on('pageerror', e => errors.push(e.message));
+  mobile.on('requestfailed',r=>errors.push(`${r.method()} ${r.url()}: ${r.failure()?.errorText}`));
+  mobile.on('response',r=>{if(r.status()>=400)errors.push(`HTTP ${r.status()} ${r.url()}`);});
   await mobile.goto(url);
   await mobile.waitForFunction(() => typeof System !== 'undefined');
   await mobile.evaluate(async () => { window.cc = await System.import('cc'); });

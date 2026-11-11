@@ -23,8 +23,8 @@
 - [x] Add failing full-area input and compact-layout regressions; add projection invariants. Run RED before implementation.
 - [x] Implement gesture ownership, button exclusion, cancellation/lifecycle cleanup, floating visual feedback.
 - [x] Implement camera and shared world rendering, player heading/swim feedback, rocks/hazards and weapon/hit presentation.
-- [ ] Verify unit suite and type checks; real Creator debug/release builds; browser input, lifecycle, ads, tutorial, save and quality regressions; stress both tiers at 80/200/100/30.
-- [ ] Capture matching after screenshots and movement recording; write exact limits and five-item results; commit, push, PR if available, update existing preview with version manifest and verify public build.
+- [x] Verify unit suite and type checks; real Creator debug/release builds; browser input, lifecycle, ads, tutorial, save and quality regressions; stress both tiers at 80/200/100/30.
+- [x] Capture matching after screenshots and movement recording; write exact limits and five-item results; commit, push, PR if available, update existing preview with version manifest and verify public build.
 - [ ] Deliver one final issue comment with artifacts; set in_review for PM and existing LOO-59 independent retest.
 
 ## Review focus
@@ -44,3 +44,4 @@
 - CDP partial `touchEnd` takes released points; event tracing confirmed the first multi-touch test accidentally released finger 2. Corrected the test to release the owner and verified the surviving finger cannot move. No production workaround added.
 - Final release/debug mobile regression covers 375×667, 390×844 and 320×640 safe areas, all five start regions, neutral origin, single owner, cancel, buttons, pause, blur, keyboard and actor/world offsets. Debug Mock entry passes using the pre-existing untracked driver; its prior clean-checkout delivery omission remains outside this repair and the file is preserved.
 - Ruling: PR should target `loo-58-rework` at 83984ea, keeping prior economics separate from this delta. GitHub CLI has no authenticated account; SSH push is checked separately. No main/tag changes.
+- Implementation pushed as e0d8e5f; release deployed to existing Pages production at 91e08471 (393 files). Public manifest/index hashes match local and complete touch regression passed. PR creation attempted and blocked by missing GitHub authentication. Physical phone checks remain for PM's reuse of LOO-59.
