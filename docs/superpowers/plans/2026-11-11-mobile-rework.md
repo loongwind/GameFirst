@@ -11,7 +11,7 @@
 - [x] Reproduce semantic mismatch, real CSS target shrink, and round-rock presentation; preserve before screenshots/JSON.
 - [x] Add RED regressions for metadata-independent world rendering and actual CSS hit bounds; geometric tests tie rock hull to the unchanged collider.
 - [x] Remove false hazard cues; fix physical target conversion (including resize/DPR/short landscape/modal); improve rock silhouette/material/volume.
-- [ ] Verify focused tests, full unit suite/typechecks, Cocos release, controls/camera/weapons, tutorial/ads/save/settlement, release isolation and both stress tiers.
+- [x] Verify focused tests, full unit suite/typechecks, Cocos release, controls/camera/weapons, tutorial/ads/save/settlement, release isolation and both stress tiers.
 - [ ] Commit/push, rebuild with clean source version, update existing Pages, verify local/public semantics/targets/rocks and version/hash, attach evidence and report once, return in_review for PM to reuse LOO-59.
 
 **Review focus:** CSS pixels differ from logical and device pixels; all seven key controls must fit safe bounds. Oxygen card and modal text must fit resized controls. No red overlay may survive a fresh save, restored save, normal/tutorial or low tier. Rock vertices remain outside the collider but limited to a small decorative corner margin; no new collision or per-frame node allocation.
@@ -19,3 +19,5 @@
 **Corrections:** Prior claims of real danger damage and >=44CSSpx at 320px were wrong. Current findings supersede those parts of the first report.
 
 **Ledger:** Initial built-scene regression RED3/3 (high/low AI overlay present, 320px pause only37.55CSSpx), then GREEN3/3. Geometry RED missing hull implementation then GREEN. Full unit148/148; three typechecks pass. Original UI/controls/ads/quality/weapons/tutorial regression9/9 passed. Read-only reviewer found compact modal clipping at844×390 and375×400; reproduced real rescue text height23.28 vs3×14 needed, then corrected compact CSS target/typography and threshold; expanded regression GREEN at six viewports and DPR1/3. Source battle/shared unchanged. Exact final build/deployment and performance recorded in the rework report.
+
+**Final verification:** Exact906d5e6 clean build deployed to existing Pages project, immutable d37e90f1; manifest/index byte match. Final local browser12 cases all obtained passing results (11 before quota interruption plus separately rerun tutorial). Fresh unit148/148 and all typechecks pass. Public rework3/3 and full input1/1 pass. Original wall-clock zone check6114ms: HP200→200, tick4→187, oxygen119.8667→113.7667, no runtime/network errors. Stress high/low rAFp95=19.80/19.70ms and advancep95=0.90/1.00ms; desktop only. Evidence delivery and in_review are the remaining checklist action.
