@@ -270,6 +270,8 @@ test(`${target}: newcomer natural progression without injected resources`, { tim
     const metrics = { firstDeaths: dives[0].deaths, deaths5: dives.slice(0,5).reduce((a,d)=>a+d.deaths,0), deaths10: dives.slice(0,10).reduce((a,d)=>a+d.deaths,0), medianSeconds10: median(dives.slice(0,10).map(d=>d.finished.seconds)), hpReturnRate20: dives.slice(0,20).filter(d=>d.decisions.returnCause==='hp').length / Math.min(20, dives.length), firstGateDive: dives.find(d=>d.finished.bosses.includes('enemy_boss_01_angler_king'))?.n ?? null, maxDepth: Math.max(...dives.map(d=>d.finished.depth)), crystalInflow10: dives.slice(0,10).reduce((a,d)=>a+d.crystalInflow,0), crystalNet10: dives.slice(0,10).reduce((a,d)=>a+(d.crystalNet??d.crystalInflow),0) };
     console.log(JSON.stringify(metrics));
     await writeFile(`${artifacts}/progression-${target}.json`, JSON.stringify({ adsEnabled, metrics, tutorial, dives, final, deaths, rescues, oxygenAds, pearlIncome, reached2400, errors }, null, 2));
+    if (process.env.PROGRESS_COMPARE) { const previous = JSON.parse(await readFile(process.env.PROGRESS_COMPARE,'utf8')); assert.ok(metrics.crystalInflow10 <= previous.metrics.crystalInflow10 * 1.3, 'crystal inflow must not inflate by more than 30%'); }
+    if (MAX_DIVES >= 130 && !baseline) assert.ok(metrics.maxDepth >= 1504, '130-dive depth must retain the prior 1504m ceiling');
     if (process.env.PROGRESS_ASSERT === '1') { assert.equal(metrics.firstDeaths,0); assert.ok(metrics.deaths5<=1); assert.ok(metrics.deaths10<=2); assert.ok(metrics.medianSeconds10>=120); assert.ok(metrics.hpReturnRate20<=.3); assert.ok(metrics.firstGateDive && metrics.firstGateDive<=20); }
     
     assert.ok(dives.every(d => d.settled), 'every dive must settle through the real economy');
