@@ -22,9 +22,24 @@ test('harbor touch targets fit three heights, capsule and all safe area edges', 
       assert.ok(r.y >= safe.capsuleBottom && r.y + r.height <= height - safe.bottom);
     }
     assert.ok(l.panel.y >= Math.max(safe.top, safe.capsuleBottom));
-    assert.ok(l.panel.y + l.panel.height <= l.navY);
+    assert.ok(l.panel.y + l.panel.height <= height - (safe.bottom ?? 0));
   }
   assert.equal(harborLayout(750, 1624, { top: 88, bottom: 68 }).height, 812);
+});
+
+test('harbor uses actual CSS viewport for targets and focuses one launch on compact and safe screens', () => {
+  const { harborLayout } = harbor();
+  for (const [cssWidth, cssHeight, top, bottom] of [[320,640,44,34],[375,667,0,0],[390,844,44,34],[375,400,0,0]]) {
+    const ratio = 375 / cssWidth, l = harborLayout(375, cssHeight * ratio, { top: top * ratio, bottom: bottom * ratio }, { width: cssWidth, height: cssHeight });
+    assert.ok(l.touch * cssWidth / 375 >= 43.99);
+    assert.equal(Object.keys(l.targets).filter(n => /launch/.test(n)).length, 1);
+    assert.ok(!('gift' in l.targets) && !('sonar' in l.targets), 'supply subfeatures belong in supply');
+    for (const rect of Object.values(l.targets)) {
+      assert.ok(rect.height * cssWidth / 375 >= 43.99);
+      assert.ok(rect.y >= top * ratio && rect.y + rect.height <= (cssHeight-bottom) * ratio);
+    }
+    assert.ok(l.panel.height >= 250 && l.panel.y >= top * ratio);
+  }
 });
 test('cost previews use shared formulas and synthesis requires explicit main and actual auxiliary investments', () => {
   const { HarborModel } = harbor(), { EconomyService, LocalSaveService } = loadServices();

@@ -41,7 +41,9 @@ test(`${target}: actual Cocos sonar, oxygen/rescue buttons, pause overlaps and h
       const c = window.h; c.economy.dispatch({ type: 'dive.settle', opId: 'sonar-seed', settlement: { diveId: 'sonar-seed', reason: 'return', cargo: { crystal: 0, pearl: 0, marrow: 0, core: 0 }, xp: 10000, activeSeconds: 0, depth: 0 } });
       c.configureAds(window.testDriver); c.view.update();
     });
-    await click('sonar'); await click('ad-sonar');
+    await click('supply');
+    await page.evaluate(()=>window.h.view.open('supply',2));
+    await click('ad-sonar');
     const expiry = await page.evaluate(() => window.h.economy.snapshot.buffs.sonarUntil);
     assert.ok(expiry > Date.now() + 890000); await shot('harbor-sonar');
     await click('close'); await click('LaunchButton');

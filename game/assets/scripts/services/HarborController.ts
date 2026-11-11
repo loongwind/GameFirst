@@ -97,7 +97,7 @@ export class HarborController extends Component {
       left: device.safeArea.left * ratio, right: Math.max(0, device.windowWidth - device.safeArea.left - device.safeArea.width) * ratio,
       // Mini game platforms can provide their capsule rect; reserve its bottom in logical units.
       capsuleBottom: (device.capsule?.bottom ?? device.safeArea.top) * ratio,
-    });
+    }, { width:device.windowWidth,height:device.windowHeight });
     this.view.update();
   }
   onDestroy(): void {

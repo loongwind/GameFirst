@@ -6,6 +6,7 @@ import { SeaBundleLease } from './SeaBundleLease';
 import { SEA_ART, SEA_SCENES, SEA_IDENTITIES, BOSS_RIGS, PLAYER_ART } from './SeaArt';
 import { enemyArtKey } from './legacyEnemyArt';
 import type { WorldProjection } from './WorldProjection';
+import { wallTiles } from './WorldScroll';
 
 interface LoadedArt { bundle: AssetManager.Bundle; frames: Map<string, SpriteFrame>; sequences: Map<string, SpriteFrame[]> }
 interface Actor { node: Node; sprite: Sprite; key: string; parts: Node[]; bar?: Graphics }
@@ -29,6 +30,7 @@ export class SeaWorldView {
   private height = 812;
   private current?: SeaLayer;
   private snow?: Graphics;
+  private scenery: { nodes: Node[]; rate: number; span: number; x: number; offsetY: number; mirror: boolean }[] = [];
   private readonly snowDots = Array.from({ length: 28 }, (_, i) => {
     const phase = (i * 97) % 211 / 211, drift = (i * 53) % 89 / 89;
     return { x: (phase - .5) * 420, speed: 14 + drift * 22, size: .8 + (i % 3) * .35, wobble: 6 + drift * 10 };
@@ -123,6 +125,7 @@ export class SeaWorldView {
       this.player.node.angle=moving ? -Math.sign(dy)*8*(this.facing??1) : 0;
     }
     this.renderSnow(b, cy, projection);
+    this.scrollScene(projection?.y ?? b.player.y);
   }
 
   /** Decorative suspended matter: pure presentation, safe to drop on low-end devices. */
@@ -188,16 +191,31 @@ export class SeaWorldView {
       if (isValid(actor.node, true)) { actor.node.removeFromParent(); actor.node.destroy(); }
       this.actors.delete(id);
     }
-    if (this.sceneLayer === layer) { this.clear(this.background); this.sceneArt = undefined; this.sceneLayer = undefined; }
+    if (this.sceneLayer === layer) { this.clear(this.background); this.scenery = []; this.sceneArt = undefined; this.sceneLayer = undefined; }
   }
   private buildScene(art: LoadedArt): void {
     const scene = SEA_SCENES[this.sceneLayer!]; if (!scene) return;
-    const far = this.sprite(scene.far, this.background, art.frames.get(scene.far)!, 375, Math.max(812, this.height)); far.node.setPosition(0, 0);
+    this.scenery = [];
+    const span = Math.max(812, this.height);
+    const strip = (key: string, width: number, height: number, x: number, rate: number, offsetY = 0, mirror = true): void => {
+      const nodes = Array.from({ length: 3 }, (_, i) => this.sprite(`${key}-tile-${i}`, this.background, art.frames.get(key)!, width, height).node);
+      this.scenery.push({ nodes, rate, span, x, offsetY, mirror });
+    };
+    strip(scene.far, 375, span + 2, 0, .18);
     for (const [key, x] of [[scene.left, -150], [scene.right, 150]] as const) {
       if (!key) continue;
-      this.sprite(key, this.background, art.frames.get(key)!, 110, Math.max(812, this.height)).node.setPosition(x, 0);
+      strip(key, 110, span + 2, x, .78);
     }
-    if (scene.flora) this.sprite(scene.flora, this.background, art.frames.get(scene.flora)!, 120, 120).node.setPosition(-136, -this.height / 2 + 200);
+    if (scene.flora) strip(scene.flora, 120, 120, -136, .78, -span / 2 + 200, false);
+  }
+  private scrollScene(cameraY: number): void {
+    for (const strip of this.scenery) {
+      const tiles = wallTiles(cameraY, strip.span, strip.rate);
+      strip.nodes.forEach((node, i) => {
+        node.setPosition(strip.x, tiles[i].y + strip.offsetY, 0);
+        node.setScale(1, strip.mirror ? tiles[i].flip : 1, 1);
+      });
+    }
   }
   private actor(key: string, image: string, size: number, art: LoadedArt): Actor {
     const frame = art.sequences.get(image)?.[0] ?? art.frames.get(image);

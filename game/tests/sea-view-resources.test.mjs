@@ -17,7 +17,7 @@ function compile(name, imports = {}) {
 const flush = async () => { for (let i = 0; i < 8; i++) await Promise.resolve(); };
 
 function fixture() {
-  const art = compile('SeaArt'), lease = compile('SeaBundleLease'), legacy = compile('legacyEnemyArt');
+  const art = compile('SeaArt'), lease = compile('SeaBundleLease'), legacy = compile('legacyEnemyArt'), scroll = compile('WorldScroll');
   const pending = [], bundles = new Map();
   class Frame {
     constructor(name = '') { this.name = name; this.refCount = 0; this.isValid = true; this.texture = {}; }
@@ -42,7 +42,7 @@ function fixture() {
     removeBundle(bundle) { bundle.destroyed = true; bundles.delete([...bundles].find(([, value]) => value === bundle)?.[0]); },
   };
   const cc = { assetManager, SpriteFrame: Frame, Rect: class {}, Size: class {}, Vec2: class {} };
-  const { SeaWorldView } = compile('SeaWorldView', { cc, './SeaBundleLease': lease, './SeaArt': art, './legacyEnemyArt': legacy, '../battle/SeaContent': { layerAtDepth: () => 'abyss' } });
+  const { SeaWorldView } = compile('SeaWorldView', { cc, './SeaBundleLease': lease, './SeaArt': art, './legacyEnemyArt': legacy, './WorldScroll':scroll, '../battle/SeaContent': { layerAtDepth: () => 'abyss' } });
   const owner = () => {
     // Test the real loader/releaser without instantiating Cocos's scene graph.
     const view = Object.create(SeaWorldView.prototype);
@@ -55,7 +55,7 @@ test('legacy enemies render with genuine current-sea art without changing saved 
   const f = fixture(), view = Object.create(f.SeaWorldView.prototype);
   const loaded = { frames: new Map(), sequences: new Map() };
   Object.assign(view, { current: 'twilight', sceneLayer: 'twilight', sceneArt: loaded, height: 812,
-    actors: new Map(), prepare() {}, leases: { get: layer => layer === 'twilight' ? loaded : undefined },
+    actors: new Map(), scenery:[], prepare() {}, leases: { get: layer => layer === 'twilight' ? loaded : undefined },
     player: { node: { setPosition() {}, setScale() {} } },
     actor(key) { return { key, node: { setPosition() {}, destroy() {} }, sprite: {}, parts: [] }; },
   });

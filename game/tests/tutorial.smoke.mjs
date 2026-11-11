@@ -92,10 +92,10 @@ test(`${target}: fresh save real-time six-step loop, refresh, replay, three fina
       const file = await download; await file.saveAs(`${artifacts}/${target}-${file.suggestedFilename()}`);
       await click(page, 'close');
     }
-    await click(page, 'tutorial-next');
+    await click(page, 'upgrade');
     await click(page, 'upgrade-cargo');
     await page.waitForFunction(() => window.h.economy.snapshot.attributes.cargo === 1);
-    await click(page, 'close'); await click(page, 'tutorial-next'); await diveReady(page);
+    await click(page, 'close'); await click(page, 'LaunchButton'); await diveReady(page);
     const elapsed = (Date.now()-started)/1000;
     const second = await page.evaluate(() => ({ tutorial:window.c.economy.snapshot.objectives.tutorial, cargo:window.c.session.cargoCapacity, wallet:window.c.economy.snapshot.wallet.crystal }));
     assert.equal(second.tutorial.completed, true); assert.equal(second.cargo, 2100); assert.equal(second.wallet, '420'); assert.ok(elapsed < 180, `activation ${elapsed}s`);

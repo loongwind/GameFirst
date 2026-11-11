@@ -9,6 +9,7 @@ import { objectiveTasks, tutorialHint } from '../services/local/Objectives';
 import { WorldProjection } from './WorldProjection';
 import { reefRockHull } from './ReefRock';
 import type { RockPoint } from './ReefRock';
+import { steelPlate } from './PanelSkin';
 
 const ink = new Color(7, 25, 35), panel = new Color(15, 43, 54), line = new Color(43, 82, 90);
 const mint = new Color(105, 233, 198), cream = new Color(233, 240, 218), muted = new Color(126, 165, 169);
@@ -133,7 +134,7 @@ export class DiveHud {
     this.set('hp', `生命  ${Math.ceil(s.hp)}/${s.maxHp}`);
     this.set('depth', `${Math.floor(s.depth)} m ↓`);
     const boss = Array.from(session.battle.enemies.values()).find(enemy => enemy.kind === 'boss');
-    const status = s.oxygen <= 0 ? '氧气耗尽 · 正在失血，立即返航 ↑' : s.oxygen/s.oxygenCapacity < .15 ? '低氧警报 · 补给或安全返航 ↑' : s.cargo.crystal >= s.cargoCapacity ? '舱已满 · 返航保住收获 ↑' : boss ? `${boss.name} · ${Math.ceil(boss.hp)}/${Math.ceil(boss.maxHp)}` : '';
+    const status = s.oxygen <= 0 ? '氧气耗尽 · 正在失血，立即返航 ↑' : s.oxygen/s.oxygenCapacity < .15 ? '低氧警报 · 补给或安全返航 ↑' : s.cargo.crystal >= s.cargoCapacity ? '舱已满 · 返航保住收获 ↑' : session.canSurfaceReturn ? session.surfaceReturnProgress > 0 ? '正在出水 ↑ · 继续上推返回母港' : '已到水面 ↑ · 继续上推即可返港' : boss ? `${boss.name} · ${Math.ceil(boss.hp)}/${Math.ceil(boss.maxHp)}` : '';
     if (status) this.box(g, l.status, new Color(5,27,40,190), 7);
     this.set('status', status);
     for (const r of [l.pause, l.return, l.sonar]) this.box(g, r, panel, 10);
@@ -183,6 +184,11 @@ export class DiveHud {
     const g = this.modalGraphics; g.clear();
     this.box(g, { x: 0, y: 0, width: 375, height: l.height }, new Color(2, 13, 21, 215), 0);
     this.box(g, l.modal, panel, 16);
+    if(!l.compact){
+      this.segment(g,l.modal.x+12,l.modal.y+52,l.modal.x+l.modal.width-12,l.modal.y+52,new Color(163,162,118,95),1);
+      // Hatch chevrons give the frozen scene a consistent command-console frame.
+      for(let i=0;i<3;i++)this.segment(g,l.modal.x+l.modal.width-42+i*9,l.modal.y+23,l.modal.x+l.modal.width-46+i*9,l.modal.y+31,amber,2);
+    }
     if(!l.compact)this.box(g, { x: l.modal.x + 20, y: l.modal.y + 7, width: 36, height: 3 }, mint, 1);
     let title = '潜航已暂停', body = '战斗与氧气已冻结。\n准备好后继续探索。', primary = '继续潜航', secondary = '安全返航';
     if (s.state === 'RescuePending') {
@@ -190,7 +196,7 @@ export class DiveHud {
       body = notice || `舱内 ${Math.floor(s.cargo.crystal)} 荧晶已冻结。\n救援成功保留收获；放弃仅损失荧晶。\n珍珠、深海髓与渊核均保留。`;
       primary = `观看 · 救援浮标 (${ads?.rescueRemaining ?? 3}/3)`; secondary = '放弃救援 · 返航';
     } else if (s.state === 'PendingSettlement' || s.state === 'Settled') {
-      title = s.state === 'Settled' ? '结算已确认' : '已返航 · 待结算';
+      title = s.state === 'Settled' ? s.depth===0 ? '已出水 · 收获入港' : '收获入港' : '已返航 · 待结算';
       body = notice || `荧晶 ${Math.floor(s.cargo.crystal)}    珍珠 ${s.cargo.pearl}\n深海髓 ${s.cargo.marrow}    渊核 ${s.cargo.core}\n${s.state === 'Settled' ? '收获已入账，进度已保存。' : '货物已冻结，等待保存确认。'}`;
       primary = s.state === 'Settled' ? '返回母港' : '货物安全保留'; secondary = s.state === 'Settled' ? '' : '等待保存确认';
     } else if (s.state === 'Returning') { title = '正在返航'; body = '正在冻结本局收获…'; primary = '返航中'; secondary = ''; }
@@ -247,7 +253,13 @@ export class DiveHud {
       g.fillColor=new Color(179,171,133);
       g.rect(x-r*.42,y+r*.42,r*.13,r*.06);g.rect(x+r*.12,y+r*.56,r*.09,r*.05);g.fill();
     }
-    for (const e of b.loot.values()) { const p=this.projection.sample(e); this.dot(g,p.x,p.y,3,mint); }
+    for (const e of b.loot.values()) {
+      const p=this.projection.sample(e), x=p.x-187.5, y=l.height/2-p.y;
+      // Faceted crystal, not a generic pickup dot. Same silhouette in both tiers.
+      g.fillColor=new Color(23,118,132);g.moveTo(x-5,y);g.lineTo(x-1,y+8);g.lineTo(x+5,y+2);g.lineTo(x+3,y-6);g.close();g.fill();
+      g.fillColor=mint;g.moveTo(x-1,y+8);g.lineTo(x+1,y);g.lineTo(x+3,y-6);g.lineTo(x+5,y+2);g.close();g.fill();
+      this.segment(g,p.x-3,p.y,p.x-1,p.y-6,cream,1);
+    }
     for (const e of b.projectiles.values()) {
       const p=this.projection.sample(e);
       if (e.kind==='torpedo') {
@@ -257,8 +269,13 @@ export class DiveHud {
         this.segment(g,p.x-dx*3-dy*3,p.y-dy*3+dx*3,p.x-dx*5,p.y-dy*5,mint,1.5);
         this.segment(g,p.x-dx*3+dy*3,p.y-dy*3-dx*3,p.x-dx*5,p.y-dy*5,mint,1.5);
       } else if(e.kind==='mine') {
-        this.dot(g,p.x,p.y,6,amber);
-        for(let i=0;i<3;i++){const a=i*Math.PI*2/3;this.segment(g,p.x+Math.cos(a)*6,p.y+Math.sin(a)*6,p.x+Math.cos(a)*10,p.y+Math.sin(a)*10,amber,2);}
+        const x=p.x-187.5,y=l.height/2-p.y;
+        // Pressure canister, brass end caps, contact feelers and a cyan armed lamp.
+        g.fillColor=new Color(41,65,72);g.moveTo(x-6,y-3);g.lineTo(x-3,y-6);g.lineTo(x+4,y-5);g.lineTo(x+6,y+2);g.lineTo(x+2,y+6);g.lineTo(x-5,y+4);g.close();g.fill();
+        this.segment(g,p.x-5,p.y-3,p.x+4,p.y-4,amber,3);
+        this.segment(g,p.x-4,p.y+4,p.x+4,p.y+4,amber,2);
+        for(let i=0;i<4;i++){const a=i*Math.PI/2+.3;this.segment(g,p.x+Math.cos(a)*6,p.y+Math.sin(a)*6,p.x+Math.cos(a)*10,p.y+Math.sin(a)*10,cream,1.5);}
+        g.fillColor=mint;g.rect(x-1,y-1,3,3);g.fill();
       } else {
         g.strokeColor=new Color(105,233,198,this.lowEnd?170:125);g.lineWidth=2;
         g.circle(p.x-187.5,l.height/2-p.y,e.radius);g.stroke();
@@ -289,7 +306,15 @@ export class DiveHud {
     if (session.content.openRifts.length) {
       g.strokeColor = mint; g.lineWidth = 2;
       const previous = session.depth < 1600 ? 800 : 1600, distance = previous - session.depth, p=point({x:0,y:previous});
-      if (Math.abs(distance) < 240) { g.ellipse(p.x-187.5,l.height/2-p.y,32,8);g.stroke(); }
+      if (Math.abs(distance) < 240) {
+        // A broken stone threshold frames the opened passage, distinct from sonar rings.
+        for (const side of [-1,1]) {
+          const x=p.x+side*30;
+          this.segment(g,x,p.y+9,x+side*4,p.y-8,new Color(115,145,145),6);
+          this.segment(g,x+side*4,p.y-8,x-side*7,p.y-14,cream,3);
+        }
+        this.segment(g,p.x-23,p.y+5,p.x+23,p.y+5,new Color(105,233,198,160),3);
+      }
     }
   }
 
@@ -325,12 +350,13 @@ export class DiveHud {
     const n = this.node(`${name}-touch`, parent);
     n.setPosition(r.x + r.width / 2 - 187.5, this.layout.height / 2 - r.y - r.height / 2);
     n.getComponent(UITransform)!.setContentSize(r.width, r.height);
-    const button = n.addComponent(Button); button.transition = Button.Transition.NONE;
+    const button = n.addComponent(Button); button.transition = Button.Transition.SCALE;button.zoomScale=.97;button.duration=.08;
     this.buttons.set(name, button);
     n.on(Button.EventType.CLICK, () => this.action(name));
     // Label coordinates are root-relative; the touch node remains its own hit box.
     const height=Math.min(25,r.height-4),font=this.layout.compact?Math.min(13,13/this.layout.cssScale):13;
     this.label(name, text, r.x + 8, r.y + (r.height-height)/2, r.width - 16, height, font, cream, parent);
+    this.labels.get(name)!.horizontalAlign=Label.HorizontalAlign.CENTER;
   }
   private set(name: string, value: string): void {
     const label = this.labels.get(name)!;
@@ -338,10 +364,8 @@ export class DiveHud {
   }
   private box(g: Graphics, r: HudRect, color: Color, radius: number): void {
     if (r.width <= 0 || r.height <= 0) return;
-    g.fillColor = color;
-    if (radius) g.roundRect(r.x - 187.5, this.layout.height / 2 - r.y - r.height, r.width, r.height, Math.min(radius, r.width / 2));
-    else g.rect(r.x - 187.5, this.layout.height / 2 - r.y - r.height, r.width, r.height);
-    g.fill();
+    if(radius&&r.height>12)steelPlate(g,r.x-187.5,this.layout.height/2-r.y,r.width,r.height,color,r===this.layout.primary||r===this.layout.return||r===this.layout.modal);
+    else {g.fillColor=color;g.rect(r.x-187.5,this.layout.height/2-r.y-r.height,r.width,r.height);g.fill();}
   }
   private dot(g: Graphics, x: number, y: number, radius: number, color: Color): void {
     g.fillColor = color; g.circle(x - 187.5, this.layout.height / 2 - y, radius); g.fill();

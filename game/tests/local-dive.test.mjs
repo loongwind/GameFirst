@@ -8,6 +8,21 @@ const env = (storage = memoryStorage()) => {
   const economy = new api.EconomyService(new api.LocalSaveService(storage));
   return { storage, economy, dives: new api.LocalDiveService(economy) };
 };
+test('manual surface uses the durable safe-return receipt, including tutorial early return and repeated refresh', () => {
+  const first=env(), s=first.dives.open('manual-surface',{battle:{spawn:false,content:true,weapons:[]}});
+  s.collect('crystal',31);s.collect('pearl',2);s.setInput(0,1);
+  for(let i=0;i<15;i++)s.advance(1/30);
+  s.setInput(0,-1);while(s.depth>0)s.advance(1/30);
+  for(let i=0;i<12;i++)s.advance(1/30);
+  assert.equal(s.state,'Returning');s.arriveHarbor();first.dives.settle(s);
+  assert.equal(first.economy.snapshot.wallet.crystal,'31','early teaching return keeps real cargo, not the unearned 500');
+  assert.equal(first.economy.snapshot.objectives.tutorial.rewarded,false);
+  for(let i=0;i<3;i++){
+    const next=env(first.storage),restored=next.dives.open('unused');
+    assert.equal(restored.state,'Settled');assert.equal(next.dives.settle(restored),false);
+    assert.equal(next.economy.snapshot.wallet.crystal,'31');assert.equal(next.economy.snapshot.wallet.pearl,'2');
+  }
+});
 test('active checkpoint restores original dive, cargo, HP/O2, enemies and projectiles without repeating kills', () => {
   const { storage, dives } = env(); const session = dives.open('persisted-dive', { battle: { spawn: false } });
   session.collect('pearl', 3); session.collect('crystal', 30); session.battle.player.y = 150;

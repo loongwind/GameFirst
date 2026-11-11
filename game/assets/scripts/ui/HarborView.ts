@@ -1,4 +1,4 @@
-import { Node, UITransform, SpriteFrame, BitmapFont, Widget, BlockInputEvents, Label, Color } from 'cc';
+import { Node, UITransform, SpriteFrame, BitmapFont, Widget, BlockInputEvents, Label, Color, Graphics, Mask, ScrollView } from 'cc';
 import { DEFAULT_BALANCE, equipmentUpgradeCost } from '@abyss-hunter/shared';
 import type { Equipment } from '@abyss-hunter/shared';
 import { HarborModel, TREE_NAMES, EQUIPMENT_NAMES, QUALITY_NAMES } from '../meta/HarborModel';
@@ -39,8 +39,8 @@ export class HarborView {
     this.offBase = model.subscribe(() => { this.panelDirty = true; });
   }
   get liveRows(): number { return this.lists.reduce((sum, list) => sum + list.liveRows, 0); }
-  resize(width: number, height: number, insets: HarborInsets): void {
-    const l = harborLayout(width, height, insets), key = JSON.stringify(l);
+  resize(width: number, height: number, insets: HarborInsets, viewport = { width, height }): void {
+    const l = harborLayout(width, height, insets, viewport), key = JSON.stringify(l);
     if (key === this.signature) return;
     this.signature = key; this.layout = l;
     this.root.setScale(l.scale, l.scale, 1); this.root.setPosition(-width / 2, height / 2);
@@ -64,7 +64,7 @@ export class HarborView {
   destroy(): void { this.close(); this.offBase?.(); this.base?.dispose(); this.root.destroy(); }
   private scope(name: string): UiScope {
     const n = new Node(name); n.layer = this.parent.layer; this.root.addChild(n); n.addComponent(UITransform).setAnchorPoint(0, 1);
-    return new UiScope(n, this.frames, this.font);
+    return new UiScope(n, this.frames, this.font, this.layout.touch);
   }
   private buildBase(): void {
     this.base?.dispose(); const s = this.base = this.scope('HarborCanvas'), l = this.layout, state = this.model.snapshot;
@@ -72,41 +72,51 @@ export class HarborView {
     s.icon('bg_harbor_far', 0, 0, 375, l.height);
     s.icon('deco_harbor_left', 0, l.height * 0.29, 86, 344);
     s.icon('deco_harbor_right', 289, l.height * 0.29, 86, 344);
-    s.box('TitlePlate', r(l.left, l.top, 375 - l.left - l.right, 50));
-    s.text('HarborTitle', '潮汐母港', l.left + 14, l.top + 5, 170, 27, 23);
-    s.text('HarborSubtitle', 'ABYSS / 远航准备', l.left + 15, l.top + 32, 180, 14, 10, C.muted);
-    s.text('PlayerLevel', `潜航员 Lv.${state.playerLevel}`, 248, l.top + 13, 105, 28, 12, C.amber);
-    const wallet = s.box('Wallet', r(l.left, l.top + 58, 375 - l.left - l.right, 42));
+    const shade=s.node('HarborShade',s.root,0,0,375,l.height).addComponent(Graphics);
+    shade.fillColor=new Color(2,20,34,85);shade.rect(0,-l.height,375,l.height);shade.fill();
+    s.box('TitlePlate', r(l.left, l.top, 375 - l.left - l.right, 48));
+    s.text('HarborTitle', '潮汐母港', l.left + 14, l.top + 1, 170, 29, 24);
+    s.text('HarborSubtitle', 'PORT 01  /  潜渊猎手', l.left + 15, l.top + 30, 200, 13, 9, C.amber);
+    s.text('PlayerLevel', `执照 Lv.${state.playerLevel}`, 258-l.right, l.top + 9, 100, 28, 12, C.amber);
+    const wallet = s.box('Wallet', r(l.left, l.top + 54, 375 - l.left - l.right, 36));
     const currencies = ['crystal', 'pearl', 'marrow', 'core'] as const;
     currencies.forEach((currency, i) => {
       const x = 6 + i * (375 - l.left - l.right - 12) / 4;
-      s.icon(`icon_${currency === 'core' ? 'core_cyan' : currency}`, x, 10, 22, 22, wallet);
+      s.icon(`icon_${currency === 'core' ? 'core_cyan' : currency}`, x, 7, 22, 22, wallet);
       const raw = state.wallet[currency], group = raw.length >= 9 ? 8 : raw.length >= 6 ? 4 : 0;
       const whole = group ? raw.slice(0, -group) : raw;
       const number = group && whole.length < 3 && raw[raw.length - group] !== '0' ? `${whole}.${raw[raw.length - group]}` : whole;
-      s.text(`wallet-${currency}`, number, x + 25, 8, group ? 34 : 52, 26, 12, currency === 'pearl' ? C.amber : C.text, wallet, true);
+      s.text(`wallet-${currency}`, number, x + 25, 5, group ? 34 : 52, 26, 12, currency === 'pearl' ? C.amber : C.text, wallet, true);
       if (group) s.text(`wallet-${currency}-unit`, group === 8 ? '亿' : '万', x + 59, 10, 16, 22, 10, C.muted, wallet);
     });
-    const icons: Record<string, string> = { gift: 'gift', blessing: 'blessing', sonar: 'sonar', archive: 'archive', upgrade: 'upgrade', tech: 'tech', equipment: 'equipment', supply: 'supply' };
-    const labels: Record<string, string> = { gift: '深海馈赠', blessing: '远航祝福', sonar: '声呐协击', archive: '图鉴 P1', upgrade: '强化', tech: '科技', equipment: '装备', supply: '补给' };
+    const icons: Record<string, string> = { upgrade: 'upgrade', tech: 'tech', equipment: 'equipment', supply: 'supply' };
+    const labels: Record<string, string> = { upgrade: '强化', tech: '科技', equipment: '装备', supply: '补给' };
     for (const [name, rect] of Object.entries(l.targets)) {
-      if (name === 'launch') continue;
-      const n = s.button(name, rect, '', () => this.open(['gift', 'blessing', 'sonar'].includes(name) ? 'supply' : name as Panel, Math.max(0, ['gift', 'blessing', 'sonar'].indexOf(name))));
+      if (!icons[name]) continue;
+      const n = s.button(name, rect, '', () => this.open(name as Panel));
       s.icon(`icon_${icons[name]}`, rect.width / 2 - 15, 3, 30, 30, n);
       const label = s.text(`${name}-title`, labels[name], 0, 35, rect.width, 21, 11, name === 'archive' ? C.muted : C.text, n); label.horizontalAlign = Label.HorizontalAlign.CENTER;
     }
-    const heroY = Math.max(l.top + 186, l.navY - 352);
-    s.icon('hero_h01_harbor', 72, heroY, 230, 230);
-    s.text('SubDisplay', 'H-01  ·  潮汐号', 104, Math.min(heroY + 222, l.navY - 123), 175, 28, 17, C.text);
+    const chart = s.node('NavigationChart',s.root,0,0,375,l.height).addComponent(Graphics);
+    const cx=187.5,cy=-(l.heroY+l.heroSize/2),radius=l.heroSize*.53;
+    chart.strokeColor=new Color(180,243,221,85);chart.lineWidth=1;
+    chart.circle(cx,cy,radius);chart.stroke();chart.circle(cx,cy,radius+7);chart.stroke();
+    for(let i=0;i<32;i++){const a=i*Math.PI/16;chart.moveTo(cx+Math.cos(a)*(radius+7),cy+Math.sin(a)*(radius+7));chart.lineTo(cx+Math.cos(a)*(radius+(i%4?10:16)),cy+Math.sin(a)*(radius+(i%4?10:16)));}chart.stroke();
+    s.text('Readiness', 'H-01  /  潮汐号', l.left+4, l.top+95, 220, 23, 12, C.text);
+    s.text('DiveRoute', state.activeDive?'现场待续':'航线  透光层', 254-l.right, l.top+95, 106, 23, 11, C.amber);
+    s.icon('hero_h01_harbor', (375-l.heroSize)/2, l.heroY, l.heroSize, l.heroSize);
     const tasks = objectiveTasks(state), task = tasks.find(t => t.ready) ?? tasks.find(t => t.kind === 'rotation');
-    s.button('TaskStrip', r(l.left, l.navY - 124, 375 - l.left - l.right - 72, 44), task ? `${task.ready ? '● 可领取' : '目标'} ${task.title} ${task.progress}/${task.target}` : '潜航目标 · 查看首日进度', () => this.open('tasks'));
+    s.button('TaskStrip', l.targets.tasks, task ? `${task.ready ? '◆ 领奖' : '航程'}  ${task.progress}/${task.target}  ›` : '航程任务  ›', () => this.open('tasks'));
+    const archive=s.button('archive',l.targets.archive,'',()=>this.open('archive'));
+    s.icon('icon_archive',4,(l.targets.archive.height-26)/2,26,26,archive);
+    s.text('ArchiveLabel','档案',30,0,27,l.targets.archive.height,10,C.muted,archive);
     const hint = tutorialHint(state);
     if (hint) {
-      const guide = s.box('HarborTutorial', r(l.left, l.top + 190, 375 - l.left - l.right, 115));
-      s.text('TutorialHint', hint, 12, 4, 309 - l.left - l.right, 54, 13, C.mint, guide);
-      s.button('tutorial-next', r(12, 61, 351 - l.left - l.right, 44), state.objectives.tutorial.upgraded ? '再次出发 · 自由探索' : '强化推荐 · 舱容 / 氧效', () => this.model.snapshot.objectives.tutorial.upgraded ? this.launch() : this.open('upgrade'), !this.model.hasPending && !this.model.busy, guide, true);
+      // Guidance belongs to the next action; it never covers the ship or adds another launch.
+      const short=l.heroSize<120;
+      s.text('TutorialHint', state.objectives.tutorial.rewarded&&!state.objectives.tutorial.upgraded?'下一步  强化舱容 / 氧效 ↓':state.objectives.tutorial.upgraded?'准备就绪 · 再次出发':'首潜教学 · 拖动游动，自动攻击', l.left+5, l.targets.tasks.y-(short?22:30), 375-l.left-l.right-10, 22, 11, C.amber);
     }
-    s.button('LaunchButton', l.targets.launch, state.activeDive ? '继续潜航   ↓' : '出发 · 探索透光层   ↓', () => { if (!this.model.busy && !this.model.hasPending) this.launch(); }, !this.model.busy && !this.model.hasPending, undefined, true);
+    s.button('LaunchButton', l.targets.launch, state.activeDive ? '↓   继续潜航' : '↓   下潜  ·  探索透光层', () => { if (!this.model.busy && !this.model.hasPending) this.launch(); }, !this.model.busy && !this.model.hasPending, undefined, true);
     if (this.overlay) this.overlay.root.setSiblingIndex(this.root.children.length - 1);
   }
   private drawPanel(): void {
@@ -118,26 +128,42 @@ export class HarborView {
     const panel = s.box(`${TITLES[this.panel]}Panel`, p), widget = panel.addComponent(Widget);
     widget.target = s.root; widget.isAlignLeft = true; widget.isAlignTop = true; widget.left = p.x; widget.top = p.y; widget.updateAlignment();
     // Rebase panel-local helpers under a panel-owned scope; cleanup remains attached to overlay.
-    const body = new UiScope(panel, this.frames, this.font); s.own(() => body.dispose());
-    body.text('PanelTitle', TITLES[this.panel], 16, 8, p.width - 80, 34, 22);
-    body.button('close', r(p.width - 54, 4, 48, 44), '关闭', () => this.close());
+    const header = new UiScope(panel, this.frames, this.font, l.touch);
+    s.own(()=>header.dispose());
+    const code:Record<Panel,string>={upgrade:'01 / HULL',tech:'02 / RESEARCH',equipment:'03 / LOADOUT',supply:'04 / SUPPLY',tasks:'05 / ORDERS',archive:'06 / LOGBOOK',poster:'07 / RECORD'};
+    const iconKey:Record<Panel,string>={upgrade:'upgrade',tech:'tech',equipment:'equipment',supply:'supply',tasks:'archive',archive:'archive',poster:'archive'};
+    header.icon(`icon_${iconKey[this.panel]}`,12,12,32);
+    header.text('PanelTitle', TITLES[this.panel], 52, 6, p.width - 115, 32, 21);
+    header.text('PanelCode', code[this.panel], 54, 35, p.width-125, 16, 9, C.amber);
+    header.button('close', r(p.width - 64, 8, 52, l.touch), '关闭', () => this.close());
     const state = this.model.snapshot;
-    body.text('PanelBalance', `荧晶 ${state.wallet.crystal} · 珍珠 ${state.wallet.pearl} · 髓 ${state.wallet.marrow} · 核 ${state.wallet.core}`, 16, 47, p.width - 32, 34, 11, C.amber);
+    header.text('PanelBalance', `荧晶 ${state.wallet.crystal} · 珍珠 ${state.wallet.pearl} · 髓 ${state.wallet.marrow} · 核 ${state.wallet.core}`, 16, 57, p.width - 32, 24, 11, C.muted);
+    const panelHeight=Math.max(530,p.height);
+    let body=header;
+    if(panelHeight>p.height){
+      const viewport=header.node('PanelScroll',panel,4,84,p.width-8,p.height-92);
+      viewport.addComponent(Mask).type=Mask.Type.GRAPHICS_RECT;
+      const scroll=viewport.addComponent(ScrollView);scroll.horizontal=false;scroll.vertical=true;
+      const content=header.node('PanelContent',viewport,0,0,p.width-8,panelHeight-84);scroll.content=content;
+      const origin=header.node('PanelBody',content,-4,-84,p.width,panelHeight);
+      body=new UiScope(origin,this.frames,this.font,l.touch);s.own(()=>body.dispose());
+      header.text('ScrollHint','↕',p.width-24,p.height-26,14,20,12,C.amber);
+    }
     s.own(this.model.subscribe(() => { this.panelDirty = true; }));
-    const statusY = p.height - 50;
+    const statusY = panelHeight - 50;
     const status = this.model.phase;
     if (status === 'loading' || status === 'error' && !(this.model.rewardPending && this.panel === 'equipment')) {
-      this.fourState(body, status, this.model.notice, 92, p.height - 162);
-      if (status === 'error') body.button('retry', r(16, p.height - 68, p.width - 32, 48), this.model.hasPending ? '重试原操作 / 领取原奖励' : '返回面板', () => { void this.model.retry(); }, !this.model.busy, undefined, true);
-      if (status === 'error' && this.model.rewardPending) body.button('manage-space', r(16, p.height - 124, p.width - 32, 48), '管理装备 · 合成腾出位置', () => this.open('equipment'));
+      this.fourState(body, status, this.model.notice, 92, panelHeight - 162);
+      if (status === 'error') body.button('retry', r(16, panelHeight - 68, p.width - 32, 48), this.model.hasPending ? '重试原操作 / 领取原奖励' : '返回面板', () => { void this.model.retry(); }, !this.model.busy, undefined, true);
+      if (status === 'error' && this.model.rewardPending) body.button('manage-space', r(16, panelHeight - 124, p.width - 32, 48), '管理装备 · 合成腾出位置', () => this.open('equipment'));
       return;
     }
-    if (this.panel === 'upgrade') this.upgrade(body, p.width, p.height);
-    else if (this.panel === 'tech') this.tech(body, p.width, p.height);
-    else if (this.panel === 'equipment') this.equipment(body, p.width, p.height);
-    else if (this.panel === 'supply') this.supply(body, p.width, p.height);
-    else if (this.panel === 'tasks') this.tasks(body, p.width, p.height);
-    else if (this.panel === 'poster' && state.objectives.record && this.posterPort) depthPosterView(body, p.width, p.height, state.objectives.record, this.posterPort);
+    if (this.panel === 'upgrade') this.upgrade(body, p.width, panelHeight);
+    else if (this.panel === 'tech') this.tech(body, p.width, panelHeight);
+    else if (this.panel === 'equipment') this.equipment(body, p.width, panelHeight);
+    else if (this.panel === 'supply') this.supply(body, p.width, panelHeight);
+    else if (this.panel === 'tasks') this.tasks(body, p.width, panelHeight);
+    else if (this.panel === 'poster' && state.objectives.record && this.posterPort) depthPosterView(body, p.width, panelHeight, state.objectives.record, this.posterPort);
     else {
       body.text('ArchiveRecord', `最深纪录 ${state.objectives.record?.depth ?? 0}m\n打卡 ${state.objectives.milestones.join(' / ') || '尚未到达 500m'}\n完整首日航程 ${state.objectives.completedDives.length}/3`, 20, 100, p.width - 40, 100, 15, C.mint);
       body.button('open-poster', r(16, 220, p.width - 32, 48), '查看深度海报', () => this.open('poster'), !!state.objectives.record);
@@ -159,7 +185,9 @@ export class HarborView {
     if (this.model.snapshot.objectives.tutorial.active && this.model.snapshot.objectives.tutorial.step === 5) rows.sort((a, b) => Number(!['cargo', 'oxygen'].includes(a.id)) - Number(!['cargo', 'oxygen'].includes(b.id)));
     this.list(s, 'UpgradeRows', r(12, 88, width - 24, height - 148), rows.length, 86, (row, i) => {
       const a = rows[i]; row.box('UpgradeRow', r(0, 0, width - 24, 80));
-      row.text('Attribute', `${a.title}  Lv.${a.level}`, 12, 5, 205, 24, 15);
+      const icon:Record<string,string>={hp:'equip_armor',attack:'icon_attack',attackSpeed:'icon_attack_speed',speed:'icon_move_speed',cargo:'icon_supply',oxygen:'equip_searchlight'};
+      row.icon(icon[a.id]??'icon_upgrade',8,6,26);
+      row.text('Attribute', `${a.title}  Lv.${a.level}`, 40, 5, 163, 24, 15);
       row.text('AttributeValues', `${Number(a.value.toFixed(2))} → ${Number(a.next.toFixed(2))}`, 12, 30, 170, 20, 12, C.mint);
       row.text('EstimatedCost', a.maxed ? '已达上限' : `预估 ${a.cost.crystal} 荧晶${a.cost.core !== '0' ? ` + ${a.cost.core} 渊核` : ''}`, 12, 53, 200, 21, 11, C.amber);
       row.button(`upgrade-${a.id}`, r(width - 116, 17, 80, 48), '强化', () => this.command({ type: 'attribute.upgrade', attribute: a.id }), !a.maxed);
