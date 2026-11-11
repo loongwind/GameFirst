@@ -28,6 +28,7 @@ export class HarborView {
   private slot = 0;
   private focusedId = '';
   private mergeConfirm = false;
+  private compactSynthesis = false;
   private supplyFocus = 0;
   private signature = '';
   private lists: VirtualRows[] = [];
@@ -55,7 +56,7 @@ export class HarborView {
       this.shownRecord = p.record.depth; this.open('poster');
     }
   }
-  open(panel: Panel, supplyFocus = 0): void { this.supplyFocus = supplyFocus; this.panel = panel; this.mergeConfirm = false; this.drawPanel(); }
+  open(panel: Panel, supplyFocus = 0): void { this.supplyFocus = supplyFocus; this.panel = panel; this.mergeConfirm = false; this.compactSynthesis=false; this.drawPanel(); }
   close(): void {
     const depth = this.panel === 'poster' ? this.model.snapshot.objectives.record?.depth : undefined;
     this.overlay?.dispose(); this.overlay = undefined; this.lists = []; this.timers = []; this.panel = undefined;
@@ -138,7 +139,9 @@ export class HarborView {
     header.button('close', r(p.width - 64, 8, 52, l.touch), '关闭', () => this.close());
     const state = this.model.snapshot;
     header.text('PanelBalance', `荧晶 ${state.wallet.crystal} · 珍珠 ${state.wallet.pearl} · 髓 ${state.wallet.marrow} · 核 ${state.wallet.core}`, 16, 57, p.width - 32, 24, 11, C.muted);
-    const panelHeight=Math.max(530,p.height);
+    // List panels already own a clipped/virtualized ScrollView. Never nest a second
+    // vertical view: normal swipes must reach their final row on a short screen.
+    const panelHeight=['archive','poster'].includes(this.panel)||this.model.phase==='error'?Math.max(530,p.height):p.height;
     let body=header;
     if(panelHeight>p.height){
       const viewport=header.node('PanelScroll',panel,4,84,p.width-8,p.height-92);
@@ -221,11 +224,28 @@ export class HarborView {
     const state = this.model.snapshot, unlocked = state.playerLevel >= DEFAULT_BALANCE.equipment.unlockLevel;
     if (!unlocked) { this.fourState(s, 'empty', `挂载装备与珍珠箱将在 Lv.${DEFAULT_BALANCE.equipment.unlockLevel} 开放。\n第四槽将在 Lv.${DEFAULT_BALANCE.equipment.fourthSlotLevel} 开放。`, 110, height - 180); return; }
     const inventory = state.inventory;
+    const compact=height<530;
+    let preview: ReturnType<HarborModel['synthesis']> | undefined;
+    try { preview = this.model.synthesis([this.mainId, ...this.auxiliary].map(id => inventory.find(i => i.id === id)!).filter(Boolean), this.mainId); } catch { /* selection not complete */ }
+    const previewText = preview ? `成品 ${QUALITY_NAMES[preview.item.quality]} Lv.${preview.item.level} · 返还 ${preview.refund.marrow}髓 / ${preview.refund.tickets}券\n消耗辅料 ${this.auxiliary.map(id => this.itemLabel(inventory.find(i => i.id === id))).join('、')}` : '三合一：先选主件，再选同模板同品质的两个辅料。';
+    const merge=():void=>{
+      if(!this.mergeConfirm){this.mergeConfirm=true;this.drawPanel();return;}
+      const mainId=this.mainId,itemIds=[mainId,...this.auxiliary];
+      this.mainId='';this.auxiliary=[];this.focusedId='';this.mergeConfirm=false;this.compactSynthesis=false;
+      this.command({type:'equipment.synthesize',mainId,itemIds});
+    };
+    if(compact&&this.compactSynthesis){
+      s.text('SynthesisHeading','三合一 / 确认消耗',18,96,width-36,32,20,C.amber);
+      s.text('SynthesisPreview',previewText,18,136,width-36,Math.max(70,height-270),13,C.text);
+      s.button('back-inventory',r(14,height-118,width-28,44),'返回收纳舱',()=>{this.compactSynthesis=false;this.mergeConfirm=false;this.drawPanel();});
+      s.button('merge',r(14,height-56,width-28,44),'确认消耗所选三件 · 合成',merge,!!preview,undefined,true);
+      return;
+    }
     for (let i = 0; i < 4; i++) {
       const item = inventory.find(e => (e as Equipment & { slot?: number }).slot === i && e.equipped), locked = i === 3 && state.playerLevel < DEFAULT_BALANCE.equipment.fourthSlotLevel;
       s.button(`slot-${i}`, r(12 + i * (width - 24) / 4, 85, (width - 24) / 4 - 4, 48), locked ? `Lv.${DEFAULT_BALANCE.equipment.fourthSlotLevel} 锁定` : item ? EQUIPMENT_NAMES[item.template] : i < 2 ? `主武器 ${i + 1}` : `辅件 ${i - 1}`, () => { this.slot = i; this.drawPanel(); }, !locked, undefined, this.slot === i);
     }
-    if (!inventory.some(i => i.id === this.focusedId)) s.text('SelectedSlot', `当前槽 ${this.slot + 1} · ${this.slot < 2 ? '仅主武器' : '仅辅件'} · 已选主件 ${this.mainId ? this.itemLabel(inventory.find(i => i.id === this.mainId)) : '无'}`, 14, 137, width - 28, 28, 11, C.muted);
+    if (!compact&&!inventory.some(i => i.id === this.focusedId)) s.text('SelectedSlot', `当前槽 ${this.slot + 1} · ${this.slot < 2 ? '仅主武器' : '仅辅件'} · 已选主件 ${this.mainId ? this.itemLabel(inventory.find(i => i.id === this.mainId)) : '无'}`, 14, 137, width - 28, 28, 11, C.muted);
     const focused = inventory.find(i => i.id === this.focusedId);
     if (focused) {
       const maxed = focused.level >= DEFAULT_BALANCE.equipment.maxLevels[focused.quality];
@@ -239,8 +259,9 @@ export class HarborView {
       ];
       actions.forEach(([key, title, command, enabled], i) => s.button(key, r(12 + i * (width - 24) / 4, 168, (width - 24) / 4 - 4, 44), title, () => this.command(command), enabled));
     }
-    const listY = focused ? 220 : 169, footer = 110;
+    const listY = focused ? 220 : compact?143:169, footer = compact?70:110;
     if (!inventory.length) this.fourState(s, 'empty', '收纳舱暂无装备，前往补给打开珍珠箱。', listY, height - listY - 80);
+    else if(compact&&focused)s.button('back-inventory',r(14,220,width-28,44),'← 返回收纳舱',()=>{this.focusedId='';this.drawPanel();});
     else this.list(s, 'VirtualInventory', r(12, listY, width - 24, Math.max(44, height - listY - footer)), inventory.length, 112, (row, index) => {
       const item = inventory[index], selected = item.id === this.focusedId;
       const n = row.button(`item-${item.id}`, r(0, 0, width - 24, 106), '', () => { this.focusedId = item.id; this.mergeConfirm = false; this.drawPanel(); }, true, undefined, selected);
@@ -257,18 +278,14 @@ export class HarborView {
         }, !!this.mainId && this.mainId !== item.id);
       }
     });
+    if(compact){
+      s.button('compact-synthesis',r(14,height-56,width-28,44),preview?'三合一 · 查看消耗与返还':'三合一 · 请先选择主件与两件辅料',()=>{this.compactSynthesis=true;this.mergeConfirm=true;this.drawPanel();},!!preview,undefined,true);
+      return;
+    }
     // A second explicit confirmation is required after seeing the exact consumed instances and refunds.
     const footerY = height - 106;
-    let preview: ReturnType<HarborModel['synthesis']> | undefined;
-    try { preview = this.model.synthesis([this.mainId, ...this.auxiliary].map(id => inventory.find(i => i.id === id)!).filter(Boolean), this.mainId); } catch { /* selection not complete */ }
-    const previewText = preview ? `成品 ${QUALITY_NAMES[preview.item.quality]} Lv.${preview.item.level} · 返还 ${preview.refund.marrow}髓 / ${preview.refund.tickets}券\n消耗辅料 ${this.auxiliary.map(id => this.itemLabel(inventory.find(i => i.id === id))).join('、')}` : '三合一：先选主件，再选同模板同品质的两个辅料。';
     s.text('SynthesisPreview', previewText, 14, footerY, width - 28, 48, 11, C.amber);
-    s.button('merge', r(14, height - 55, width - 28, 44), this.mergeConfirm ? '确认消耗所选三件 · 合成' : '查看三合一确认', () => {
-      if (!this.mergeConfirm) { this.mergeConfirm = true; this.drawPanel(); return; }
-      const mainId = this.mainId, itemIds = [mainId, ...this.auxiliary];
-      this.mainId = ''; this.auxiliary = []; this.focusedId = ''; this.mergeConfirm = false;
-      this.command({ type: 'equipment.synthesize', mainId, itemIds });
-    }, !!preview, undefined, true);
+    s.button('merge', r(14, height - 55, width - 28, 44), this.mergeConfirm ? '确认消耗所选三件 · 合成' : '查看三合一确认', merge, !!preview, undefined, true);
   }
   private itemLabel(item?: Equipment): string { return item ? `${EQUIPMENT_NAMES[item.template]} ${QUALITY_NAMES[item.quality]} Lv.${item.level}` : '无'; }
   private supply(s: UiScope, width: number, height: number): void {

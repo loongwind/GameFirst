@@ -126,6 +126,81 @@ for(const quality of ['high','low'])test(`${phase}: ${quality} semantic objects 
   },{navigate:false,width:375,height:667,deviceScaleFactor:1});
 });
 
+test(`${phase}: failed harbor asset load keeps safe-area retry targets reachable at 44 CSS px`,{timeout:45000},async()=>{
+  await mkdir(artifacts,{recursive:true});
+  await withBrowser(root,async(page,browser,url)=>{
+    await ready(page,url);
+    await page.setViewportSize({width:320,height:640});
+    await page.evaluate(()=>{
+      document.documentElement.style.setProperty('--safe-top','44px');document.documentElement.style.setProperty('--safe-bottom','34px');
+    });
+    await page.route('**/assets/meta/**',route=>route.abort());
+    await enterBuiltScene(page,'Harbor');
+    await page.waitForFunction(()=>{window.h=cc.director.getScene()?.getChildByName('Canvas')?.getComponent('HarborController');return !!h?.error;});
+    await page.screenshot({path:`${artifacts}/harbor-load-error-320.png`});
+    const targets=await page.evaluate(()=>{
+      const cv=document.querySelector('canvas').getBoundingClientRect(),v=cc.view.getVisibleSize();
+      const find=(n,name)=>n.name===name?n:n.children.map(n=>find(n,name)).find(Boolean);
+      return ['retry-assets','safe-dive'].map(name=>{
+        const b=find(h.node,name).getComponent(cc.UITransform).getBoundingBoxToWorld();
+        return {name,x:cv.left+(b.x+b.width/2)*cv.width/v.width,y:cv.top+(v.height-b.y-b.height/2)*cv.height/v.height,height:b.height*cv.height/v.height};
+      });
+    });
+    await writeFile(`${artifacts}/harbor-load-error-targets.json`,JSON.stringify(targets,null,2));
+    for(const b of targets){assert.ok(b.height>=43.99,JSON.stringify(b));assert.ok(b.y-b.height/2>=44&&b.y+b.height/2<=606);}
+    await page.unroute('**/assets/meta/**');await page.mouse.click(targets[0].x,targets[0].y);await page.waitForFunction(()=>!!h.view);
+  },{navigate:false,width:375,height:667,deviceScaleFactor:1});
+});
+
+test(`${phase}: physical short-screen swipes reach the last upgrade without nested vertical scrolling`,{timeout:30000},async()=>{
+  await mkdir(artifacts,{recursive:true});
+  await withBrowser(root,async(_page,browser,url)=>{
+    const context=await browser.newContext({viewport:{width:375,height:400},hasTouch:true});const page=await context.newPage();
+    try{
+      await ready(page,url);await enterBuiltScene(page,'Harbor');
+      await page.waitForFunction(()=>{window.h=cc.director.getScene()?.getChildByName('Canvas')?.getComponent('HarborController');return !!h?.view;});
+      await page.evaluate(()=>h.view.open('upgrade'));
+      const cdp=await context.newCDPSession(page);
+      for(let i=0;i<6;i++){
+        await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:180,y:300,id:1}]});
+        for(let step=1;step<=8;step++){await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:180,y:300-step*18,id:1}]});await page.waitForTimeout(16);}
+        await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await page.waitForTimeout(200);
+      }
+      await page.waitForTimeout(400);await page.screenshot({path:`${artifacts}/upgrade-short-physical-swipe.png`});
+      const bounds=await page.evaluate(()=>{
+        const find=n=>n.name==='upgrade-oxygen'?n:n.children.map(find).find(Boolean),node=find(h.view.root);
+        const b=node?.getComponent(cc.UITransform).getBoundingBoxToWorld(),v=cc.view.getVisibleSize(),cv=document.querySelector('canvas').getBoundingClientRect();
+        return b?{top:cv.top+(v.height-b.y-b.height)*cv.height/v.height,bottom:cv.top+(v.height-b.y)*cv.height/v.height,height:b.height*cv.height/v.height}:null;
+      });
+      await writeFile(`${artifacts}/upgrade-short-physical-swipe.json`,JSON.stringify(bounds));
+      assert.ok(bounds&&bounds.top>=0&&bounds.bottom<=400&&bounds.height>=43.99,JSON.stringify(bounds));
+      await page.evaluate(()=>{
+        const e=h.economy;e.dispatch({type:'dive.settle',opId:'compact-seed',settlement:{diveId:'compact-seed',reason:'return',cargo:{crystal:10000,pearl:10000,marrow:1000,core:10},xp:10000,depth:0,activeSeconds:0}});
+        e.random=()=>0;e.dispatch({type:'box.draw',opId:'compact-box',box:'silver',count:10});h.view.open('equipment');
+      });
+      const tap=async name=>{
+        const p=await page.evaluate(name=>{
+          const find=n=>n.name===name?n:n.children.map(find).find(Boolean),n=find(h.view.root),b=n.getComponent(cc.UITransform).getBoundingBoxToWorld();
+          const cv=document.querySelector('canvas').getBoundingClientRect(),v=cc.view.getVisibleSize();
+          return{x:cv.left+(b.x+b.width/2)*cv.width/v.width,y:cv.top+(v.height-b.y-b.height/2)*cv.height/v.height};
+        },name);assert.ok(p.y>=0&&p.y<=400,`${name} outside screen`);await page.touchscreen.tap(p.x,p.y);await page.waitForTimeout(100);
+      };
+      assert.equal(await page.evaluate(()=>{const walk=n=>(n.getComponent(cc.ScrollView)?1:0)+n.children.reduce((s,n)=>s+walk(n),0);return walk(h.view.root);}),1);
+      await tap('main-compact-box.0');
+      for(const index of [1,2]){
+        await page.evaluate(index=>{
+          const find=n=>n.name==='VirtualInventory'?n:n.children.map(find).find(Boolean),n=find(h.view.root);n.getComponent(cc.ScrollView).scrollToOffset(new cc.Vec2(0,index*112),0);n.emit(cc.ScrollView.EventType.SCROLLING);
+        },index);await page.waitForTimeout(50);await tap(`aux-compact-box.${index}`);
+      }
+      await tap('compact-synthesis');
+      await page.screenshot({path:`${artifacts}/equipment-short-confirm.png`});
+      assert.equal(await page.evaluate(()=>h.view.compactSynthesis),true);
+      const count=await page.evaluate(()=>h.economy.snapshot.inventory.length);await tap('merge');
+      assert.equal(await page.evaluate(()=>h.economy.snapshot.inventory.length),count-2);
+    }finally{await context.close();}
+  },{navigate:false});
+});
+
 test(`${phase}: native surface return and scenery repro`, { timeout: 90000 }, async () => {
   await mkdir(artifacts, { recursive: true });
   await withBrowser(root, async (_page, browser, url) => {

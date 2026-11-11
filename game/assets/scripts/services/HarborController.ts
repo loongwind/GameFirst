@@ -9,6 +9,7 @@ import type { AdDriver } from './local/AdService';
 import { HarborModel } from '../meta/HarborModel';
 import { HarborView } from '../ui/HarborView';
 import { UiScope, C } from '../ui/HarborKit';
+import { harborLayout } from '../ui/harborLayout';
 
 const { ccclass } = _decorator;
 const unavailable: AdDriver = { isMock: false, async load() { throw new Error('AD_DRIVER_UNAVAILABLE'); }, async show() { throw new Error('AD_DRIVER_UNAVAILABLE'); } };
@@ -27,6 +28,7 @@ export class HarborController extends Component {
   private loadingAssets = false;
   private adService?: AdService;
   private error = '';
+  private loadingKey = '';
 
   onLoad(): void {
     this.platform = createPlatformAdapter(WECHAT ? 'wechat' : 'browser');
@@ -79,18 +81,31 @@ export class HarborController extends Component {
   }
   private drawLoading(): void {
     this.loading?.dispose(); if (this.dead) return;
-    const s = this.loading = new UiScope(this.newLoadingRoot(), this.frames);
-    s.box('LoadingPlate', { x: 15, y: 100, width: 345, height: 280 });
-    s.text('LoadState', this.error || '正在准备母港…', 35, 130, 305, 80, 18, this.error ? C.danger : C.mint);
-    if (this.error) s.button('retry-assets', { x: 35, y: 230, width: 305, height: 48 }, '重新连接港口', () => { void this.loadAssets(); });
-    s.button('safe-dive', { x: 35, y: 300, width: 305, height: 48 }, '返回潜航现场', () => director.loadScene('Dive'));
+    const size=this.node.getComponent(UITransform)!.contentSize,device=this.platform.getDeviceInfo(),ratio=size.width/device.windowWidth;
+    this.loadingKey=JSON.stringify({size,device,error:this.error});
+    const l=harborLayout(size.width,size.height,{top:Math.max(device.safeArea.top,device.capsule?.bottom??0)*ratio,
+      bottom:Math.max(0,device.windowHeight-device.safeArea.top-device.safeArea.height)*ratio,
+      left:device.safeArea.left*ratio,right:Math.max(0,device.windowWidth-device.safeArea.left-device.safeArea.width)*ratio},{width:device.windowWidth,height:device.windowHeight});
+    const root=this.newLoadingRoot();root.setScale(l.scale,l.scale,1);
+    const s = this.loading = new UiScope(root, this.frames, undefined, l.touch);
+    const height=2*l.touch+144,y=l.top+Math.max(0,(l.height-l.bottom-l.top-height)/2),width=375-l.left-l.right;
+    s.box('LoadingPlate', { x:l.left,y,width,height });
+    s.text('LoadTitle','港口通信 / PORT 01',l.left+16,y+16,width-32,32,19,C.amber);
+    s.text('LoadState', this.error || '正在准备母港…',l.left+16,y+54,width-32,54,14,this.error?C.danger:C.mint);
+    if (this.error) s.button('retry-assets',{x:l.left+16,y:y+116,width:width-32,height:l.touch},'重新连接港口',()=>{void this.loadAssets();},true,undefined,true);
+    s.button('safe-dive',{x:l.left+16,y:y+128+l.touch,width:width-32,height:l.touch},'返回潜航现场',()=>director.loadScene('Dive'));
   }
   private newLoadingRoot() {
     const s = new UiScope(this.node, this.frames), n = s.node('HarborLoading');
     const size = this.node.getComponent(UITransform)!.contentSize; n.setPosition(-size.width / 2, size.height / 2); return n;
   }
   update(): void {
-    if (!this.view || this.dead) return;
+    if(this.dead)return;
+    if(!this.view){
+      const size=this.node.getComponent(UITransform)!.contentSize,device=this.platform.getDeviceInfo();
+      if(this.loadingKey!==JSON.stringify({size,device,error:this.error}))this.drawLoading();
+      return;
+    }
     const size = this.node.getComponent(UITransform)!.contentSize, device = this.platform.getDeviceInfo(), ratio = size.width / device.windowWidth;
     this.view.resize(size.width, size.height, {
       top: device.safeArea.top * ratio, bottom: Math.max(0, device.windowHeight - device.safeArea.top - device.safeArea.height) * ratio,
