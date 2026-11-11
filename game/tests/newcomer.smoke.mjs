@@ -51,12 +51,30 @@ test(`${target}: newcomer natural progression without injected resources`, { tim
     const errors = []; page.on('pageerror', e => errors.push(e.message));
     page.on('console', e => { if (e.type() === 'error') errors.push(e.text()); });
     // Test-side mock video driver: payouts stay behind the real AdService counters and eligibility.
-    await page.goto(url);
+    await page.addInitScript(() => {
+      let busy = false;
+      const timer = setInterval(async () => {
+        if (typeof System === 'undefined' || busy) return;
+        busy = true;
+        try {
+          const cc = await System.import('cc'), frozen = new WeakSet();
+          cc.director.on(cc.Director.EVENT_BEFORE_UPDATE, () => {
+            const c = cc.director.getScene()?.getChildByName('Canvas')?.getComponent('DiveController');
+            if (c?.hud?.sea.status === 'ready' && !frozen.has(c)) {
+              c.enabled = false; c.update(0); frozen.add(c);
+            }
+          });
+          clearInterval(timer);
+        } catch { busy = false; } // import map is installed by the normal boot
+      }, 1);
+    });
+    await page.goto(url, { waitUntil: 'domcontentloaded' });
     await page.evaluate(() => {
       window.testDriver = { isMock: true, shows: 0, async load() {}, async show() { this.shows++; return 'completed'; } };
     });
     await page.evaluate(effects => { window.__techEffect = effects; }, Object.fromEntries(balance.tech.nodes.map(n => [n.id, n.effect])));
     await diveReady(page);
+    assert.equal(await page.evaluate(() => window.c.session.snapshot.activeSeconds),0,'fresh simulation must start at the same fixed tick');
     // --- Tutorial completion on the production fixed clock (real services, no resource injection) ---
     await page.evaluate(() => { window.c.enabled = false; });
     const tutorial = await page.evaluate(async () => {
@@ -94,6 +112,7 @@ test(`${target}: newcomer natural progression without injected resources`, { tim
     const dives = [];
     let reached2400 = false, deaths = 0, rescues = 0, oxygenAds = 0, pearlIncome = 0;
     for (let n = 1; n <= MAX_DIVES && !reached2400; n++) {
+      assert.equal(await page.evaluate(() => window.c.session.snapshot.activeSeconds),0,'each natural dive starts at fixed tick zero');
       // Phase A dives 1-10: the safe speed-farm profile. Phase B: the full-depth push.
       await page.evaluate(strategy => { window.__strategy = strategy; }, n <= 10 ? 'farm' : 'deep');
       const record = await page.evaluate(async ({ n, techEffects, adsEnabled, strengths, sunlightOxygen, unlockLevel }) => {
