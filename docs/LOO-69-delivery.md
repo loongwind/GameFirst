@@ -24,7 +24,7 @@
 - `npm test` 167/167（新增 `tests/loadout-stats.test.mjs` 6 项：与 combatLoadout 逐项一致、品质/等级、科技、辅件、槽位解析、对比与预览、摘要/来源/机制文案）。
 - `npm run typecheck`、`typecheck:battle`、`typecheck:services` 全部退出 0。
 - 新增 `tests/stats-display.smoke.mjs`（`npm run test:stats:web`）：320×640 / 375×667 / 390×844 三视口，断言面板文本与 Node 侧同一编译产物逐字一致、对比随槽位切换更新、不兼容提示、列表滚动到底（Row-5 可达）、摘要行两两无重叠；web-debug 与 web-release 双构建均通过，证据在 `game/.artifacts/loo-69/`。
-- 既有回归（web-debug）：harbor / dive / mobile-controls / economy / sonar-ads / tutorial 全部通过；`npm run test:preview:web` 7/8。
+- 既有回归 web-debug 与 web-release 双构建：harbor / dive / mobile-controls / economy / sonar-ads / tutorial 全部通过；`npm run test:preview:web` 7/8（唯一失败见「已知边界」）。
 
 ## 已知边界
 
