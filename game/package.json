@@ -3,8 +3,12 @@
   "uuid": "a467aab9-73b5-40ca-acf8-322119836731",
   "version": "0.1.0",
   "private": true,
-  "creator": { "version": "3.8.8" },
-  "engines": { "node": ">=24.5.0 <25" },
+  "creator": {
+    "version": "3.8.8"
+  },
+  "engines": {
+    "node": ">=24.5.0 <25"
+  },
   "scripts": {
     "config:export": "node tools/export-balance.mjs",
     "assets:sea": "python3 tools/prepare-sea-assets.py",
@@ -30,8 +34,15 @@
     "test:mobile:web": "node --test tests/mobile-controls.smoke.mjs",
     "test:progression:web": "node --test tests/progression.smoke.mjs",
     "dev:serve": "node tools/dev-serve.mjs",
-    "test:dev-entry:web": "node --test tests/dev-entry.smoke.mjs"
+    "test:dev-entry:web": "node --test tests/dev-entry.smoke.mjs",
+    "build:web:preview": "node tools/build-preview.mjs",
+    "test:preview:web": "node --test tests/preview-ads.smoke.mjs"
   },
-  "dependencies": { "@abyss-hunter/shared": "file:../shared" },
-  "devDependencies": { "playwright": "1.56.1", "typescript": "5.9.3" }
+  "dependencies": {
+    "@abyss-hunter/shared": "file:../shared"
+  },
+  "devDependencies": {
+    "playwright": "1.56.1",
+    "typescript": "5.9.3"
+  }
 }

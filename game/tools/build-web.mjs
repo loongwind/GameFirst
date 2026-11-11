@@ -2,7 +2,7 @@ import { readFileSync, writeFileSync, mkdirSync, openSync, closeSync, existsSync
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { assertReleaseSources } from './release-guard.mjs';
+import { assertReleaseSources, assertReleaseArtifacts } from './release-guard.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const target = process.argv[2] || 'web-debug';
@@ -40,8 +40,9 @@ if (result.error || result.status !== 36) {
 }
 const output = path.join(root, 'build', target, 'index.html');
 if (!existsSync(output)) throw new Error(`Creator returned 36 but no output: ${output}`);
+if (target === 'web-release') await assertReleaseArtifacts(path.dirname(output));
 const revision = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' });
-const changes = spawnSync('git', ['status', '--porcelain', '--', 'assets', '../shared', 'build-templates', 'build-configs', 'tools/build-web.mjs', 'editor-version.json'], { cwd: root, encoding: 'utf8' });
+const changes = spawnSync('git', ['status', '--porcelain', '--', 'assets', '../shared', 'build-templates', 'build-configs', 'tools/build-web.mjs', 'tools/build-preview.mjs', 'development/browser/preview-ads.js', 'development/browser/preview-ads.css', 'package.json', 'editor-version.json'], { cwd: root, encoding: 'utf8' });
 if (revision.status !== 0 || changes.status !== 0) throw new Error('Cannot identify build source');
 writeFileSync(path.join(root, 'build', target, 'playtest-version.json'), JSON.stringify({
   revision: revision.stdout.trim(), sourceDirty: !!changes.stdout.trim(),

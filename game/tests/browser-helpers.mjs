@@ -28,7 +28,7 @@ export async function enterBuiltScene(page, name) {
   await page.waitForFunction(name => window.cc.director.getScene()?.name === name, name);
 }
 
-export async function withBrowser(root, run, { navigate = true, headless = true, deviceScaleFactor = 2, width = 375, height = 812 } = {}) {
+export async function withBrowser(root, run, { navigate = true, headless = true, deviceScaleFactor = 2, width = 375, height = 812, recordVideo } = {}) {
   const types = { '.js': 'text/javascript', '.json': 'application/json', '.html': 'text/html', '.css': 'text/css', '.wasm': 'application/wasm', '.png': 'image/png' };
   const server = createServer(async (request, response) => {
     try {
@@ -51,7 +51,7 @@ export async function withBrowser(root, run, { navigate = true, headless = true,
   try {
     // Headed runs keep the real GPU raster path for performance sampling.
     browser = await chromium.launch({ channel: 'chrome', headless });
-    const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor });
+    const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor, ...(recordVideo ? { recordVideo: { dir: recordVideo, size: { width, height } } } : {}) });
     const url = `http://127.0.0.1:${server.address().port}`;
     if (navigate) await page.goto(url);
     await run(page, browser, url);

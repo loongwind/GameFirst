@@ -2,6 +2,19 @@ import { readdir, readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import ts from 'typescript';
 
+/** Run on emitted release files as well as sources: preview stays a separate artifact. */
+export async function assertReleaseArtifacts(root) {
+  for (const entry of await readdir(root, { withFileTypes: true })) {
+    const file = path.join(root, entry.name);
+    if (/preview-ads|mock-ads/i.test(entry.name)) throw new Error(`Release rejects preview asset ${file}`);
+    if (entry.isDirectory()) await assertReleaseArtifacts(file);
+    else if (/\.(?:js|html|css|json)$/.test(entry.name)) {
+      const text = await readFile(file, 'utf8');
+      if (/preview-ads|mock-ads-boot|演示版 · 模拟广告|模拟广告（演示）|演示用模拟广告/.test(text)) throw new Error(`Release rejects preview content ${file}`);
+    }
+  }
+}
+
 /** No test/simulator entry point may be imported by a release asset graph. */
 export async function assertReleaseSources(root) {
   const visited = new Set();
