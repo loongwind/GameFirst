@@ -1,4 +1,4 @@
-import { Node, UITransform, SpriteFrame, BitmapFont, Widget, BlockInputEvents, Label, Color, Graphics, Mask, ScrollView } from 'cc';
+import { Node, UITransform, SpriteFrame, BitmapFont, Widget, BlockInputEvents, Label, Color, Graphics, Mask, ScrollView, UIOpacity } from 'cc';
 import { DEFAULT_BALANCE, equipmentUpgradeCost } from '@abyss-hunter/shared';
 import type { Equipment } from '@abyss-hunter/shared';
 import { HarborModel, TREE_NAMES, EQUIPMENT_NAMES, QUALITY_NAMES, CURRENCY_NAMES } from '../meta/HarborModel';
@@ -36,6 +36,7 @@ export class HarborView {
   private lists: VirtualRows[] = [];
   private timers: Label[] = [];
   private shownRecord = 0;
+  private panelOpenedAt = 0;
   constructor(private readonly parent: Node, readonly model: HarborModel, private readonly frames: ReadonlyMap<string, SpriteFrame>, private readonly font: BitmapFont | undefined,
     private readonly launch: () => void, private readonly posterPort?: PosterPort) {
     this.root = new Node('HarborRoot'); this.root.layer = parent.layer; parent.addChild(this.root); this.root.addComponent(UITransform).setAnchorPoint(0, 1);
@@ -56,6 +57,7 @@ export class HarborView {
   }
   update(): void {
     if (this.panelDirty) { this.panelDirty = false; this.buildBase(); this.drawPanel(); }
+    if (this.overlay) this.animateOverlay();
     for (const i of [0, 1]) {
       const label = this.timers[i]; if (!label) continue;
       const seconds = this.model.buffSeconds(i === 0 ? 'blessing' : 'sonar');
@@ -88,6 +90,7 @@ export class HarborView {
     s.box('ToastScrim', r(0, 0, 375, l.height), undefined, new Color(2, 13, 21, 165));
     const width = 288, height = 190, x = Math.round((375 - width) / 2), y = Math.round(l.height / 2 - height / 2);
     s.box('ToastCard', r(x, y, width, height));
+    s.skin('ToastRibbon', 'loo70_ui_ribbon', r(x + 34, y + 10, width - 68, 44));
     s.text('ToastTitle', toast.title, x, y + 24, width, 30, 20, toast.positive ? C.mint : C.amber);
     const label = s.text('ToastBody', toast.body, x + 18, y + 64, width - 36, 56, 14, C.text);
     label.horizontalAlign = Label.HorizontalAlign.CENTER;
@@ -120,14 +123,6 @@ export class HarborView {
       s.text(`wallet-${currency}`, number, x + 25, 5, group ? 34 : 52, 26, 12, currency === 'pearl' ? C.amber : C.text, wallet, true);
       if (group) s.text(`wallet-${currency}-unit`, group === 8 ? '亿' : '万', x + 59, 10, 16, 22, 10, C.muted, wallet);
     });
-    const icons: Record<string, string> = { upgrade: 'upgrade', tech: 'tech', equipment: 'equipment', supply: 'supply' };
-    const labels: Record<string, string> = { upgrade: '强化', tech: '科技', equipment: '装备', supply: '补给' };
-    for (const [name, rect] of Object.entries(l.targets)) {
-      if (!icons[name]) continue;
-      const n = s.button(name, rect, '', () => this.open(name as Panel));
-      s.icon(`icon_${icons[name]}`, rect.width / 2 - 15, 3, 30, 30, n);
-      const label = s.text(`${name}-title`, labels[name], 0, 35, rect.width, 21, 11, name === 'archive' ? C.muted : C.text, n); label.horizontalAlign = Label.HorizontalAlign.CENTER;
-    }
     const chart = s.node('NavigationChart',s.root,0,0,375,l.height).addComponent(Graphics);
     const cx=187.5,cy=-(l.heroY+l.heroSize/2),radius=l.heroSize*.53;
     chart.strokeColor=new Color(180,243,221,85);chart.lineWidth=1;
@@ -136,20 +131,90 @@ export class HarborView {
     s.text('Readiness', 'H-01  /  潮汐号', l.left+4, l.top+95, 220, 23, 12, C.text);
     s.text('DiveRoute', state.activeDive?'现场待续':'航线  透光层', 254-l.right, l.top+95, 106, 23, 11, C.amber);
     s.icon('hero_h01_harbor', (375-l.heroSize)/2, l.heroY, l.heroSize, l.heroSize);
-    const tasks = objectiveTasks(state), task = tasks.find(t => t.ready) ?? tasks.find(t => t.kind === 'rotation');
-    s.button('TaskStrip', l.targets.tasks, task ? `${task.ready ? '◆ 领奖' : '航程'}  ${task.progress}/${task.target}  ›` : '航程任务  ›', () => this.open('tasks'));
-    const archive=s.button('archive',l.targets.archive,'',()=>this.open('archive'));
+    // R2: three scene-native stations with their own pedestals, plus supply, archive and a
+    // standalone launch button. No shared bottom bar and no equal-width icon row (LOO-70 §4).
+    const dots = this.redDots();
+    this.station(s, 'upgrade', l.targets.upgrade as Rect, l.targets.upgrade as Rect, 'icon_upgrade', '强化', dots.upgrade);
+    this.station(s, 'equipment', l.targets.equipment as Rect, l.targets.equipment as Rect, 'icon_equipment', '装备', dots.equipment);
+    this.station(s, 'tech', l.targets.tech as Rect, l.targets.tech as Rect, 'icon_tech', '科技', dots.tech);
+    const supply = s.button('supply', l.targets.supply as Rect, '', () => this.open('supply'));
+    s.icon('icon_supply', 17, 8, 30, 30, supply);
+    const supplyLabel = s.text('supply-title', '补给', 0, 40, 64, 20, 10, C.text, supply); supplyLabel.horizontalAlign = Label.HorizontalAlign.CENTER;
+    s.text('supply-count', dots.supply > 0 ? String(dots.supply) : '', 44, 2, 18, 18, 11, C.amber, supply);
+    const archive=s.button('archive',l.targets.archive as Rect,'',()=>this.open('archive'));
     s.icon('icon_archive',4,(l.targets.archive.height-26)/2,26,26,archive);
     s.text('ArchiveLabel','档案',30,0,27,l.targets.archive.height,10,C.muted,archive);
     const hint = tutorialHint(state);
     if (hint) {
       // Guidance belongs to the next action; it never covers the ship or adds another launch.
-      const short=l.heroSize<120;
-      s.text('TutorialHint', state.objectives.tutorial.rewarded&&!state.objectives.tutorial.upgraded?'下一步  强化舱容 / 氧效 ↓':state.objectives.tutorial.upgraded?'准备就绪 · 再次出发':'首潜教学 · 拖动游动，自动攻击', l.left+5, l.targets.tasks.y-(short?22:30), 375-l.left-l.right-10, 22, 11, C.amber);
+      s.text('TutorialHint', state.objectives.tutorial.rewarded&&!state.objectives.tutorial.upgraded?'下一步  强化舱容 / 氧效 ↓':state.objectives.tutorial.upgraded?'准备就绪 · 再次出发':'首潜教学 · 拖动游动，自动攻击', l.left+5, (l.targets.upgrade as Rect).y - 28, 375-l.left-l.right-10, 22, 11, C.amber);
     }
-    s.button('LaunchButton', l.targets.launch, state.activeDive ? '↓   继续潜航' : '↓   下潜  ·  探索透光层', () => { if (!this.model.busy && !this.model.hasPending) this.launch(); }, !this.model.busy && !this.model.hasPending, undefined, true);
+    const task = objectiveTasks(state).find(t => t.ready);
+    if (task) s.text('TaskReadyHint', '任务已完成 · 进入档案领取奖励', l.left+5, (l.targets.upgrade as Rect).y - 48, 375-l.left-l.right-10, 20, 10, C.mint);
+    s.button('LaunchButton', l.targets.launch as Rect, state.activeDive ? '↓   继续潜航' : '↓   下潜  ·  探索透光层', () => { if (!this.model.busy && !this.model.hasPending) this.launch(); }, !this.model.busy && !this.model.hasPending, undefined, true);
     if (this.overlay) this.overlay.root.setSiblingIndex(this.root.children.length - 1);
     if (this.toast) this.toast.root.setSiblingIndex(this.root.children.length - 1);
+  }
+
+  /** A scene station: fixed code geometry (never nine-slice stretched) with an existing
+   *  icon, an in-world nameplate and an optional 12px indicator light (LOO-70 §4 R2). */
+  private station(s: UiScope, name: string, rect: Rect, _hit: Rect, iconKey: string, title: string, dot: boolean): void {
+    const n = s.hit(name, rect, () => this.open(name as Panel));
+    const g = s.node(`${name}-device`, n, 0, 0, rect.width, rect.height).addComponent(Graphics);
+    const w = rect.width, h = rect.height;
+    // Shared码头脚墩 (pedestal) under every device, kept visually distinct per station.
+    g.fillColor = new Color(30, 50, 58); g.rect(w * .12, -h + 6, w * .76, 10); g.fill();
+    g.fillColor = new Color(46, 70, 76); g.rect(w * .08, -h + 2, w * .84, 4); g.fill();
+    if (name === 'upgrade') {
+      // Low four-leg table, orange vise and a leaning welding torch.
+      g.fillColor = new Color(88, 70, 52); g.rect(10, -56, w - 20, 9); g.fill();
+      g.fillColor = new Color(62, 50, 38);
+      for (const x of [16, w - 22]) { g.rect(x, -47, 5, 40); g.fill(); }
+      g.fillColor = new Color(196, 110, 46); g.rect(12, -62, 16, 7); g.fill(); g.rect(14, -69, 5, 8); g.fill();
+      g.strokeColor = new Color(150, 168, 170); g.lineWidth = 3;
+      g.moveTo(w - 30, -54); g.lineTo(w - 16, -84); g.stroke();
+      g.fillColor = new Color(105, 233, 198); g.circle(w - 15, -88, 3); g.fill();
+    } else if (name === 'equipment') {
+      // Tall mast, diagonal boom, hanging hook and a mount icon.
+      g.fillColor = new Color(74, 96, 102); g.rect(w * .55, -h + 14, 10, h - 26); g.fill();
+      g.strokeColor = new Color(88, 70, 52); g.lineWidth = 6;
+      g.moveTo(w * .6, -h + 26); g.lineTo(w * .2, -h * .45); g.stroke();
+      g.strokeColor = new Color(120, 146, 150); g.lineWidth = 2;
+      g.moveTo(w * .2, -h * .45); g.lineTo(w * .2, -h * .62); g.stroke();
+      g.fillColor = new Color(150, 168, 170); g.circle(w * .2, -h * .64, 4); g.fill();
+    } else {
+      // Round sonar glass dish with a short antenna.
+      g.fillColor = new Color(16, 52, 64); g.ellipse(w * .5, -52, w * .34, 14); g.fill();
+      g.strokeColor = new Color(105, 233, 198, 160); g.lineWidth = 1.5; g.ellipse(w * .5, -52, w * .3, 11); g.stroke();
+      g.strokeColor = new Color(150, 168, 170); g.lineWidth = 2; g.moveTo(w * .5, -52); g.lineTo(w * .62, -80); g.stroke();
+      g.fillColor = new Color(244, 198, 122); g.circle(w * .62, -82, 3); g.fill();
+    }
+    // Icon and nameplate use top-left-down coordinates inside the touch node.
+    const iconY = name === 'equipment' ? Math.round(h * .42) : name === 'upgrade' ? 40 : Math.round(h * .38);
+    s.icon(iconKey, Math.round(w * (name === 'equipment' ? .12 : .5) - 16), iconY, 32, 32, n);
+    const nameplate = s.text(`${name}-plate`, title, 4, h - 26, w - 8, 18, 12, C.text, n);
+    nameplate.horizontalAlign = Label.HorizontalAlign.CENTER;
+    nameplate.enableOutline = true; nameplate.outlineColor = C.ink; nameplate.outlineWidth = 2;
+    if (dot) {
+      // Indicator lights sit on the device itself: desk corner, boom hinge, dish rim.
+      const dotX = name === 'upgrade' ? w - 22 : name === 'equipment' ? Math.round(w * .3) : w - 24;
+      const dotY = name === 'upgrade' ? 22 : name === 'equipment' ? Math.round(h * .5) : Math.round(h * .58);
+      const light = s.node(`${name}-dot`, n, dotX, dotY, 12, 12).addComponent(Graphics);
+      light.fillColor = new Color(255, 138, 92); light.circle(6, -6, 6); light.fill();
+      light.strokeColor = new Color(20, 30, 32); light.lineWidth = 1.5; light.circle(6, -6, 6); light.stroke();
+    }
+  }
+
+  /** Affordance lights only when the action is genuinely available (LOO-70 §4). */
+  private redDots(): { upgrade: boolean; tech: boolean; equipment: boolean; supply: number } {
+    const snapshot = this.model.snapshot;
+    const crystal = BigInt(snapshot.wallet.crystal), core = BigInt(snapshot.wallet.core), marrow = BigInt(snapshot.wallet.marrow);
+    const upgrade = this.model.attributes().some(a => !a.maxed && crystal >= BigInt(a.cost.crystal) && core >= BigInt(a.cost.core));
+    const tech = DEFAULT_BALANCE.tech.trees.some(tree => this.model.tech(tree).some(n => n.enabled && crystal >= BigInt(n.crystal) && core >= BigInt(n.core)));
+    const unlocked = snapshot.playerLevel >= DEFAULT_BALANCE.equipment.unlockLevel;
+    const equipment = unlocked && snapshot.inventory.some(item => item.level < DEFAULT_BALANCE.equipment.maxLevels[item.quality] && marrow > BigInt(0));
+    const supply = (['gift', 'blessing', 'sonar', 'silver', 'gold'] as const).reduce((sum, slot) => sum + Math.max(0, this.model.adRemaining(slot)), 0);
+    return { upgrade, tech, equipment, supply };
   }
   private drawPanel(): void {
     this.overlay?.dispose(); this.overlay = undefined; this.lists = []; this.timers = [];
@@ -162,10 +227,14 @@ export class HarborView {
     // Rebase panel-local helpers under a panel-owned scope; cleanup remains attached to overlay.
     const header = new UiScope(panel, this.frames, this.font, l.touch);
     s.own(()=>header.dispose());
+    // Copper wing-plate behind every panel title (LOO-70 §4 ribbon skin); kept to the title
+    // width so the wing tips stay decorative rather than framing the whole panel.
+    header.skin('PanelRibbon', 'loo70_ui_ribbon', r(44, 4, Math.min(212, p.width - 150), 44));
     const code:Record<Panel,string>={upgrade:'01 / HULL',tech:'02 / RESEARCH',equipment:'03 / LOADOUT',supply:'04 / SUPPLY',tasks:'05 / ORDERS',archive:'06 / LOGBOOK',poster:'07 / RECORD'};
     const iconKey:Record<Panel,string>={upgrade:'upgrade',tech:'tech',equipment:'equipment',supply:'supply',tasks:'archive',archive:'archive',poster:'archive'};
     header.icon(`icon_${iconKey[this.panel]}`,12,12,32);
-    header.text('PanelTitle', TITLES[this.panel], 52, 6, p.width - 115, 32, 21);
+    const panelTitle = header.text('PanelTitle', TITLES[this.panel], 52, 6, p.width - 115, 32, 22);
+    panelTitle.isBold = true; panelTitle.enableOutline = true; panelTitle.outlineColor = C.ink; panelTitle.outlineWidth = 2;
     header.text('PanelCode', code[this.panel], 54, 35, p.width-125, 16, 9, C.amber);
     header.button('close', r(p.width - 64, 8, 52, l.touch), '关闭', () => this.close());
     const state = this.model.snapshot;
@@ -205,6 +274,19 @@ export class HarborView {
     }
     if (this.model.notice && !['equipment', 'tasks', 'poster'].includes(this.panel)) body.text('Notice', this.model.notice, 16, statusY, p.width - 32, 44, 11, C.mint);
     if (this.toast) this.toast.root.setSiblingIndex(this.root.children.length - 1);
+    this.panelOpenedAt = Date.now();
+  }
+  /** 140ms entrance: the panel eases up 8px and fades in (LOO-70 §4 feedback spec). */
+  private animateOverlay(): void {
+    if (!this.overlay) return;
+    const root = this.overlay.root;
+    let opacity = root.getComponent(UIOpacity);
+    if (!opacity) opacity = root.addComponent(UIOpacity);
+    const t = Math.min(1, (Date.now() - this.panelOpenedAt) / 140);
+    if (t >= 1) { root.setPosition(0, 0); opacity.opacity = 255; return; }
+    const ease = 1 - (1 - t) * (1 - t);
+    root.setPosition(0, -8 * (1 - ease));
+    opacity.opacity = Math.round(255 * (.25 + .75 * ease));
   }
   private fourState(s: UiScope, phase: 'loading' | 'empty' | 'error', text: string, y: number, height: number): void {
     const title = phase === 'loading' ? '正在连接潜航终端…' : phase === 'error' ? '暂未确认' : '等待新的发现';
@@ -250,6 +332,8 @@ export class HarborView {
     const rows = this.model.tech(this.tree);
     this.list(s, 'NodeTree', r(12, 140, width - 24, height - 200), rows.length, 84, (row, i) => {
       const n = rows[i]; row.box('TechNode', r(0, 0, width - 24, 78));
+      // Riveted hexagonal node base under the icon (LOO-70 §4 tech-node skin).
+      row.skin('TechNodeBase', 'loo70_ui_tech_node', r(2, 17, 44, 44));
       row.text('PrerequisiteLine', i ? '│' : '●', 8, 0, 12, 76, 18, C.mint);
       row.text('NodeName', `${TREE_NAMES[n.tree]}  ${i + 1} / 20${n.learned ? ' · 已解锁' : ''}`, 26, 4, 190, 26, 14);
       row.text('Requires', `${n.requires.length ? `前置 ${n.requires.join(' / ')}` : '分支起点'} · 增益 ${Math.round(n.effect * 100)}%`, 26, 30, 190, 20, 11, C.muted);
@@ -282,6 +366,8 @@ export class HarborView {
     for (let i = 0; i < 4; i++) {
       const locked = i === 3 && state.playerLevel < DEFAULT_BALANCE.equipment.fourthSlotLevel, card = slotReadout(state, i);
       const n = s.button(`slot-${i}`, r(12 + i * (width - 24) / 4, 85, cardW, 62), '', () => { this.slot = i; this.drawPanel(); }, !locked, undefined, this.slot === i);
+      // Recessed mount socket under the card content (LOO-70 §4 socket skin).
+      s.skin(`slot-${i}-socket`, 'loo70_ui_socket', r(2, 2, cardW - 4, 58), n as Node);
       if (locked) {
         const title = s.text(`slot-${i}-title`, `Lv.${DEFAULT_BALANCE.equipment.fourthSlotLevel} 锁定`, 0, 18, cardW, 22, 11, C.muted, n);
         title.horizontalAlign = Label.HorizontalAlign.CENTER;

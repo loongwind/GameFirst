@@ -91,7 +91,11 @@ test(`${target}: real Cocos harbor panels, safe areas, commands, virtual invento
     await page.evaluate(() => { const p = window.harborController.platform, get = p.getDeviceInfo.bind(p); p.getDeviceInfo = () => ({ ...get(), safeArea: { left: 8, top: 44, width: 359, height: 589 }, capsule: { bottom: 88 } }); });
     await page.waitForTimeout(200); await click('equipment');
     await page.screenshot({ path: `${artifacts}/safe-area-667-${target}.png` });
-    const safe = await read(); assert.ok(safe.layout.panel.y >= 88); assert.ok(safe.layout.targets.supply.y + 60 <= 633); results.push({ safe: safe.layout });
+    const safe = await read(); assert.ok(safe.layout.panel.y >= 88);
+    // R2: the launch button hugs the safe bottom, stations stay above it and the top entries sit below the capsule.
+    assert.ok(safe.layout.targets.launch.y + safe.layout.targets.launch.height <= 667 - 34 + 1);
+    assert.ok(safe.layout.targets.supply.y >= safe.layout.top && safe.layout.targets.upgrade.y + 115 <= safe.layout.targets.launch.y);
+    results.push({ safe: safe.layout });
     // Leaving the scene releases every model listener and owned texture reference.
     await click('close');
     await page.evaluate(async () => { const { director } = await System.import('cc'); window.oldHarborResources = { model: window.harborController.model, frames: window.harborController.frames }; await new Promise((resolve, reject) => director.loadScene('Dive', e => e ? reject(e) : resolve())); });

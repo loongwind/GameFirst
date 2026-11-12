@@ -3,6 +3,23 @@ import { virtualRange } from './harborLayout';
 import type { Rect } from './harborLayout';
 import { steelPlate } from './PanelSkin';
 export const C = { ink: new Color(4, 20, 31), panel: new Color(10, 34, 46, 250), line: new Color(64, 104, 114), text: new Color(235, 239, 219), muted: new Color(147, 175, 176), mint: new Color(103, 229, 202), amber: new Color(244, 198, 122), danger: new Color(255, 137, 115) };
+/** Nine-slice borders from the LOO-70 asset list (L/T/R/B px). Corners and rivets never scale. */
+export const SKIN_INSETS: Readonly<Record<string, readonly [number, number, number, number]>> = {
+  loo70_ui_hull: [32, 40, 32, 32], loo70_ui_gold: [24, 20, 24, 20], loo70_ui_steel: [24, 20, 24, 20],
+  loo70_ui_socket: [16, 16, 16, 16], loo70_ui_ribbon: [64, 16, 64, 16], loo70_ui_hud: [16, 16, 16, 16],
+  loo70_ui_tech_node: [0, 0, 0, 0],
+};
+/** SpriteFrame insets are presentation metadata; set them once on the shared frame. */
+export function skinnedFrame(frames: ReadonlyMap<string, SpriteFrame>, key: string): SpriteFrame | undefined {
+  const frame = frames.get(key);
+  if (!frame) return undefined;
+  const insets = SKIN_INSETS[key];
+  if (!insets) return frame;
+  try {
+    frame.insetLeft = insets[0]; frame.insetTop = insets[1]; frame.insetRight = insets[2]; frame.insetBottom = insets[3];
+  } catch { /* engine without runtime insets keeps the flat art */ }
+  return frame;
+}
 /** Every panel owns a scope. Closing it removes listeners immediately before deferred Node.destroy. */
 export class UiScope {
   private cleanup: (() => void)[] = [];
@@ -15,8 +32,22 @@ export class UiScope {
     const n = new Node(name); n.layer = Layers.Enum.UI_2D; parent.addChild(n); n.setPosition(x, -y);
     const t = n.addComponent(UITransform); t.setAnchorPoint(0, 1); t.setContentSize(width, height); return n;
   }
+  /** Nine-sliced skin sprite (metal frames, ribbons, sockets). Returns undefined without art. */
+  skin(name: string, key: string, r: Rect, parent = this.root): Sprite | undefined {
+    const frame = skinnedFrame(this.frames, key);
+    if (!frame) return undefined;
+    const n = this.node(name, parent, r.x, r.y, r.width, r.height);
+    const sprite = n.addComponent(Sprite);
+    sprite.spriteFrame = frame; sprite.sizeMode = Sprite.SizeMode.CUSTOM; sprite.type = Sprite.Type.SLICED; sprite.trim = false;
+    // Re-apply the rect after the frame: the Sprite initialiser otherwise adopts the
+    // texture's native size and ignores the intended nine-slice box.
+    n.getComponent(UITransform)!.setContentSize(r.width, r.height);
+    return sprite;
+  }
   box(name: string, r: Rect, parent = this.root, color = C.panel): Node {
     const n = this.node(name, parent, r.x, r.y, r.width, r.height), g = n.addComponent(Graphics);
+    const skinned = /Panel$|TitlePlate|ToastCard|LoadingPlate/.test(name) && r.height >= 120 && this.skin(`${name}-skin`, 'loo70_ui_hull', { x: 0, y: 0, width: r.width, height: r.height }, n);
+    if (skinned) return n;
     if(name==='Scrim'){g.fillColor=color;g.rect(0,-r.height,r.width,r.height);g.fill();}
     else steelPlate(g, 0, 0, r.width, r.height, color, /Panel$|TitlePlate/.test(name));
     return n;
@@ -35,10 +66,23 @@ export class UiScope {
     if (frame) { const sprite = n.addComponent(Sprite); sprite.spriteFrame = frame; sprite.sizeMode = Sprite.SizeMode.CUSTOM; n.getComponent(UITransform)!.setContentSize(width, height); }
     return n;
   }
+  /** Invisible touch target: a Button with no plate, for scene-native devices that draw
+   *  their own geometry on the open background (LOO-70 §4: no shared plates). */
+  hit(name: string, r: Rect, action: () => void, parent = this.root): Node {
+    const n = this.node(name, parent, r.x, r.y, r.width, r.height);
+    const b = n.addComponent(Button);
+    b.transition = Button.Transition.SCALE; b.zoomScale = .97; b.duration = .08;
+    const click = (): void => { if (this.alive && b.interactable) action(); };
+    n.on(Button.EventType.CLICK, click); this.own(() => { if (isValid(n, true)) n.off(Button.EventType.CLICK, click); });
+    return n;
+  }
   button(name: string, r: Rect, title: string, action: () => void, enabled = true, parent = this.root, accent = false): Node {
     const height = Math.max(r.height, this.minTouch), rect = { ...r, y:r.y-(height-r.height)/2, height };
     const n = this.box(name, rect, parent), b = n.addComponent(Button), g=n.getComponent(Graphics)!;
-    const draw=(pressed=false):void=>{g.clear();steelPlate(g,0,0,r.width,height,enabled?accent?pressed?new Color(92,76,46):new Color(54,55,43):pressed?new Color(25,67,75):C.panel:new Color(15,28,37),accent,enabled);};
+    // Primary actions wear the gold enamel skin; secondary actions keep the steel plate.
+    // Narrow tabs and slot cards stay on the plate: the gold frame needs room for its borders.
+    const gold = accent && r.width >= 120 ? this.skin(`${name}-gold`, 'loo70_ui_gold', { x: 0, y: 0, width: r.width, height }, n) : undefined;
+    const draw=(pressed=false):void=>{g.clear();if(gold){gold.color=enabled?pressed?new Color(205,170,110):new Color(255,255,255):new Color(150,150,150,180);return;}steelPlate(g,0,0,r.width,height,enabled?accent?pressed?new Color(92,76,46):new Color(54,55,43):pressed?new Color(25,67,75):C.panel:new Color(15,28,37),accent,enabled);};
     draw();
     b.transition = Button.Transition.SCALE; b.zoomScale = 0.97; b.duration = 0.08; b.interactable = enabled;
     const click = (): void => { if (this.alive && b.interactable) action(); };

@@ -97,8 +97,7 @@ export class SeaFx {
       const age = tick - impact.bornTick;
       if (age > IMPACT_TICKS) {
         this.impacts.splice(i, 1);
-        impact.node.active = false;
-        this.pool.get('impact')!.push({ node: impact.node, sprite: impact.sprite });
+        this.recycle('impact', { node: impact.node, sprite: impact.sprite });
         continue;
       }
       impact.sprite.spriteFrame = this.impactFrames![Math.min(IMPACT_FRAMES - 1, Math.floor(age / STEP_SECONDS * IMPACT_FPS))];
@@ -204,7 +203,7 @@ export class SeaFx {
     if (this.impacts.length >= IMPACT_CAP) {
       // Recycle the oldest burst: decoration merges, hits do not.
       const oldest = this.impacts.shift()!;
-      this.pool.get('impact')?.push({ node: oldest.node, sprite: oldest.sprite });
+      this.recycle('impact', { node: oldest.node, sprite: oldest.sprite });
     }
     const visual = this.acquireVisual('impact', this.impactFrames[0], 48, 48, true);
     visual.node.setPosition(x, y, 0);
@@ -244,8 +243,11 @@ export class SeaFx {
     const visual = this.live.get(key);
     if (!visual) return;
     this.live.delete(key);
+    this.recycle(visual.node.name.split('-').slice(0, -1).join('-'), visual);
+  }
+
+  private recycle(kind: string, visual: Visual): void {
     visual.node.active = false;
-    const kind = visual.node.name.split('-').slice(0, -1).join('-');
     let pool = this.pool.get(kind);
     if (!pool) { pool = []; this.pool.set(kind, pool); }
     pool.push(visual);

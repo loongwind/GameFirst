@@ -46,6 +46,8 @@ test(`${target}: actual Cocos sonar, oxygen/rescue buttons, pause overlaps and h
     await click('ad-sonar');
     const expiry = await page.evaluate(() => window.h.economy.snapshot.buffs.sonarUntil);
     assert.ok(expiry > Date.now() + 890000); await shot('harbor-sonar');
+    // The LOO-67 reward card is a real modal; a user taps 收下了 before leaving the panel.
+    await click('toast-confirm'); await page.waitForFunction(() => !window.h.model.rewardToast);
     await click('close'); await click('LaunchButton');
     await page.waitForFunction(() => window.cc.director.getScene()?.name === 'Dive');
     await page.evaluate(() => { window.c = window.cc.director.getScene().getChildByName('Canvas').getComponent('DiveController'); window.c.configureAds(window.testDriver); });

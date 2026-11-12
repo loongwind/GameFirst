@@ -18,7 +18,10 @@ export class SeaBundleLease<T> {
     // neighbouring layers preload ahead of their visual band and are never evicted by a
     // direction flip. Loading entries are left untouched: in-flight requests are never
     // cancelled and always settle into the resident set if it still wants them.
-    this.wanted = new Set(wanted ?? []); this.wanted.add(layer);
+    // Copied element-wise: Set spread is unsafe under the Creator build's loose helpers.
+    this.wanted = new Set<Layer>();
+    this.wanted.add(layer);
+    for (const keep of wanted ?? []) this.wanted.add(keep);
     for (const [key, entry] of this.entries) if (!this.wanted.has(key) && entry.state !== 'loading') {
       if (entry.value !== undefined) { this.beforeRelease(key); this.release(entry.value); }
       this.entries.delete(key);

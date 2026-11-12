@@ -80,7 +80,12 @@ test(`${target}: 36 genuine identities at 48 logical pixels, swim frames, four a
         assert.equal(assembled[0].key, key); assert.ok(assembled[0].parts >= 1); assert.equal(assembled[0].width, 180);
       }
     }
-    assert.deepEqual(results.at(-1).resident, ['abyss'], 'returning to deep sea releases far textures');
+    // LOO-70 §3 hysteresis: twilight stays resident through the 120m window past its band.
+    assert.deepEqual(results.at(-1).resident, ['twilight', 'abyss'], 'abyss band keeps the twilight side resident');
+    await page.evaluate(() => { const c = window.c; c.session.battle.player.y = 1800; c.hud.prepare(c.session); });
+    await seaReady(page);
+    const deepResident = await page.evaluate(() => window.c.hud.sea.residentLayers);
+    assert.deepEqual(deepResident, ['abyss'], 'past the hysteresis window only the current sea remains');
     const releasedFrames = await page.evaluate(() => {
       const retained = [];
       window.cc.assetManager.assets.forEach(asset => {

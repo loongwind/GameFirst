@@ -75,10 +75,10 @@ test(`${target}: natural economy progression reaches all three sea layers withou
     assert.equal(await page.evaluate(() => window.c.session.state), 'Settled');
     await click(page, 'primary-touch'); await harborReady(page);
     if (await page.evaluate(() => window.h.view.panel === 'poster')) await click(page, 'close');
-    await click(page, 'tutorial-next');
+    await click(page, 'upgrade'); // LOO-70 R2: the upgrade panel is a station entry
     await click(page, 'upgrade-cargo');
     await page.waitForFunction(() => window.h.economy.snapshot.attributes.cargo === 1);
-    await click(page, 'close'); await click(page, 'tutorial-next');
+    await click(page, 'close'); await click(page, 'LaunchButton');
     await diveReady(page);
     assert.equal(await page.evaluate(() => window.c.economy.snapshot.objectives.tutorial.completed), true);
 

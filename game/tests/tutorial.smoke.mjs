@@ -113,7 +113,7 @@ test(`${target}: fresh save real-time six-step loop, refresh, replay, three fina
       if (await page.evaluate(()=>window.h.view.panel==='poster')) await click(page,'close');
       if(trip===2) { await click(page,'LaunchButton'); await diveReady(page); }
     }
-    await click(page,'TaskStrip');
+    await click(page,'archive'); await click(page,'open-tasks');
     const xp = await page.evaluate(()=>window.h.economy.snapshot.totalXp);
     await click(page,'claim-first-day');
     await page.waitForFunction(xp=>window.h.economy.snapshot.totalXp===xp+20,xp);

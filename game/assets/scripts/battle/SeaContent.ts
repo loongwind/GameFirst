@@ -44,7 +44,9 @@ export function residentLayersAt(depth: number): SeaLayer[] {
   if (depth <= 980) wanted.add('sunlight');
   if (depth >= 500 && depth <= 1780) wanted.add('twilight');
   if (depth >= 1300) wanted.add('abyss');
-  return [...wanted];
+  // Array.from, not [...wanted]: Creator's Babel loose mode compiles Set spread to
+  // [].concat(set), which would hand the caller a one-element array holding the Set.
+  return Array.from(wanted);
 }
 /** Visual blend weight inside a transition band: 0 = lower layer, 1 = upper layer. */
 export function bandBlend(depth: number): { band: (typeof SEA_BANDS)[number]; weight: number } | undefined {

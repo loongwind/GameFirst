@@ -1,4 +1,4 @@
-import { BlockInputEvents, Button, Color, Graphics, Label, Layers, Node, UITransform, isValid } from 'cc';
+import { BlockInputEvents, Button, Color, Graphics, Label, Layers, Node, Sprite, UITransform, isValid } from 'cc';
 import type { DiveSession } from '../battle/DiveSession';
 import { hudLayout } from './hudLayout';
 import type { HudInsets, HudLayout, HudRect, HudViewport } from './hudLayout';
@@ -10,6 +10,8 @@ import { WorldProjection } from './WorldProjection';
 import { reefRockHull } from './ReefRock';
 import type { RockPoint } from './ReefRock';
 import { steelPlate } from './PanelSkin';
+import { skinnedFrame } from './HarborKit';
+import { slotReadout } from '../meta/loadoutStats';
 import { SeaFx } from './SeaFx';
 
 const ink = new Color(7, 25, 35), panel = new Color(15, 43, 54), line = new Color(43, 82, 90);
@@ -43,6 +45,9 @@ export class DiveHud {
   private hintKey = '';
   private hintUntil = 0;
   private fx?: SeaFx;
+  private skinsReady = false;
+  private slotKey: unknown = null;
+  private slotTitles: { title: string; empty: boolean }[] = [];
   private readonly rockHulls = new WeakMap<object, RockPoint[]>();
 
   constructor(parent: Node, private readonly action: (action: HudAction) => void, readonly lowEnd = false) {
@@ -91,6 +96,12 @@ export class DiveHud {
     this.button('seaRetry', l.seaRetry, '重试海流', this.root);
     this.buttons.get('seaRetry')!.node.active = false;
     this.labels.get('seaRetry')!.node.active = false;
+    // Four mount sockets above the dock: display only, never a panel shortcut (LOO-70 §4 R2).
+    for (let i = 0; i < 4; i++) {
+      const x = l.mounts.x + l.mounts.width / 2 - 76 + i * 38;
+      this.label(`mount-${i}`, '', x, l.mounts.y + 3, 34, 18, 9, cream);
+      this.labels.get(`mount-${i}`)!.horizontalAlign = Label.HorizontalAlign.CENTER;
+    }
     this.label('layerPlate', '', 80, l.top + 116, 215, 24, 13, cream);
     const plateTransform = this.labels.get('layerPlate')!.node.getComponent(UITransform)!;
     plateTransform.setAnchorPoint(.5, .5);
@@ -119,6 +130,8 @@ export class DiveHud {
     this.overlay.addComponent(BlockInputEvents);
     this.modalGraphics = this.overlay.addComponent(Graphics);
     this.label('modalTitle', '', l.modal.x + 20, l.modal.y + (l.compact?6:19), l.modal.width - 40, l.compact?23:32, l.compact?Math.min(18,22/l.cssScale):22, cream, this.overlay);
+    const modalTitle = this.labels.get('modalTitle')!;
+    modalTitle.isBold = true; modalTitle.enableOutline = true; modalTitle.outlineColor = ink; modalTitle.outlineWidth = 2;
     const bodyY = l.modal.y+(l.compact?32:61);
     this.label('modalBody', '', l.modal.x + 20, bodyY, l.modal.width - 40, Math.min(90,l.primary.y-bodyY-6), l.compact?Math.min(13,12/l.cssScale):13, muted, this.overlay);
     if(l.compact)this.labels.get('modalBody')!.lineHeight=17/l.cssScale;
@@ -161,7 +174,19 @@ export class DiveHud {
     const status = s.oxygen <= 0 ? '氧气耗尽 · 正在失血，立即返航 ↑' : s.oxygen/s.oxygenCapacity < .15 ? '低氧警报 · 补给或安全返航 ↑' : s.cargo.crystal >= s.cargoCapacity ? '舱已满 · 返航保住收获 ↑' : session.canSurfaceReturn ? session.surfaceReturnProgress > 0 ? '正在出水 ↑ · 继续上推返回母港' : '已到水面 ↑ · 继续上推即可返港' : boss ? `${boss.name} · ${Math.ceil(boss.hp)}/${Math.ceil(boss.maxHp)}` : '';
     if (status) this.box(g, l.status, new Color(5,27,40,190), 7);
     this.set('status', status);
-    for (const r of [l.pause, l.return, l.sonar]) this.box(g, r, panel, 10);
+    this.ensureButtonSkins();
+    // Until the steel skins decode, the Graphics plates keep the dock readable.
+    if (!this.skinsReady) for (const r of [l.pause, l.return, l.sonar]) this.box(g, r, panel, 10);
+    // Four mount sockets: current loadout at a glance, non-interactive by design.
+    const mounts = state ? this.mountSlots(state) : [];
+    for (let i = 0; i < 4; i++) {
+      const x = l.mounts.x + l.mounts.width / 2 - 76 + i * 38;
+      const top = this.layout.height / 2 - l.mounts.y - 26;
+      g.fillColor = new Color(6, 24, 32, 215); g.roundRect(x - 187.5, top, 34, 26, 6); g.fill();
+      g.strokeColor = mounts[i]?.empty ? line : new Color(105, 233, 198, 170); g.lineWidth = 1;
+      g.roundRect(x - 187.5, top, 34, 26, 6); g.stroke();
+      this.set(`mount-${i}`, mounts[i]?.title ?? '');
+    }
     const seconds = ads?.sonarSeconds ?? 0;
     this.set('sonar', seconds ? `声呐 ${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')} ${b.movementMode === 'manual' ? '手动' : seconds <= 60 ? '刷新' : '自动'}` : '声呐 · 补给');
     this.buttons.get('sonar')!.interactable = s.state === 'Running' && !session.pause.paused && !!ads?.sonarRefreshable;
@@ -216,6 +241,43 @@ export class DiveHud {
     this.drawModal(session, settlementNotice, ads);
   }
 
+  /** Nine-sliced steel skins for the dock buttons, created once when the dive bundle is
+   *  decoded. Sprite children mirror the Button's scale feedback; labels stay above them. */
+  private ensureButtonSkins(): void {
+    if (this.skinsReady) return;
+    const frames = this.sea.fxFrames;
+    if (!frames) return;
+    const frame = skinnedFrame(frames, 'loo70_ui_steel');
+    if (!frame) return;
+    for (const name of ['pause', 'sonar', 'return', 'primary', 'secondary'] as const) {
+      const button = this.buttons.get(name);
+      if (!button) continue;
+      const touch = button.node;
+      if (touch.getChildByName(`${name}-skin`)) continue;
+      const parent = touch.getComponent(UITransform)!;
+      const node = new Node(`${name}-skin`); node.layer = Layers.Enum.UI_2D;
+      touch.addChild(node);
+      const sprite = node.addComponent(Sprite);
+      sprite.spriteFrame = frame; sprite.sizeMode = Sprite.SizeMode.CUSTOM; sprite.type = Sprite.Type.SLICED; sprite.trim = false;
+      // Assign the frame first, then the size: the Sprite initialiser otherwise resets the
+      // node to the texture's native 192x80 footprint.
+      node.getComponent(UITransform)!.setContentSize(parent.width, parent.height);
+    }
+    this.skinsReady = true;
+  }
+
+  /** Current four-slot loadout for the in-dive mount display (cached by inventory identity). */
+  private mountSlots(state: LocalState): { title: string; empty: boolean }[] {
+    if (state.inventory !== this.slotKey) {
+      this.slotKey = state.inventory;
+      this.slotTitles = [0, 1, 2, 3].map(i => {
+        const card = slotReadout(state, i);
+        return { title: card.empty ? '空' : card.title.slice(0, 4), empty: card.empty };
+      });
+    }
+    return this.slotTitles;
+  }
+
   destroy(): void { this.fx?.destroy(); this.fx = undefined; this.sea.destroy(); if (isValid(this.root, true)) this.root.destroy(); }
 
   private drawModal(session: DiveSession, notice: string, ads?: DiveAdView): void {
@@ -237,8 +299,10 @@ export class DiveHud {
       body = notice || `舱内 ${Math.floor(s.cargo.crystal)} 荧晶已冻结。\n救援成功保留收获；放弃仅损失荧晶。\n珍珠、深海髓与渊核均保留。`;
       primary = `观看 · 救援浮标 (${ads?.rescueRemaining ?? 3}/3)`; secondary = '放弃救援 · 返航';
     } else if (s.state === 'PendingSettlement' || s.state === 'Settled') {
-      title = s.state === 'Settled' ? s.depth===0 ? '已出水 · 收获入港' : '收获入港' : '已返航 · 待结算';
-      body = notice || `荧晶 ${Math.floor(s.cargo.crystal)}    珍珠 ${s.cargo.pearl}\n深海髓 ${s.cargo.marrow}    渊核 ${s.cargo.core}\n${s.state === 'Settled' ? '收获已入账，进度已保存。' : '货物已冻结，等待保存确认。'}`;
+      const lost = session.pendingSettlement?.reason === 'death';
+      // Sunk and safely surfaced dives must never share an "all credited" heading (LOO-70 §4).
+      title = s.state === 'Settled' ? lost ? '沉没返航 · 本局未卸货' : s.depth===0 ? '已出水 · 收获入港' : '收获入港' : lost ? '沉没返航 · 待结算' : '已返航 · 待结算';
+      body = notice || `${lost ? '本局未卸货：舱内荧晶已损失。\n' : ''}荧晶 ${Math.floor(s.cargo.crystal)}    珍珠 ${s.cargo.pearl}\n深海髓 ${s.cargo.marrow}    渊核 ${s.cargo.core}\n${s.state === 'Settled' ? '收获已入账，进度已保存。' : '货物已冻结，等待保存确认。'}`;
       primary = s.state === 'Settled' ? '返回母港' : '货物安全保留'; secondary = s.state === 'Settled' ? '' : '等待保存确认';
     } else if (s.state === 'Returning') { title = '正在返航'; body = '正在冻结本局收获…'; primary = '返航中'; secondary = ''; }
     else if (session.pause.has('background')) { title = '已冻结现场'; body = '回到前台后倒计时恢复。'; primary = '等待回到前台'; secondary = ''; }

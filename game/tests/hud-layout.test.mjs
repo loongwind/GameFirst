@@ -18,6 +18,14 @@ test('375-wide HUD fits 667/750/812, notches and bottom safe area with >=44 touc
     assert.ok(l.modal.y >= l.status.y + l.status.height);
     assert.ok(l.modal.y + l.modal.height <= l.joystick.y);
     assert.ok(l.pause.x + l.pause.width <= l.return.x);
+    // Dock buttons must never overlap: an overlapped sibling silently swallows taps.
+    const dock = [l.pause, l.sonar, l.return];
+    for (const a of dock) for (const b of dock) {
+      if (a === b) continue;
+      const overlap = Math.min(a.x + a.width, b.x + b.width) - Math.max(a.x, b.x);
+      const vertical = Math.min(a.y + a.height, b.y + b.height) - Math.max(a.y, b.y);
+      assert.ok(overlap <= 0 || vertical <= 0, `dock rects overlap: ${JSON.stringify(a)} vs ${JSON.stringify(b)}`);
+    }
   }
   const wide = hudLayout(750, 1624, { top: 88, bottom: 68 });
   assert.equal(wide.scale, 2); assert.equal(wide.height, 812);

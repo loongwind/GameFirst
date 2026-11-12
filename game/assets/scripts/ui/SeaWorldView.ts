@@ -101,14 +101,19 @@ export class SeaWorldView {
   /** Seam-safe degraded path: pin depth to the band edge while the far side is not ready. */
   private updateBandBarrier(session: DiveSession, depth: number): void {
     const layer = layerAtDepth(depth);
+    const wanted = new Set(residentLayersAt(depth));
     let barrier: { depth: number; state: 'loading' | 'error' } | undefined;
     for (const band of SEA_BANDS) {
-      const lowerReady = this.leases.state(band.lower) === 'ready', upperReady = this.leases.state(band.upper) === 'ready';
-      const farSide: SeaLayer = layer === band.lower ? band.upper : band.lower;
+      const farSide: SeaLayer = layer === band.lower ? band.upper : layer === band.upper ? band.lower : band.upper;
       const inside = layer === band.lower || layer === band.upper;
-      if (!inside || (layer === band.lower ? upperReady : lowerReady)) continue;
-      session.battle.barrierDown = layer === band.lower ? band.lo : undefined;
-      session.battle.barrierUp = layer === band.upper ? band.hi : undefined;
+      // Only the band whose far side this depth actually preloads can block the diver;
+      // the other boundary is hundreds of metres away and legitimately unloaded. The line
+      // only arms within 120m of the band, so ordinary preloading never raises a notice.
+      const near = layer === band.lower ? depth >= band.lo - 120 : depth <= band.hi + 120;
+      if (!inside || !near || !wanted.has(farSide)) continue;
+      if (this.leases.state(farSide) === 'ready') continue;
+      if (layer === band.lower) session.battle.barrierDown = band.lo;
+      else session.battle.barrierUp = band.hi;
       barrier = { depth: layer === band.lower ? band.lo : band.hi, state: this.leases.state(farSide) === 'error' ? 'error' : 'loading' };
     }
     if (!barrier) { session.battle.barrierDown = undefined; session.battle.barrierUp = undefined; }
@@ -126,7 +131,9 @@ export class SeaWorldView {
     if (this.dead) return;
     this.prepare(session);
     const layer = this.current!, b = session.battle, depth = session.depth;
-    for (const resident of new Set([...residentLayersAt(depth), layer])) {
+    const residents = residentLayersAt(depth);
+    if (residents.indexOf(layer) < 0) residents.push(layer);
+    for (const resident of new Set(residents)) {
       const art = this.leases.get(resident);
       if (art && !this.strips.has(resident)) this.buildLayerStrips(resident, art);
     }
@@ -396,6 +403,8 @@ export class SeaWorldView {
     const frame = art.sequences.get(image)?.[0] ?? art.frames.get(image);
     if (!frame) throw new Error(`Missing actor ${image}`);
     const node = this.node(key, this.actorsRoot), artNode = this.node(`${key}-art`, node);
+    // The outer node keeps the actor's full logical footprint for hit reads and tooling.
+    node.getComponent(UITransform)!.setContentSize(size, size);
     const sprite = this.frameSprite(artNode, frame, size, size), parts: Node[] = [];
     const rig = BOSS_RIGS[key];
     if (rig) for (const angle of rig.angles) {
