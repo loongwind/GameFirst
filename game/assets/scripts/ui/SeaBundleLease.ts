@@ -1,6 +1,5 @@
 type Layer = 'sunlight' | 'twilight' | 'abyss';
 type LoadState = 'loading' | 'ready' | 'error' | 'absent';
-const layers: Layer[] = ['sunlight', 'twilight', 'abyss'];
 interface Entry<T> { state: LoadState; value?: T }
 
 /** Owns only this view's references. In-flight requests are reused even across rapid revisits. */
@@ -12,11 +11,14 @@ export class SeaBundleLease<T> {
   constructor(private readonly load: (layer: Layer) => Promise<T>, private readonly release: (value: T) => void,
     private readonly beforeRelease: (layer: Layer) => void = () => {}) {}
 
-  select(layer: Layer, direction: 1 | -1 = 1): void {
+  select(layer: Layer, wanted?: Iterable<Layer>): void {
     if (this.dead) return;
     this.current = layer;
-    const adjacent = layers[layers.indexOf(layer) + direction];
-    this.wanted = new Set(adjacent ? [layer, adjacent] : [layer]);
+    // Depth-threshold residency (LOO-70 §3): the caller derives the keep-set from depth so
+    // neighbouring layers preload ahead of their visual band and are never evicted by a
+    // direction flip. Loading entries are left untouched: in-flight requests are never
+    // cancelled and always settle into the resident set if it still wants them.
+    this.wanted = new Set(wanted ?? []); this.wanted.add(layer);
     for (const [key, entry] of this.entries) if (!this.wanted.has(key) && entry.state !== 'loading') {
       if (entry.value !== undefined) { this.beforeRelease(key); this.release(entry.value); }
       this.entries.delete(key);

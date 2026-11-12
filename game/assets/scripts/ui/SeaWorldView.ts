@@ -1,15 +1,29 @@
 import { assetManager, AssetManager, SpriteFrame, Sprite, Node, UITransform, Layers, Rect, Size, Vec2, Graphics, Color, isValid } from 'cc';
 import type { DiveSession } from '../battle/DiveSession';
-import { layerAtDepth } from '../battle/SeaContent';
+import { SEA_BANDS, WORLD_BOUNDS, bandBlend, layerAtDepth, residentLayersAt } from '../battle/SeaContent';
 import type { SeaLayer } from '../battle/SeaContent';
+import { STEP_SECONDS } from '../battle/model';
+import type { Enemy } from '../battle/model';
 import { SeaBundleLease } from './SeaBundleLease';
 import { SEA_ART, SEA_SCENES, SEA_IDENTITIES, BOSS_RIGS, PLAYER_ART } from './SeaArt';
 import { enemyArtKey } from './legacyEnemyArt';
+import { frontTilt, facingMemory, isFrontFacing, updateFacing } from './EnemyFacing';
+import type { FacingMemory } from './EnemyFacing';
+import { LayerAnnouncer } from './LayerAnnouncer';
 import type { WorldProjection } from './WorldProjection';
 import { wallTiles } from './WorldScroll';
 
 interface LoadedArt { bundle: AssetManager.Bundle; frames: Map<string, SpriteFrame>; sequences: Map<string, SpriteFrame[]> }
-interface Actor { node: Node; sprite: Sprite; key: string; parts: Node[]; bar?: Graphics }
+/** `art` mirrors only the creature (body, fins, tentacle sockets); the vitality bar lives on
+ *  `node`, outside the mirrored transform, so hp fills always deplete toward the same side. */
+interface Actor { node: Node; sprite: Sprite; art: Node; key: string; parts: Node[]; bar?: Graphics; facing?: FacingMemory }
+interface LayerStrips { far: Node[]; flora?: Node }
+
+const siltTint: Readonly<Record<SeaLayer, Color>> = {
+  sunlight: new Color(140, 205, 215),
+  twilight: new Color(96, 130, 170),
+  abyss: new Color(70, 88, 132),
+};
 
 /** Art is leased independently from combat. No timers advance while battle is paused. */
 export class SeaWorldView {
@@ -19,22 +33,30 @@ export class SeaWorldView {
   private actorsRoot: Node;
   private actors = new Map<number, Actor>();
   private sceneLayer?: SeaLayer;
-  private sceneArt?: LoadedArt;
   private common?: LoadedArt;
   private commonState: 'loading' | 'ready' | 'error' = 'loading';
   private player?: Actor;
   private dead = false;
-  private previousDepth = 0;
-  private direction: 1 | -1 = 1;
   private facing: 1 | -1 = 1;
   private height = 812;
   private current?: SeaLayer;
   private snow?: Graphics;
+  private boundary?: Graphics;
+  private silt: Node[] = [];
+  private transition?: Graphics;
   private scenery: { nodes: Node[]; rate: number; span: number; x: number; offsetY: number; mirror: boolean }[] = [];
+  private strips = new Map<SeaLayer, LayerStrips>();
+  private readonly announcer = new LayerAnnouncer();
+  /** Seam-safe degraded state: set while a neighbouring band layer is still loading or failed. */
+  private degraded?: { depth: number; state: 'loading' | 'error' };
+  private boundaryNotice = '';
+  private hintUntilTick = Number.NEGATIVE_INFINITY;
+  private nextHintTick = Number.NEGATIVE_INFINITY;
   private readonly snowDots = Array.from({ length: 28 }, (_, i) => {
     const phase = (i * 97) % 211 / 211, drift = (i * 53) % 89 / 89;
     return { x: (phase - .5) * 420, speed: 14 + drift * 22, size: .8 + (i % 3) * .35, wobble: 6 + drift * 10 };
   });
+  private readonly siltDots = Array.from({ length: 12 }, (_, i) => ({ phase: (i * 61) % 197 / 197, drift: (i * 37) % 71 / 71 }));
   constructor(parent: Node, private readonly lowEnd = false) {
     this.root = this.node('SeaWorld', parent);
     this.background = this.node('SeaBackground', this.root);
@@ -54,15 +76,41 @@ export class SeaWorldView {
   }
   get residentLayers(): string[] { return (['sunlight', 'twilight', 'abyss'] as const).filter(layer => !!this.leases.get(layer)); }
   get activeLayer(): SeaLayer | undefined { return this.current; }
+  /** Seam-safe crossing state for the HUD: a band whose far side is not decoded yet. */
+  get degradedBand(): { depth: number; state: 'loading' | 'error' } | undefined { return this.degraded; }
+  get boundaryHint(): string { return this.boundaryNotice; }
+  get layerPlate(): { text: string; alpha: number } | undefined { return this.announcer.visible ? { text: this.announcer.label, alpha: this.announcer.alpha } : undefined; }
   prepare(session: DiveSession): void {
     const depth = session.depth;
-    if (Math.abs(depth - this.previousDepth) > .01) this.direction = depth > this.previousDepth ? 1 : -1;
-    this.previousDepth = depth;
     // A living gate guardian still belongs to the preceding sea at exactly 800/1600m.
     const guardian = Array.from(session.battle.enemies.values()).find(e => e.kind === 'boss' && depth === session.content.gateDepth);
-    this.current = guardian?.layer ?? layerAtDepth(depth); this.leases.select(this.current, guardian ? 1 : this.direction);
+    this.current = guardian?.layer ?? layerAtDepth(depth);
+    // Depth-threshold residency: preloads 240m ahead of each band, keeps both sides of a
+    // band resident plus a 120m hysteresis, and never evicts on a direction flip (LOO-70 §3).
+    const wanted = new Set(residentLayersAt(depth)); wanted.add(this.current!);
+    this.leases.select(this.current!, wanted);
+    // Only the current layer can pause the session: entering an area whose art is missing.
+    // Crossing into a resident neighbour stays seamless; if that neighbour is still loading
+    // the band barrier below pins the player instead of freezing oxygen and combat.
     if (session.state === 'Running' && this.status !== 'ready') session.pause.add('assets');
     else session.pause.remove('assets');
+    this.updateBandBarrier(session, depth);
+  }
+  /** Seam-safe degraded path: pin depth to the band edge while the far side is not ready. */
+  private updateBandBarrier(session: DiveSession, depth: number): void {
+    const layer = layerAtDepth(depth);
+    let barrier: { depth: number; state: 'loading' | 'error' } | undefined;
+    for (const band of SEA_BANDS) {
+      const lowerReady = this.leases.state(band.lower) === 'ready', upperReady = this.leases.state(band.upper) === 'ready';
+      const farSide: SeaLayer = layer === band.lower ? band.upper : band.lower;
+      const inside = layer === band.lower || layer === band.upper;
+      if (!inside || (layer === band.lower ? upperReady : lowerReady)) continue;
+      session.battle.barrierDown = layer === band.lower ? band.lo : undefined;
+      session.battle.barrierUp = layer === band.upper ? band.hi : undefined;
+      barrier = { depth: layer === band.lower ? band.lo : band.hi, state: this.leases.state(farSide) === 'error' ? 'error' : 'loading' };
+    }
+    if (!barrier) { session.battle.barrierDown = undefined; session.battle.barrierUp = undefined; }
+    this.degraded = barrier;
   }
   retry(): void { this.leases.retry(); if (this.commonState === 'error') void this.loadCommon(); }
   resize(width: number, height: number): void {
@@ -70,15 +118,17 @@ export class SeaWorldView {
     this.root.setScale(width / 375, width / 375, 1);
     this.root.getComponent(UITransform)!.setContentSize(375, height);
     // Re-layout backgrounds on viewport changes without reloading textures.
-    if (this.sceneArt) { this.clear(this.background); this.buildScene(this.sceneArt); }
+    this.clear(this.background); this.scenery = []; this.strips.clear(); this.sceneLayer = undefined;
   }
   render(session: DiveSession, projection?: WorldProjection): void {
     if (this.dead) return;
     this.prepare(session);
-    const layer = this.current!, loaded = this.leases.get(layer), b = session.battle;
-    if (loaded && (this.sceneLayer !== layer || this.sceneArt !== loaded)) {
-      this.clear(this.background); this.sceneLayer = layer; this.sceneArt = loaded; this.buildScene(loaded);
+    const layer = this.current!, b = session.battle, depth = session.depth;
+    for (const resident of new Set([...residentLayersAt(depth), layer])) {
+      const art = this.leases.get(resident);
+      if (art && !this.strips.has(resident)) this.buildLayerStrips(resident, art);
     }
+    this.applyBlend(depth, b.tick, projection?.y ?? b.player.y);
     const cy = this.height * .46, alive = new Set<number>();
     const point = (item: { x: number; y: number; previousX?: number; previousY?: number }): [number, number] => {
       const p=projection?.sample(item) ?? {x:187.5+item.x-b.player.x,y:cy+item.y-b.player.y};
@@ -96,7 +146,8 @@ export class SeaWorldView {
       if (actor?.key !== key) { actor?.node.destroy(); this.actors.delete(enemy.id); actor = undefined; }
       if (!actor) {
         const size = enemy.kind === 'boss' ? 180 : enemy.kind === 'elite' ? 68 : 48;
-        actor = this.actor(key, identity.swim ?? identity.idle, size, art);
+        // Spawn heading follows the horizontal offset to the player (LOO-70 §5).
+        actor = this.actor(key, identity.swim ?? identity.idle, size, art, facingMemory(b.player.x - enemy.x));
         if (enemy.kind !== 'normal') actor.bar = this.node('Vitality', actor.node).addComponent(Graphics);
         this.actors.set(enemy.id, actor);
       }
@@ -104,6 +155,7 @@ export class SeaWorldView {
       actor.node.active=Math.abs(position[0])<260 && Math.abs(position[1])<this.height/2+100;
       const sequence = art.sequences.get(identity.swim ?? '');
       if (sequence) actor.sprite.spriteFrame = sequence[this.lowEnd ? 0 : Math.floor(b.tick / 5) % 4];
+      this.applyHeading(actor, enemy, b.tick);
       const rig = BOSS_RIGS[key];
       if (rig) actor.parts.forEach((part, i) => { part.angle = rig.angles[i] + Math.sin(b.tick / 30 * Math.PI * 1.5) * 12; });
       if (actor.bar) {
@@ -125,9 +177,136 @@ export class SeaWorldView {
       this.player.node.angle=moving ? -Math.sign(dy)*8*(this.facing??1) : 0;
     }
     this.renderSnow(b, cy, projection);
+    this.renderBoundary(b, projection);
     this.scrollScene(projection?.y ?? b.player.y);
+    this.announcer.update(depth, b.tick);
   }
-
+  /** LOO-70 §5: mirror the art container by real velocity; radial identities lean instead. */
+  private applyHeading(actor: Actor, enemy: Enemy, tick: number): void {
+    const vx = (enemy.x - enemy.previousX) / STEP_SECONDS;
+    if (isFrontFacing(enemy.assetKey)) {
+      actor.art.setScale(1, 1, 1);
+      actor.art.angle = this.lowEnd ? 0 : frontTilt(vx);
+    } else if (actor.facing) {
+      actor.art.setScale(updateFacing(actor.facing, vx, tick), 1, 1);
+      actor.art.angle = 0;
+    }
+  }
+  private buildLayerStrips(layer: SeaLayer, art: LoadedArt): void {
+    const scene = SEA_SCENES[layer]; if (!scene) return;
+    const span = Math.max(812, this.height);
+    const group: LayerStrips = { far: [] };
+    for (let i = 0; i < 3; i++) group.far.push(this.sprite(`${layer}-far-${i}`, this.background, art.frames.get(scene.far)!, 375, span + 2).node);
+    this.scenery.push({ nodes: group.far, rate: .18, span, x: 0, offsetY: 0, mirror: true });
+    if (scene.flora) {
+      const flora = this.sprite(`${layer}-flora`, this.background, art.frames.get(scene.flora)!, 120, 120);
+      flora.node.setPosition(-136, -span / 2 + 200, 0);
+      this.scenery.push({ nodes: [flora.node], rate: .78, span, x: -136, offsetY: -span / 2 + 200, mirror: false });
+      group.flora = flora.node;
+    }
+    this.strips.set(layer, group);
+  }
+  /** Depth-linear dual-background blend (LOO-70 §3): weights follow real depth and reverse
+   *  along the same path; outside a band only the current layer draws. */
+  private applyBlend(depth: number, tick: number, cameraY: number): void {
+    const blend = bandBlend(depth);
+    const weights = new Map<SeaLayer, number>();
+    if (blend) { weights.set(blend.band.lower, 1 - blend.weight); weights.set(blend.band.upper, blend.weight); }
+    else if (this.current) weights.set(this.current, 1);
+    for (const [layer, group] of this.strips) {
+      const alpha = weights.get(layer) ?? 0;
+      for (const node of group.flora ? [...group.far, group.flora] : group.far) {
+        node.active = alpha > .002;
+        if (node.active) node.getComponent(Sprite)!.color = new Color(255, 255, 255, Math.round(alpha * 255));
+      }
+    }
+    this.renderSilt(blend ? 1 - Math.abs(blend.weight * 2 - 1) : 0, blend?.band.upper ?? this.current ?? 'sunlight', tick, cameraY);
+  }
+  /** Transition silt: two screen-wide sheets with opposing drift plus ≤12 rising motes,
+   *  only inside a band, alpha ≤ 0.22 (LOO-70 §3 asset spec). */
+  private renderSilt(activity: number, layer: SeaLayer, tick: number, cameraY: number): void {
+    if (this.lowEnd || !this.common) return;
+    if (!this.silt.length) {
+      const frame = this.common.frames.get('loo70_transition_silt');
+      if (!frame) return;
+      for (let i = 0; i < 2; i++) this.silt.push(this.sprite(`transition-silt-${i}`, this.background, frame, 375, 220).node);
+      this.transition = this.node('TransitionMotes', this.root).addComponent(Graphics);
+      this.transition.node.setSiblingIndex(1);
+    }
+    const tint = siltTint[layer];
+    this.silt.forEach((node, i) => {
+      node.active = activity > .002;
+      if (!node.active) return;
+      const sprite = node.getComponent(Sprite)!;
+      sprite.color = new Color(tint.r, tint.g, tint.b, Math.round(.22 * activity * 255));
+      const cycle = this.height + 220;
+      const drift = tick / 30 * (i ? 26 : -34) + cameraY * .35;
+      node.setPosition(Math.sin(drift / 90) * 30, ((i * 173 + drift) % cycle + cycle) % cycle - cycle / 2, 0);
+    });
+    const g = this.transition;
+    if (!g) return;
+    g.clear();
+    if (activity > .002) {
+      g.fillColor = new Color(tint.r, tint.g, tint.b, Math.round(110 * activity));
+      for (const dot of this.siltDots) {
+        const cycle = this.height + 80;
+        const rise = tick / 30 * (14 + dot.drift * 26) + cameraY * .5;
+        const y = ((dot.phase * cycle + rise) % cycle + cycle) % cycle - cycle / 2;
+        g.circle((dot.phase - .5) * 340 + Math.sin(tick / 26 + dot.phase * 9) * 10, y, 1.6 + dot.drift * 2.2);
+      }
+      g.fill();
+    }
+  }
+  /** World-anchored sonar boundary at x=±540 (LOO-70 §2): a dashed line with a shaded
+   *  exterior, brightening on approach, plus a once-per-second edge notice at the clamp. */
+  private renderBoundary(b: DiveSession['battle'], projection?: WorldProjection): void {
+    if (!this.boundary) {
+      this.boundary = this.node('SeaBoundary', this.root).addComponent(Graphics);
+      this.boundary.node.setSiblingIndex(this.lowEnd ? 1 : 2);
+    }
+    const g = this.boundary, cy = this.height * .46, cameraY = projection?.y ?? b.player.y;
+    const px = projection?.x ?? b.player.x;
+    const atLimit = Math.abs(b.player.x) >= WORLD_BOUNDS.maxX - b.player.radius - .5;
+    const tick = b.tick;
+    if (atLimit && tick >= this.nextHintTick) { this.hintUntilTick = tick + 30; this.nextHintTick = tick + 30; }
+    this.boundaryNotice = tick < this.hintUntilTick ? '已到航区边缘' : '';
+    g.clear();
+    const near = Math.abs(px) >= WORLD_BOUNDS.maxX - 48;
+    const alpha = near ? .55 : .25;
+    for (const side of [-1, 1]) {
+      const worldX = side * WORLD_BOUNDS.maxX;
+      const p = projection ? projection.point(worldX, 0) : { x: 187.5 + worldX - px, y: cy };
+      const sx = p.x - 187.5;
+      if (sx < -24 || sx > 375 + 24) continue;
+      // Shaded exterior band just outside the boundary.
+      g.fillColor = new Color(2, 13, 21, Math.round(alpha * 140));
+      g.rect(Math.min(sx, sx + side * 16), -this.height, 16, this.height * 3); g.fill();
+      // Dashed sonar line; dash phase derives from world depth so it never swims.
+      g.strokeColor = new Color(160, 190, 200, Math.round(alpha * 255)); g.lineWidth = 1;
+      const span = this.height;
+      for (let y = Math.floor((cameraY - span) / 14) * 14; y < cameraY + span; y += 14) {
+        const sy = this.height / 2 - (cy + y - cameraY);
+        if (sy < -12 || sy > this.height + 12) continue;
+        g.moveTo(sx, sy); g.lineTo(sx, sy - 8);
+      }
+      g.stroke();
+    }
+    // Seam-safe crossing (LOO-70 §3): a buoyed temporary safety line at the band edge while
+    // the neighbouring layer is still loading — the fight stays alive behind it.
+    if (this.degraded) {
+      const p = projection ? projection.point(0, this.degraded.depth) : { x: 187.5, y: cy + this.degraded.depth - (projection ? 0 : b.player.y) };
+      const sy = this.height / 2 - p.y;
+      if (sy > -20 && sy < this.height + 20) {
+        const failed = this.degraded.state === 'error';
+        g.strokeColor = new Color(255, 184, 99, failed ? 200 : 150); g.lineWidth = 1.5;
+        for (let x = -180; x < 180; x += 16) { g.moveTo(x, sy); g.lineTo(x + 9, sy); }
+        g.stroke();
+        g.fillColor = new Color(255, 184, 99, 220);
+        for (const bx of [-170, 170]) { g.moveTo(bx, sy + 6); g.lineTo(bx + 7, sy); g.lineTo(bx, sy - 6); g.close(); }
+        g.fill();
+      }
+    }
+  }
   /** Decorative suspended matter: pure presentation, safe to drop on low-end devices. */
   private renderSnow(b: DiveSession['battle'], cy: number, projection?: WorldProjection): void {
     if (!this.snow) return;
@@ -145,6 +324,7 @@ export class SeaWorldView {
     if (this.dead) return;
     this.dead = true;
     this.clear(this.actorsRoot); this.player = undefined; this.actors.clear(); this.clear(this.background);
+    this.strips.clear(); this.silt = []; this.scenery = [];
     this.leases.dispose(); if (this.common) this.release(this.common); this.common = undefined;
     if (isValid(this.root, true)) this.root.destroy();
   }
@@ -191,22 +371,15 @@ export class SeaWorldView {
       if (isValid(actor.node, true)) { actor.node.removeFromParent(); actor.node.destroy(); }
       this.actors.delete(id);
     }
-    if (this.sceneLayer === layer) { this.clear(this.background); this.scenery = []; this.sceneArt = undefined; this.sceneLayer = undefined; }
-  }
-  private buildScene(art: LoadedArt): void {
-    const scene = SEA_SCENES[this.sceneLayer!]; if (!scene) return;
-    this.scenery = [];
-    const span = Math.max(812, this.height);
-    const strip = (key: string, width: number, height: number, x: number, rate: number, offsetY = 0, mirror = true): void => {
-      const nodes = Array.from({ length: 3 }, (_, i) => this.sprite(`${key}-tile-${i}`, this.background, art.frames.get(key)!, width, height).node);
-      this.scenery.push({ nodes, rate, span, x, offsetY, mirror });
-    };
-    strip(scene.far, 375, span + 2, 0, .18);
-    for (const [key, x] of [[scene.left, -150], [scene.right, 150]] as const) {
-      if (!key) continue;
-      strip(key, 110, span + 2, x, .78);
+    const strips = this.strips.get(layer);
+    if (strips) {
+      for (const node of strips.flora ? [...strips.far, strips.flora] : strips.far) {
+        if (isValid(node, true)) { node.removeFromParent(); node.destroy(); }
+      }
+      this.scenery = this.scenery.filter(strip => !strips.far.includes(strip.nodes[0]) && strip.nodes[0] !== strips.flora);
+      this.strips.delete(layer);
     }
-    if (scene.flora) strip(scene.flora, 120, 120, -136, .78, -span / 2 + 200, false);
+    if (this.sceneLayer === layer) this.sceneLayer = undefined;
   }
   private scrollScene(cameraY: number): void {
     for (const strip of this.scenery) {
@@ -217,23 +390,27 @@ export class SeaWorldView {
       });
     }
   }
-  private actor(key: string, image: string, size: number, art: LoadedArt): Actor {
+  private actor(key: string, image: string, size: number, art: LoadedArt, facing?: FacingMemory): Actor {
     const frame = art.sequences.get(image)?.[0] ?? art.frames.get(image);
     if (!frame) throw new Error(`Missing actor ${image}`);
-    const sprite = this.sprite(key, this.actorsRoot, frame, size, size), parts: Node[] = [];
+    const node = this.node(key, this.actorsRoot), artNode = this.node(`${key}-art`, node);
+    const sprite = this.frameSprite(artNode, frame, size, size), parts: Node[] = [];
     const rig = BOSS_RIGS[key];
     if (rig) for (const angle of rig.angles) {
       const partFrame = art.frames.get(rig.partKey)!;
-      const part = this.sprite(rig.partKey, sprite.node, partFrame, rig.sourcePartSize * size / rig.sourceBodySize * rig.scale, rig.sourcePartSize * size / rig.sourceBodySize * rig.scale);
+      const part = this.sprite(rig.partKey, artNode, partFrame, rig.sourcePartSize * size / rig.sourceBodySize * rig.scale, rig.sourcePartSize * size / rig.sourceBodySize * rig.scale);
       part.node.getComponent(UITransform)!.setAnchorPoint(rig.anchor[0], rig.anchor[1]);
       part.node.setPosition(rig.socket[0] * size / 768, rig.socket[1] * size / 768);
       part.node.angle = angle; parts.push(part.node);
     }
-    return { node: sprite.node, sprite, key, parts };
+    return { node, sprite, art: artNode, key, parts, facing };
   }
   private sprite(name: string, parent: Node, frame: SpriteFrame, width: number, height: number): Sprite {
-    const n = this.node(name, parent), s = n.addComponent(Sprite); s.spriteFrame = frame; s.sizeMode = Sprite.SizeMode.CUSTOM;
-    n.getComponent(UITransform)!.setContentSize(width, height); return s;
+    const n = this.node(name, parent), s = this.frameSprite(n, frame, width, height); return s;
+  }
+  private frameSprite(parent: Node, frame: SpriteFrame, width: number, height: number): Sprite {
+    const s = parent.addComponent(Sprite); s.spriteFrame = frame; s.sizeMode = Sprite.SizeMode.CUSTOM;
+    parent.getComponent(UITransform)!.setContentSize(width, height); return s;
   }
   private node(name: string, parent: Node): Node { const n = new Node(name); n.layer = Layers.Enum.UI_2D; parent.addChild(n); n.addComponent(UITransform); return n; }
   private clear(n: Node): void {

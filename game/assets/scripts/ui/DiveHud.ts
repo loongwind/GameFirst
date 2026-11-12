@@ -15,7 +15,7 @@ const ink = new Color(7, 25, 35), panel = new Color(15, 43, 54), line = new Colo
 const mint = new Color(105, 233, 198), cream = new Color(233, 240, 218), muted = new Color(126, 165, 169);
 const amber = new Color(255, 189, 99), danger = new Color(255, 110, 111);
 
-export type HudAction = 'pause' | 'return' | 'primary' | 'secondary' | 'sonar' | 'oxygen' | 'dismissOxygen';
+export type HudAction = 'pause' | 'return' | 'primary' | 'secondary' | 'sonar' | 'oxygen' | 'dismissOxygen' | 'seaRetry';
 
 /** Spec cap for concurrent damage numbers (技术方案 §活跃对象: 飘字30组). */
 const TEXT_POOL = 30;
@@ -59,6 +59,7 @@ export class DiveHud {
     if (this.overlay?.active) return true;
     const l = this.layout;
     const rects = [l.pause, l.return, l.sonar];
+    if (this.buttons.get('seaRetry')?.node.active) rects.push(l.seaRetry);
     if (this.oxygenCard?.active) rects.push(l.oxygenAd, l.oxygenDismiss);
     return rects.some(r => x >= r.x && x <= r.x+r.width && y >= r.y && y <= r.y+r.height);
   }
@@ -85,6 +86,14 @@ export class DiveHud {
     this.button('pause', l.pause, '暂停', this.root);
     this.button('return', l.return, '安全返航 ↑', this.root);
     this.button('sonar', l.sonar, '', this.root);
+    this.button('seaRetry', l.seaRetry, '重试海流', this.root);
+    this.buttons.get('seaRetry')!.node.active = false;
+    this.labels.get('seaRetry')!.node.active = false;
+    this.label('layerPlate', '', 80, l.top + 116, 215, 24, 13, cream);
+    const plateTransform = this.labels.get('layerPlate')!.node.getComponent(UITransform)!;
+    plateTransform.setAnchorPoint(.5, .5);
+    this.labels.get('layerPlate')!.horizontalAlign = Label.HorizontalAlign.CENTER;
+    this.labels.get('layerPlate')!.node.active = false;
     this.oxygenCard = this.node('OxygenCard', this.root);
     const cardGraphics = this.oxygenCard.addComponent(Graphics);
     this.box(cardGraphics, l.oxygenCard, panel, 12);
@@ -151,7 +160,24 @@ export class DiveHud {
     this.set('guidance', guidance);
     this.set('oxygenBody', `应急供氧 · 今日剩余 ${ads?.oxygenRemaining ?? 0}/3\n空白处仍可拖动，返航始终可用`);
     this.buttons.get('oxygen')!.interactable = (ads?.oxygenRemaining ?? 0) > 0;
-    this.set('feedback', s.state === 'Running' && !session.pause.paused ? notice : '');
+    this.set('feedback', s.state === 'Running' && !session.pause.paused
+      ? (notice || this.sea.boundaryHint || (this.sea.degradedBand ? this.sea.degradedBand.state === 'loading' ? '前方海流探测中 · 可继续本层战斗或上浮' : '前方海流探测失败 · 可重试或继续本层' : '') ) : '');
+    const seaRetry = this.buttons.get('seaRetry')!;
+    seaRetry.node.active = this.sea.degradedBand?.state === 'error';
+    this.labels.get('seaRetry')!.node.active = seaRetry.node.active;
+    // Layer-crossing nameplate: a small non-center plate that follows the band announcer.
+    const plate = this.sea.layerPlate;
+    const plateLabel = this.labels.get('layerPlate')!;
+    plateLabel.node.active = !!plate;
+    if (plate) {
+      if (plateLabel.string !== plate.text) plateLabel.string = plate.text;
+      plateLabel.color = new Color(cream.r, cream.g, cream.b, Math.round(plate.alpha * 255));
+      const width = 160, x = 187.5, y = l.top + 128, h = 24;
+      g.fillColor = new Color(5, 27, 40, Math.round(plate.alpha * 200));
+      g.roundRect(x - width / 2, this.layout.height / 2 - y - h / 2, width, h, 7); g.fill();
+      g.strokeColor = new Color(105, 233, 198, Math.round(plate.alpha * 130)); g.lineWidth = 1;
+      g.roundRect(x - width / 2, this.layout.height / 2 - y - h / 2, width, h, 7); g.stroke();
+    }
     g.strokeColor = line; g.lineWidth = 1;
     g.moveTo(l.rail.x - 187.5, l.height / 2 - l.rail.y); g.lineTo(l.rail.x - 187.5, l.height / 2 - l.rail.y - l.rail.height); g.stroke();
     for (let d = 0; d <= 2400; d += 400) {

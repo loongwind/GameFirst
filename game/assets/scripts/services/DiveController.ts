@@ -189,6 +189,7 @@ export class DiveController extends Component {
   private handleAction(action: HudAction): void {
     this.clearInput();
     const s = this.session;
+    if (action === 'seaRetry' && s.state === 'Running' && !s.pause.has('ad') && !s.pause.has('reconnect')) { this.notice = ''; this.hud.retryAssets(); return; }
     if (action === 'primary' && s.pause.has('assets') && !s.pause.has('background') && !s.pause.has('reconnect')) { this.hud.retryAssets(); return; }
     if (action === 'primary' && this.ads.view.rewardPending && !s.pause.has('background') && !s.pause.has('reconnect')) { void this.ads.retry(); return; }
     if (s.pause.has('ad') || s.pause.has('background') || s.pause.has('reconnect')) return;

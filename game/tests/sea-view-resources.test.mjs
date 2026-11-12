@@ -18,6 +18,7 @@ const flush = async () => { for (let i = 0; i < 8; i++) await Promise.resolve();
 
 function fixture() {
   const art = compile('SeaArt'), lease = compile('SeaBundleLease'), legacy = compile('legacyEnemyArt'), scroll = compile('WorldScroll');
+  const facing = compile('EnemyFacing'), announcer = compile('LayerAnnouncer', { '../battle/SeaContent': compile('../battle/SeaContent') }), content = compile('../battle/SeaContent');
   const pending = [], bundles = new Map();
   class Frame {
     constructor(name = '') { this.name = name; this.refCount = 0; this.isValid = true; this.texture = {}; }
@@ -41,21 +42,27 @@ function fixture() {
     },
     removeBundle(bundle) { bundle.destroyed = true; bundles.delete([...bundles].find(([, value]) => value === bundle)?.[0]); },
   };
-  const cc = { assetManager, SpriteFrame: Frame, Rect: class {}, Size: class {}, Vec2: class {} };
-  const { SeaWorldView } = compile('SeaWorldView', { cc, './SeaBundleLease': lease, './SeaArt': art, './legacyEnemyArt': legacy, './WorldScroll':scroll, '../battle/SeaContent': { layerAtDepth: () => 'abyss' } });
+  class Color { constructor(r = 255, g = 255, b = 255, a = 255) { this.r = r; this.g = g; this.b = b; this.a = a; } }
+  const cc = { assetManager, SpriteFrame: Frame, Rect: class {}, Size: class {}, Vec2: class {}, Color };
+  const { SeaWorldView } = compile('SeaWorldView', {
+    cc, './SeaBundleLease': lease, './SeaArt': art, './legacyEnemyArt': legacy, './WorldScroll': scroll,
+    './EnemyFacing': facing, './LayerAnnouncer': announcer, '../battle/SeaContent': content, '../battle/model': { STEP_SECONDS: 1 / 30 },
+  });
   const owner = () => {
     // Test the real loader/releaser without instantiating Cocos's scene graph.
     const view = Object.create(SeaWorldView.prototype);
     return new lease.SeaBundleLease(name => view.load(name), loaded => view.release(loaded));
   };
-  return { owner, pending, bundles, SeaWorldView, art, legacy };
+  return { owner, pending, bundles, SeaWorldView, art, legacy, announcer };
 }
 
 test('legacy enemies render with genuine current-sea art without changing saved combat data', () => {
   const f = fixture(), view = Object.create(f.SeaWorldView.prototype);
   const loaded = { frames: new Map(), sequences: new Map() };
-  Object.assign(view, { current: 'twilight', sceneLayer: 'twilight', sceneArt: loaded, height: 812,
-    actors: new Map(), scenery:[], prepare() {}, leases: { get: layer => layer === 'twilight' ? loaded : undefined },
+  Object.assign(view, { current: 'twilight', height: 812,
+    actors: new Map(), strips: new Map(), scenery: [], announcer: new f.announcer.LayerAnnouncer(),
+    prepare() {}, buildLayerStrips() {}, applyBlend() {}, renderSnow() {}, renderBoundary() {}, scrollScene() {},
+    leases: { get: layer => layer === 'twilight' ? loaded : undefined },
     player: { node: { setPosition() {}, setScale() {} } },
     actor(key) { return { key, node: { setPosition() {}, destroy() {} }, sprite: {}, parts: [] }; },
   });

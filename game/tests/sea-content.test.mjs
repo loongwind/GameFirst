@@ -71,8 +71,8 @@ test('all primary gates and extra abyss whale are once-per-dive; world bounds an
   assert.deepEqual(s.content.openRifts, ['sunlight', 'twilight', 'abyss']);
   assert.equal(s.snapshot.cargo.pearl, 8); assert.equal(s.snapshot.cargo.core, 4);
   s.battle.player.x = 10000; s.battle.player.y = 10000; s.setInput(1, 1); step(s);
-  assert.equal(s.depth, 2400); assert.ok(s.battle.player.x <= 360);
-  assert.ok(values(s.battle.enemies).every(e => e.x >= -360 && e.x <= 360 && e.y >= 0 && e.y <= 2400));
+  assert.equal(s.depth, 2400); assert.ok(s.battle.player.x <= 528, 'player center keeps its 12-unit collision margin');
+  assert.ok(values(s.battle.enemies).every(e => e.x >= -540 && e.x <= 540 && e.y >= 0 && e.y <= 2400));
   const shallow = s.battle.spawnEnemy({ x: 0, y: 100, assetKey: 'enemy_normal_01_moon_jelly' });
   const shallowId = shallow.id; step(s); assert.equal(s.battle.enemies.get(shallowId), undefined);
 });
@@ -147,4 +147,69 @@ test('a blocked boundary keeps its guardian layer until the boss dies, then ente
   s.battle.weapons[0].nextFireTick = 1; step(s); step(s);
   assert.equal(s.battle.activeContentLayer, 'twilight'); assert.equal(s.content.layer, 'twilight');
   assert.ok(values(s.battle.enemies).every(e => e.layer === 'twilight'));
+});
+
+test('LOO-70 world bounds widen to ±540 with a ±528 player center limit', () => {
+  assert.equal(api.WORLD_BOUNDS.minX, -540); assert.equal(api.WORLD_BOUNDS.maxX, 540);
+  assert.equal(api.CAMERA_LIMIT_X, 352.5); // ±(540 − 187.5)
+  const s = make({ battle: { spawn: false, content: true, weapons: [] } });
+  s.battle.player.x = -10000; step(s);
+  assert.equal(s.battle.player.x, -528, 'clamped center equals collision radius margin');
+  s.setInput(1, 0); step(s);
+  assert.ok(s.battle.player.x > -528, 'movement away from the clamp works immediately');
+  // Edge spawns clamp inside the world and re-aim into open water instead of point-blank.
+  const spawner = make({});
+  spawner.battle.player.x = 528; spawner.battle.player.y = 500;
+  const seen = new Set();
+  for (let i = 0; i < 240; i++) {
+    step(spawner);
+    for (const e of values(spawner.battle.enemies)) {
+      if (seen.has(e.id)) continue;
+      seen.add(e.id);
+      assert.ok(Math.abs(e.x) <= 540, 'spawn clamps inside the world');
+      assert.ok(Math.hypot(e.x - spawner.battle.player.x, e.y - spawner.battle.player.y) >= 120,
+        `fresh edge spawn stays >=120 from the player (got ${Math.hypot(e.x - spawner.battle.player.x, e.y - spawner.battle.player.y)})`);
+    }
+  }
+});
+
+test('LOO-70 threshold residency preloads before each band and evicts 120m past it', () => {
+  const at = depth => api.residentLayersAt(depth);
+  assert.deepEqual(at(0), ['sunlight'], 'first dive holds only sunlight');
+  assert.deepEqual(at(499), ['sunlight']);
+  assert.deepEqual(at(500), ['sunlight', 'twilight'], 'twilight preloads at 500m, 240m before its band');
+  assert.deepEqual(at(740), ['sunlight', 'twilight']);
+  assert.deepEqual(at(979), ['sunlight', 'twilight']);
+  assert.deepEqual(at(981), ['twilight'], 'sunlight evicts 120m past the band');
+  assert.deepEqual(at(1299), ['twilight']);
+  assert.deepEqual(at(1300), ['twilight', 'abyss'], 'abyss preloads at 1300m');
+  assert.deepEqual(at(1660), ['twilight', 'abyss']);
+  assert.deepEqual(at(1781), ['abyss'], 'twilight evicts 120m past its lower band');
+  assert.deepEqual(at(2400), ['abyss'], 'deep return holds only abyss');
+  for (let depth = 0; depth <= 2400; depth += 5) assert.ok(at(depth).length <= 2, `at most two resident layers at ${depth}m`);
+  for (let depth = 0; depth <= 2400; depth += 5) assert.ok(at(depth).includes(api.layerAtDepth(depth)), `current layer resident at ${depth}m`);
+});
+
+test('LOO-70 band blend weights follow real depth linearly and exist only inside bands', () => {
+  assert.equal(api.bandBlend(700), undefined);
+  const entry = api.bandBlend(740);
+  assert.equal(entry.band.boundary, 800); assert.equal(entry.weight, 0);
+  const mid = api.bandBlend(800);
+  assert.equal(mid.weight, .5);
+  const exit = api.bandBlend(860);
+  assert.equal(exit.weight, 1);
+  assert.equal(api.bandBlend(900), undefined);
+  assert.equal(api.bandBlend(1540).band.boundary, 1600);
+  assert.equal(api.bandBlend(1600).weight, .5);
+  assert.equal(api.bandBlend(2400), undefined);
+});
+
+test('LOO-70 barriers pin the player to the band edge while the far layer is not ready', () => {
+  const s = make({ battle: { spawn: false, content: true, weapons: [] } });
+  s.battle.player.y = 700; s.battle.barrierDown = 740;
+  for (let i = 0; i < 40; i++) s.setInput(0, 1), step(s); // dive hard
+  assert.ok(s.battle.player.y <= 740, 'barrierDown clamps downward travel');
+  s.battle.barrierDown = undefined; s.battle.barrierUp = 860; s.battle.player.y = 900;
+  for (let i = 0; i < 40; i++) s.setInput(0, -1), step(s); // climb hard
+  assert.ok(s.battle.player.y >= 860, 'barrierUp clamps upward travel');
 });

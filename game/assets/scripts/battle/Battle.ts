@@ -5,7 +5,7 @@ import { body, resetBody, SeededRandom, STEP_SECONDS, weaponSpec } from './model
 import { SonarSteering, canMove } from './SonarSteering';
 import type { TerrainCircle } from './model';
 import type { BattleOptions, Capacities, Effect, Enemy, FloatingText, Loot, Player, Projectile, WeaponKind, WeaponState } from './model';
-import { BOSS_ENCOUNTERS, ENEMY_CATALOG, WORLD_BOUNDS, SUNLIGHT_TUNING, enemyByKey, enemyStrength, layerAtDepth } from './SeaContent';
+import { BOSS_ENCOUNTERS, ENEMY_CATALOG, WORLD_BOUNDS, MIN_SPAWN_DISTANCE, SUNLIGHT_TUNING, enemyByKey, enemyStrength, layerAtDepth } from './SeaContent';
 import type { ContentProgress, SeaLayer } from './SeaContent';
 
 export interface BattleCheckpoint {
@@ -32,6 +32,12 @@ export class Battle {
   }
   readonly obstacles: readonly TerrainCircle[];
   readonly dangerZones: readonly TerrainCircle[];
+  /** Presentation-owned depth gates (LOO-70 §3): when the neighbouring sea layer has not
+   *  finished loading, the view pins these to the band edge so the player can still fight,
+   *  dodge and turn back instead of crossing into an unloaded layer. Purely a clamp — no
+   *  timers, damage or spawning are affected, and they are never part of a checkpoint. */
+  barrierUp?: number;
+  barrierDown?: number;
   private readonly steering = new SonarSteering();
   private sonar = false;
   private manual = false;
@@ -143,7 +149,7 @@ export class Battle {
     const e = this.enemies.acquire();
     if (!e) return undefined;
     e.x = e.previousX = spec.x; e.y = e.previousY = spec.y;
-    if (this.contentEnabled) { e.x = e.previousX = this.boundX(e.x); e.y = e.previousY = this.boundDepth(e.y); }
+    if (this.contentEnabled) { e.x = e.previousX = this.boundX(e.x, kind === 'boss' ? 40 : kind === 'elite' ? 18 : 10); e.y = e.previousY = this.boundDepth(e.y); }
     e.hp = e.maxHp = spec.hp ?? strength.maxHp; e.attack = spec.attack ?? strength.attack; e.spawnDepth = spawnDepth;
     e.assetKey = identity?.assetKey ?? ''; e.name = identity?.name ?? ''; e.layer = identity?.layer ?? layerAtDepth(spawnDepth);
     e.speed = spec.speed ?? 30; e.radius = spec.radius ?? (kind === 'boss' ? 40 : kind === 'elite' ? 18 : 10); e.lootValue = spec.lootValue ?? 10;
@@ -222,10 +228,22 @@ export class Battle {
     const interval = this.contentEnabled && layer === 'sunlight' ? this.sunlightSpawnInterval : this.spawnInterval;
     const candidates = this.contentEnabled ? ENEMY_CATALOG.filter(e => e.layer === layer && e.kind === (this.tick > 1 && Math.floor(this.tick / interval) % 6 === 5 ? 'elite' : 'normal')) : [];
     const identity = candidates.length ? candidates[Math.floor(this.random.next() * candidates.length)] : undefined;
-    this.spawnEnemy({ x: this.player.x + Math.cos(angle) * distance, y: this.player.y + Math.sin(angle) * distance, assetKey: identity?.assetKey, spawnDepth: this.player.y });
+    let x = this.player.x + Math.cos(angle) * distance, y = this.player.y + Math.sin(angle) * distance;
+    if (this.contentEnabled) {
+      // A spawn aimed past the world edge must not clamp onto the player: re-aim into open
+      // water so edge-camping never produces point-blank ambushes (LOO-70 §2).
+      const radius = identity && identity.kind === 'elite' ? 18 : 10;
+      const settled = (cx: number, cy: number) => ({ x: this.boundX(cx, radius), y: this.boundDepth(cy) });
+      const first = settled(x, y);
+      if (Math.hypot(first.x - this.player.x, first.y - this.player.y) < MIN_SPAWN_DISTANCE) {
+        const mirror = settled(this.player.x + Math.cos(angle + Math.PI) * distance, this.player.y + Math.sin(angle + Math.PI) * distance);
+        if (Math.hypot(mirror.x - this.player.x, mirror.y - this.player.y) >= MIN_SPAWN_DISTANCE) Object.assign(first, mirror);
+      }
+      x = first.x; y = first.y;
+    }
+    this.spawnEnemy({ x, y, assetKey: identity?.assetKey, spawnDepth: this.player.y });
     this.nextSpawnTick = this.tick + interval;
   }
-
   private movementSystem(): void {
     const player = this.player;
     player.previousX = player.x; player.previousY = player.y;
@@ -234,7 +252,7 @@ export class Battle {
     if (canMove(player, dx, dy, this.obstacles)) { player.x += dx; player.y += dy; }
     else if (canMove(player, dx, 0, this.obstacles)) player.x += dx;
     else if (canMove(player, 0, dy, this.obstacles)) player.y += dy;
-    if (this.contentEnabled) { player.x = this.boundX(player.x); player.y = Math.min(this.boundDepth(player.y), this.contentProgress.gateDepth ?? WORLD_BOUNDS.maxDepth); }
+    if (this.contentEnabled) { player.x = this.boundX(player.x, player.radius); this.clampPlayerDepths(); }
     for (const e of this.enemies.values()) {
       e.previousX = e.x; e.previousY = e.y;
       const dx = player.x - e.x, dy = player.y - e.y, distance = Math.hypot(dx, dy);
@@ -244,7 +262,7 @@ export class Battle {
       }
       const fraction = Math.min(STEP_SECONDS, e.speed > 0 ? distance / e.speed : STEP_SECONDS);
       e.x += e.vx * fraction; e.y += e.vy * fraction;
-      if (this.contentEnabled) { e.x = this.boundX(e.x); e.y = this.boundDepth(e.y); }
+      if (this.contentEnabled) { e.x = this.boundX(e.x, e.radius); e.y = this.boundDepth(e.y); }
     }
     for (const p of this.projectiles.values()) {
       if (this.tick >= p.expiresTick) { this.projectiles.release(p.id); continue; }
@@ -384,16 +402,24 @@ export class Battle {
     }
   }
 
-  private boundX(x: number): number { return Math.max(WORLD_BOUNDS.minX, Math.min(WORLD_BOUNDS.maxX, x)); }
+  private boundX(x: number, radius = 0): number { return Math.max(WORLD_BOUNDS.minX + radius, Math.min(WORLD_BOUNDS.maxX - radius, x)); }
   private boundDepth(y: number): number { return Math.max(0, Math.min(WORLD_BOUNDS.maxDepth, y)); }
-  private contentSystem(): void {
-    this.player.x = this.boundX(this.player.x);
+  /** Depth gates in one place so movement can never outrun a clamp within the same tick. */
+  private clampPlayerDepths(): void {
     this.player.y = Math.min(this.boundDepth(this.player.y), this.contentProgress.gateDepth ?? WORLD_BOUNDS.maxDepth);
+    if (this.barrierDown !== undefined) this.player.y = Math.min(this.player.y, Math.max(0, this.barrierDown));
+    if (this.barrierUp !== undefined) this.player.y = Math.max(this.player.y, this.barrierUp);
+  }
+  private contentSystem(): void {
+    this.player.x = this.boundX(this.player.x, this.player.radius);
+    this.clampPlayerDepths();
     const layer = this.activeContentLayer;
     for (const e of this.enemies.values()) {
       if (e.layer === layer) continue;
       const boundaryBoss = e.kind === 'boss' && BOSS_ENCOUNTERS.some(b => b.assetKey === e.assetKey && b.gate && b.depth === this.player.y);
-      if (!boundaryBoss) this.enemies.release(e.id);
+      // Seamless bands keep the fight flowing (LOO-70 §3): previous-layer enemies persist
+      // until death or until they trail far enough offscreen to be legitimately cleaned up.
+      if (!boundaryBoss && Math.hypot(e.x - this.player.x, e.y - this.player.y) > 420) this.enemies.release(e.id);
     }
     if (!this.autoSpawn) return;
     for (const boss of BOSS_ENCOUNTERS) {

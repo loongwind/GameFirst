@@ -28,6 +28,7 @@ export function hudLayout(width: number, height: number, insets: HudInsets = { t
     oxygen: rect(left + 18, top + 12, 153 - left, 24),
     cargo: rect(left + 18, top + 42, 230 - left - right, 22), status, joystick, modal,
     sonar: rect(left + 12, dockY, 125 - left - right, touch),
+    seaRetry: rect(left + 12, dockY + touch + 8, 125 - left - right, touch),
     oxygenCard: rect(left + 12, cardBottom-cardHeight, compact ? 142 : 351-left-right, cardHeight),
     oxygenAd: rect(left + (compact ? 16 : 20), cardBottom-touch-(compact ? 4 : 8), compact ? 61 : 170-left-right, touch),
     oxygenDismiss: rect(compact ? left+83 : 202-right, cardBottom-touch-(compact ? 4 : 8), compact ? 61 : 151, touch),

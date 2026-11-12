@@ -8,5 +8,5 @@ export { SpatialGrid, circlesOverlap, segmentHitsCircle, expandingRingHitsCircle
 export { joystickVector } from './input';
 export { SeededRandom, STEP_SECONDS, WEAPON_DEFAULTS } from './model';
 export type { BattleOptions, Capacities, Enemy, Projectile, Loot, WeaponInput, WeaponSpec, WeaponKind } from './model';
-export { SEA_LAYERS, ENEMY_CATALOG, WORLD_BOUNDS, BOSS_ENCOUNTERS, ENEMY_TUNING, SUNLIGHT_TUNING, layerAtDepth, enemyByKey, enemyStrength } from './SeaContent';
-export type { SeaLayer, EnemyContent, ContentProgress } from './SeaContent';
+export { SEA_LAYERS, ENEMY_CATALOG, WORLD_BOUNDS, BOSS_ENCOUNTERS, ENEMY_TUNING, SUNLIGHT_TUNING, layerAtDepth, enemyByKey, enemyStrength, SEA_BANDS, residentLayersAt, bandBlend, CAMERA_LIMIT_X, MIN_SPAWN_DISTANCE } from './SeaContent';
+export type { SeaLayer, EnemyContent, ContentProgress, SeaBand } from './SeaContent';

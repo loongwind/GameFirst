@@ -20,7 +20,38 @@ export const SEA_LAYERS = Object.freeze([
   Object.freeze({ layer: 'twilight' as const, name: '暮光层', minDepth: 800, maxDepth: 1600 }),
   Object.freeze({ layer: 'abyss' as const, name: '深渊层', minDepth: 1600, maxDepth: 2400 }),
 ]);
-export const WORLD_BOUNDS = Object.freeze({ minX: -360, maxX: 360, minDepth: 0, maxDepth: 2400 });
+/** LOO-70 §2: playfield widened to ±540 world units (was ±360). The player's center keeps a
+ *  12-unit collision margin (±528) and enemies keep their own radius; the visual boundary at
+ *  ±540 therefore coincides with the movement limit and no dead margin remains. */
+export const WORLD_BOUNDS = Object.freeze({ minX: -540, maxX: 540, minDepth: 0, maxDepth: 2400 });
+/** Camera center clamp for the fixed 375-wide logical canvas: ±(540 − 187.5). */
+export const CAMERA_LIMIT_X = 352.5;
+/** Minimum distance between the player and a fresh spawn after edge clamping (LOO-70 §2). */
+export const MIN_SPAWN_DISTANCE = 120;
+
+/** Seamless layer transition (LOO-70 §3). Depth-threshold residency: a layer starts
+ *  downloading 240m before its visual band, stays resident through the band plus a 120m
+ *  hysteresis margin, and at most two sea layers are ever resident alongside the common
+ *  dive bundle. Bands are 740–860m (sunlight↔twilight) and 1540–1660m (twilight↔abyss). */
+export interface SeaBand { readonly lower: SeaLayer; readonly upper: SeaLayer; readonly lo: number; readonly hi: number; readonly boundary: number }
+export const SEA_BANDS: readonly SeaBand[] = Object.freeze([
+  Object.freeze({ lower: 'sunlight' as const, upper: 'twilight' as const, lo: 740, hi: 860, boundary: 800 }),
+  Object.freeze({ lower: 'twilight' as const, upper: 'abyss' as const, lo: 1540, hi: 1660, boundary: 1600 }),
+]);
+export function residentLayersAt(depth: number): SeaLayer[] {
+  if (!Number.isFinite(depth) || depth < 0) throw new RangeError('Invalid depth');
+  const wanted = new Set<SeaLayer>();
+  if (depth <= 980) wanted.add('sunlight');
+  if (depth >= 500 && depth <= 1780) wanted.add('twilight');
+  if (depth >= 1300) wanted.add('abyss');
+  return [...wanted];
+}
+/** Visual blend weight inside a transition band: 0 = lower layer, 1 = upper layer. */
+export function bandBlend(depth: number): { band: (typeof SEA_BANDS)[number]; weight: number } | undefined {
+  const band = SEA_BANDS.find(b => depth >= b.lo && depth <= b.hi);
+  if (!band) return undefined;
+  return { band, weight: (depth - band.lo) / (band.hi - band.lo) };
+}
 export interface EnemyContent { readonly assetKey: string; readonly layer: SeaLayer; readonly kind: EnemyKind; readonly name: string }
 export const ENEMY_CATALOG: readonly EnemyContent[] = Object.freeze([
   Object.freeze({"assetKey": "enemy_normal_01_moon_jelly", "layer": "sunlight", "kind": "normal", "name": "月光水母"}),
