@@ -1,0 +1,173 @@
+{
+  "count": 15,
+  "checks": [
+    {
+      "key": "loo70_fx_sonar",
+      "size": [
+        128,
+        128
+      ],
+      "alpha": true,
+      "sha256": "bcc5e32c6d427481d0422a92ab5d60776cc3e62c55af35c38addb27adb8910d8"
+    },
+    {
+      "key": "loo70_fx_torpedo",
+      "size": [
+        64,
+        32
+      ],
+      "alpha": true,
+      "sha256": "a8c58f3af3e92699bcfd1b3915f9f4279cc5e7f9c627e7ce3c5ff5873a43435a"
+    },
+    {
+      "key": "loo70_fx_arc",
+      "size": [
+        128,
+        32
+      ],
+      "alpha": true,
+      "sha256": "626b07f8f9c170d3fcf0a1ba6236dbb1a9570f6898eed1636f7248293b850858"
+    },
+    {
+      "key": "loo70_fx_mine",
+      "size": [
+        64,
+        64
+      ],
+      "alpha": true,
+      "sha256": "35a7de6275ad3b509dc9baccea945546d646fb7bf53179a1cb87fe5340f3907b"
+    },
+    {
+      "key": "loo70_fx_wake",
+      "size": [
+        32,
+        16
+      ],
+      "alpha": true,
+      "sha256": "1934e676478b123b41dd4454e5d281a632b9c1f057d61e94545b7ce51d3f359c"
+    },
+    {
+      "key": "loo70_fx_impact",
+      "size": [
+        256,
+        64
+      ],
+      "alpha": true,
+      "sha256": "1a9fd82189c0559d684bed37d639581d080de434e6879fceb2cf4a8816477ec4"
+    },
+    {
+      "key": "loo70_fx_enemy_dart",
+      "size": [
+        32,
+        32
+      ],
+      "alpha": true,
+      "sha256": "873de33747c33c69a14cf0ff6993e41338a0200f9a966ccdd4a9d951cc7361ea"
+    },
+    {
+      "key": "loo70_ui_hull",
+      "size": [
+        192,
+        192
+      ],
+      "alpha": true,
+      "sha256": "5cadcfbe7671330e88689b97e9421d2138c7bfefd980248d4473f98a4a7b0bda"
+    },
+    {
+      "key": "loo70_ui_hud",
+      "size": [
+        128,
+        64
+      ],
+      "alpha": true,
+      "sha256": "40266d37c50f3493317c9fc488086f660fd0ba78147c412edcc1c8e498f25fa9"
+    },
+    {
+      "key": "loo70_ui_gold",
+      "size": [
+        192,
+        80
+      ],
+      "alpha": true,
+      "sha256": "0ef14d9d370e30eb0f062a29e14df9379b5e9219ed2fd1523a51c51ead88fb85"
+    },
+    {
+      "key": "loo70_ui_steel",
+      "size": [
+        192,
+        80
+      ],
+      "alpha": true,
+      "sha256": "683485d0d0831da040078c0b3985190b8f7923774bab02521fe0b99fcb3a9b15"
+    },
+    {
+      "key": "loo70_ui_socket",
+      "size": [
+        96,
+        96
+      ],
+      "alpha": true,
+      "sha256": "3fbb798fc7142be7e8476a5a83a54fc0afd97ffff551c070bacbc4ac49ad464b"
+    },
+    {
+      "key": "loo70_ui_ribbon",
+      "size": [
+        256,
+        80
+      ],
+      "alpha": true,
+      "sha256": "fd3895b55472670fd2dfc115f1a77e74419ff1dcc9f2b740189fcc564e1339d6"
+    },
+    {
+      "key": "loo70_ui_tech_node",
+      "size": [
+        64,
+        64
+      ],
+      "alpha": true,
+      "sha256": "74703e08396fde4cb185bbb9eeb4ff9c2954b6e485cfc86f7d2a338378371086"
+    },
+    {
+      "key": "loo70_transition_silt",
+      "size": [
+        256,
+        128
+      ],
+      "alpha": true,
+      "sha256": "ca92a88634a3ef0c387bb37313b35bf6a2ef8869c27903e92b814f03102a293e"
+    }
+  ],
+  "bundles": {
+    "sunlight": {
+      "pngBytes": 1583962,
+      "rgbaBytes": 7356312,
+      "downloadBudgetBytes": 2097152,
+      "textureBudgetBytes": 12582912
+    },
+    "twilight": {
+      "pngBytes": 1506174,
+      "rgbaBytes": 7356312,
+      "downloadBudgetBytes": 4194304,
+      "textureBudgetBytes": 12582912
+    },
+    "abyss": {
+      "pngBytes": 1521388,
+      "rgbaBytes": 8503192,
+      "downloadBudgetBytes": 4194304,
+      "textureBudgetBytes": 12582912
+    },
+    "dive": {
+      "pngBytes": 126267,
+      "rgbaBytes": 550912,
+      "downloadBudgetBytes": 1048576,
+      "textureBudgetBytes": 1048576
+    }
+  },
+  "meta": {
+    "pngBytes": 2115381,
+    "rgbaBytes": 8744856,
+    "downloadBudgetBytes": 3145728,
+    "textureBudgetBytes": 16777216
+  },
+  "notes": "PNG/import budgets only; no claim of published Cocos/WeChat package or device performance."
+}

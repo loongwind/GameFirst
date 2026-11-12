@@ -219,6 +219,53 @@
       "width": 96,
       "height": 96,
       "bytes": 11441
+    },
+    {
+      "name": "loo70_ui_hull.png",
+      "sourceSha256": "5cadcfbe7671330e88689b97e9421d2138c7bfefd980248d4473f98a4a7b0bda",
+      "width": 192,
+      "height": 192,
+      "bytes": 24763,
+      "anchor": "0.5,0.5",
+      "nineSlice": "L/T/R/B=32/40/32/32px；中央128×120可双轴拉伸；铆钉仅四角；最小192×192；中心不画文字"
+    },
+    {
+      "name": "loo70_ui_gold.png",
+      "sourceSha256": "0ef14d9d370e30eb0f062a29e14df9379b5e9219ed2fd1523a51c51ead88fb85",
+      "width": 192,
+      "height": 80,
+      "bytes": 9990,
+      "anchor": "0.5,0.5",
+      "nineSlice": "L/T/R/B=24/20/24/20；中心144×40可拉伸；最小192×80；无文字"
+    },
+    {
+      "name": "loo70_ui_socket.png",
+      "sourceSha256": "3fbb798fc7142be7e8476a5a83a54fc0afd97ffff551c070bacbc4ac49ad464b",
+      "width": 96,
+      "height": 96,
+      "bytes": 9071,
+      "anchor": "0.5,0.5",
+      "nineSlice": "L/T/R/B=16/16/16/16；中心64×64；叠原品质框，不拉伸图标"
+    },
+    {
+      "name": "loo70_ui_ribbon.png",
+      "sourceSha256": "fd3895b55472670fd2dfc115f1a77e74419ff1dcc9f2b740189fcc564e1339d6",
+      "width": 256,
+      "height": 80,
+      "bytes": 19182,
+      "anchor": "0.5,0.5",
+      "nineSlice": "L/T/R/B=64/16/64/16；中心128×48；最小256×80"
+    },
+    {
+      "name": "loo70_ui_tech_node.png",
+      "sourceSha256": "74703e08396fde4cb185bbb9eeb4ff9c2954b6e485cfc86f7d2a338378371086",
+      "width": 64,
+      "height": 64,
+      "bytes": 8049,
+      "anchor": "0.5,0.5",
+      "nineSlice": "不拉伸；32逻辑px显示；点亮/锁定靠代码与现有锁图标"
     }
-  ]
+  ],
+  "pngBytes": 2115381,
+  "rgbaBytes": 8744856
 }

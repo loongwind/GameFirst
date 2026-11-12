@@ -1,5 +1,9 @@
 # 潜渊猎手 · MVP 素材 v1-r9
 
+## LOO-70 优化增量
+
+新增15张生产PNG，完整规格、预算和验收边界见 `QUALITY-LOO70.md`；评审图为 `fx-review-r10.png`、`ui-review-r7.png`。两份索引现为200条，原185条保留。复导出与登记使用 `export-loo70.py`、`register-loo70.py`；原MVP说明和r9质量摘要保留为历史基线。
+
 MVP 167/167 项完成美术自检，供组织整体验收。A8、B46、C46、D67全部齐备；P1的18项后置。完整185项索引见 `asset-index-final.csv`，与 `asset-index.csv` 逐字节相同。整体质量、实际包体、检查证据和验收边界见 `QUALITY-SUMMARY-FINAL.md`。
 
 ## 本轮新增27项
