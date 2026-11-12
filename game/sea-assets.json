@@ -2223,7 +2223,7 @@
     {
       "key": "loo70_fx_sonar",
       "bundle": "dive",
-      "kind": "fx",
+      "kind": "特效",
       "sourcePath": "output/game-assets/v1/dive/loo70_fx_sonar.png",
       "sourceSha256": "bcc5e32c6d427481d0422a92ab5d60776cc3e62c55af35c38addb27adb8910d8",
       "importPath": "game/assets/bundles/dive/content/loo70_fx_sonar.png",
@@ -2231,17 +2231,12 @@
       "loadPath": "content/loo70_fx_sonar",
       "width": 128,
       "height": 128,
-      "bytes": 15543,
-      "anchor": "0.5,0.5",
-      "blendMode": "Alpha",
-      "animationFrames": 1,
-      "animationFps": 0,
-      "nineSlice": null
+      "bytes": 15543
     },
     {
       "key": "loo70_fx_torpedo",
       "bundle": "dive",
-      "kind": "fx",
+      "kind": "特效",
       "sourcePath": "output/game-assets/v1/dive/loo70_fx_torpedo.png",
       "sourceSha256": "a8c58f3af3e92699bcfd1b3915f9f4279cc5e7f9c627e7ce3c5ff5873a43435a",
       "importPath": "game/assets/bundles/dive/content/loo70_fx_torpedo.png",
@@ -2249,17 +2244,12 @@
       "loadPath": "content/loo70_fx_torpedo",
       "width": 64,
       "height": 32,
-      "bytes": 3727,
-      "anchor": "0.5,0.5",
-      "blendMode": "Alpha",
-      "animationFrames": 1,
-      "animationFps": 0,
-      "nineSlice": null
+      "bytes": 3727
     },
     {
       "key": "loo70_fx_arc",
       "bundle": "dive",
-      "kind": "fx",
+      "kind": "特效",
       "sourcePath": "output/game-assets/v1/dive/loo70_fx_arc.png",
       "sourceSha256": "626b07f8f9c170d3fcf0a1ba6236dbb1a9570f6898eed1636f7248293b850858",
       "importPath": "game/assets/bundles/dive/content/loo70_fx_arc.png",
@@ -2267,17 +2257,12 @@
       "loadPath": "content/loo70_fx_arc",
       "width": 128,
       "height": 32,
-      "bytes": 5260,
-      "anchor": "0,0.5",
-      "blendMode": "Additive",
-      "animationFrames": 1,
-      "animationFps": 0,
-      "nineSlice": null
+      "bytes": 5260
     },
     {
       "key": "loo70_fx_mine",
       "bundle": "dive",
-      "kind": "fx",
+      "kind": "特效",
       "sourcePath": "output/game-assets/v1/dive/loo70_fx_mine.png",
       "sourceSha256": "35a7de6275ad3b509dc9baccea945546d646fb7bf53179a1cb87fe5340f3907b",
       "importPath": "game/assets/bundles/dive/content/loo70_fx_mine.png",
@@ -2285,17 +2270,12 @@
       "loadPath": "content/loo70_fx_mine",
       "width": 64,
       "height": 64,
-      "bytes": 8322,
-      "anchor": "0.5,0.5",
-      "blendMode": "Alpha",
-      "animationFrames": 1,
-      "animationFps": 0,
-      "nineSlice": null
+      "bytes": 8322
     },
     {
       "key": "loo70_fx_wake",
       "bundle": "dive",
-      "kind": "fx",
+      "kind": "特效",
       "sourcePath": "output/game-assets/v1/dive/loo70_fx_wake.png",
       "sourceSha256": "1934e676478b123b41dd4454e5d281a632b9c1f057d61e94545b7ce51d3f359c",
       "importPath": "game/assets/bundles/dive/content/loo70_fx_wake.png",
@@ -2303,17 +2283,12 @@
       "loadPath": "content/loo70_fx_wake",
       "width": 32,
       "height": 16,
-      "bytes": 880,
-      "anchor": "0.5,0.5",
-      "blendMode": "Additive",
-      "animationFrames": 1,
-      "animationFps": 0,
-      "nineSlice": null
+      "bytes": 880
     },
     {
       "key": "loo70_fx_impact",
       "bundle": "dive",
-      "kind": "fx",
+      "kind": "特效",
       "sourcePath": "output/game-assets/v1/dive/loo70_fx_impact.png",
       "sourceSha256": "1a9fd82189c0559d684bed37d639581d080de434e6879fceb2cf4a8816477ec4",
       "importPath": "game/assets/bundles/dive/content/loo70_fx_impact.png",
@@ -2321,17 +2296,12 @@
       "loadPath": "content/loo70_fx_impact",
       "width": 256,
       "height": 64,
-      "bytes": 16517,
-      "anchor": "0.5,0.5",
-      "blendMode": "Additive",
-      "animationFrames": 4,
-      "animationFps": 24,
-      "nineSlice": null
+      "bytes": 16517
     },
     {
       "key": "loo70_fx_enemy_dart",
       "bundle": "dive",
-      "kind": "fx",
+      "kind": "特效",
       "sourcePath": "output/game-assets/v1/dive/loo70_fx_enemy_dart.png",
       "sourceSha256": "873de33747c33c69a14cf0ff6993e41338a0200f9a966ccdd4a9d951cc7361ea",
       "importPath": "game/assets/bundles/dive/content/loo70_fx_enemy_dart.png",
@@ -2339,12 +2309,25 @@
       "loadPath": "content/loo70_fx_enemy_dart",
       "width": 32,
       "height": 32,
-      "bytes": 1219,
+      "bytes": 1219
+    },
+    {
+      "key": "loo70_ui_hull",
+      "bundle": "meta",
+      "kind": "ui",
+      "sourcePath": "output/game-assets/v1/meta/loo70_ui_hull.png",
+      "sourceSha256": "5cadcfbe7671330e88689b97e9421d2138c7bfefd980248d4473f98a4a7b0bda",
+      "importPath": "game/assets/bundles/meta/ui/loo70_ui_hull.png",
+      "importSha256": "5cadcfbe7671330e88689b97e9421d2138c7bfefd980248d4473f98a4a7b0bda",
+      "loadPath": "ui/loo70_ui_hull",
+      "width": 192,
+      "height": 192,
+      "bytes": 24763,
       "anchor": "0.5,0.5",
       "blendMode": "Alpha",
       "animationFrames": 1,
       "animationFps": 0,
-      "nineSlice": null
+      "nineSlice": "L/T/R/B=32/40/32/32px；中央128×120可双轴拉伸；铆钉仅四角；最小192×192；中心不画文字"
     },
     {
       "key": "loo70_ui_hud",
@@ -2365,6 +2348,24 @@
       "nineSlice": "L/T/R/B=16/16/16/16；中心96×32；最小128×64"
     },
     {
+      "key": "loo70_ui_gold",
+      "bundle": "meta",
+      "kind": "ui",
+      "sourcePath": "output/game-assets/v1/meta/loo70_ui_gold.png",
+      "sourceSha256": "0ef14d9d370e30eb0f062a29e14df9379b5e9219ed2fd1523a51c51ead88fb85",
+      "importPath": "game/assets/bundles/meta/ui/loo70_ui_gold.png",
+      "importSha256": "0ef14d9d370e30eb0f062a29e14df9379b5e9219ed2fd1523a51c51ead88fb85",
+      "loadPath": "ui/loo70_ui_gold",
+      "width": 192,
+      "height": 80,
+      "bytes": 9990,
+      "anchor": "0.5,0.5",
+      "blendMode": "Alpha",
+      "animationFrames": 1,
+      "animationFps": 0,
+      "nineSlice": "L/T/R/B=24/20/24/20；中心144×40可拉伸；最小192×80；无文字"
+    },
+    {
       "key": "loo70_ui_steel",
       "bundle": "dive",
       "kind": "ui",
@@ -2383,9 +2384,63 @@
       "nineSlice": "L/T/R/B=24/20/24/20；中心144×40；meta引用公共dive不复制"
     },
     {
+      "key": "loo70_ui_socket",
+      "bundle": "meta",
+      "kind": "ui",
+      "sourcePath": "output/game-assets/v1/meta/loo70_ui_socket.png",
+      "sourceSha256": "3fbb798fc7142be7e8476a5a83a54fc0afd97ffff551c070bacbc4ac49ad464b",
+      "importPath": "game/assets/bundles/meta/ui/loo70_ui_socket.png",
+      "importSha256": "3fbb798fc7142be7e8476a5a83a54fc0afd97ffff551c070bacbc4ac49ad464b",
+      "loadPath": "ui/loo70_ui_socket",
+      "width": 96,
+      "height": 96,
+      "bytes": 9071,
+      "anchor": "0.5,0.5",
+      "blendMode": "Alpha",
+      "animationFrames": 1,
+      "animationFps": 0,
+      "nineSlice": "L/T/R/B=16/16/16/16；中心64×64；叠原品质框，不拉伸图标"
+    },
+    {
+      "key": "loo70_ui_ribbon",
+      "bundle": "meta",
+      "kind": "ui",
+      "sourcePath": "output/game-assets/v1/meta/loo70_ui_ribbon.png",
+      "sourceSha256": "fd3895b55472670fd2dfc115f1a77e74419ff1dcc9f2b740189fcc564e1339d6",
+      "importPath": "game/assets/bundles/meta/ui/loo70_ui_ribbon.png",
+      "importSha256": "fd3895b55472670fd2dfc115f1a77e74419ff1dcc9f2b740189fcc564e1339d6",
+      "loadPath": "ui/loo70_ui_ribbon",
+      "width": 256,
+      "height": 80,
+      "bytes": 19182,
+      "anchor": "0.5,0.5",
+      "blendMode": "Alpha",
+      "animationFrames": 1,
+      "animationFps": 0,
+      "nineSlice": "L/T/R/B=64/16/64/16；中心128×48；最小256×80"
+    },
+    {
+      "key": "loo70_ui_tech_node",
+      "bundle": "meta",
+      "kind": "ui",
+      "sourcePath": "output/game-assets/v1/meta/loo70_ui_tech_node.png",
+      "sourceSha256": "74703e08396fde4cb185bbb9eeb4ff9c2954b6e485cfc86f7d2a338378371086",
+      "importPath": "game/assets/bundles/meta/ui/loo70_ui_tech_node.png",
+      "importSha256": "74703e08396fde4cb185bbb9eeb4ff9c2954b6e485cfc86f7d2a338378371086",
+      "loadPath": "ui/loo70_ui_tech_node",
+      "width": 64,
+      "height": 64,
+      "bytes": 8049,
+      "anchor": "0.5,0.5",
+      "blendMode": "Alpha",
+      "animationFrames": 1,
+      "animationFps": 0,
+      "nineSlice": "不拉伸；32逻辑px显示；点亮/锁定靠代码与现有锁图标"
+    },
+    {
       "key": "loo70_transition_silt",
       "bundle": "dive",
-      "kind": "fx",
+      "kind": "特效",
       "sourcePath": "output/game-assets/v1/dive/loo70_transition_silt.png",
       "sourceSha256": "ca92a88634a3ef0c387bb37313b35bf6a2ef8869c27903e92b814f03102a293e",
       "importPath": "game/assets/bundles/dive/content/loo70_transition_silt.png",
@@ -2393,12 +2448,7 @@
       "loadPath": "content/loo70_transition_silt",
       "width": 256,
       "height": 128,
-      "bytes": 20796,
-      "anchor": "0.5,0.5",
-      "blendMode": "Alpha",
-      "animationFrames": 1,
-      "animationFps": 0,
-      "nineSlice": null
+      "bytes": 20796
     }
   ]
 }

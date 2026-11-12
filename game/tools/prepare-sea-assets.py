@@ -11,12 +11,14 @@ import csv
 import hashlib
 import json
 import re
+import shutil
 import uuid
 
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE = ROOT / 'output/game-assets/v1'
 INDEX = SOURCE / 'asset-index-final.csv'
 RIGS = SOURCE / 'boss-rigs-r9.json'
+SPEC = ROOT / 'output/deliverables/loo-70-design/asset-list.csv'
 NAMESPACE = uuid.UUID('c5e8dff8-c956-52ee-86b3-17f850de1722')
 LAYERS = ('sunlight', 'twilight', 'abyss')
 
@@ -101,12 +103,17 @@ def classify(row):
         return f'{match[1]}-' + ('swim' if swim else 'idle'), (size * 4 if swim else size, size)
     if key.startswith('enemy_boss_'):
         return ('boss-part', (320, 320)) if key.endswith('_tentacle') else ('boss-body', (480, 480))
+    if key.startswith('loo70_'):
+        # LOO-70 FX/UI rows are exported at final size; they carry anchor and blend
+        # metadata and must keep their reviewed bytes verbatim (no re-encode).
+        return row['类别'].lower(), (int(row['宽px']), int(row['高px']))
     return None
 
 
 def main():
     rows = list(csv.DictReader(INDEX.open(encoding='utf-8-sig', newline='')))
     template = json.loads((ROOT / 'game/assets/bundles/meta/ui/hero_h01_harbor.png.meta').read_text())
+    spec_rows = {r['id']: r for r in csv.DictReader(SPEC.open(encoding='utf-8-sig', newline=''))}
     records = []
     for row in rows:
         selected = classify(row)
@@ -119,30 +126,43 @@ def main():
         bundle = 'dive' if kind == 'player' else row['资源包']
         bundle_path = ROOT / 'game/assets/bundles' / bundle
         directory_meta(bundle_path, bundle=True)
-        directory_meta(bundle_path / 'content')
-        output = bundle_path / 'content' / Path(row['path']).name
+        # Harbor meta assets live in ui/ (loadDir('ui')); sea bundles in content/.
+        subdir = 'ui' if bundle == 'meta' else 'content'
+        directory_meta(bundle_path / subdir)
+        output = bundle_path / subdir / Path(row['path']).name
         with Image.open(original) as image:
             if image.size != (int(row['宽px']), int(row['高px'])):
                 raise ValueError(f'Production index dimensions mismatch: {row["id"]}')
-            image = image.convert('RGBA')
-            if kind.endswith('-swim'):
-                cell = image.width // 4
-                if image.width != image.height * 4:
-                    raise ValueError(f'Invalid animation strip: {row["id"]}')
-                resized = Image.new('RGBA', (width, height))
-                for frame in range(4):
-                    tile = image.crop((frame * cell, 0, (frame + 1) * cell, cell))
-                    tile = tile.resize((height, height), Image.Resampling.LANCZOS)
-                    resized.paste(tile, (frame * height, 0))
+            if kind in ('fx', 'ui'):
+                # LOO-70 rows ship reviewed bytes; copying preserves their sha256.
+                shutil.copyfile(original, output)
             else:
-                resized = image.resize((width, height), Image.Resampling.LANCZOS)
-            resized.save(output, optimize=True, compress_level=9)
+                image = image.convert('RGBA')
+                if kind.endswith('-swim'):
+                    cell = image.width // 4
+                    if image.width != image.height * 4:
+                        raise ValueError(f'Invalid animation strip: {row["id"]}')
+                    resized = Image.new('RGBA', (width, height))
+                    for frame in range(4):
+                        tile = image.crop((frame * cell, 0, (frame + 1) * cell, cell))
+                        tile = tile.resize((height, height), Image.Resampling.LANCZOS)
+                        resized.paste(tile, (frame * height, 0))
+                else:
+                    resized = image.resize((width, height), Image.Resampling.LANCZOS)
+                resized.save(output, optimize=True, compress_level=9)
         image_meta(output, width, height, template)
         record = {'key': row['id'], 'bundle': bundle, 'kind': kind,
                   'sourcePath': relative(original), 'sourceSha256': row['sha256'],
                   'importPath': relative(output), 'importSha256': digest(output),
-                  'loadPath': 'content/' + output.stem, 'width': width, 'height': height,
+                  'loadPath': f'{subdir}/' + output.stem, 'width': width, 'height': height,
                   'bytes': output.stat().st_size}
+        if kind in ('fx', 'ui'):
+            # Design-provided presentation metadata used by the runtime FX layer.
+            spec = spec_rows[row['id']]
+            record.update({'anchor': spec['锚点'], 'blendMode': spec['混合模式'],
+                           'animationFrames': 4 if row['id'] == 'loo70_fx_impact' else 1,
+                           'animationFps': 24 if row['id'] == 'loo70_fx_impact' else 0,
+                           'nineSlice': spec['备注'] if kind == 'ui' else None})
         if kind.endswith('-swim'):
             record.update({'fps': 6, 'frames': [[i * height, 0, height, height] for i in range(4)]})
         records.append(record)

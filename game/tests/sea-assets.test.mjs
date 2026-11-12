@@ -34,7 +34,7 @@ test('every sea import is traceable to the genuine production index and bounded 
   const m = manifest(), index = new Map(sourceRows().map(row => [row.id, row]));
   assert.equal(m.sourceIndexSha256, shaText(m.sourceIndex));
   assert.equal(m.sourceRigsSha256, shaText(m.sourceRigs));
-  assert.equal(m.assets.length, 85); // 12 scenes + 64 idle/swim + 8 boss parts + hero.
+  assert.equal(m.assets.length, 100); // 12 scenes + 64 idle/swim + 8 boss parts + hero + 15 loo70 fx/ui (meta-bundle skins included).
   const paths = new Set();
   for (const a of m.assets) {
     const original = index.get(a.key); assert.ok(original, a.key);

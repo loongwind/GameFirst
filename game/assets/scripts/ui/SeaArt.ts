@@ -1466,6 +1466,111 @@ export const SEA_ART: Readonly<Record<string, SeaArtAsset>> = {
     "height": 320,
     "kind": "boss-part",
     "path": "content/enemy_boss_04_abyss_whale_fin"
+  },
+  "loo70_fx_sonar": {
+    "bundle": "dive",
+    "width": 128,
+    "height": 128,
+    "kind": "特效",
+    "path": "content/loo70_fx_sonar"
+  },
+  "loo70_fx_torpedo": {
+    "bundle": "dive",
+    "width": 64,
+    "height": 32,
+    "kind": "特效",
+    "path": "content/loo70_fx_torpedo"
+  },
+  "loo70_fx_arc": {
+    "bundle": "dive",
+    "width": 128,
+    "height": 32,
+    "kind": "特效",
+    "path": "content/loo70_fx_arc"
+  },
+  "loo70_fx_mine": {
+    "bundle": "dive",
+    "width": 64,
+    "height": 64,
+    "kind": "特效",
+    "path": "content/loo70_fx_mine"
+  },
+  "loo70_fx_wake": {
+    "bundle": "dive",
+    "width": 32,
+    "height": 16,
+    "kind": "特效",
+    "path": "content/loo70_fx_wake"
+  },
+  "loo70_fx_impact": {
+    "bundle": "dive",
+    "width": 256,
+    "height": 64,
+    "kind": "特效",
+    "path": "content/loo70_fx_impact"
+  },
+  "loo70_fx_enemy_dart": {
+    "bundle": "dive",
+    "width": 32,
+    "height": 32,
+    "kind": "特效",
+    "path": "content/loo70_fx_enemy_dart"
+  },
+  "loo70_ui_hull": {
+    "bundle": "meta",
+    "width": 192,
+    "height": 192,
+    "kind": "ui",
+    "path": "ui/loo70_ui_hull"
+  },
+  "loo70_ui_hud": {
+    "bundle": "dive",
+    "width": 128,
+    "height": 64,
+    "kind": "ui",
+    "path": "content/loo70_ui_hud"
+  },
+  "loo70_ui_gold": {
+    "bundle": "meta",
+    "width": 192,
+    "height": 80,
+    "kind": "ui",
+    "path": "ui/loo70_ui_gold"
+  },
+  "loo70_ui_steel": {
+    "bundle": "dive",
+    "width": 192,
+    "height": 80,
+    "kind": "ui",
+    "path": "content/loo70_ui_steel"
+  },
+  "loo70_ui_socket": {
+    "bundle": "meta",
+    "width": 96,
+    "height": 96,
+    "kind": "ui",
+    "path": "ui/loo70_ui_socket"
+  },
+  "loo70_ui_ribbon": {
+    "bundle": "meta",
+    "width": 256,
+    "height": 80,
+    "kind": "ui",
+    "path": "ui/loo70_ui_ribbon"
+  },
+  "loo70_ui_tech_node": {
+    "bundle": "meta",
+    "width": 64,
+    "height": 64,
+    "kind": "ui",
+    "path": "ui/loo70_ui_tech_node"
+  },
+  "loo70_transition_silt": {
+    "bundle": "dive",
+    "width": 256,
+    "height": 128,
+    "kind": "特效",
+    "path": "content/loo70_transition_silt"
   }
 };
 export const SEA_IDENTITIES: Readonly<Record<string, SeaIdentityArt>> = {
