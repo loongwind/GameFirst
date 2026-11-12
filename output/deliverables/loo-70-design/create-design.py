@@ -29,6 +29,9 @@ add('loo70_direction_flip','朝向','36身份镜像与前视策略',0,0,'沿用4
 # 条件规格独立，明确不计入当前出图任务
 add('loo70_spear_guard_left','朝向备选','仅未来确认固定持械侧时制作左向泳姿',384,96,'4帧横排，每帧96×96，6fps','严格沿用剑鱼游侠；保持头部/武器物理侧','sunlight','条件出图（本轮不制作）',extra='当前素材为生物长吻并非独立持械；右向复用原图；idle取首帧；脚点/中心逐帧对齐')
 add('loo70_boss_handed_left','朝向备选','仅未来boss出现固定侧伤口/武器时启用',256,256,'1主体+原rig部件','逐boss单独确认；不可整张烘焙触须','对应原海层','条件出图（本轮不制作）',extra='右向复用；左向主体256×256；fin/触须部件各128×128、1帧、锚点沿boss-rigs-r9对应值；镜像socket并反角，先验证再发单')
+add('loo70_harbor_weld_station','场景入口','强化：焊接工作台与独立码头脚墩',115,115,'代码静态','低矮桌体、虎钳、焊枪、斜铭牌；现有icon_upgrade','meta','复用+代码',extra='375逻辑px布局尺寸，非待出图尺寸；x16 y439；固定几何件不九宫拉伸；下载/纹理新增0B；红点12px')
+add('loo70_harbor_crane_station','场景入口','装备：高吊臂挂架与独立码头脚墩',96,167,'代码静态','高窄钢柱、斜吊臂、挂钩；现有icon_equipment','meta','复用+代码',extra='375逻辑px布局尺寸，非待出图尺寸；x266 y375；固定几何件不九宫拉伸；下载/纹理新增0B；红点挂铰接处')
+add('loo70_harbor_sonar_station','场景入口','科技：圆形声呐实验台与独立码头脚墩',107,102,'代码静态','圆盘、短天线、铜铭牌；现有icon_tech可用于选中态','meta','复用+代码',extra='375逻辑px布局尺寸，非待出图尺寸；x148 y476；固定几何件不九宫拉伸；下载/纹理新增0B；盘沿红点')
 with (root/'asset-list.csv').open('w',encoding='utf-8-sig',newline='') as f:
  w=csv.DictWriter(f,fieldnames=rows[0]);w.writeheader();w.writerows(rows)
 j=json.load(open('game/sea-assets.json')); audit=[]
