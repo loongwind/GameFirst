@@ -76,6 +76,8 @@ export class SeaWorldView {
   }
   get residentLayers(): string[] { return (['sunlight', 'twilight', 'abyss'] as const).filter(layer => !!this.leases.get(layer)); }
   get activeLayer(): SeaLayer | undefined { return this.current; }
+  /** Dive-bundle frames for the shared projectile/FX layer (LOO-70 §1). */
+  get fxFrames(): ReadonlyMap<string, SpriteFrame> | undefined { return this.commonState === 'ready' && this.common ? this.common.frames : undefined; }
   /** Seam-safe crossing state for the HUD: a band whose far side is not decoded yet. */
   get degradedBand(): { depth: number; state: 'loading' | 'error' } | undefined { return this.degraded; }
   get boundaryHint(): string { return this.boundaryNotice; }

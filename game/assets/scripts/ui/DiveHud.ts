@@ -10,6 +10,7 @@ import { WorldProjection } from './WorldProjection';
 import { reefRockHull } from './ReefRock';
 import type { RockPoint } from './ReefRock';
 import { steelPlate } from './PanelSkin';
+import { SeaFx } from './SeaFx';
 
 const ink = new Color(7, 25, 35), panel = new Color(15, 43, 54), line = new Color(43, 82, 90);
 const mint = new Color(105, 233, 198), cream = new Color(233, 240, 218), muted = new Color(126, 165, 169);
@@ -17,8 +18,8 @@ const amber = new Color(255, 189, 99), danger = new Color(255, 110, 111);
 
 export type HudAction = 'pause' | 'return' | 'primary' | 'secondary' | 'sonar' | 'oxygen' | 'dismissOxygen' | 'seaRetry';
 
-/** Spec cap for concurrent damage numbers (技术方案 §活跃对象: 飘字30组). */
-const TEXT_POOL = 30;
+/** Spec cap for concurrent damage numbers (LOO-70 §1: 飘字最多20组). */
+const TEXT_POOL = 20;
 
 /** Cocos presentation only: reads a session, emits commands through callbacks. */
 export class DiveHud {
@@ -41,6 +42,7 @@ export class DiveHud {
   private currentSession?: DiveSession;
   private hintKey = '';
   private hintUntil = 0;
+  private fx?: SeaFx;
   private readonly rockHulls = new WeakMap<object, RockPoint[]>();
 
   constructor(parent: Node, private readonly action: (action: HudAction) => void, readonly lowEnd = false) {
@@ -104,10 +106,13 @@ export class DiveHud {
     this.button('oxygen', l.oxygenAd, l.compact ? '补氧' : '观看 · 氧气回满', this.oxygenCard);
     this.button('dismissOxygen', l.oxygenDismiss, l.compact ? '关闭' : '坚持上浮 · 关闭', this.oxygenCard);
     if (!this.lowEnd) for (let i = 0; i < TEXT_POOL; i++) {
-      this.label(`dmg-${i}`, '', 0, 0, 80, 20, 12, mint);
-      const transform = this.labels.get(`dmg-${i}`)!.node.getComponent(UITransform)!;
+      this.label(`dmg-${i}`, '', 0, 0, 80, 20, 12, cream);
+      const label = this.labels.get(`dmg-${i}`)!;
+      // White damage numbers with a 1.5px ink outline (LOO-70 §1 damage-text spec).
+      label.enableOutline = true; label.outlineColor = ink; label.outlineWidth = 1.5;
+      const transform = label.node.getComponent(UITransform)!;
       transform.setAnchorPoint(.5, .5);
-      this.labels.get(`dmg-${i}`)!.node.active = false;
+      label.node.active = false;
     }
     this.overlay = this.node('DiveOverlay', this.root);
     this.overlay.getComponent(UITransform)!.setContentSize(375, l.height);
@@ -130,6 +135,16 @@ export class DiveHud {
     const player = b.samplePlayer(this.projection.alpha);
     this.projection.follow(player.x, player.y, l.height);
     this.sea.render(session, this.projection);
+    // Sprite FX ride the same interpolation; they live under the sea root so resize stays cheap.
+    const fx = this.sea.fxFrames;
+    if (fx && !this.fx) this.fx = new SeaFx(this.sea.root, fx, this.lowEnd);
+    if (this.fx) {
+      const height = l.height;
+      this.fx.sync(b, (x, y, px = x, py = y) => {
+        const p = this.projection.sample({ x, y, previousX: px, previousY: py });
+        return { x: p.x - 187.5, y: height / 2 - p.y };
+      }, b.tick);
+    }
     this.drawWorld(session);
     g.clear();
     this.box(g, { x: l.left + 10, y: l.top + 6, width: 355 - l.left - l.right, height: 58 }, new Color(5, 27, 40, 182), 10);
@@ -201,7 +216,7 @@ export class DiveHud {
     this.drawModal(session, settlementNotice, ads);
   }
 
-  destroy(): void { this.sea.destroy(); if (isValid(this.root, true)) this.root.destroy(); }
+  destroy(): void { this.fx?.destroy(); this.fx = undefined; this.sea.destroy(); if (isValid(this.root, true)) this.root.destroy(); }
 
   private drawModal(session: DiveSession, notice: string, ads?: DiveAdView): void {
     const s = session.snapshot, l = this.layout;
@@ -286,43 +301,8 @@ export class DiveHud {
       g.fillColor=mint;g.moveTo(x-1,y+8);g.lineTo(x+1,y);g.lineTo(x+3,y-6);g.lineTo(x+5,y+2);g.close();g.fill();
       this.segment(g,p.x-3,p.y,p.x-1,p.y-6,cream,1);
     }
-    for (const e of b.projectiles.values()) {
-      const p=this.projection.sample(e);
-      if (e.kind==='torpedo') {
-        const speed=Math.hypot(e.vx,e.vy)||1, dx=e.vx/speed,dy=e.vy/speed;
-        if(!this.lowEnd) this.segment(g,p.x-dx*18,p.y-dy*18,p.x-dx*5,p.y-dy*5,new Color(105,233,198,100),2);
-        this.segment(g,p.x-dx*5,p.y-dy*5,p.x+dx*5,p.y+dy*5,cream,3);
-        this.segment(g,p.x-dx*3-dy*3,p.y-dy*3+dx*3,p.x-dx*5,p.y-dy*5,mint,1.5);
-        this.segment(g,p.x-dx*3+dy*3,p.y-dy*3-dx*3,p.x-dx*5,p.y-dy*5,mint,1.5);
-      } else if(e.kind==='mine') {
-        const x=p.x-187.5,y=l.height/2-p.y;
-        // Pressure canister, brass end caps, contact feelers and a cyan armed lamp.
-        g.fillColor=new Color(41,65,72);g.moveTo(x-6,y-3);g.lineTo(x-3,y-6);g.lineTo(x+4,y-5);g.lineTo(x+6,y+2);g.lineTo(x+2,y+6);g.lineTo(x-5,y+4);g.close();g.fill();
-        this.segment(g,p.x-5,p.y-3,p.x+4,p.y-4,amber,3);
-        this.segment(g,p.x-4,p.y+4,p.x+4,p.y+4,amber,2);
-        for(let i=0;i<4;i++){const a=i*Math.PI/2+.3;this.segment(g,p.x+Math.cos(a)*6,p.y+Math.sin(a)*6,p.x+Math.cos(a)*10,p.y+Math.sin(a)*10,cream,1.5);}
-        g.fillColor=mint;g.rect(x-1,y-1,3,3);g.fill();
-      } else {
-        g.strokeColor=new Color(105,233,198,this.lowEnd?170:125);g.lineWidth=2;
-        g.circle(p.x-187.5,l.height/2-p.y,e.radius);g.stroke();
-        if(!this.lowEnd && e.radius>10){g.strokeColor=new Color(180,255,236,65);g.lineWidth=1;g.circle(p.x-187.5,l.height/2-p.y,e.radius-5);g.stroke();}
-      }
-    }
-    for (const e of b.effects.values()) {
-      const p=point(e),end=point({x:e.endX,y:e.endY});
-      if(e.kind==='mine') { g.strokeColor=amber;g.lineWidth=2;g.circle(p.x-187.5,l.height/2-p.y,e.radius);g.stroke(); }
-      else if(e.kind==='arc') {
-        const mx=(p.x+end.x)/2,my=(p.y+end.y)/2;
-        this.segment(g,p.x,p.y,mx+4,my-4,new Color(165,203,255,190),this.lowEnd?1.5:2.5);
-        this.segment(g,mx+4,my-4,end.x,end.y,new Color(165,203,255,190),this.lowEnd?1.5:2.5);
-      }
-    }
-    // Existing text pool is also a bounded impact source, including in low quality.
-    for(const t of b.texts.values()) if(t.expiresTick-b.tick>=15) {
-      const p=this.projection.sample(t), age=20-(t.expiresTick-b.tick), r=3+age;
-      this.segment(g,p.x-r,p.y,p.x+r,p.y,cream,1.5);
-      this.segment(g,p.x,p.y-r,p.x,p.y+r,amber,1.5);
-    }
+    // Projectiles, weapon effects and hit bursts are sprite-based in SeaFx (LOO-70 §1);
+    // this layer keeps only gameplay-critical forms: loot, terrain, gates and damage text.
     this.drawTexts(session);
     const gate = session.content.gateDepth;
     if (gate !== undefined && Math.abs(gate - session.depth) < 240) {
