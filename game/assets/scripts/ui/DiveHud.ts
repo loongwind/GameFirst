@@ -9,7 +9,7 @@ import { objectiveTasks, tutorialHint } from '../services/local/Objectives';
 import { WorldProjection } from './WorldProjection';
 import { reefRockHull } from './ReefRock';
 import type { RockPoint } from './ReefRock';
-import { steelPlate } from './PanelSkin';
+import { steelPlate, amberPlate } from './PanelSkin';
 import { skinnedFrame } from './HarborKit';
 import { slotReadout } from '../meta/loadoutStats';
 import { SeaFx } from './SeaFx';
@@ -241,15 +241,16 @@ export class DiveHud {
     this.drawModal(session, settlementNotice, ads);
   }
 
-  /** Nine-sliced steel skins for the dock buttons, created once when the dive bundle is
-   *  decoded. Sprite children mirror the Button's scale feedback; labels stay above them. */
+  /** Nine-sliced steel skins for the dock and secondary modal buttons, created once when
+   *  the dive bundle is decoded. The primary action wears the shared amber plate instead
+   *  (drawn each frame in drawModal), keeping harbour and dive styles identical. */
   private ensureButtonSkins(): void {
     if (this.skinsReady) return;
     const frames = this.sea.fxFrames;
     if (!frames) return;
     const frame = skinnedFrame(frames, 'loo70_ui_steel');
     if (!frame) return;
-    for (const name of ['pause', 'sonar', 'return', 'primary', 'secondary'] as const) {
+    for (const name of ['pause', 'sonar', 'return', 'secondary'] as const) {
       const button = this.buttons.get(name);
       if (!button) continue;
       const touch = button.node;
@@ -319,7 +320,11 @@ export class DiveHud {
     if (ads?.rewardPending) { title = '奖励确认中'; body = notice || '现场保持冻结，重试原奖励即可。\n无需再次观看视频。'; primary = '重试原奖励'; secondary = ''; }
     else if (ads?.busy) { title = '等待补给'; body = notice || '战斗与氧耗已冻结。'; primary = '正在加载或播放…'; secondary = ''; }
     this.set('modalTitle', title); this.set('modalBody', body); this.set('primary', primary); this.set('secondary', secondary);
-    this.box(g, l.primary, new Color(32, 83, 80), 9);
+    // Primary actions share the harbour's amber enamel plate; the steel skin is only for
+    // the secondary action, and it must vanish (plate + label) whenever it has no text.
+    this.box(g, l.primary, new Color(245, 183, 79), 9, true);
+    const secondarySkin = this.buttons.get('secondary')!.node.getChildByName('secondary-skin');
+    if (secondarySkin) secondarySkin.active = !!secondary;
     if (secondary) this.box(g, l.secondary, ink, 9);
     this.labels.get('secondary')!.node.active = !!secondary;
     const blocked = session.pause.has('ad') || session.pause.has('background') || session.pause.has('reconnect');
@@ -423,17 +428,21 @@ export class DiveHud {
     const button = n.addComponent(Button); button.transition = Button.Transition.SCALE;button.zoomScale=.97;button.duration=.08;
     this.buttons.set(name, button);
     n.on(Button.EventType.CLICK, () => this.action(name));
-    // Label coordinates are root-relative; the touch node remains its own hit box.
-    const height=Math.min(25,r.height-4),font=this.layout.compact?Math.min(13,13/this.layout.cssScale):13;
-    this.label(name, text, r.x + 8, r.y + (r.height-height)/2, r.width - 16, height, font, cream, parent);
-    this.labels.get(name)!.horizontalAlign=Label.HorizontalAlign.CENTER;
+    // Label rides the touch node's exact centre (0.5,0.5) so text is centred on every skin.
+    const font=this.layout.compact?Math.min(13,13/this.layout.cssScale):13;
+    this.label(name, text, r.x + r.width / 2, r.y + r.height / 2, r.width - 12, Math.min(30, r.height - 6), font, cream, parent);
+    const label = this.labels.get(name)!;
+    label.node.getComponent(UITransform)!.setAnchorPoint(.5, .5);
+    label.horizontalAlign=Label.HorizontalAlign.CENTER;
+    label.verticalAlign=Label.VerticalAlign.CENTER;
   }
   private set(name: string, value: string): void {
     const label = this.labels.get(name)!;
     if (label.string !== value) label.string = value;
   }
-  private box(g: Graphics, r: HudRect, color: Color, radius: number): void {
+  private box(g: Graphics, r: HudRect, color: Color, radius: number, amber = false): void {
     if (r.width <= 0 || r.height <= 0) return;
+    if (amber) { amberPlate(g, r.x - 187.5, this.layout.height / 2 - r.y, r.width, r.height); return; }
     if(radius&&r.height>12)steelPlate(g,r.x-187.5,this.layout.height/2-r.y,r.width,r.height,color,r===this.layout.primary||r===this.layout.return||r===this.layout.modal);
     else {g.fillColor=color;g.rect(r.x-187.5,this.layout.height/2-r.y-r.height,r.width,r.height);g.fill();}
   }

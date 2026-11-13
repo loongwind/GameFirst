@@ -1,7 +1,7 @@
 import { Node, UITransform, Label, Button, Graphics, Color, Layers, Sprite, SpriteFrame, BitmapFont, Mask, ScrollView, Vec2, isValid } from 'cc';
 import { virtualRange } from './harborLayout';
 import type { Rect } from './harborLayout';
-import { steelPlate } from './PanelSkin';
+import { steelPlate, amberPlate } from './PanelSkin';
 export const C = { ink: new Color(4, 20, 31), panel: new Color(10, 34, 46, 250), line: new Color(64, 104, 114), text: new Color(235, 239, 219), muted: new Color(147, 175, 176), mint: new Color(103, 229, 202), amber: new Color(244, 198, 122), danger: new Color(255, 137, 115) };
 /** Nine-slice borders from the LOO-70 asset list (L/T/R/B px). Corners and rivets never scale. */
 export const SKIN_INSETS: Readonly<Record<string, readonly [number, number, number, number]>> = {
@@ -79,10 +79,10 @@ export class UiScope {
   button(name: string, r: Rect, title: string, action: () => void, enabled = true, parent = this.root, accent = false): Node {
     const height = Math.max(r.height, this.minTouch), rect = { ...r, y:r.y-(height-r.height)/2, height };
     const n = this.box(name, rect, parent), b = n.addComponent(Button), g=n.getComponent(Graphics)!;
-    // Primary actions wear the gold enamel skin; secondary actions keep the steel plate.
-    // Narrow tabs and slot cards stay on the plate: the gold frame needs room for its borders.
-    const gold = accent && r.width >= 120 ? this.skin(`${name}-gold`, 'loo70_ui_gold', { x: 0, y: 0, width: r.width, height }, n) : undefined;
-    const draw=(pressed=false):void=>{g.clear();if(gold){gold.color=enabled?pressed?new Color(205,170,110):new Color(255,255,255):new Color(150,150,150,180);return;}steelPlate(g,0,0,r.width,height,enabled?accent?pressed?new Color(92,76,46):new Color(54,55,43):pressed?new Color(25,67,75):C.panel:new Color(15,28,37),accent,enabled);};
+    // Primary actions wear the amber enamel plate (LOO-70 §4); secondary actions keep the
+    // steel plate. The gold nine-slice source is 192x80 and crushes below ~60px height.
+    const amber = accent;
+    const draw=(pressed=false):void=>{g.clear();if(amber){amberPlate(g,0,0,r.width,height,pressed,enabled);return;}steelPlate(g,0,0,r.width,height,enabled?pressed?new Color(25,67,75):C.panel:new Color(15,28,37),false,enabled);};
     draw();
     b.transition = Button.Transition.SCALE; b.zoomScale = 0.97; b.duration = 0.08; b.interactable = enabled;
     const click = (): void => { if (this.alive && b.interactable) action(); };
@@ -90,8 +90,8 @@ export class UiScope {
     const pressed=():void=>{if(b.interactable)draw(true);},released=():void=>draw();
     n.on(Node.EventType.TOUCH_START,pressed);n.on(Node.EventType.TOUCH_END,released);n.on(Node.EventType.TOUCH_CANCEL,released);
     this.own(()=>{if(isValid(n,true)){n.off(Node.EventType.TOUCH_START,pressed);n.off(Node.EventType.TOUCH_END,released);n.off(Node.EventType.TOUCH_CANCEL,released);}});
-    const label = this.text(`${name}-label`, title, 8, 2, r.width - 16, height - 4, 13, enabled ? accent ? C.amber : C.text : C.muted, n);
-    label.horizontalAlign = Label.HorizontalAlign.CENTER; return n;
+    const label = this.text(`${name}-label`, title, 8, 2, r.width - 16, height - 4, 13, enabled ? accent ? C.ink : C.text : C.muted, n);
+    label.horizontalAlign = Label.HorizontalAlign.CENTER; label.verticalAlign = Label.VerticalAlign.CENTER; return n;
   }
 }
 /** A recycled, clipped Cocos ScrollView. Node/listener count depends on viewport, not inventory size. */

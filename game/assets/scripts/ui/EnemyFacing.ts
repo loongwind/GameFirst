@@ -17,7 +17,7 @@ export const FACING_SPEED_THRESHOLD = 6; // world units/second of real velocity
 export const FLIP_CONFIRM_TICKS = 3;
 export const FLIP_COOLDOWN_TICKS = 4;
 
-export interface FacingMemory { facing: 1 | -1; candidate: 0 | 1 | -1; sinceTick: number; lastFlipTick: number }
+export interface FacingMemory { facing: 1 | -1; candidate: 0 | 1 | -1; sinceTick: number; lastFlipTick: number; flipTick?: number }
 
 /** New actors face their target; source art heads right, so an ambiguous offset keeps right. */
 export function initialFacing(targetDx: number): 1 | -1 { return targetDx >= -12 ? 1 : -1; }
@@ -28,7 +28,8 @@ export function facingMemory(targetDx: number): FacingMemory {
 
 /** Heading from the enemy's real displacement (never input or player position), so contact
  *  at a wall cannot spin an enemy: |vx| under the threshold keeps the previous heading,
- *  an opposite intent must hold for FLIP_CONFIRM_TICKS and respect FLIP_COOLDOWN_TICKS. */
+ *  an opposite intent must hold for FLIP_CONFIRM_TICKS and respect FLIP_COOLDOWN_TICKS.
+ *  flipTick records when a flip happened so presentation can ease the mirror in. */
 export function updateFacing(memory: FacingMemory, vx: number, tick: number): 1 | -1 {
   const intent: 0 | 1 | -1 = vx > FACING_SPEED_THRESHOLD ? 1 : vx < -FACING_SPEED_THRESHOLD ? -1 : 0;
   if (intent === 0 || intent === memory.facing) { memory.candidate = 0; return memory.facing; }
@@ -37,12 +38,28 @@ export function updateFacing(memory: FacingMemory, vx: number, tick: number): 1 
       memory.facing = intent;
       memory.candidate = 0;
       memory.lastFlipTick = tick;
+      memory.flipTick = tick;
     }
   } else {
     memory.candidate = intent;
     memory.sinceTick = tick;
   }
   return memory.facing;
+}
+
+/** Visual flip easing (LOO-70 rework #4): squeeze the old heading to 0 over SQUEEZE_TICKS,
+ *  then expand the new heading over the same span — never interpolating through zero long
+ *  enough to read as paper-thin, and the logical heading flips instantly as before. */
+export const SQUEEZE_TICKS = 3; // 100ms per phase at the fixed 30Hz clock
+export function flipScaleX(memory: FacingMemory, facing: 1 | -1, continuousTick: number): number {
+  const flip = memory.flipTick;
+  if (flip === undefined) return facing;
+  const t = continuousTick - flip;
+  if (t <= 0) return -facing;
+  if (t >= SQUEEZE_TICKS * 2) return facing;
+  if (t < SQUEEZE_TICKS) return -facing * (1 - t / SQUEEZE_TICKS);
+  const progress = (t - SQUEEZE_TICKS) / SQUEEZE_TICKS;
+  return facing * Math.max(0.12, progress);
 }
 
 /** Radial identities lean into horizontal motion instead of mirroring, at most 8°. */

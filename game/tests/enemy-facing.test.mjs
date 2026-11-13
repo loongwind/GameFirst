@@ -94,3 +94,21 @@ test('band nameplate shows once per crossing and re-arms only 80m past the band'
   assert.equal(announcer.visible, true, 're-entering the band replays the plate');
   assert.equal(announcer.label, '暮光层 · 800m');
 });
+
+test('flip easing squeezes the old heading then expands the new, never resting paper-thin', () => {
+  const memory = facing.facingMemory(-50);
+  assert.equal(facing.flipScaleX(memory, -1, 5), -1, 'no flip recorded: full old heading');
+  facing.updateFacing(memory, 30, 20);
+  facing.updateFacing(memory, 30, 21);
+  facing.updateFacing(memory, 30, 22);
+  assert.equal(facing.updateFacing(memory, 30, 23), 1);
+  // Continuous render time = tick + render alpha (both in tick units here).
+  assert.equal(facing.flipScaleX(memory, 1, 23), -1, 'flip instant: still fully on the old side');
+  const mid = facing.flipScaleX(memory, 1, 24.5);
+  assert.ok(mid < -0.4 && mid > -0.9, `collapsing through the old side: ${mid}`);
+  const seam = facing.flipScaleX(memory, 1, 26);
+  assert.equal(seam, 0.12, 'phase boundary squeezes to the 12% sliver — near zero without vanishing');
+  const growing = facing.flipScaleX(memory, 1, 27.5);
+  assert.ok(growing > 0.3 && growing < 1, `expanding on the new side: ${growing}`);
+  assert.equal(facing.flipScaleX(memory, 1, 30), 1, 'easing finished: full new heading');
+});

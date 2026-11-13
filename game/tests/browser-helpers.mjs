@@ -4,17 +4,18 @@ import path from 'node:path';
 import { chromium } from 'playwright';
 import ts from 'typescript';
 
-/** Wait for Boot's production auto-routing before an older scene-specific acceptance test navigates. */
-export async function enterBuiltScene(page, name) {
+/** Wait for Boot's production auto-routing before an older scene-specific acceptance test navigates.
+ *  timeout covers cold-start machines: the first scene load of a suite run decodes every bundle. */
+export async function enterBuiltScene(page, name, { timeout = 30000 } = {}) {
   await page.evaluate(async () => { window.cc = await System.import('cc'); });
   await page.waitForFunction(() => {
     const scene = window.cc.director.getScene();
     return !!scene && (scene.name !== 'Boot' || !!scene.getChildByName('Canvas')?.getChildByName('StartTerminal'));
-  });
+  }, null, { timeout });
   if (name === 'Harbor') await page.waitForFunction(() => {
     const c = window.cc.director.getScene().getChildByName('Canvas')?.getComponent('DiveController');
     return !c || c.hud?.sea.status === 'ready';
-  });
+  }, null, { timeout });
   await page.evaluate(async name => {
     const { director } = window.cc;
     if (director.getScene().name === name) return;
@@ -25,7 +26,7 @@ export async function enterBuiltScene(page, name) {
     }
     await new Promise((resolve, reject) => director.loadScene(name, error => error ? reject(error) : resolve()));
   }, name);
-  await page.waitForFunction(name => window.cc.director.getScene()?.name === name, name);
+  await page.waitForFunction(name => window.cc.director.getScene()?.name === name, name, { timeout });
 }
 
 export async function withBrowser(root, run, { navigate = true, headless = true, deviceScaleFactor = 2, width = 375, height = 812, recordVideo } = {}) {

@@ -13,12 +13,20 @@ class FakeNode {
   destroy() { this.destroyed = true; }
 }
 class UITransform { setContentSize(w, h) { this.width = w; this.height = h; } }
-class Sprite { constructor() { this.spriteFrame = undefined; this.sizeMode = 0; this.color = undefined; this.trim = true; this.blendState = { targets: [{}] }; } }
+class Sprite {
+  constructor() { this.spriteFrame = undefined; this.sizeMode = 0; this.color = undefined; this.trim = true; this.blendState = { targets: [{}] }; }
+  set spriteFrame(frame) {
+    // Mimic the engine: assigning a frame resets the node to the texture's native size.
+    this._frame = frame;
+    if (this.node && frame) this.node.getComponent(UITransform).setContentSize(frame.nativeWidth, frame.nativeHeight);
+  }
+  get spriteFrame() { return this._frame; }
+}
 Sprite.SizeMode = { CUSTOM: 0 };
 class Graphics { clear() { this.paths = []; } stroke() {} fill() {} circle() {} moveTo() {} lineTo() {} rect() {} roundRect() {} }
 class Color { constructor(r = 255, g = 255, b = 255, a = 255) { this.r = r; this.g = g; this.b = b; this.a = a; } }
 class Frame {
-  constructor(name) { this.name = name; this.refCount = 0; this.isValid = true; this.texture = { id: name }; }
+  constructor(name, nativeWidth = 64, nativeHeight = 64) { this.name = name; this.nativeWidth = nativeWidth; this.nativeHeight = nativeHeight; this.refCount = 0; this.isValid = true; this.texture = { id: name }; }
   addRef() { assert.ok(this.isValid, 'retained a destroyed frame'); this.refCount++; return this; }
   decRef() { assert.ok(this.refCount > 0, 'unbalanced release'); this.refCount--; return this; }
   reset() {}
@@ -44,9 +52,9 @@ const lib = load();
 const step = 1 / 30;
 const body = (id, x, y, extra = {}) => ({ id, active: true, x, y, previousX: x, previousY: y, radius: 4, ...extra });
 const frames = () => new Map([
-  ['loo70_fx_torpedo', new Frame('torpedo')], ['loo70_fx_wake', new Frame('wake')],
-  ['loo70_fx_sonar', new Frame('sonar')], ['loo70_fx_mine', new Frame('mine')],
-  ['loo70_fx_arc', new Frame('arc')], ['loo70_fx_impact', new Frame('impact')],
+  ['loo70_fx_torpedo', new Frame('torpedo', 64, 32)], ['loo70_fx_wake', new Frame('wake', 32, 16)],
+  ['loo70_fx_sonar', new Frame('sonar', 128, 128)], ['loo70_fx_mine', new Frame('mine', 64, 64)],
+  ['loo70_fx_arc', new Frame('arc', 128, 32)], ['loo70_fx_impact', new Frame('impact', 256, 64)],
 ]);
 const screen = (x, y) => ({ x: 187.5 + x, y: 400 - y });
 const battle = overrides => ({ tick: 1, projectiles: { values: () => [] }, effects: { values: () => [] }, texts: { values: () => [] }, ...overrides });
@@ -113,3 +121,21 @@ test('arc chains use at most six shared segments between real endpoints', () => 
 });
 
 void step;
+
+test('display sizes override the frame-native reset: torpedo 24x12, mine 28x28, ring scaled', () => {
+  const root = new FakeNode('root'), fx = new lib.SeaFx(root, frames());
+  const torpedo = { ...body(5, 0, 0), kind: 'torpedo', vx: 200, vy: 0, damage: 20, bornTick: 0, expiresTick: 60, owner: 0, range: 400, speed: 420, innerRadius: 0, triggerRadius: 0, hits: new Set() };
+  const mine = { ...body(6, 40, 0), kind: 'mine', vx: 0, vy: 0, damage: 35, bornTick: 0, expiresTick: 150, owner: 1, range: 200, speed: 0, innerRadius: 0, triggerRadius: 28, radius: 70, hits: new Set() };
+  const ring = { ...body(7, 80, 0), kind: 'sonic', vx: 0, vy: 0, damage: 20, bornTick: 0, expiresTick: 24, owner: 2, range: 180, speed: 240, innerRadius: 90, triggerRadius: 0, radius: 90, hits: new Set() };
+  fx.sync(battle({ projectiles: { values: () => [torpedo, mine, ring] } }), screen, 1);
+  const sizeOf = key => { const t = fx.live.get(key).node.getComponent(UITransform); return [t.width, t.height]; };
+  assert.deepEqual(sizeOf('p5'), [24, 12], 'torpedo core at the design 24x12, not the 64x32 source');
+  assert.deepEqual(sizeOf('m6'), [28, 28], 'mine at the design 28x28, not the 64x64 source');
+  assert.equal(fx.live.get('s7').node.scale.x, 180 / 128, 'ring scale maps the exact AOE diameter');
+  // Velocity-facing: heading right keeps the art at 0°; heading up-right reads +45°.
+  assert.equal(fx.live.get('p5').node.angle, 0);
+  const rising = { ...torpedo, id: 8, vx: 200, vy: 200 };
+  fx.sync(battle({ projectiles: { values: () => [rising, mine, ring] } }), screen, 2);
+  assert.equal(fx.live.get('p8').node.angle, 45);
+  fx.destroy();
+});

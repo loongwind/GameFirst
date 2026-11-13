@@ -7,7 +7,7 @@ import type { Enemy } from '../battle/model';
 import { SeaBundleLease } from './SeaBundleLease';
 import { SEA_ART, SEA_SCENES, SEA_IDENTITIES, BOSS_RIGS, PLAYER_ART } from './SeaArt';
 import { enemyArtKey } from './legacyEnemyArt';
-import { frontTilt, facingMemory, isFrontFacing, updateFacing } from './EnemyFacing';
+import { frontTilt, facingMemory, isFrontFacing, updateFacing, flipScaleX } from './EnemyFacing';
 import type { FacingMemory } from './EnemyFacing';
 import { LayerAnnouncer } from './LayerAnnouncer';
 import type { WorldProjection } from './WorldProjection';
@@ -164,7 +164,7 @@ export class SeaWorldView {
       actor.node.active=Math.abs(position[0])<260 && Math.abs(position[1])<this.height/2+100;
       const sequence = art.sequences.get(identity.swim ?? '');
       if (sequence) actor.sprite.spriteFrame = sequence[this.lowEnd ? 0 : Math.floor(b.tick / 5) % 4];
-      this.applyHeading(actor, enemy, b.tick);
+      this.applyHeading(actor, enemy, b.tick, projection?.alpha ?? 1);
       const rig = BOSS_RIGS[key];
       if (rig) actor.parts.forEach((part, i) => { part.angle = rig.angles[i] + Math.sin(b.tick / 30 * Math.PI * 1.5) * 12; });
       if (actor.bar) {
@@ -190,14 +190,16 @@ export class SeaWorldView {
     this.scrollScene(projection?.y ?? b.player.y);
     this.announcer.update(depth, b.tick);
   }
-  /** LOO-70 §5: mirror the art container by real velocity; radial identities lean instead. */
-  private applyHeading(actor: Actor, enemy: Enemy, tick: number): void {
+  /** LOO-70 §5: mirror the art container by real velocity; radial identities lean instead.
+   *  Flips ease in (squeeze the old heading, expand the new) instead of snapping. */
+  private applyHeading(actor: Actor, enemy: Enemy, tick: number, alpha: number): void {
     const vx = (enemy.x - enemy.previousX) / STEP_SECONDS;
     if (isFrontFacing(enemy.assetKey)) {
       actor.art.setScale(1, 1, 1);
       actor.art.angle = this.lowEnd ? 0 : frontTilt(vx);
     } else if (actor.facing) {
-      actor.art.setScale(updateFacing(actor.facing, vx, tick), 1, 1);
+      const facing = updateFacing(actor.facing, vx, tick);
+      actor.art.setScale(this.lowEnd ? facing : flipScaleX(actor.facing, facing, tick + alpha), 1, 1);
       actor.art.angle = 0;
     }
   }

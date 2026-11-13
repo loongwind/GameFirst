@@ -19,7 +19,8 @@ async function click(page, name) {
   await page.mouse.click(box.x, box.y); return box;
 }
 async function harbor(page) {
-  await enterBuiltScene(page, 'Harbor');
+  // First suite run pays the cold bundle decode; keep assertions, widen the wait.
+  await enterBuiltScene(page, 'Harbor', { timeout: 60000 });
   await page.waitForFunction(() => {
     window.h = window.cc.director.getScene()?.getChildByName('Canvas')?.getComponent('HarborController');
     return !!window.h?.view;

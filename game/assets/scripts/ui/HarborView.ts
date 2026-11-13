@@ -134,16 +134,20 @@ export class HarborView {
     // R2: three scene-native stations with their own pedestals, plus supply, archive and a
     // standalone launch button. No shared bottom bar and no equal-width icon row (LOO-70 §4).
     const dots = this.redDots();
-    this.station(s, 'upgrade', l.targets.upgrade as Rect, l.targets.upgrade as Rect, 'icon_upgrade', '强化', dots.upgrade);
-    this.station(s, 'equipment', l.targets.equipment as Rect, l.targets.equipment as Rect, 'icon_equipment', '装备', dots.equipment);
-    this.station(s, 'tech', l.targets.tech as Rect, l.targets.tech as Rect, 'icon_tech', '科技', dots.tech);
+    this.station(s, 'upgrade', l.targets.upgrade as Rect, l.targets.upgrade as Rect, 'icon_upgrade', '机体强化', dots.upgrade);
+    this.station(s, 'equipment', l.targets.equipment as Rect, l.targets.equipment as Rect, 'icon_equipment', '挂载装备', dots.equipment);
+    this.station(s, 'tech', l.targets.tech as Rect, l.targets.tech as Rect, 'icon_tech', '潜航科技', dots.tech);
     const supply = s.button('supply', l.targets.supply as Rect, '', () => this.open('supply'));
     s.icon('icon_supply', 17, 8, 30, 30, supply);
-    const supplyLabel = s.text('supply-title', '补给', 0, 40, 64, 20, 10, C.text, supply); supplyLabel.horizontalAlign = Label.HorizontalAlign.CENTER;
+    const supplyLabel = s.text('supply-title', '深海补给', 0, 40, 64, 18, 10, C.text, supply);
+    supplyLabel.horizontalAlign = Label.HorizontalAlign.CENTER;
+    supplyLabel.enableOutline = true; supplyLabel.outlineColor = C.ink; supplyLabel.outlineWidth = 1.5;
     s.text('supply-count', dots.supply > 0 ? String(dots.supply) : '', 44, 2, 18, 18, 11, C.amber, supply);
     const archive=s.button('archive',l.targets.archive as Rect,'',()=>this.open('archive'));
-    s.icon('icon_archive',4,(l.targets.archive.height-26)/2,26,26,archive);
-    s.text('ArchiveLabel','档案',30,0,27,l.targets.archive.height,10,C.muted,archive);
+    s.icon('icon_archive',17,8,30,30,archive);
+    const archiveLabel = s.text('ArchiveLabel','探索档案',0,40,64,18,10,C.text,archive);
+    archiveLabel.horizontalAlign = Label.HorizontalAlign.CENTER;
+    archiveLabel.enableOutline = true; archiveLabel.outlineColor = C.ink; archiveLabel.outlineWidth = 1.5;
     const hint = tutorialHint(state);
     if (hint) {
       // Guidance belongs to the next action; it never covers the ship or adds another launch.
@@ -151,58 +155,81 @@ export class HarborView {
     }
     const task = objectiveTasks(state).find(t => t.ready);
     if (task) s.text('TaskReadyHint', '任务已完成 · 进入档案领取奖励', l.left+5, (l.targets.upgrade as Rect).y - 48, 375-l.left-l.right-10, 20, 10, C.mint);
-    s.button('LaunchButton', l.targets.launch as Rect, state.activeDive ? '↓   继续潜航' : '↓   下潜  ·  探索透光层', () => { if (!this.model.busy && !this.model.hasPending) this.launch(); }, !this.model.busy && !this.model.hasPending, undefined, true);
+    s.button('LaunchButton', l.targets.launch as Rect, state.activeDive ? '继续潜航 ↓' : '出发下潜 ↓', () => { if (!this.model.busy && !this.model.hasPending) this.launch(); }, !this.model.busy && !this.model.hasPending, undefined, true);
     if (this.overlay) this.overlay.root.setSiblingIndex(this.root.children.length - 1);
     if (this.toast) this.toast.root.setSiblingIndex(this.root.children.length - 1);
   }
 
-  /** A scene station: fixed code geometry (never nine-slice stretched) with an existing
-   *  icon, an in-world nameplate and an optional 12px indicator light (LOO-70 §4 R2). */
+  /** A scene station: fixed code geometry (never nine-slice stretched) matching the R2
+   *  board — device silhouette in the lower area, icon on the device, full-name riveted
+   *  plate along the device body, optional 12px indicator light (LOO-70 §4 R2). */
   private station(s: UiScope, name: string, rect: Rect, _hit: Rect, iconKey: string, title: string, dot: boolean): void {
     const n = s.hit(name, rect, () => this.open(name as Panel));
     const g = s.node(`${name}-device`, n, 0, 0, rect.width, rect.height).addComponent(Graphics);
     const w = rect.width, h = rect.height;
-    // Shared码头脚墩 (pedestal) under every device, kept visually distinct per station.
-    g.fillColor = new Color(30, 50, 58); g.rect(w * .12, -h + 6, w * .76, 10); g.fill();
-    g.fillColor = new Color(46, 70, 76); g.rect(w * .08, -h + 2, w * .84, 4); g.fill();
     if (name === 'upgrade') {
-      // Low four-leg table, orange vise and a leaning welding torch.
-      g.fillColor = new Color(88, 70, 52); g.rect(10, -56, w - 20, 9); g.fill();
+      // Graphics local space is y-up from the hit node's top-left anchor, so everything
+      // below the anchor draws with negative y. Desk surface at 62% height.
+      const deskY = -Math.round(h * .62);
       g.fillColor = new Color(62, 50, 38);
-      for (const x of [16, w - 22]) { g.rect(x, -47, 5, 40); g.fill(); }
-      g.fillColor = new Color(196, 110, 46); g.rect(12, -62, 16, 7); g.fill(); g.rect(14, -69, 5, 8); g.fill();
-      g.strokeColor = new Color(150, 168, 170); g.lineWidth = 3;
-      g.moveTo(w - 30, -54); g.lineTo(w - 16, -84); g.stroke();
-      g.fillColor = new Color(105, 233, 198); g.circle(w - 15, -88, 3); g.fill();
+      for (const x of [12, w - 18]) { g.rect(x, deskY + 8, 6, h - deskY - 12 + 8); g.fill(); }
+      g.fillColor = new Color(88, 70, 52); g.rect(4, deskY - 10, w - 8, 10); g.fill();
+      g.fillColor = new Color(120, 96, 66); g.rect(4, deskY - 3, w - 8, 3); g.fill();
+      g.strokeColor = new Color(40, 52, 56); g.lineWidth = 1; g.rect(4, deskY - 10, w - 8, 10); g.stroke();
+      g.fillColor = new Color(196, 110, 46); g.rect(w * .66, deskY + 2, 16, 8); g.fill(); g.rect(w * .68, deskY + 8, 5, 7); g.fill();
+      g.strokeColor = new Color(150, 168, 170); g.lineWidth = 3.5;
+      g.moveTo(w * .3, deskY - 10); g.lineTo(w * .16, deskY + 18); g.stroke();
+      g.fillColor = new Color(105, 233, 198); g.circle(w * .15, deskY + 21, 3); g.fill();
+      // The upgrade icon rests on the desk surface, vise on its right, torch on its left.
+      s.icon(iconKey, Math.round(w * .5 - 17), Math.round(-deskY - 36), 34, 34, n);
+      this.plate(s, `${name}-plate`, n, w * .5, -deskY + 24, Math.min(108, w - 6), title);
+      if (dot) this.light(s, `${name}-dot`, n, w - 20, Math.round(-deskY - 34));
     } else if (name === 'equipment') {
-      // Tall mast, diagonal boom, hanging hook and a mount icon.
-      g.fillColor = new Color(74, 96, 102); g.rect(w * .55, -h + 14, 10, h - 26); g.fill();
-      g.strokeColor = new Color(88, 70, 52); g.lineWidth = 6;
-      g.moveTo(w * .6, -h + 26); g.lineTo(w * .2, -h * .45); g.stroke();
-      g.strokeColor = new Color(120, 146, 150); g.lineWidth = 2;
-      g.moveTo(w * .2, -h * .45); g.lineTo(w * .2, -h * .62); g.stroke();
-      g.fillColor = new Color(150, 168, 170); g.circle(w * .2, -h * .64, 4); g.fill();
+      // Stout mast with cross-bracing, diagonal boom and the crate hanging from the hook.
+      g.fillColor = new Color(46, 70, 76); g.rect(w * .1, -h + 4, w * .8, 10); g.fill();
+      g.fillColor = new Color(74, 96, 102); g.rect(w * .6, -h + 10, 14, h - 10); g.fill();
+      g.strokeColor = new Color(40, 52, 56); g.lineWidth = 1; g.rect(w * .6, -h + 10, 14, h - 10); g.stroke();
+      g.fillColor = new Color(96, 122, 128); g.rect(w * .6, -h * .7, 14, 5); g.fill(); g.rect(w * .6, -h * .38, 14, 5); g.fill();
+      g.strokeColor = new Color(88, 70, 52); g.lineWidth = 7;
+      g.moveTo(w * .67, -h + 12); g.lineTo(w * .26, -h * .58); g.stroke();
+      g.strokeColor = new Color(120, 146, 150); g.lineWidth = 2.5;
+      g.moveTo(w * .26, -h * .58); g.lineTo(w * .26, -h * .42); g.stroke();
+      s.icon(iconKey, Math.round(w * .26 - 16), Math.round(h * .42), 32, 32, n);
+      this.plate(s, `${name}-plate`, n, w * .45, h - 22, Math.min(104, w - 6), title);
+      if (dot) this.light(s, `${name}-dot`, n, Math.round(w * .67) + 9, 16);
     } else {
-      // Round sonar glass dish with a short antenna.
-      g.fillColor = new Color(16, 52, 64); g.ellipse(w * .5, -52, w * .34, 14); g.fill();
-      g.strokeColor = new Color(105, 233, 198, 160); g.lineWidth = 1.5; g.ellipse(w * .5, -52, w * .3, 11); g.stroke();
-      g.strokeColor = new Color(150, 168, 170); g.lineWidth = 2; g.moveTo(w * .5, -52); g.lineTo(w * .62, -80); g.stroke();
-      g.fillColor = new Color(244, 198, 122); g.circle(w * .62, -82, 3); g.fill();
+      // Round glass sonar dish on a short pedestal with a stub antenna; plate below the rim.
+      const dishY = -Math.round(h * .5);
+      g.fillColor = new Color(30, 50, 58); g.rect(w * .32, dishY - 16, w * .36, h - dishY - 16); g.fill();
+      g.fillColor = new Color(22, 42, 50); g.rect(w * .28, dishY - 16, w * .44, 6); g.fill();
+      g.fillColor = new Color(16, 52, 64); g.ellipse(w * .5, dishY, w * .42, 17); g.fill();
+      g.strokeColor = new Color(105, 233, 198, 170); g.lineWidth = 1.5; g.ellipse(w * .5, dishY, w * .35, 13); g.stroke();
+      g.fillColor = new Color(105, 233, 198, 120); g.ellipse(w * .5, dishY, w * .12, 4); g.fill();
+      g.strokeColor = new Color(150, 168, 170); g.lineWidth = 2; g.moveTo(w * .5, dishY + 15); g.lineTo(w * .66, dishY + 42); g.stroke();
+      g.fillColor = new Color(244, 198, 122); g.circle(w * .67, dishY + 45, 3); g.fill();
+      this.plate(s, `${name}-plate`, n, w * .5, -dishY + 30, Math.min(104, w - 6), title);
+      if (dot) this.light(s, `${name}-dot`, n, Math.round(w * .84), -dishY - 6);
     }
-    // Icon and nameplate use top-left-down coordinates inside the touch node.
-    const iconY = name === 'equipment' ? Math.round(h * .42) : name === 'upgrade' ? 40 : Math.round(h * .38);
-    s.icon(iconKey, Math.round(w * (name === 'equipment' ? .12 : .5) - 16), iconY, 32, 32, n);
-    const nameplate = s.text(`${name}-plate`, title, 4, h - 26, w - 8, 18, 12, C.text, n);
-    nameplate.horizontalAlign = Label.HorizontalAlign.CENTER;
-    nameplate.enableOutline = true; nameplate.outlineColor = C.ink; nameplate.outlineWidth = 2;
-    if (dot) {
-      // Indicator lights sit on the device itself: desk corner, boom hinge, dish rim.
-      const dotX = name === 'upgrade' ? w - 22 : name === 'equipment' ? Math.round(w * .3) : w - 24;
-      const dotY = name === 'upgrade' ? 22 : name === 'equipment' ? Math.round(h * .5) : Math.round(h * .58);
-      const light = s.node(`${name}-dot`, n, dotX, dotY, 12, 12).addComponent(Graphics);
-      light.fillColor = new Color(255, 138, 92); light.circle(6, -6, 6); light.fill();
-      light.strokeColor = new Color(20, 30, 32); light.lineWidth = 1.5; light.circle(6, -6, 6); light.stroke();
-    }
+  }
+
+  /** Riveted nameplate on the device body: dark plate, edge line, full Chinese name. */
+  private plate(s: UiScope, name: string, parent: Node, cx: number, cy: number, width: number, title: string): void {
+    const g = s.node(`${name}-bg`, parent, 0, 0, 0, 0).addComponent(Graphics);
+    const x = cx - width / 2, y = cy - 9;
+    g.fillColor = new Color(6, 24, 32, 235); g.roundRect(x, -y - 18, width, 18, 4); g.fill();
+    g.strokeColor = new Color(163, 107, 53, 220); g.lineWidth = 1; g.roundRect(x, -y - 18, width, 18, 4); g.stroke();
+    g.fillColor = new Color(163, 107, 53, 200); g.circle(x + 4, -y - 9, 1.4); g.fill(); g.circle(x + width - 4, -y - 9, 1.4); g.fill();
+    const label = s.text(name, title, x + 2, y + 9, width - 4, 16, 12, C.text, parent);
+    label.horizontalAlign = Label.HorizontalAlign.CENTER;
+    label.enableOutline = true; label.outlineColor = C.ink; label.outlineWidth = 1.5;
+  }
+
+  /** 12px indicator light with a dark bezel so it reads on any backdrop. */
+  private light(s: UiScope, name: string, parent: Node, x: number, y: number): void {
+    const light = s.node(name, parent, x, y, 12, 12).addComponent(Graphics);
+    light.fillColor = new Color(20, 30, 32); light.circle(6, -6, 7); light.fill();
+    light.fillColor = new Color(255, 138, 92); light.circle(6, -6, 5.5); light.fill();
+    light.fillColor = new Color(255, 200, 170, 220); light.circle(4.6, -7.4, 1.8); light.fill();
   }
 
   /** Affordance lights only when the action is genuinely available (LOO-70 §4). */
