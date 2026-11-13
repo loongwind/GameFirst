@@ -74,7 +74,8 @@ for (const [width, height] of [[320,640],[375,667],[390,844]]) {
       assert.match(await page.evaluate(() => window.h.model.notice), /奖励已入账/);
       const wallet = await page.evaluate(() => JSON.stringify(window.h.economy.snapshot.wallet));
       await page.waitForTimeout(300); assert.equal(await page.evaluate(() => JSON.stringify(window.h.economy.snapshot.wallet)), wallet);
-      await page.reload(); await harbor(page); assert.equal(await count(page,'gift'),4);
+      await page.reload(); await harbor(page);
+      assert.equal(await count(page,'gift'),4);
       for (const [slot,index,button] of [['blessing',1,'blessing-yield'],['sonar',2,'ad-sonar'],['silver',3,'ad-silver'],['gold',4,'ad-gold']]) {
         await supply(page,index);
         const before = await count(page,slot), inventory = await page.evaluate(() => window.h.economy.snapshot.inventory.length + window.h.economy.snapshot.tickets);

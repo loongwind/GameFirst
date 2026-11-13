@@ -22,11 +22,27 @@ export async function enterBuiltScene(page, name, { timeout = 30000 } = {}) {
     // Harbor panel fixtures explicitly finish the automatically started empty first dive.
     if (name === 'Harbor') {
       const c = director.getScene().getChildByName('Canvas')?.getComponent('DiveController');
-      if (c) { c.session.requestReturn(); c.session.arriveHarbor(); c.dives.settle(c.session); c.handleAction('primary'); return; }
+      if (c) {
+        // An idle auto-started tutorial dive may already have died; decline first so the
+        // fixture can always settle it and leave the scene deterministically.
+        if (c.session.state === 'RescuePending') c.session.declineRescue();
+        c.session.requestReturn(); c.session.arriveHarbor(); c.dives.settle(c.session); c.handleAction('primary'); return;
+      }
     }
     await new Promise((resolve, reject) => director.loadScene(name, error => error ? reject(error) : resolve()));
   }, name);
-  await page.waitForFunction(name => window.cc.director.getScene()?.name === name, name, { timeout });
+  try {
+    await page.waitForFunction(name => window.cc.director.getScene()?.name === name, name, { timeout });
+  } catch (error) {
+    // A boot-time scene load right after page.reload() can collide with this navigation;
+    // re-issue once and give it a fresh window. The assertion itself is unchanged.
+    await page.evaluate(async name => {
+      const { director } = window.cc;
+      if (director.getScene()?.name === name) return;
+      await new Promise(resolve => { try { const started = director.loadScene(name, () => resolve()); if (!started) resolve(); } catch { resolve(); } });
+    }, name);
+    await page.waitForFunction(name => window.cc.director.getScene()?.name === name, name, { timeout: 20000 });
+  }
 }
 
 export async function withBrowser(root, run, { navigate = true, headless = true, deviceScaleFactor = 2, width = 375, height = 812, recordVideo } = {}) {
