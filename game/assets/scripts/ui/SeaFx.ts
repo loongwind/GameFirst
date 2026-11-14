@@ -138,17 +138,9 @@ export class SeaFx {
       const remaining = p.expiresTick - tick;
       mine.sprite.color = remaining * STEP_SECONDS <= .2 ? new Color(255, 184, 99, 255) : new Color(255, 255, 255, 255);
     } else {
+      // The pixel-tick halo art read as an abrupt second ring (user feedback); the live
+      // AOE edge is carried by the thin crisp circle alone.
       const at2 = toScreen(p.x, p.y, p.previousX, p.previousY);
-      const ring = this.acquire(`s${p.id}`, 'loo70_fx_sonar', 128, 128, true);
-      // The halo previously kept its stale pooled position and read as a second ring
-      // drifting off the live AOE; it must ride the sonar point every tick.
-      ring.node.setPosition(at2.x, at2.y, 0);
-      // The ring always equals the live AOE diameter; visuals never inflate the range.
-      // The source stroke would scale to ~2.8px-per-10-radius, so the exact AOE edge is
-      // drawn as a thin crisp circle and the art rides behind as a faint tick-mark halo.
-      const diameter = Math.max(6, p.radius * 2);
-      ring.node.setScale(diameter / 128, diameter / 128, 1);
-      ring.sprite.color = new Color(115, 255, 240, 70);
       this.glow.strokeColor = new Color(115, 255, 240, 215);
       this.glow.lineWidth = 1.6;
       this.glow.circle(at2.x, at2.y, p.radius);

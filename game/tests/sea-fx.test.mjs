@@ -81,24 +81,11 @@ test('torpedoes pool per projectile id with one wake and release cleanly', () =>
   fx.destroy();
 });
 
-test('sonic rings scale to the live AOE radius, never a cosmetic diameter', () => {
+test('sonic rings draw no sprite visual — the thin glow circle carries the AOE alone', () => {
   const root = new FakeNode('root'), fx = new lib.SeaFx(root, frames());
-  const ring = { ...body(2, 0, 0), kind: 'sonic', vx: 0, vy: 0, damage: 20, bornTick: 0, expiresTick: 24, owner: 0, range: 180, speed: 240, innerRadius: 60, triggerRadius: 0, hits: new Set() };
-  fx.sync(battle({ projectiles: { values: () => [{ ...ring, radius: 60 }] } }), screen, 1);
-  assert.equal(fx.live.get('s2').node.scale.x, 120 / 128);
-  fx.sync(battle({ projectiles: { values: () => [{ ...ring, radius: 180 }] } }), screen, 2);
-  assert.equal(fx.live.get('s2').node.scale.x, 360 / 128);
-  fx.destroy();
-});
-
-test('sonic halo rides the sonar point — never a stale second ring', () => {
-  const root = new FakeNode('root'), fx = new lib.SeaFx(root, frames());
-  const ring = { ...body(11, 30, 40), kind: 'sonic', vx: 0, vy: 0, damage: 20, bornTick: 0, expiresTick: 24, owner: 0, range: 180, speed: 240, innerRadius: 60, triggerRadius: 0, radius: 60, hits: new Set() };
+  const ring = { ...body(2, 30, 40), kind: 'sonic', vx: 0, vy: 0, damage: 20, bornTick: 0, expiresTick: 24, owner: 0, range: 180, speed: 240, innerRadius: 60, triggerRadius: 0, radius: 90, hits: new Set() };
   fx.sync(battle({ projectiles: { values: () => [ring] } }), screen, 1);
-  const halo = fx.live.get('s11').node.position;
-  // screen(30, 40) with the world→screen y flip the DiveHud mapping applies.
-  assert.equal(halo.x, 187.5 + 30);
-  assert.equal(halo.y, 400 - 40);
+  assert.equal(fx.live.get('s2'), undefined, 'pixel-tick halo retired: no second ring, no pooled visual');
   fx.destroy();
 });
 
@@ -145,24 +132,22 @@ test('arc chains use at most six shared segments between real endpoints', () => 
 
 void step;
 
-test('display sizes override the frame-native reset: torpedo 24x12, mine 28x28, ring scaled', () => {
+test('display sizes override the frame-native reset: torpedo 24x12, mine 28x28', () => {
   const root = new FakeNode('root'), fx = new lib.SeaFx(root, frames());
   const torpedo = { ...body(5, 0, 0), kind: 'torpedo', vx: 200, vy: 0, damage: 20, bornTick: 0, expiresTick: 60, owner: 0, range: 400, speed: 420, innerRadius: 0, triggerRadius: 0, hits: new Set() };
   const mine = { ...body(6, 40, 0), kind: 'mine', vx: 0, vy: 0, damage: 35, bornTick: 0, expiresTick: 150, owner: 1, range: 200, speed: 0, innerRadius: 0, triggerRadius: 28, radius: 70, hits: new Set() };
-  const ring = { ...body(7, 80, 0), kind: 'sonic', vx: 0, vy: 0, damage: 20, bornTick: 0, expiresTick: 24, owner: 2, range: 180, speed: 240, innerRadius: 90, triggerRadius: 0, radius: 90, hits: new Set() };
-  fx.sync(battle({ projectiles: { values: () => [torpedo, mine, ring] } }), screen, 1);
+  fx.sync(battle({ projectiles: { values: () => [torpedo, mine] } }), screen, 1);
   const sizeOf = key => { const t = fx.live.get(key).node.getComponent(UITransform); return [t.width, t.height]; };
   assert.deepEqual(sizeOf('p5'), [24, 12], 'torpedo core at the design 24x12, not the 64x32 source');
   assert.deepEqual(sizeOf('m6'), [28, 28], 'mine at the design 28x28, not the 64x64 source');
-  assert.equal(fx.live.get('s7').node.scale.x, 180 / 128, 'ring scale maps the exact AOE diameter');
   // Velocity-facing: the toScreen mapping flips world y (depth grows downward), so the
   // rendered angle mirrors p.vy — world +vy descends and must render pointing down.
   assert.equal(fx.live.get('p5').node.angle, 0);
   const rising = { ...torpedo, id: 8, vx: 200, vy: -200 };
-  fx.sync(battle({ projectiles: { values: () => [rising, mine, ring] } }), screen, 2);
+  fx.sync(battle({ projectiles: { values: () => [rising, mine] } }), screen, 2);
   assert.equal(fx.live.get('p8').node.angle, 45, 'world -vy renders up-right (+45°)');
   const diving = { ...torpedo, id: 10, vx: -200, vy: 200 };
-  fx.sync(battle({ projectiles: { values: () => [diving, mine, ring] } }), screen, 3);
+  fx.sync(battle({ projectiles: { values: () => [diving, mine] } }), screen, 3);
   assert.equal(fx.live.get('p10').node.angle, -135, 'descending left shot points down-left, never mirrored');
   fx.destroy();
 });

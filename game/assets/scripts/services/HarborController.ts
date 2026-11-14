@@ -34,6 +34,7 @@ export class HarborController extends Component {
   private readonly posterCreatures = new Map<string, PosterCreature>();
   private readonly posterFrames = new Map<string, SpriteFrame>();
   private loadingCreatures?: Promise<ReadonlyMap<string, PosterCreature>>;
+  private posterWarmKey = '';
 
   onLoad(): void {
     this.platform = createPlatformAdapter(WECHAT ? 'wechat' : 'browser');
@@ -88,36 +89,39 @@ export class HarborController extends Component {
     }
     finally { this.loadingAssets = false; }
   }
-  /** Resolves the encounter keys' real art from their layer bundles; failures fall back to
-   *  the painter's silhouettes one key at a time. Cached across poster opens. */
+  /** Resolves the encounter keys' real art from their layer bundles. Per-key loads run in
+   *  parallel, the whole wait is bounded so the poster never stalls on the network, and
+   *  update() warms the cache while the user is still in the harbor. */
   private readyPosterCreatures(record: DepthPosterData): Promise<ReadonlyMap<string, PosterCreature>> {
-    if (this.loadingCreatures) return this.loadingCreatures;
-    const keys = Array.from(new Set(record.encounters)).slice(0, 12).filter(key => !this.posterCreatures.has(key) && SEA_IDENTITIES[key]);
-    const load = (async () => {
-      for (const key of keys) {
-        const art = SEA_ART[SEA_IDENTITIES[key].idle];
-        if (!art) continue;
-        try {
-          const bundle = await new Promise<AssetManager.Bundle>((resolve, reject) => assetManager.loadBundle(art.bundle, (error, result) => error ? reject(error) : resolve(result)));
-          const frame = await new Promise<SpriteFrame>((resolve, reject) => bundle.load(`${art.path}/spriteFrame`, SpriteFrame, (error, asset) => error ? reject(error) : resolve(asset as SpriteFrame)));
-          if (this.dead) break;
-          // The engine hands Texture2D.image as an ImageAsset whose .data is the drawable;
-          // accept either shape. Constructor-name checks stay platform-free (no DOM globals).
-          const drawable = ['HTMLImageElement', 'HTMLCanvasElement', 'ImageBitmap'];
-          const raw = (frame.texture as Texture2D | undefined)?.image as { data?: unknown; constructor?: { name?: string } } | undefined;
-          const name = (value: unknown): string => (value as { constructor?: { name?: string } } | undefined)?.constructor?.name ?? '';
-          const source = raw && drawable.includes(name(raw)) ? raw : raw && drawable.includes(name(raw.data)) ? raw.data : undefined;
-          if (!source) continue;
-          frame.addRef(); this.posterFrames.set(key, frame);
-          const rect = art.frames?.[0];
-          const [sx, sy, sw, sh] = rect ?? [0, 0, art.width, art.height];
-          this.posterCreatures.set(key, { source, sx, sy, sw, sh });
-        } catch { /* one missing creature keeps the rest on the silhouette fallback */ }
-      }
-      return this.posterCreatures;
-    })();
-    this.loadingCreatures = load.finally(() => { this.loadingCreatures = undefined; });
-    return this.loadingCreatures;
+    const run = (this.loadingCreatures ?? Promise.resolve<ReadonlyMap<string, PosterCreature>>(this.posterCreatures))
+      .then(() => this.loadPosterCreatures(record))
+      .then(() => this.posterCreatures);
+    const done = run.finally(() => { if (this.loadingCreatures === done) this.loadingCreatures = undefined; });
+    this.loadingCreatures = done;
+    return Promise.race([done, new Promise<ReadonlyMap<string, PosterCreature>>(resolve => setTimeout(() => resolve(this.posterCreatures), 8000))]);
+  }
+
+  private async loadPosterCreatures(record: DepthPosterData): Promise<void> {
+    const keys = Array.from(new Set(record.encounters)).slice(0, 12)
+      .filter(key => !this.posterCreatures.has(key) && SEA_IDENTITIES[key]);
+    // The drawable engine source sits on Texture2D.image (an ImageAsset) at `.data`.
+    // Constructor-name checks stay platform-free (no DOM globals on WeChat).
+    const drawableNames = ['HTMLImageElement', 'HTMLCanvasElement', 'ImageBitmap'];
+    const nameOf = (value: unknown): string => (value as { constructor?: { name?: string } } | undefined)?.constructor?.name ?? '';
+    await Promise.allSettled(keys.map(async key => {
+      const art = SEA_ART[SEA_IDENTITIES[key].idle];
+      if (!art) return;
+      const bundle = await new Promise<AssetManager.Bundle>((resolve, reject) => assetManager.loadBundle(art.bundle, (error, result) => error ? reject(error) : resolve(result)));
+      const frame = await new Promise<SpriteFrame>((resolve, reject) => bundle.load(`${art.path}/spriteFrame`, SpriteFrame, (error, asset) => error ? reject(error) : resolve(asset as SpriteFrame)));
+      if (this.dead || this.posterCreatures.has(key)) { frame.decRef(); return; }
+      const raw = (frame.texture as Texture2D | undefined)?.image as { data?: unknown; constructor?: { name?: string } } | undefined;
+      const source = raw && drawableNames.includes(nameOf(raw)) ? raw : raw && drawableNames.includes(nameOf(raw.data)) ? raw.data : undefined;
+      if (!source) return;
+      frame.addRef(); this.posterFrames.set(key, frame);
+      const rect = art.frames?.[0];
+      const [sx, sy, sw, sh] = rect ?? [0, 0, art.width, art.height];
+      this.posterCreatures.set(key, { source, sx, sy, sw, sh });
+    }));
   }
 
   private drawLoading(): void {
@@ -155,6 +159,13 @@ export class HarborController extends Component {
       capsuleBottom: (device.capsule?.bottom ?? device.safeArea.top) * ratio,
     }, { width:device.windowWidth,height:device.windowHeight });
     this.view.update();
+    // Warm the depth-poster encounter art the moment a record exists, so the record popup
+    // draws instantly instead of waiting on bundle loads while the panel is open.
+    const record = this.model.snapshot?.objectives?.record;
+    if (record && `${record.diveId}:${record.depth}` !== this.posterWarmKey) {
+      this.posterWarmKey = `${record.diveId}:${record.depth}`;
+      void this.readyPosterCreatures({ depth: record.depth, diveId: record.diveId, encounters: record.encounters }).catch(() => { /* poster falls back to silhouettes */ });
+    }
   }
   onDestroy(): void {
     this.dead = true; this.offShow?.(); this.view?.destroy(); this.loading?.dispose(); this.model?.dispose();
