@@ -162,54 +162,126 @@ export class HarborView {
 
   /** A scene station: fixed code geometry (never nine-slice stretched) matching the R2
    *  board — device silhouette in the lower area, icon on the device, full-name riveted
-   *  plate along the device body, optional 12px indicator light (LOO-70 §4 R2). */
+   *  plate along the device body, optional 12px indicator light (LOO-70 §4 R2).
+   *  LOO-73 icon rework: every part is bounded by the station rect (the previous posts
+   *  and pedestal overshoot read as stray bars), bodies use steel brighter than the
+   *  water, and each device stands on a shared lit plinth so nothing floats. */
   private station(s: UiScope, name: string, rect: Rect, _hit: Rect, iconKey: string, title: string, dot: boolean): void {
     const n = s.hit(name, rect, () => this.open(name as Panel));
     const g = s.node(`${name}-device`, n, 0, 0, rect.width, rect.height).addComponent(Graphics);
     const w = rect.width, h = rect.height;
+    // Graphics local space is y-up from the hit node's top-left anchor, so everything
+    // below the anchor draws with negative y; sprites/labels use the y-down convention.
+    this.ground(s, `${name}-ground`, n, w, h);
     if (name === 'upgrade') {
-      // Graphics local space is y-up from the hit node's top-left anchor, so everything
-      // below the anchor draws with negative y. Desk surface at 62% height.
-      const deskY = -Math.round(h * .62);
-      g.fillColor = new Color(62, 50, 38);
-      for (const x of [12, w - 18]) { g.rect(x, deskY + 8, 6, h - deskY - 12 + 8); g.fill(); }
-      g.fillColor = new Color(88, 70, 52); g.rect(4, deskY - 10, w - 8, 10); g.fill();
-      g.fillColor = new Color(120, 96, 66); g.rect(4, deskY - 3, w - 8, 3); g.fill();
-      g.strokeColor = new Color(40, 52, 56); g.lineWidth = 1; g.rect(4, deskY - 10, w - 8, 10); g.stroke();
-      g.fillColor = new Color(196, 110, 46); g.rect(w * .66, deskY + 2, 16, 8); g.fill(); g.rect(w * .68, deskY + 8, 5, 7); g.fill();
-      g.strokeColor = new Color(150, 168, 170); g.lineWidth = 3.5;
-      g.moveTo(w * .3, deskY - 10); g.lineTo(w * .16, deskY + 18); g.stroke();
-      g.fillColor = new Color(105, 233, 198); g.circle(w * .15, deskY + 21, 3); g.fill();
-      // The upgrade icon rests on the desk surface, vise on its right, torch on its left.
-      s.icon(iconKey, Math.round(w * .5 - 17), Math.round(-deskY - 36), 34, 34, n);
-      this.plate(s, `${name}-plate`, n, w * .5, -deskY + 24, Math.min(108, w - 6), title);
-      if (dot) this.light(s, `${name}-dot`, n, w - 20, Math.round(-deskY - 34));
+      // Welding workbench: tool board with a lit icon socket rising from a warm desktop,
+      // torch and heated workpiece on the surface, legs down to the plinth.
+      const deskY = -Math.round(h * .55);            // desktop plank top edge (y-up)
+      const boardTop = deskY + 42;                   // tool board top edge
+      g.fillColor = new Color(38, 60, 70); g.rect(w * .16, deskY, w * .68, 42); g.fill();
+      g.fillColor = new Color(56, 88, 98); g.rect(w * .16, boardTop - 3, w * .68, 3); g.fill();
+      g.strokeColor = new Color(24, 42, 50); g.lineWidth = 1; g.rect(w * .16, deskY, w * .68, 42); g.stroke();
+      g.strokeColor = new Color(96, 122, 128); g.lineWidth = 2;
+      g.moveTo(w * .24, deskY + 10); g.lineTo(w * .32, deskY + 24); g.stroke();
+      g.moveTo(w * .76, deskY + 10); g.lineTo(w * .7, deskY + 22); g.stroke();
+      // Legs behind the desk front, then the desktop plank with its lit edge.
+      g.fillColor = new Color(64, 46, 28);
+      g.rect(w * .12, -h + 24, 8, deskY - 12 + h - 24); g.fill();
+      g.rect(w * .88 - 8, -h + 24, 8, deskY - 12 + h - 24); g.fill();
+      g.fillColor = new Color(86, 62, 38); g.rect(8, deskY - 12, w - 16, 12); g.fill();
+      g.fillColor = new Color(142, 104, 62); g.rect(4, deskY - 2, w - 8, 10); g.fill();
+      g.fillColor = new Color(196, 148, 92); g.rect(4, deskY + 6, w - 8, 2); g.fill();
+      g.strokeColor = new Color(40, 52, 56); g.lineWidth = 1; g.rect(8, deskY - 12, w - 16, 12); g.stroke();
+      // Torch with a glowing mint tip on the left, heated workpiece on the right.
+      g.strokeColor = new Color(150, 168, 170); g.lineWidth = 2.5;
+      g.moveTo(w * .26, deskY + 8); g.lineTo(w * .16, deskY + 20); g.stroke();
+      g.fillColor = new Color(105, 233, 198, 80); g.circle(w * .16, deskY + 23, 5); g.fill();
+      g.fillColor = new Color(105, 233, 198); g.circle(w * .16, deskY + 23, 2.5); g.fill();
+      g.fillColor = new Color(214, 122, 52); g.rect(w * .56, deskY + 8, 14, 6); g.fill();
+      g.fillColor = new Color(244, 198, 122); g.rect(w * .58, deskY + 10, 4, 2); g.fill();
+      // Lit icon socket centred on the tool board.
+      const cx = Math.round(w * .5), socketY = boardTop - 33;
+      g.fillColor = new Color(8, 26, 34, 235); g.roundRect(cx - 17, socketY, 34, 32, 5); g.fill();
+      g.strokeColor = new Color(105, 233, 198, 150); g.lineWidth = 1.5; g.roundRect(cx - 17, socketY, 34, 32, 5); g.stroke();
+      s.icon(iconKey, cx - 15, -socketY - 31, 30, 30, n);
+      this.plate(s, `${name}-plate`, n, w * .5, -deskY + 6, Math.min(108, w - 6), title);
+      if (dot) this.light(s, `${name}-dot`, n, w - 20, -boardTop);
     } else if (name === 'equipment') {
-      // Stout mast with cross-bracing, diagonal boom and the crate hanging from the hook.
-      g.fillColor = new Color(46, 70, 76); g.rect(w * .1, -h + 4, w * .8, 10); g.fill();
-      g.fillColor = new Color(74, 96, 102); g.rect(w * .6, -h + 10, 14, h - 10); g.fill();
-      g.strokeColor = new Color(40, 52, 56); g.lineWidth = 1; g.rect(w * .6, -h + 10, 14, h - 10); g.stroke();
-      g.fillColor = new Color(96, 122, 128); g.rect(w * .6, -h * .7, 14, 5); g.fill(); g.rect(w * .6, -h * .38, 14, 5); g.fill();
-      g.strokeColor = new Color(88, 70, 52); g.lineWidth = 7;
-      g.moveTo(w * .67, -h + 12); g.lineTo(w * .26, -h * .58); g.stroke();
-      g.strokeColor = new Color(120, 146, 150); g.lineWidth = 2.5;
-      g.moveTo(w * .26, -h * .58); g.lineTo(w * .26, -h * .42); g.stroke();
-      s.icon(iconKey, Math.round(w * .26 - 16), Math.round(h * .42), 32, 32, n);
-      this.plate(s, `${name}-plate`, n, w * .45, h - 22, Math.min(104, w - 6), title);
-      if (dot) this.light(s, `${name}-dot`, n, Math.round(w * .67) + 9, 16);
+      // Gantry crane: twin uprights into a riveted cross beam, trolley and hook lowering
+      // the crate under a warm work lamp, a spare crate stacked at the foot.
+      const beamY = -Math.round(h * .24);            // beam bottom edge (y-up)
+      const beamTop = beamY + 9;
+      const footY = -h + 24;                         // plinth top edge
+      const uprightH = beamTop - footY;
+      g.fillColor = new Color(64, 90, 98);
+      g.rect(w * .16, footY, 9, uprightH); g.fill();
+      g.rect(w * .72, footY, 9, uprightH); g.fill();
+      g.strokeColor = new Color(28, 48, 56); g.lineWidth = 1;
+      g.rect(w * .16, footY, 9, uprightH); g.stroke();
+      g.rect(w * .72, footY, 9, uprightH); g.stroke();
+      g.strokeColor = new Color(110, 140, 148); g.lineWidth = 4;
+      g.moveTo(w * .205, beamY - 14); g.lineTo(w * .32, beamTop); g.stroke();
+      g.moveTo(w * .795, beamY - 14); g.lineTo(w * .68, beamTop); g.stroke();
+      g.fillColor = new Color(96, 128, 136); g.rect(w * .08, beamY, w * .84, 9); g.fill();
+      g.fillColor = new Color(134, 168, 174); g.rect(w * .08, beamTop - 2, w * .84, 2); g.fill();
+      g.strokeColor = new Color(28, 48, 56); g.lineWidth = 1; g.rect(w * .08, beamY, w * .84, 9); g.stroke();
+      g.fillColor = new Color(196, 138, 59); g.circle(w * .08 + 4, beamY + 4.5, 1.6); g.fill(); g.circle(w * .92 - 4, beamY + 4.5, 1.6); g.fill();
+      // Work lamp under the beam centre, its cone lighting the hanging crate.
+      const cableTop = beamY - 9, crateY = beamY - 74;   // crate centre (y-up)
+      g.fillColor = new Color(24, 40, 48); g.rect(w * .5 - 7, cableTop + 2, 14, 7); g.fill();
+      g.fillColor = new Color(244, 198, 122); g.circle(w * .5, cableTop, 2.5); g.fill();
+      g.fillColor = new Color(244, 198, 122, 26);
+      g.moveTo(w * .5 - 4, cableTop); g.lineTo(w * .5 - 22, crateY + 17); g.lineTo(w * .5 + 22, crateY + 17); g.lineTo(w * .5 + 4, cableTop); g.fill();
+      g.strokeColor = new Color(206, 216, 218); g.lineWidth = 2;
+      g.moveTo(w * .5, cableTop); g.lineTo(w * .5, crateY + 21); g.stroke();
+      g.strokeColor = new Color(150, 168, 170); g.lineWidth = 2.5;
+      g.moveTo(w * .5 - 5, crateY + 21); g.lineTo(w * .5 + 5, crateY + 21); g.stroke();
+      g.fillColor = new Color(105, 233, 198, 40); g.circle(w * .5, crateY, 22); g.fill();
+      s.icon(iconKey, Math.round(w * .5) - 16, -crateY - 16, 32, 32, n);
+      // Spare crate stacked beside the left upright.
+      g.fillColor = new Color(122, 90, 54); g.rect(w * .03, footY, 22, 13); g.fill();
+      g.fillColor = new Color(158, 118, 70); g.rect(w * .03, footY + 13, 22, 3); g.fill();
+      g.strokeColor = new Color(46, 62, 66); g.lineWidth = 1; g.rect(w * .03, footY, 22, 16); g.stroke();
+      this.plate(s, `${name}-plate`, n, w * .5, h - 14, Math.min(96, w - 6), title);
+      if (dot) this.light(s, `${name}-dot`, n, w - 16, -beamTop + 8);
     } else {
-      // Round glass sonar dish on a short pedestal with a stub antenna; plate below the rim.
-      const dishY = -Math.round(h * .5);
-      g.fillColor = new Color(30, 50, 58); g.rect(w * .32, dishY - 16, w * .36, h - dishY - 16); g.fill();
-      g.fillColor = new Color(22, 42, 50); g.rect(w * .28, dishY - 16, w * .44, 6); g.fill();
-      g.fillColor = new Color(16, 52, 64); g.ellipse(w * .5, dishY, w * .42, 17); g.fill();
-      g.strokeColor = new Color(105, 233, 198, 170); g.lineWidth = 1.5; g.ellipse(w * .5, dishY, w * .35, 13); g.stroke();
-      g.fillColor = new Color(105, 233, 198, 120); g.ellipse(w * .5, dishY, w * .12, 4); g.fill();
-      g.strokeColor = new Color(150, 168, 170); g.lineWidth = 2; g.moveTo(w * .5, dishY + 15); g.lineTo(w * .66, dishY + 42); g.stroke();
-      g.fillColor = new Color(244, 198, 122); g.circle(w * .67, dishY + 45, 3); g.fill();
-      this.plate(s, `${name}-plate`, n, w * .5, -dishY + 30, Math.min(104, w - 6), title);
-      if (dot) this.light(s, `${name}-dot`, n, Math.round(w * .84), -dishY - 6);
+      // Sonar console: steel cabinet with the icon in a lit front panel and status lamps,
+      // glowing scan dish resting on top, stub antenna to the right; plate on the plinth.
+      const consoleTop = -Math.round(h * .40);       // console top edge (y-up)
+      const plinthY = -h + 24;
+      const dishY = consoleTop + 12;                 // scan dish centre, above the console
+      const panelBottom = plinthY + 6, panelTop = consoleTop - 5, panelH = panelTop - panelBottom;
+      g.fillColor = new Color(22, 52, 62); g.ellipse(w * .5, dishY, w * .40, 12); g.fill();
+      g.fillColor = new Color(16, 64, 76); g.ellipse(w * .5, dishY, w * .32, 9); g.fill();
+      g.strokeColor = new Color(105, 233, 198, 170); g.lineWidth = 1.5; g.ellipse(w * .5, dishY, w * .24, 6.5); g.stroke();
+      g.fillColor = new Color(105, 233, 198, 120); g.ellipse(w * .5, dishY, w * .1, 3); g.fill();
+      g.strokeColor = new Color(105, 233, 198, 130); g.lineWidth = 2;
+      g.moveTo(w * .5, dishY); g.lineTo(w * .5 + w * .26, dishY + 5); g.stroke();
+      g.fillColor = new Color(58, 88, 98); g.rect(w * .14, plinthY, w * .72, consoleTop - plinthY); g.fill();
+      g.fillColor = new Color(78, 116, 126); g.rect(w * .17, plinthY + 3, w * .66, consoleTop - plinthY - 6); g.fill();
+      g.strokeColor = new Color(26, 46, 54); g.lineWidth = 1; g.rect(w * .14, plinthY, w * .72, consoleTop - plinthY); g.stroke();
+      g.fillColor = new Color(244, 198, 122); g.circle(w * .22, consoleTop - 8, 2.2); g.fill();
+      g.fillColor = new Color(105, 233, 198, 210); g.circle(w * .3, consoleTop - 8, 2.2); g.fill();
+      const cx = Math.round(w * .5);
+      g.fillColor = new Color(8, 26, 34, 235); g.roundRect(cx - 14, panelBottom, 28, panelH, 5); g.fill();
+      g.strokeColor = new Color(105, 233, 198, 150); g.lineWidth = 1.5; g.roundRect(cx - 14, panelBottom, 28, panelH, 5); g.stroke();
+      s.icon(iconKey, cx - 12, -(panelBottom + panelTop) / 2 - 12, 24, 24, n);
+      g.strokeColor = new Color(150, 168, 170); g.lineWidth = 2; g.moveTo(w * .8, dishY + 7); g.lineTo(w * .9, dishY + 13); g.stroke();
+      g.fillColor = new Color(244, 198, 122); g.circle(w * .9, dishY + 15, 3); g.fill();
+      this.plate(s, `${name}-plate`, n, w * .5, h - 14, Math.min(104, w - 6), title);
+      if (dot) this.light(s, `${name}-dot`, n, w - 24, -consoleTop + 10);
     }
+  }
+
+  /** Shared grounding: waterline shadow and a plinth with a lit amber deck edge, so every
+   *  device visibly stands in the scene instead of floating on open water. */
+  private ground(s: UiScope, name: string, parent: Node, w: number, h: number): void {
+    const g = s.node(name, parent, 0, 0, 0, 0).addComponent(Graphics);
+    g.fillColor = new Color(4, 18, 26, 110); g.ellipse(w * .5, -h + 7, w * .48, 6); g.fill();
+    g.fillColor = new Color(22, 48, 58); g.roundRect(w * .05, -h + 8, w * .9, 16, 3); g.fill();
+    g.fillColor = new Color(44, 84, 94); g.roundRect(w * .05, -h + 18, w * .9, 6, 2); g.fill();
+    g.strokeColor = new Color(232, 178, 102, 190); g.lineWidth = 1.5;
+    g.moveTo(w * .07, -h + 24); g.lineTo(w * .93, -h + 24); g.stroke();
   }
 
   /** Riveted nameplate on the device body: dark plate, edge line, full Chinese name. */
