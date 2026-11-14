@@ -462,18 +462,22 @@ export class HarborView {
       return;
     }
     const cardW = (width - 24) / 4 - 4;
+    // Slot cards: clean steel plates (the old nine-slice socket frame swallowed the text
+    // area), compacted stat strings so nothing overflows, amber plate marks the target slot.
+    const packed = (text: string): string => text.replace(/\s+/g, '');
     for (let i = 0; i < 4; i++) {
       const locked = i === 3 && state.playerLevel < DEFAULT_BALANCE.equipment.fourthSlotLevel, card = slotReadout(state, i);
-      const n = s.button(`slot-${i}`, r(12 + i * (width - 24) / 4, 85, cardW, 62), '', () => { this.slot = i; this.drawPanel(); }, !locked, undefined, this.slot === i);
-      // Recessed mount socket under the card content (LOO-70 §4 socket skin).
-      s.skin(`slot-${i}-socket`, 'loo70_ui_socket', r(2, 2, cardW - 4, 58), n as Node);
+      const chosen = this.slot === i, soft = new Color(112, 76, 30);
+      const n = s.button(`slot-${i}`, r(12 + i * (width - 24) / 4, 85, cardW, 62), '', () => { this.slot = i; this.drawPanel(); }, !locked, undefined, chosen);
       if (locked) {
         const title = s.text(`slot-${i}-title`, `Lv.${DEFAULT_BALANCE.equipment.fourthSlotLevel} 锁定`, 0, 18, cardW, 22, 11, C.muted, n);
         title.horizontalAlign = Label.HorizontalAlign.CENTER;
       } else {
-        const title = s.text(`slot-${i}-title`, card.title, 0, 2, cardW, 20, 11, C.text, n); title.horizontalAlign = Label.HorizontalAlign.CENTER;
-        const line1 = s.text(`slot-${i}-line1`, card.line1, 0, 22, cardW, 18, 9, card.empty ? C.muted : C.mint, n); line1.horizontalAlign = Label.HorizontalAlign.CENTER;
-        if (card.line2) { const line2 = s.text(`slot-${i}-line2`, card.line2, 0, 40, cardW, 18, 9, C.muted, n); line2.horizontalAlign = Label.HorizontalAlign.CENTER; }
+        // The chosen slot wears the amber plate: its text switches to the ink family.
+        const tone = chosen ? C.ink : card.empty ? C.muted : C.text;
+        const title = s.text(`slot-${i}-title`, packed(card.title), 0, 4, cardW, 20, 11, tone, n); title.horizontalAlign = Label.HorizontalAlign.CENTER; title.isBold = true;
+        const line1 = s.text(`slot-${i}-line1`, packed(card.line1), 0, 26, cardW, 16, 9, chosen ? soft : card.empty ? C.muted : C.mint, n); line1.horizontalAlign = Label.HorizontalAlign.CENTER;
+        if (card.line2) { const line2 = s.text(`slot-${i}-line2`, packed(card.line2), 0, 43, cardW, 15, 9, chosen ? soft : C.muted, n); line2.horizontalAlign = Label.HorizontalAlign.CENTER; }
       }
     }
     if (!compact&&!inventory.some(i => i.id === this.focusedId)) s.text('SelectedSlot', `当前槽 ${this.slot + 1} · ${this.slot < 2 ? '仅主武器' : '仅辅件'} · 已选主件 ${this.mainId ? this.itemLabel(inventory.find(i => i.id === this.mainId)) : '无'}`, 14, 151, width - 28, 22, 10, C.muted);
@@ -504,10 +508,13 @@ export class HarborView {
     else this.list(s, 'VirtualInventory', r(12, listY, width - 24, Math.max(44, height - listY - footer)), inventory.length, 112, (row, index) => {
       const item = inventory[index], selected = item.id === this.focusedId;
       const n = row.button(`item-${item.id}`, r(0, 0, width - 24, 106), '', () => { this.focusedId = item.id; this.mergeConfirm = false; this.drawPanel(); }, true, undefined, selected);
+      // Selected rows sit on the amber plate: light-on-light greys are unreadable there,
+      // so the whole row switches to the ink family the accent buttons use.
+      const onAmber = selected, soft = new Color(112, 76, 30);
       row.icon(EQUIP_ICON[item.template] ?? `equip_${item.template}`, 5, 8, 48, 48, n);
-      row.text('ItemName', this.itemLabel(item), 58, 3, width - 100, 22, 13, C.text, n);
-      row.text('ItemState', `${item.equipped ? '已装配' : item.locked ? '已锁定' : this.mainId === item.id ? '★ 主装备' : this.auxiliary.includes(item.id) ? '◆ 辅料' : '未装配'} · 升级投入 ${item.invested.marrow}髓 / ${item.invested.tickets}券`, 58, 24, width - 100, 18, 10, C.muted, n);
-      row.text('ItemStats', itemKeyStats(state, item), 58, 42, width - 100, 16, 10, C.mint, n);
+      row.text('ItemName', this.itemLabel(item), 58, 3, width - 100, 22, 13, onAmber ? C.ink : C.text, n);
+      row.text('ItemState', `${item.equipped ? '已装配' : item.locked ? '已锁定' : this.mainId === item.id ? '★ 主装备' : this.auxiliary.includes(item.id) ? '◆ 辅料' : '未装配'} · 升级投入 ${item.invested.marrow}髓 / ${item.invested.tickets}券`, 58, 24, width - 100, 18, 10, onAmber ? soft : C.muted, n);
+      row.text('ItemStats', itemKeyStats(state, item), 58, 42, width - 100, 16, 10, onAmber ? soft : C.mint, n);
       if (!item.equipped && !item.locked && item.quality < 4) {
         row.button(`main-${item.id}`, r(58, 58, 92, 44), '选为主件', () => { this.mainId = item.id; this.auxiliary = []; this.mergeConfirm = false; this.drawPanel(); });
         row.button(`aux-${item.id}`, r(157, 58, 92, 44), this.auxiliary.includes(item.id) ? '取消辅料' : '选为辅料', () => {
