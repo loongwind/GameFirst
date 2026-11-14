@@ -4,7 +4,8 @@ import type { PosterImage } from '../platform/PlatformAdapter';
 import { UiScope, C } from './HarborKit';
 
 export interface PosterPort {
-  create(record: DepthRecord): PosterImage;
+  /** May resolve asynchronously when the platform gathers encounter art first. */
+  create(record: DepthRecord): PosterImage | Promise<PosterImage>;
   save(record: DepthRecord): Promise<{ filename: string }>;
 }
 /** Owner scope prevents late PNG loads or save responses from reviving a closed panel. */
@@ -14,17 +15,18 @@ export function depthPosterView(s: UiScope, width: number, height: number, recor
   const sprite = n.addComponent(Sprite); sprite.sizeMode = Sprite.SizeMode.CUSTOM;
   const status = s.text('PosterStatus', '正在本地绘制纪录…', 16, height - 112, width - 32, 42, 11, C.mint);
   try {
-    const image = port.create(record);
-    assetManager.loadRemote<ImageAsset>(image.dataUrl, { ext: '.png', cacheEnabled: false }, (error, asset) => {
-      if (error || !asset) { if (s.alive) status.string = '海报预览未就绪，可重开面板或直接保存。'; return; }
-      asset.addRef();
-      if (!s.alive) { asset.decRef(); return; }
-      const texture = new Texture2D(); texture.image = asset;
-      const frame = new SpriteFrame(); frame.texture = texture; sprite.spriteFrame = frame;
-      n.getComponent(UITransform)!.setContentSize(previewW, previewH);
-      s.own(() => { sprite.spriteFrame = null; frame.destroy(); texture.destroy(); asset.decRef(); });
-      status.string = `${record.depth}m · ${record.encounters.length} 种沿途生物 · 本地 PNG`;
-    });
+    void Promise.resolve(port.create(record)).then(image => {
+      assetManager.loadRemote<ImageAsset>(image.dataUrl, { ext: '.png', cacheEnabled: false }, (error, asset) => {
+        if (error || !asset) { if (s.alive) status.string = '海报预览未就绪，可重开面板或直接保存。'; return; }
+        asset.addRef();
+        if (!s.alive) { asset.decRef(); return; }
+        const texture = new Texture2D(); texture.image = asset;
+        const frame = new SpriteFrame(); frame.texture = texture; sprite.spriteFrame = frame;
+        n.getComponent(UITransform)!.setContentSize(previewW, previewH);
+        s.own(() => { sprite.spriteFrame = null; frame.destroy(); texture.destroy(); asset.decRef(); });
+        status.string = `${record.depth}m · ${record.encounters.length} 种沿途生物 · 本地 PNG`;
+      });
+    }, () => { if (s.alive) status.string = '本地绘制失败，请重新打开后重试。'; });
   } catch { status.string = '本地绘制失败，请重新打开后重试。'; }
   let saving = false;
   s.button('save-depth-poster', { x: 16, y: height - 66, width: width - 32, height: 48 }, '保存深度海报', () => {

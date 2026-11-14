@@ -91,6 +91,29 @@ test('sonic rings scale to the live AOE radius, never a cosmetic diameter', () =
   fx.destroy();
 });
 
+test('sonic halo rides the sonar point — never a stale second ring', () => {
+  const root = new FakeNode('root'), fx = new lib.SeaFx(root, frames());
+  const ring = { ...body(11, 30, 40), kind: 'sonic', vx: 0, vy: 0, damage: 20, bornTick: 0, expiresTick: 24, owner: 0, range: 180, speed: 240, innerRadius: 60, triggerRadius: 0, radius: 60, hits: new Set() };
+  fx.sync(battle({ projectiles: { values: () => [ring] } }), screen, 1);
+  const halo = fx.live.get('s11').node.position;
+  // screen(30, 40) with the world→screen y flip the DiveHud mapping applies.
+  assert.equal(halo.x, 187.5 + 30);
+  assert.equal(halo.y, 400 - 40);
+  fx.destroy();
+});
+
+test('wake trails the rendered path, mirroring the world y flip', () => {
+  const root = new FakeNode('root'), fx = new lib.SeaFx(root, frames());
+  const torpedo = { ...body(12, 10, 10), kind: 'torpedo', vx: -100, vy: 100, damage: 20, bornTick: 0, expiresTick: 60, owner: 0, range: 400, speed: 420, innerRadius: 0, triggerRadius: 0, hits: new Set() };
+  fx.sync(battle({ projectiles: { values: () => [torpedo] } }), screen, 1);
+  const speed = Math.hypot(torpedo.vx, torpedo.vy);
+  const at = screen(10, 10);
+  const wake = fx.live.get('w12').node.position;
+  assert.equal(wake.x, at.x - torpedo.vx / speed * 16);
+  assert.equal(wake.y, at.y + torpedo.vy / speed * 16, 'descending world vy trails downward on screen');
+  fx.destroy();
+});
+
 test('hit bursts are capped at 24 and recycle the oldest instead of breaking hits', () => {
   const root = new FakeNode('root'), fx = new lib.SeaFx(root, frames());
   const texts = Array.from({ length: 30 }, (_, i) => ({ ...body(i + 1, i, 0), value: 5, expiresTick: 20 }));
@@ -132,10 +155,14 @@ test('display sizes override the frame-native reset: torpedo 24x12, mine 28x28, 
   assert.deepEqual(sizeOf('p5'), [24, 12], 'torpedo core at the design 24x12, not the 64x32 source');
   assert.deepEqual(sizeOf('m6'), [28, 28], 'mine at the design 28x28, not the 64x64 source');
   assert.equal(fx.live.get('s7').node.scale.x, 180 / 128, 'ring scale maps the exact AOE diameter');
-  // Velocity-facing: heading right keeps the art at 0°; heading up-right reads +45°.
+  // Velocity-facing: the toScreen mapping flips world y (depth grows downward), so the
+  // rendered angle mirrors p.vy — world +vy descends and must render pointing down.
   assert.equal(fx.live.get('p5').node.angle, 0);
-  const rising = { ...torpedo, id: 8, vx: 200, vy: 200 };
+  const rising = { ...torpedo, id: 8, vx: 200, vy: -200 };
   fx.sync(battle({ projectiles: { values: () => [rising, mine, ring] } }), screen, 2);
-  assert.equal(fx.live.get('p8').node.angle, 45);
+  assert.equal(fx.live.get('p8').node.angle, 45, 'world -vy renders up-right (+45°)');
+  const diving = { ...torpedo, id: 10, vx: -200, vy: 200 };
+  fx.sync(battle({ projectiles: { values: () => [diving, mine, ring] } }), screen, 3);
+  assert.equal(fx.live.get('p10').node.angle, -135, 'descending left shot points down-left, never mirrored');
   fx.destroy();
 });

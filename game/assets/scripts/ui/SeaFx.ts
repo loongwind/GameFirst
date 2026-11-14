@@ -111,7 +111,10 @@ export class SeaFx {
     this.lastPositions.set(`p${p.id}`, at);
     if (p.kind === 'torpedo') {
       const core = this.acquire(`p${p.id}`, 'loo70_fx_torpedo', TORPEDO_CORE.w, TORPEDO_CORE.h);
-      const angle = Math.atan2(p.vy, p.vx) * 180 / Math.PI;
+      // toScreen flips world y (depth grows downward), so the rendered path mirrors the
+      // world velocity's y component. atan2(p.vy, …) pointed descending shots upward.
+      // `+ 0` normalises atan2's -0 for level flight.
+      const angle = Math.atan2(-p.vy, p.vx) * 180 / Math.PI + 0;
       core.node.setPosition(at.x, at.y, 0);
       // The art heads right at 0°, so the CCW angle from the real velocity vector keeps
       // the nose on the flight path from spawn to expiry.
@@ -120,7 +123,8 @@ export class SeaFx {
         const wake = this.acquire(`w${p.id}`, 'loo70_fx_wake', 30, 15, true);
         const speed = Math.hypot(p.vx, p.vy) || 1;
         const stretch = Math.min(2.2, .8 + speed / 420);
-        wake.node.setPosition(at.x - p.vx / speed * 16, at.y - p.vy / speed * 16, 0);
+        // The wake trails the screen-space path, so its y offset mirrors too.
+        wake.node.setPosition(at.x - p.vx / speed * 16, at.y + p.vy / speed * 16, 0);
         wake.node.angle = angle;
         wake.node.setScale(stretch, 1, 1);
       }
@@ -134,15 +138,17 @@ export class SeaFx {
       const remaining = p.expiresTick - tick;
       mine.sprite.color = remaining * STEP_SECONDS <= .2 ? new Color(255, 184, 99, 255) : new Color(255, 255, 255, 255);
     } else {
+      const at2 = toScreen(p.x, p.y, p.previousX, p.previousY);
       const ring = this.acquire(`s${p.id}`, 'loo70_fx_sonar', 128, 128, true);
+      // The halo previously kept its stale pooled position and read as a second ring
+      // drifting off the live AOE; it must ride the sonar point every tick.
+      ring.node.setPosition(at2.x, at2.y, 0);
       // The ring always equals the live AOE diameter; visuals never inflate the range.
       // The source stroke would scale to ~2.8px-per-10-radius, so the exact AOE edge is
       // drawn as a thin crisp circle and the art rides behind as a faint tick-mark halo.
       const diameter = Math.max(6, p.radius * 2);
-      const scale = diameter / 128;
-      ring.node.setScale(scale, scale, 1);
+      ring.node.setScale(diameter / 128, diameter / 128, 1);
       ring.sprite.color = new Color(115, 255, 240, 70);
-      const at2 = toScreen(p.x, p.y, p.previousX, p.previousY);
       this.glow.strokeColor = new Color(115, 255, 240, 215);
       this.glow.lineWidth = 1.6;
       this.glow.circle(at2.x, at2.y, p.radius);

@@ -1,13 +1,14 @@
-import { _decorator, Component, assetManager, AssetManager, SpriteFrame, BitmapFont, UITransform, director, isValid } from 'cc';
+import { _decorator, Component, assetManager, AssetManager, SpriteFrame, BitmapFont, Texture2D, UITransform, director, isValid } from 'cc';
 import { WECHAT } from 'cc/env';
 import { createPlatformAdapter } from '../platform/createPlatformAdapter';
-import type { PlatformAdapter } from '../platform/PlatformAdapter';
+import type { DepthPosterData, PlatformAdapter, PosterCreature } from '../platform/PlatformAdapter';
 import { EconomyService } from './local/EconomyService';
 import { LocalSaveService } from './local/SaveService';
 import { AdService } from './local/AdService';
 import type { AdDriver } from './local/AdService';
 import { HarborModel } from '../meta/HarborModel';
 import { HarborView } from '../ui/HarborView';
+import { SEA_ART, SEA_IDENTITIES } from '../ui/SeaArt';
 import { UiScope, C } from '../ui/HarborKit';
 import { harborLayout } from '../ui/harborLayout';
 
@@ -29,6 +30,10 @@ export class HarborController extends Component {
   private adService?: AdService;
   private error = '';
   private loadingKey = '';
+  /** Encounter art for the depth poster, loaded lazily per key and retained until teardown. */
+  private readonly posterCreatures = new Map<string, PosterCreature>();
+  private readonly posterFrames = new Map<string, SpriteFrame>();
+  private loadingCreatures?: Promise<ReadonlyMap<string, PosterCreature>>;
 
   onLoad(): void {
     this.platform = createPlatformAdapter(WECHAT ? 'wechat' : 'browser');
@@ -68,7 +73,11 @@ export class HarborController extends Component {
       this.loading?.dispose(); this.loading = undefined;
       this.view = new HarborView(this.node, this.model, this.frames, this.font, () => {
         director.loadScene('Dive', error => { if (error && !this.dead) { this.model.notice = '潜航资源未就绪，请稍后重试。'; this.view?.open('supply'); } });
-      }, { create: record => this.platform.createDepthPoster(record), save: record => this.platform.saveDepthPoster(record) });
+      }, {
+        // Real encounter art: the poster awaits one cached bundle read per new species.
+        create: async record => this.platform.createDepthPoster(record, await this.readyPosterCreatures(record)),
+        save: record => this.platform.saveDepthPoster(record),
+      });
       this.update();
     } catch (error) {
       if (!this.dead) {
@@ -79,6 +88,38 @@ export class HarborController extends Component {
     }
     finally { this.loadingAssets = false; }
   }
+  /** Resolves the encounter keys' real art from their layer bundles; failures fall back to
+   *  the painter's silhouettes one key at a time. Cached across poster opens. */
+  private readyPosterCreatures(record: DepthPosterData): Promise<ReadonlyMap<string, PosterCreature>> {
+    if (this.loadingCreatures) return this.loadingCreatures;
+    const keys = Array.from(new Set(record.encounters)).slice(0, 12).filter(key => !this.posterCreatures.has(key) && SEA_IDENTITIES[key]);
+    const load = (async () => {
+      for (const key of keys) {
+        const art = SEA_ART[SEA_IDENTITIES[key].idle];
+        if (!art) continue;
+        try {
+          const bundle = await new Promise<AssetManager.Bundle>((resolve, reject) => assetManager.loadBundle(art.bundle, (error, result) => error ? reject(error) : resolve(result)));
+          const frame = await new Promise<SpriteFrame>((resolve, reject) => bundle.load(`${art.path}/spriteFrame`, SpriteFrame, (error, asset) => error ? reject(error) : resolve(asset as SpriteFrame)));
+          if (this.dead) break;
+          // The engine hands Texture2D.image as an ImageAsset whose .data is the drawable;
+          // accept either shape. Constructor-name checks stay platform-free (no DOM globals).
+          const drawable = ['HTMLImageElement', 'HTMLCanvasElement', 'ImageBitmap'];
+          const raw = (frame.texture as Texture2D | undefined)?.image as { data?: unknown; constructor?: { name?: string } } | undefined;
+          const name = (value: unknown): string => (value as { constructor?: { name?: string } } | undefined)?.constructor?.name ?? '';
+          const source = raw && drawable.includes(name(raw)) ? raw : raw && drawable.includes(name(raw.data)) ? raw.data : undefined;
+          if (!source) continue;
+          frame.addRef(); this.posterFrames.set(key, frame);
+          const rect = art.frames?.[0];
+          const [sx, sy, sw, sh] = rect ?? [0, 0, art.width, art.height];
+          this.posterCreatures.set(key, { source, sx, sy, sw, sh });
+        } catch { /* one missing creature keeps the rest on the silhouette fallback */ }
+      }
+      return this.posterCreatures;
+    })();
+    this.loadingCreatures = load.finally(() => { this.loadingCreatures = undefined; });
+    return this.loadingCreatures;
+  }
+
   private drawLoading(): void {
     this.loading?.dispose(); if (this.dead) return;
     const size=this.node.getComponent(UITransform)!.contentSize,device=this.platform.getDeviceInfo(),ratio=size.width/device.windowWidth;
@@ -118,6 +159,7 @@ export class HarborController extends Component {
   onDestroy(): void {
     this.dead = true; this.offShow?.(); this.view?.destroy(); this.loading?.dispose(); this.model?.dispose();
     this.frames.forEach(frame => frame.decRef()); this.frames.clear(); this.font?.decRef(); this.font = undefined;
+    this.posterFrames.forEach(frame => frame.decRef()); this.posterFrames.clear(); this.posterCreatures.clear();
     this.platform?.dispose();
   }
 }

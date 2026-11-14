@@ -25,6 +25,22 @@ test('local depth poster draws a 750x1100 PNG and saves it through the browser p
   });
 });
 
+test('depth poster renders provided encounter art instead of silhouette fallbacks', async () => {
+  await withBrowser(root, async page => {
+    const result = await page.evaluate(async () => {
+      const { drawDepthPoster } = await import('/assets/scripts/platform/browser/DepthPoster.ts');
+      const tile = document.createElement('canvas'); tile.width = 64; tile.height = 64;
+      const t = tile.getContext('2d'); t.fillStyle = '#ff0044'; t.fillRect(0, 0, 64, 64);
+      const canvas = drawDepthPoster(document, { depth: 700, diveId: 'poster', encounters: ['enemy_normal_01_moon_jelly'] },
+        new Map([['enemy_normal_01_moon_jelly', { source: tile, sx: 0, sy: 0, sw: 64, sh: 64 }]]));
+      const cell = canvas.getContext('2d').getImageData(145, 535, 1, 1).data;
+      return [cell[0], cell[1], cell[2]];
+    });
+    assert.ok(result[0] > 200, `real art drawn at the grid cell: ${result}`);
+    assert.ok(result[2] > 40, `art tint survives the glow seat: ${result}`);
+  });
+});
+
 test('storage survives reload, namespaces keys, and preserves unrelated data', async () => {
   await withBrowser(root, async page => {
     await page.evaluate(async () => {

@@ -2,6 +2,9 @@
 export type Unsubscribe = () => void;
 export interface DepthPosterData { depth: number; diveId: string; encounters: readonly string[] }
 export interface PosterImage { dataUrl: string; filename: string }
+/** A ready-to-draw creature for the depth poster. `source` is deliberately platform-free
+ *  here; only each implementation's painter interprets it (browser: image/canvas/bitmap). */
+export interface PosterCreature { readonly source: unknown; readonly sx: number; readonly sy: number; readonly sw: number; readonly sh: number }
 
 export interface PlatformStorage {
   /** Missing keys return null. Permission/quota failures must propagate. */
@@ -33,7 +36,7 @@ export interface PlatformAdapter {
   onShow(listener: () => void): Unsubscribe;
   onHide(listener: () => void): Unsubscribe;
   getDeviceInfo(): DeviceInfo;
-  createDepthPoster(record: DepthPosterData): PosterImage;
+  createDepthPoster(record: DepthPosterData, creatures?: ReadonlyMap<string, PosterCreature>): PosterImage;
   /** Resolves after handing the local PNG to the platform download/save mechanism. */
   saveDepthPoster(record: DepthPosterData): Promise<{ filename: string }>;
   /** Owner releases browser/native event listeners on teardown. */

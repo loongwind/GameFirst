@@ -1,5 +1,5 @@
 import type { DeviceInfo, PlatformAdapter, PlatformStorage, Unsubscribe } from '../PlatformAdapter';
-import type { DepthPosterData, PosterImage } from '../PlatformAdapter';
+import type { DepthPosterData, PosterCreature, PosterImage } from '../PlatformAdapter';
 import { renderDepthPoster } from './DepthPoster';
 
 /** Real browser platform, not a reward/storage simulator. */
@@ -32,7 +32,7 @@ export class BrowserPlatformAdapter implements PlatformAdapter {
     return () => { this.showListeners.delete(listener); };
   }
 
-  createDepthPoster(record: DepthPosterData): PosterImage { return renderDepthPoster(this.host.document, record); }
+  createDepthPoster(record: DepthPosterData, creatures?: ReadonlyMap<string, PosterCreature>): PosterImage { return renderDepthPoster(this.host.document, record, creatures); }
   async saveDepthPoster(record: DepthPosterData): Promise<{ filename: string }> {
     if (this.disposed) throw new Error('PLATFORM_DISPOSED');
     const poster = this.createDepthPoster(record);
